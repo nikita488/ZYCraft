@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:glass_viewer",
+    "zycraft:dire_viewer",
+    "zycraft:aluminium_viewer",
+    "zycraft:reinforced_viewer",
+    "zycraft:glowing_viewer",
+    "zycraft:dark_viewer"
+  ]
+}

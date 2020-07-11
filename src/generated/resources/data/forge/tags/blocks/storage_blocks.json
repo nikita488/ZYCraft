@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:zychorite_block",
+    "zycraft:aluminium_block",
+    "zycraft:quartz_crystal_block",
+    "#zycraft:storage_blocks/zychorium"
+  ]
+}

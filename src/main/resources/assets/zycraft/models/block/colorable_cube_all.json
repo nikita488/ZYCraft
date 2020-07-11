@@ -1,0 +1,11 @@
+{
+    "parent": "zycraft:block/colorable_cube",
+    "textures": {
+        "overlay_down": "#all",
+        "overlay_up": "#all",
+        "overlay_north": "#all",
+        "overlay_east": "#all",
+        "overlay_south": "#all",
+        "overlay_west": "#all"
+    }
+}

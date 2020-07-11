@@ -1,0 +1,105 @@
+buildscript {
+    repositories {
+        maven { url = 'https://files.minecraftforge.net/maven' }
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+    }
+}
+
+plugins {
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id "com.wynprice.cursemaven" version "2.1.5"
+}
+
+apply plugin: 'net.minecraftforge.gradle'
+
+configurations {
+    shade
+}
+
+shadowJar {
+    configurations = [project.configurations.shade]
+    relocate 'com.tterrag.registrate', 'com.nikita488.zycraft.repack.registrate'
+}
+
+version = "${minecraft_version}-${mod_version}"
+group = 'com.nikita488.zycraft'
+archivesBaseName = 'ZYCraft'
+
+sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+
+repositories {
+    maven { url "https://maven.tterrag.com/" }
+}
+
+minecraft {
+    mappings channel: 'snapshot', version: "${mappings_version}"
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            //property 'forge.logging.console.level', 'debug'
+
+            mods {
+                zycraft {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            //property 'forge.logging.console.level', 'debug'
+
+            mods {
+                zycraft {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            //property 'forge.logging.console.level', 'debug'
+            args '--mod', 'zycraft', '--all', '--output', file('src/generated/resources/'), '--existing', sourceSets.main.resources.srcDirs[0]
+
+            mods {
+                zycraft {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+dependencies {
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
+    implementation fg.deobf(registrate)
+    shade registrate
+
+    implementation fg.deobf("team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}")
+}
+
+reobf {
+    shadowJar {}
+}
+
+build.dependsOn shadowJar
+build.dependsOn reobfShadowJar
+
+sourceSets {
+    main {
+        resources {
+            srcDir 'src/generated/resources'
+        }
+    }
+}

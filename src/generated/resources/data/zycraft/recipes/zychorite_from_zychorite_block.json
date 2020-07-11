@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "zycraft:zychorite_block"
+    }
+  ],
+  "result": {
+    "item": "zycraft:zychorite",
+    "count": 9
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:immortal_block"
+    ]
+  },
+  "criteria": {
+    "has_storage_blocks_zychorium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "zycraft:storage_blocks/zychorium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:immortal_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_storage_blocks_zychorium",
+      "has_the_recipe"
+    ]
+  ]
+}

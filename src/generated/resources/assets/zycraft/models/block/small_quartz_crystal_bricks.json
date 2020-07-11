@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "zycraft:block/small_quartz_crystal_bricks"
+  }
+}

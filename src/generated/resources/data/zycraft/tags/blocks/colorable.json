@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:immortal_block",
+    "zycraft:the_aurey_block",
+    "#zycraft:zychorium_lamps",
+    "#zycraft:immortal_viewers"
+  ]
+}

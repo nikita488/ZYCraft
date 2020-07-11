@@ -1,0 +1,73 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "zycraft:quartz_crystal",
+                  "properties": {
+                    "amount": "2"
+                  }
+                }
+              ],
+              "count": 2
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "zycraft:quartz_crystal",
+                  "properties": {
+                    "amount": "3"
+                  }
+                }
+              ],
+              "count": 3
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "zycraft:quartz_crystal",
+                  "properties": {
+                    "amount": "4"
+                  }
+                }
+              ],
+              "count": 4
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "zycraft:quartz_crystal",
+                  "properties": {
+                    "amount": "5"
+                  }
+                }
+              ],
+              "count": 5
+            }
+          ],
+          "name": "zycraft:quartz_crystal"
+        }
+      ],
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ]
+    }
+  ]
+}

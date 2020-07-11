@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:light_zychorium_from_light_zychorium_block"
+    ]
+  },
+  "criteria": {
+    "has_light_zychorium_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:light_zychorium_block"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:light_zychorium_from_light_zychorium_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_light_zychorium_block",
+      "has_the_recipe"
+    ]
+  ]
+}

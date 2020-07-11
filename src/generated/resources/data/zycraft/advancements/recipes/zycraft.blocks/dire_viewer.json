@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:dire_viewer"
+    ]
+  },
+  "criteria": {
+    "has_gems_quartz": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:gems/quartz"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:dire_viewer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_gems_quartz",
+      "has_the_recipe"
+    ]
+  ]
+}

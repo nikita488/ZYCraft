@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I#I",
+    "# #",
+    "I#I"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:dusts/glowstone"
+    },
+    "#": {
+      "tag": "forge:glass"
+    }
+  },
+  "result": {
+    "item": "zycraft:glowing_viewer",
+    "count": 4
+  }
+}

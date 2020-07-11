@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "#zycraft:bricks/zychorium",
+    "#zycraft:bricks/solid_zychorium",
+    "#zycraft:bricks/zychorized_zychorium",
+    "#zycraft:bricks/aluminized_zychorium"
+  ]
+}

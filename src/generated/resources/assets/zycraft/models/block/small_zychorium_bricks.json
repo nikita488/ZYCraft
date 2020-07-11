@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/zy_bricks",
+  "textures": {
+    "all": "zycraft:block/small_zychorium_bricks"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:blue_zychorium_shield"
+    ]
+  },
+  "criteria": {
+    "has_obsidian": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:obsidian"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:blue_zychorium_shield"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_obsidian",
+      "has_the_recipe"
+    ]
+  ]
+}

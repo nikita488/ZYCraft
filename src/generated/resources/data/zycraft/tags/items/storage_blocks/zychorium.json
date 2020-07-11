@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:blue_zychorium_block",
+    "zycraft:green_zychorium_block",
+    "zycraft:red_zychorium_block",
+    "zycraft:dark_zychorium_block",
+    "zycraft:light_zychorium_block"
+  ]
+}

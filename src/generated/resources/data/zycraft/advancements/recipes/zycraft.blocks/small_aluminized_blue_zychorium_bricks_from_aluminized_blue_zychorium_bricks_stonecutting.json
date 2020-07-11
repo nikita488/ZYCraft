@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:small_aluminized_blue_zychorium_bricks_from_aluminized_blue_zychorium_bricks_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_aluminized_blue_zychorium_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:aluminized_blue_zychorium_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:small_aluminized_blue_zychorium_bricks_from_aluminized_blue_zychorium_bricks_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminized_blue_zychorium_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

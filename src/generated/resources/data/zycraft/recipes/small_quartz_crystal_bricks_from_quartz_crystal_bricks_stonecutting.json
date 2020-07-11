@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "zycraft:quartz_crystal_bricks"
+  },
+  "result": "zycraft:small_quartz_crystal_bricks",
+  "count": 1
+}

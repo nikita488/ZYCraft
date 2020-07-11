@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:small_aluminium_bricks"
+    ]
+  },
+  "criteria": {
+    "has_aluminium_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:aluminium_bricks"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:small_aluminium_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminium_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

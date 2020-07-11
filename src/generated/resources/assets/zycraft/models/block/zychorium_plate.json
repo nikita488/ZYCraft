@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/zy_cube_all",
+  "textures": {
+    "all": "zycraft:block/zychorium_plate"
+  }
+}

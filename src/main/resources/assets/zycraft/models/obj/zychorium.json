@@ -1,0 +1,11 @@
+{
+  "parent": "forge:item/default",
+  "loader": "forge:obj",
+  "model": "zycraft:models/obj/zychorium.obj",
+  "textures": {
+    "in": "zycraft:cloud",
+    "out": "zycraft:obj/zychorium"
+  },
+  "detectCullableFaces": false,
+  "flip-v": true
+}

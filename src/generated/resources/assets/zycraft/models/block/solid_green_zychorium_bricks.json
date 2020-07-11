@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "zycraft:block/solid_green_zychorium_bricks"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I#I",
+    "#R#",
+    "I#I"
+  ],
+  "key": {
+    "I": {
+      "item": "zycraft:aluminium"
+    },
+    "#": {
+      "item": "zycraft:green_zychorium_bricks"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "item": "zycraft:aluminized_green_engineering_block",
+    "count": 4
+  }
+}

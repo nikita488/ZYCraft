@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "RGB",
+    "PSP",
+    "D#L"
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:glowstone"
+    },
+    "P": {
+      "tag": "forge:dusts/redstone"
+    },
+    "#": {
+      "tag": "forge:dusts/redstone"
+    },
+    "R": {
+      "item": "zycraft:red_zychorium"
+    },
+    "G": {
+      "item": "zycraft:green_zychorium"
+    },
+    "B": {
+      "item": "zycraft:blue_zychorium"
+    },
+    "D": {
+      "item": "zycraft:dark_zychorium"
+    },
+    "L": {
+      "item": "zycraft:light_zychorium"
+    }
+  },
+  "result": {
+    "item": "zycraft:zychorium_lamp"
+  }
+}

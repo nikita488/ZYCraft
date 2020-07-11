@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": {
+      "item": "zycraft:small_aluminized_blue_zychorium_bricks"
+    }
+  },
+  "result": {
+    "item": "zycraft:aluminized_blue_zychorium_bricks"
+  }
+}

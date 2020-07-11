@@ -1,0 +1,82 @@
+package com.nikita488.zycraft.block;
+
+import com.nikita488.zycraft.init.ModTiles;
+import com.nikita488.zycraft.tile.ColorableTile;
+import com.nikita488.zycraft.util.IColorChanger;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.DyeColor;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ActionResultType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+
+public class ColorableBlock extends Block
+{
+    public ColorableBlock(Properties properties)
+    {
+        super(properties);
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state)
+    {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    {
+        return ModTiles.COLORABLE.create();
+    }
+
+    @Override
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    {
+        ItemStack stack = player.getHeldItem(hand);
+        if (stack.isEmpty())
+            return ActionResultType.PASS;
+
+        Item item = stack.getItem();
+        TileEntity tile = world.getTileEntity(pos);
+        if (!(tile instanceof ColorableTile))
+            return ActionResultType.CONSUME;
+
+        ColorableTile colorable = (ColorableTile)tile;
+        IColorChanger changer;
+        DyeColor dye;
+
+        if (item instanceof IColorChanger && (changer = (IColorChanger)item).canChangeColor(colorable, player, hand, hit))
+        {
+            if (!world.isRemote)
+                changer.changeColor(colorable, player, hand, hit);
+            return ActionResultType.SUCCESS;
+        }
+        else if ((dye = DyeColor.getColor(stack)) != null && colorable.color().rgb() != dye.getColorValue())
+        {
+            if (world.isRemote)
+                return ActionResultType.SUCCESS;
+
+            colorable.setRGB(dye.getColorValue());
+            if (!player.abilities.isCreativeMode)
+                stack.shrink(1);
+            return ActionResultType.SUCCESS;
+        }
+
+        return ActionResultType.PASS;
+    }
+
+    public int getColor(BlockState state, ColorableTile tile)
+    {
+        return tile.color().rgb();
+    }
+}

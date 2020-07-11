@@ -1,0 +1,7 @@
+{
+  "parent": "zycraft:block/colorable_cube_all",
+  "textures": {
+    "base": "zycraft:block/immortal_viewer_base",
+    "all": "zycraft:block/immortal_viewer_overlay"
+  }
+}

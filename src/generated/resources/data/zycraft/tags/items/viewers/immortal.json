@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:immortal_viewer",
+    "zycraft:glowing_immortal_viewer",
+    "zycraft:dark_immortal_viewer"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:blue_zychorium_block"
+    ]
+  },
+  "criteria": {
+    "has_blue_zychorium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:blue_zychorium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:blue_zychorium_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_blue_zychorium",
+      "has_the_recipe"
+    ]
+  ]
+}

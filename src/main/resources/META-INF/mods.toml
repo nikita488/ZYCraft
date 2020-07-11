@@ -1,0 +1,24 @@
+modLoader="javafml"
+loaderVersion="[31,)"
+
+[[mods]]
+modId="zycraft"
+version="${file.jarVersion}"
+displayName="ZYCraft"
+description='''
+Immerses in the days when XyCraft was a "Hype Train" mod and not "on pause".
+'''
+
+[[dependencies.zycraft]]
+    modId="forge"
+    mandatory=true
+    versionRange="[31,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.zycraft]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:dark_zychorium_from_dark_zychorium_block"
+    ]
+  },
+  "criteria": {
+    "has_dark_zychorium_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:dark_zychorium_block"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:dark_zychorium_from_dark_zychorium_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dark_zychorium_block",
+      "has_the_recipe"
+    ]
+  ]
+}

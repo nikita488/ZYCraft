@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "zycraft:solid_green_zychorium_bricks"
+  },
+  "result": "zycraft:small_solid_green_zychorium_bricks",
+  "count": 1
+}

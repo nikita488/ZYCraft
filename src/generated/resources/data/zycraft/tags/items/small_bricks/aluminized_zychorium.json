@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:small_aluminized_blue_zychorium_bricks",
+    "zycraft:small_aluminized_green_zychorium_bricks",
+    "zycraft:small_aluminized_red_zychorium_bricks",
+    "zycraft:small_aluminized_dark_zychorium_bricks",
+    "zycraft:small_aluminized_light_zychorium_bricks"
+  ]
+}

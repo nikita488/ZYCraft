@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "zycraft:aluminium_block"
+    }
+  ],
+  "result": {
+    "item": "zycraft:aluminium",
+    "count": 9
+  }
+}

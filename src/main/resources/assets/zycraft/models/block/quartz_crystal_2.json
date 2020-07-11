@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/quartz_crystal_1",
+  "visibility": {
+    "2": true
+  }
+}
