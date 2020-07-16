@@ -71,7 +71,7 @@ function initializeCoreMod() {
             'target': {
                 'type': 'METHOD',
                 'class': 'net.minecraft.client.renderer.texture.AtlasTexture',
-                'methodName': 'lambda$' + Java.type('net.minecraftforge.coremod.api.ASMAPI').mapMethod('func_229217_a_') + '$4',
+                'methodName': 'lambda$getStitchedSprites$4',
                 'methodDesc': '(ILjava/util/concurrent/ConcurrentLinkedQueue;Ljava/util/List;Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIII)V'
             },
             'transformer': function(method) {
