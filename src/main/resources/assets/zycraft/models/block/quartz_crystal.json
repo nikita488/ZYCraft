@@ -1,5 +1,4 @@
 {
-  "parent": "block/block",
   "loader": "forge:obj",
   "model": "zycraft:models/obj/quartz_crystal.obj",
   "textures": {
@@ -7,6 +6,8 @@
     "particle": "zycraft:obj/quartz_crystal"
   },
   "detectCullableFaces": false,
+  "ambientToFullbright": false,
+  "diffuseLighting": true,
   "display": {
     "thirdperson_righthand": {
       "translation": [0, 4, 1],

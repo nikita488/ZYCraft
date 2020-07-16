@@ -104,7 +104,7 @@
   "block.zycraft.zychorized_red_engineering_block": "Zychorized Red Engineering Block",
   "block.zycraft.zychorized_red_zychorium_bricks": "Zychorized Red Zychorium Bricks",
   "death.attack.zycraft.quartz_crystal": "%1$s death by Quartz Crystal",
-  "death.attack.zycraft.quartz_crystal.player": "%1$s walked into a quartz crystal because of %2$s",
+  "death.attack.zycraft.quartz_crystal.player": "%1$s walked into a Quartz Crystal because of %2$s",
   "item.zycraft.aluminium": "Aluminium",
   "item.zycraft.blue_zychorium": "Blue Zychorium",
   "item.zycraft.color_scanner": "Color Scanner",

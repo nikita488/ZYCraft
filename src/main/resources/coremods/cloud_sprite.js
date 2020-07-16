@@ -20,7 +20,7 @@ function initializeCoreMod() {
                 var insn = ASMAPI.findFirstInstruction(method, Opcodes.IFNE);
                 var insnList = new InsnList();
 
-                insnList.add(ASMAPI.buildMethodCall('com/nikita488/zycraft/client/texture/CloudSprite', 'name', '()Lnet/minecraft/util/ResourceLocation;', ASMAPI.MethodType.STATIC));
+                insnList.add(ASMAPI.buildMethodCall('nikita488/zycraft/client/texture/CloudSprite', 'name', '()Lnet/minecraft/util/ResourceLocation;', ASMAPI.MethodType.STATIC));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 6));
                 insnList.add(ASMAPI.buildMethodCall('net/minecraft/util/ResourceLocation', 'equals', '(Ljava/lang/Object;)Z', ASMAPI.MethodType.VIRTUAL));
                 insnList.add(new JumpInsnNode(Opcodes.IFNE, insn.label));
@@ -56,7 +56,7 @@ function initializeCoreMod() {
                         method.instructions.size() - 1);
 
                 method.instructions.insert(addSprite, ASMAPI.buildMethodCall(
-                    'com/nikita488/zycraft/asm/ASMHooks',
+                    'nikita488/zycraft/asm/ASMHooks',
                     'addCloudSpriteInfo',
                     '(Lnet/minecraft/client/renderer/texture/AtlasTexture;Lnet/minecraft/client/renderer/texture/Stitcher;)V',
                     ASMAPI.MethodType.STATIC));
@@ -84,9 +84,9 @@ function initializeCoreMod() {
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
 
-                var cloudSpriteInfo = ASMAPI.buildMethodCall('com/nikita488/zycraft/client/texture/CloudSprite', 'info', '()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;', ASMAPI.MethodType.STATIC)
+                var cloudSpriteInfo = ASMAPI.buildMethodCall('nikita488/zycraft/client/texture/CloudSprite', 'info', '()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;', ASMAPI.MethodType.STATIC)
                 var createCloudSprite = ASMAPI.buildMethodCall(
-                    'com/nikita488/zycraft/asm/ASMHooks',
+                    'nikita488/zycraft/asm/ASMHooks',
                     'createCloudSprite',
                     '(Lnet/minecraft/client/renderer/texture/AtlasTexture;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;',
                     ASMAPI.MethodType.STATIC)

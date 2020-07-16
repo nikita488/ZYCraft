@@ -104,7 +104,7 @@
   "block.zycraft.zychorized_red_engineering_block": "\u029E\u0254o\u05DF\u15FA bu\u0131\u0279\u01DD\u01DDu\u0131bu\u018E p\u01DD\u1D1A p\u01DDz\u0131\u0279o\u0265\u0254\u028EZ",
   "block.zycraft.zychorized_red_zychorium_bricks": "s\u029E\u0254\u0131\u0279\u15FA \u026Fn\u0131\u0279o\u0265\u0254\u028EZ p\u01DD\u1D1A p\u01DDz\u0131\u0279o\u0265\u0254\u028EZ",
   "death.attack.zycraft.quartz_crystal": "\u05DF\u0250\u0287s\u028E\u0279\u0186 z\u0287\u0279\u0250n\u1F49 \u028Eq \u0265\u0287\u0250\u01DDp %1$s",
-  "death.attack.zycraft.quartz_crystal.player": "%2$s \u025Fo \u01DDsn\u0250\u0254\u01DDq \u05DF\u0250\u0287s\u028E\u0279\u0254 z\u0287\u0279\u0250nb \u0250 o\u0287u\u0131 p\u01DD\u029E\u05DF\u0250\u028D %1$s",
+  "death.attack.zycraft.quartz_crystal.player": "%2$s \u025Fo \u01DDsn\u0250\u0254\u01DDq \u05DF\u0250\u0287s\u028E\u0279\u0186 z\u0287\u0279\u0250n\u1F49 \u0250 o\u0287u\u0131 p\u01DD\u029E\u05DF\u0250\u028D %1$s",
   "item.zycraft.aluminium": "\u026Fn\u0131u\u0131\u026Fn\u05DF\u2C6F",
   "item.zycraft.blue_zychorium": "\u026Fn\u0131\u0279o\u0265\u0254\u028EZ \u01DDn\u05DF\u15FA",
   "item.zycraft.color_scanner": "\u0279\u01DDuu\u0250\u0254S \u0279o\u05DFo\u0186",
