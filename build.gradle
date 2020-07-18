@@ -89,6 +89,11 @@ dependencies {
     implementation fg.deobf("team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}")
 }
 
+processResources {
+    // Exclude datagenerator .cache directory
+    exclude '.cache'
+}
+
 jar {
     classifier = 'slim'
 
