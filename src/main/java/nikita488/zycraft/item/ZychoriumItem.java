@@ -2,7 +2,7 @@ package nikita488.zycraft.item;
 
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.block.ColorableBlock;
-import nikita488.zycraft.enums.ZyType;
+import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.util.Color4b;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,9 +13,9 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
-public class ZychoriumItem extends ZyItem implements IColorChanger
+public class ZychoriumItem extends ZYItem implements IColorChanger
 {
-    public ZychoriumItem(ZyType type, Properties properties)
+    public ZychoriumItem(ZYType type, Properties properties)
     {
         super(type, properties);
     }

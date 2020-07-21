@@ -2,7 +2,7 @@ package nikita488.zycraft.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
 import nikita488.zycraft.block.QuartzCrystalBlock;
-import nikita488.zycraft.init.ModBlocks;
+import nikita488.zycraft.init.ZYBlocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +41,7 @@ public class QuartzCrystalFeature extends Feature<NoFeatureConfig>
         if (possibleSides.isEmpty())
             return false;
 
-        world.setBlockState(pos, ModBlocks.QUARTZ_CRYSTAL.getDefaultState()
+        world.setBlockState(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
                 .with(QuartzCrystalBlock.FACING, possibleSides.get(rand.nextInt(possibleSides.size())).getOpposite())
                 .with(QuartzCrystalBlock.AMOUNT, MathHelper.nextInt(rand, 1, 5)), Constants.BlockFlags.BLOCK_UPDATE);
         possibleSides.clear();

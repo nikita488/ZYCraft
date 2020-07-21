@@ -20,7 +20,7 @@ public class CloudTextureType implements ITextureType
     @Override
     public ICTMTexture<CloudTextureType> makeTexture(TextureInfo info)
     {
-        info.getSprites()[0] = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(CloudSprite.name());
+        info.getSprites()[0] = Minecraft.getInstance().getAtlasSpriteGetter(AtlasTexture.LOCATION_BLOCKS_TEXTURE).apply(CloudSprite.NAME);
         return new CloudTexture(this, info);
     }
 

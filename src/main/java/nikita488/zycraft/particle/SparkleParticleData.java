@@ -2,7 +2,7 @@ package nikita488.zycraft.particle;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import nikita488.zycraft.init.ModParticles;
+import nikita488.zycraft.init.ZYParticles;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
@@ -59,7 +59,7 @@ public class SparkleParticleData implements IParticleData
     @Override
     public ParticleType<SparkleParticleData> getType()
     {
-        return ModParticles.SPARKLE.get();
+        return ZYParticles.SPARKLE.get();
     }
 
     @Override

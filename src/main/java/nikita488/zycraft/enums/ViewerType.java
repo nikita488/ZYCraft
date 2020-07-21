@@ -1,7 +1,7 @@
 package nikita488.zycraft.enums;
 
-import nikita488.zycraft.init.ModItems;
-import nikita488.zycraft.init.ModTags;
+import nikita488.zycraft.init.ZYItems;
+import nikita488.zycraft.init.ZYTags;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
@@ -15,7 +15,7 @@ public enum ViewerType implements IStringSerializable
 {
     GLASS("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6.0F)),
     DIRE("dire", () -> DataIngredient.tag(Tags.Items.GEMS_QUARTZ)),
-    ALUMINIUM("aluminium", () -> DataIngredient.items(ModItems.ALUMINIUM)),
+    ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
     REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200.0F)),
     GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightValue(15)),
     DARK("dark", () -> DataIngredient.tag(Tags.Items.DYES_BLACK)),
@@ -73,9 +73,9 @@ public enum ViewerType implements IStringSerializable
     public Tag<Block> tag(boolean phantomized)
     {
         if (isImmortal())
-            return phantomized ? ModTags.Blocks.VIEWERS_PHANTOMIZED_IMMORTAL : ModTags.Blocks.VIEWERS_IMMORTAL;
+            return phantomized ? ZYTags.Blocks.VIEWERS_PHANTOMIZED_IMMORTAL : ZYTags.Blocks.VIEWERS_IMMORTAL;
 
-        return phantomized ? ModTags.Blocks.VIEWERS_PHANTOMIZED : ModTags.Blocks.VIEWERS_BASE;
+        return phantomized ? ZYTags.Blocks.VIEWERS_PHANTOMIZED : ZYTags.Blocks.VIEWERS_BASE;
     }
 
 

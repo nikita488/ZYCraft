@@ -16,11 +16,12 @@ function initializeCoreMod() {
                 var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
+                var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 
                 var insn = ASMAPI.findFirstInstruction(method, Opcodes.IFNE);
                 var insnList = new InsnList();
 
-                insnList.add(ASMAPI.buildMethodCall('nikita488/zycraft/client/texture/CloudSprite', 'name', '()Lnet/minecraft/util/ResourceLocation;', ASMAPI.MethodType.STATIC));
+                insnList.add(new FieldInsnNode(Opcodes.GETSTATIC, 'nikita488/zycraft/client/texture/CloudSprite', 'NAME', 'Lnet/minecraft/util/ResourceLocation;'));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 6));
                 insnList.add(ASMAPI.buildMethodCall('net/minecraft/util/ResourceLocation', 'equals', '(Ljava/lang/Object;)Z', ASMAPI.MethodType.VIRTUAL));
                 insnList.add(new JumpInsnNode(Opcodes.IFNE, insn.label));
@@ -56,7 +57,7 @@ function initializeCoreMod() {
                         method.instructions.size() - 1);
 
                 method.instructions.insert(addSprite, ASMAPI.buildMethodCall(
-                    'nikita488/zycraft/asm/ASMHooks',
+                    'nikita488/zycraft/asm/ZYHooks',
                     'addCloudSpriteInfo',
                     '(Lnet/minecraft/client/renderer/texture/AtlasTexture;Lnet/minecraft/client/renderer/texture/Stitcher;)V',
                     ASMAPI.MethodType.STATIC));
@@ -83,19 +84,27 @@ function initializeCoreMod() {
                 var InsnList = Java.type('org.objectweb.asm.tree.InsnList');
                 var VarInsnNode = Java.type('org.objectweb.asm.tree.VarInsnNode');
                 var JumpInsnNode = Java.type('org.objectweb.asm.tree.JumpInsnNode');
+                var FieldInsnNode = Java.type('org.objectweb.asm.tree.FieldInsnNode');
 
-                var cloudSpriteInfo = ASMAPI.buildMethodCall('nikita488/zycraft/client/texture/CloudSprite', 'info', '()Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;', ASMAPI.MethodType.STATIC)
+                var missingSprite = ASMAPI.findFirstInstruction(method, Opcodes.ASTORE);
+                var getSpriteLocationName = ASMAPI.mapMethod('func_229248_a_');
+                var getSpriteLocation = ASMAPI.buildMethodCall(
+                    'net/minecraft/client/renderer/texture/TextureAtlasSprite$Info',
+                    getSpriteLocationName,
+                    '()Lnet/minecraft/util/ResourceLocation;',
+                    ASMAPI.MethodType.VIRTUAL);
                 var createCloudSprite = ASMAPI.buildMethodCall(
-                    'nikita488/zycraft/asm/ASMHooks',
+                    'nikita488/zycraft/asm/ZYHooks',
                     'createCloudSprite',
                     '(Lnet/minecraft/client/renderer/texture/AtlasTexture;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;',
-                    ASMAPI.MethodType.STATIC)
-                var missingSprite = ASMAPI.findFirstInstruction(method, Opcodes.ASTORE);
+                    ASMAPI.MethodType.STATIC);
 
                 var insnList = new InsnList();
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 5));
-                insnList.add(cloudSpriteInfo);
-                insnList.add(new JumpInsnNode(Opcodes.IF_ACMPNE, method.instructions.get(0)));
+                insnList.add(getSpriteLocation);
+                insnList.add(new FieldInsnNode(Opcodes.GETSTATIC, 'nikita488/zycraft/client/texture/CloudSprite', 'NAME', 'Lnet/minecraft/util/ResourceLocation;'));
+                insnList.add(ASMAPI.buildMethodCall('net/minecraft/util/ResourceLocation', 'equals', '(Ljava/lang/Object;)Z', ASMAPI.MethodType.VIRTUAL));
+                insnList.add(new JumpInsnNode(Opcodes.IFEQ, method.instructions.get(0)));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 0));
                 insnList.add(new VarInsnNode(Opcodes.ALOAD, 5));
                 insnList.add(new VarInsnNode(Opcodes.ILOAD, 1));

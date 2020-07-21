@@ -15,7 +15,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.List;
 
-public class ModTags
+public class ZYTags
 {
     public static class Blocks
     {

@@ -3,25 +3,25 @@ package nikita488.zycraft.config;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ZyServerConfig
+public class ZYServerConfig
 {
-    public final ForgeConfigSpec.EnumValue<OreFeatureConfig.FillerBlockType> zychoriteReplaceableBlock;
-    public final ForgeConfigSpec.IntValue zychoriteSize;
-    public final ForgeConfigSpec.IntValue orePercentage;
-    public final ForgeConfigSpec.IntValue zychoriteAmount;
-    public final ForgeConfigSpec.IntValue zychoriteMinHeight;
-    public final ForgeConfigSpec.IntValue zychoriteMaxHeight;
+    protected final ForgeConfigSpec.EnumValue<OreFeatureConfig.FillerBlockType> zychoriteReplaceableBlock;
+    protected final ForgeConfigSpec.IntValue zychoriteSize;
+    protected final ForgeConfigSpec.IntValue zychoriteOrePercentage;
+    protected final ForgeConfigSpec.IntValue zychoriteAmount;
+    protected final ForgeConfigSpec.IntValue zychoriteMinHeight;
+    protected final ForgeConfigSpec.IntValue zychoriteMaxHeight;
 
-    public final ForgeConfigSpec.EnumValue<OreFeatureConfig.FillerBlockType> aluminiumReplaceableBlock;
-    public final ForgeConfigSpec.IntValue aluminiumSize;
-    public final ForgeConfigSpec.IntValue aluminiumAmount;
-    public final ForgeConfigSpec.IntValue aluminiumMinHeight;
-    public final ForgeConfigSpec.IntValue aluminiumMaxHeight;
+    protected final ForgeConfigSpec.EnumValue<OreFeatureConfig.FillerBlockType> aluminiumReplaceableBlock;
+    protected final ForgeConfigSpec.IntValue aluminiumSize;
+    protected final ForgeConfigSpec.IntValue aluminiumAmount;
+    protected final ForgeConfigSpec.IntValue aluminiumMinHeight;
+    protected final ForgeConfigSpec.IntValue aluminiumMaxHeight;
 
-    public final ForgeConfigSpec.IntValue quartzCrystalGenerationAttempts;
-    public final ForgeConfigSpec.IntValue quartzCrystalAmount;
+    protected final ForgeConfigSpec.IntValue quartzCrystalGenerationAttempts;
+    protected final ForgeConfigSpec.IntValue quartzCrystalAmount;
 
-    public ZyServerConfig(ForgeConfigSpec.Builder builder)
+    public ZYServerConfig(ForgeConfigSpec.Builder builder)
     {
         builder.comment("WorldGen settings")
                 .push("worldGen");
@@ -34,7 +34,7 @@ public class ZyServerConfig
         zychoriteSize = builder
                 .comment("Defines the maximum amount of blocks in a vein")
                 .defineInRange("size", 17, 0, Integer.MAX_VALUE);
-        orePercentage = builder
+        zychoriteOrePercentage = builder
                 .comment("Defines the percentage of the vein that will be filled with Zychorium Ore's")
                 .defineInRange("orePercentage", 50, 0, 100);
         zychoriteAmount = builder

@@ -7,7 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.particle.SparkleParticle;
-import nikita488.zycraft.init.ModParticles;
+import nikita488.zycraft.init.ZYParticles;
 import nikita488.zycraft.util.Color4b;
 
 @Mod.EventBusSubscriber(modid = ZYCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
@@ -37,6 +37,6 @@ public class ClientSetup
     @SubscribeEvent
     public static void registerFactories(ParticleFactoryRegisterEvent event)
     {
-        Minecraft.getInstance().particles.registerFactory(ModParticles.SPARKLE.get(), SparkleParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
     }
 }

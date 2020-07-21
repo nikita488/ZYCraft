@@ -1,6 +1,6 @@
 package nikita488.zycraft.block;
 
-import nikita488.zycraft.init.ModDamageSources;
+import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleSpawn;
 import nikita488.zycraft.util.QuartzCrystalShapes;
 import net.minecraft.block.Block;
@@ -82,7 +82,7 @@ public class QuartzCrystalBlock extends Block
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         if (entity instanceof ItemEntity) return;
-        entity.attackEntityFrom(ModDamageSources.QUARTZ_CRYSTAL, state.get(AMOUNT));
+        entity.attackEntityFrom(ZYDamageSources.QUARTZ_CRYSTAL, state.get(AMOUNT));
     }
 
     @Override

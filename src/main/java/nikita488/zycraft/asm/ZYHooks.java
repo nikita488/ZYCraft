@@ -1,16 +1,18 @@
 package nikita488.zycraft.asm;
 
-import nikita488.zycraft.client.texture.CloudSprite;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.Stitcher;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.resources.data.AnimationMetadataSection;
+import nikita488.zycraft.client.texture.CloudSprite;
+import nikita488.zycraft.config.ZYConfig;
 
-public class ASMHooks
+public class ZYHooks
 {
     public static void addCloudSpriteInfo(AtlasTexture atlas, Stitcher stitcher)
     {
         if (atlas.getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE))
-            stitcher.addSprite(CloudSprite.info());
+            stitcher.addSprite(new TextureAtlasSprite.Info(CloudSprite.NAME, ZYConfig.animationSize, ZYConfig.animationSize, AnimationMetadataSection.EMPTY));
     }
 
     public static TextureAtlasSprite createCloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y)

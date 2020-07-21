@@ -1,4 +1,4 @@
-package nikita488.zycraft.init;
+package nikita488.zycraft.util;
 
 import nikita488.zycraft.ZYCraft;
 import net.minecraft.item.ItemGroup;
@@ -7,11 +7,11 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.function.Supplier;
 
-public class ZyItemGroup extends ItemGroup
+public class ZYItemGroup extends ItemGroup
 {
     private final Supplier<ItemStack> iconFactory;
 
-    public ZyItemGroup(String label, Supplier<ItemStack> iconFactory)
+    public ZYItemGroup(String label, Supplier<ItemStack> iconFactory)
     {
         super(ZYCraft.MOD_ID + "." + label);
         this.iconFactory = iconFactory;

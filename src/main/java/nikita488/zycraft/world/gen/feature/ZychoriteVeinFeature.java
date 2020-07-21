@@ -1,8 +1,8 @@
 package nikita488.zycraft.world.gen.feature;
 
 import com.mojang.datafixers.Dynamic;
-import nikita488.zycraft.enums.ZyType;
-import nikita488.zycraft.init.ModBlocks;
+import nikita488.zycraft.enums.ZYType;
+import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.world.gen.feature.сonfig.ZychoriteVeinFeatureConfig;
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
@@ -159,10 +159,10 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinFeatureConfig>
 
     public void setVeinBlock(IWorld world, BlockPos pos, Random random, ZychoriteVeinFeatureConfig config)
     {
-        Block block = ModBlocks.ZYCHORITE.get();
+        Block block = ZYBlocks.ZYCHORITE.get();
 
         if (random.nextFloat() < config.orePercentage)
-            block = ModBlocks.ZYCHORIUM_ORE.get(ZyType.random(random)).get();
+            block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.random(random)).get();
 
         world.setBlockState(pos, block.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
     }

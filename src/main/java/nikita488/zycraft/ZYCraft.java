@@ -6,7 +6,7 @@ import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import nikita488.zycraft.config.ZyConfig;
+import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.init.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,22 +21,22 @@ public class ZYCraft
     public ZYCraft()
     {
         REGISTRY = Registrate.create(MOD_ID);
-        ModBlocks.init();
-        ModItems.init();
-        ModTags.init();
-        ModTiles.init();
-        ModParticles.init();
-        ModGroups.init();
-        ModDamageSources.init();
-        ModWorldGen.init();
-        ZyConfig.register();
+        ZYBlocks.init();
+        ZYItems.init();
+        ZYTags.init();
+        ZYTiles.init();
+        ZYParticles.init();
+        ZYGroups.init();
+        ZYDamageSources.init();
+        ZYWorldGen.init();
+        ZYConfig.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
     }
 
     private void commonSetup(FMLCommonSetupEvent event)
     {
-        DeferredWorkQueue.runLater(ModWorldGen::addFeature);
+        DeferredWorkQueue.runLater(ZYWorldGen::addFeature);
     }
 
     public static ResourceLocation modLoc(String name)

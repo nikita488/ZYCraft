@@ -1,40 +1,37 @@
 package nikita488.zycraft.client.texture;
 
-import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.config.ZyConfig;
-import nikita488.zycraft.util.Color4b;
-import nikita488.zycraft.util.IntBiConsumer;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.data.AnimationMetadataSection;
-import net.minecraft.util.LazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.config.ZYConfig;
+import nikita488.zycraft.util.Color4b;
+import nikita488.zycraft.util.IntBiConsumer;
 
 import java.util.Random;
+import java.util.function.Supplier;
 
 public class CloudSprite extends TextureAtlasSprite
 {
-    private static final ResourceLocation NAME = ZYCraft.modLoc("cloud");
-    private static final int SIZE = ZyConfig.client().cloudTextureSize.get();
-    private static final TextureAtlasSprite.Info INFO = new TextureAtlasSprite.Info(NAME, SIZE, SIZE, AnimationMetadataSection.EMPTY);
+    public static final ResourceLocation NAME = ZYCraft.modLoc("cloud");
+    private static final Random RANDOM = new Random();
+    private static final Supplier<NativeImage> IMAGE = () ->
+    {
+        NativeImage image = new NativeImage(ZYConfig.animationSize, ZYConfig.animationSize, false);
+        image.untrack();
+        return image;
+    };
     private final float[] pixels, baseLayer, adjustmentLayer;
     private final int[] offsets = new int[] {0, -1, 0, 1};
-    private static final LazyValue<NativeImage> IMAGE = new LazyValue<>(() ->
-    {
-        NativeImage nativeimage = new NativeImage(SIZE, SIZE, false);
-        nativeimage.untrack();
-        return nativeimage;
-    });
-    private static final Random RANDOM = new Random();
 
     public CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y)
     {
-        super(atlas, info, 0, atlasWidth, atlasHeight, x, y, IMAGE.getValue());
-        this.pixels = new float[SIZE * SIZE];
-        this.baseLayer = new float[SIZE * SIZE];
-        this.adjustmentLayer = new float[SIZE * SIZE];
+        super(atlas, info, 0, atlasWidth, atlasHeight, x, y, IMAGE.get());
+        this.pixels = new float[info.getSpriteWidth() * info.getSpriteHeight()];
+        this.baseLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];
+        this.adjustmentLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];
     }
 
     @Override
@@ -80,14 +77,14 @@ public class CloudSprite extends TextureAtlasSprite
 
     private int pixelIndex(int x, int y)
     {
-        int mask = SIZE - 1;
-        return (x & mask) + (y & mask) * SIZE;
+        int mask = spriteInfo.getSpriteWidth() - 1;
+        return (x & mask) + (y & mask) * spriteInfo.getSpriteWidth();
     }
 
     private void forEachPixel(IntBiConsumer consumer)
     {
-        for (int x = 0; x < SIZE; x++)
-            for (int y = 0; y < SIZE; y++)
+        for (int x = 0; x < spriteInfo.getSpriteWidth(); x++)
+            for (int y = 0; y < spriteInfo.getSpriteHeight(); y++)
                 consumer.accept(x, y);
     }
 
@@ -105,15 +102,5 @@ public class CloudSprite extends TextureAtlasSprite
     {
         for(int i = 1; i < frames.length; i++)
             frames[i].close();
-    }
-
-    public static ResourceLocation name()
-    {
-        return NAME;
-    }
-
-    public static Info info()
-    {
-        return INFO;
     }
 }

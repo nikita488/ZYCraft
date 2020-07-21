@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.util.ZYDamageSource;
 
-public class ModDamageSources
+public class ZYDamageSources
 {
     public static final ZYDamageSource QUARTZ_CRYSTAL = new ZYDamageSource("quartz_crystal");
 

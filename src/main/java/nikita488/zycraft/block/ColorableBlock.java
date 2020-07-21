@@ -1,7 +1,7 @@
 package nikita488.zycraft.block;
 
 import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.init.ModTiles;
+import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -36,7 +36,7 @@ public class ColorableBlock extends Block
     @Override
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        return ModTiles.COLORABLE.create();
+        return ZYTiles.COLORABLE.create();
     }
 
     @Override

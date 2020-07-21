@@ -1,26 +1,26 @@
-package nikita488.zycraft.util;
+package nikita488.zycraft.init;
 
 import nikita488.zycraft.block.ColorableBlock;
-import nikita488.zycraft.enums.ZyType;
+import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
 
-public class ModColors
+public class ZYColors
 {
-    public static IBlockColor zyBlockColor(ZyType type, boolean coloredOverlay)
+    public static IBlockColor zyBlockColor(ZYType type, boolean coloredOverlay)
     {
         return (state, world, pos, tintIndex) -> zyRGB(type, tintIndex, coloredOverlay);
     }
 
-    public static IItemColor zyItemColor(ZyType type, boolean coloredOverlay)
+    public static IItemColor zyItemColor(ZYType type, boolean coloredOverlay)
     {
         return (stack, tintIndex) -> zyRGB(type, tintIndex, coloredOverlay);
     }
 
-    private static int zyRGB(ZyType type, int tintIndex, boolean coloredOverlay)
+    private static int zyRGB(ZYType type, int tintIndex, boolean coloredOverlay)
     {
         if (tintIndex == 0)
             return type.rgb();

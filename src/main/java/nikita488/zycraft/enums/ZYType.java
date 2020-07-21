@@ -5,7 +5,7 @@ import net.minecraft.util.IStringSerializable;
 
 import java.util.Random;
 
-public enum ZyType implements IStringSerializable
+public enum ZYType implements IStringSerializable
 {
     BLUE("blue", 0x0064FF, 0x001940, MaterialColor.BLUE),
     GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
@@ -16,9 +16,9 @@ public enum ZyType implements IStringSerializable
     private final String name;
     private final int color, darkColor;
     private final MaterialColor mtlColor;
-    public static final ZyType[] VALUES = values();
+    public static final ZYType[] VALUES = values();
 
-    ZyType(String name, int color, int darkColor, MaterialColor mtlColor)
+    ZYType(String name, int color, int darkColor, MaterialColor mtlColor)
     {
         this.name = name;
         this.color = color;
@@ -26,7 +26,7 @@ public enum ZyType implements IStringSerializable
         this.mtlColor = mtlColor;
     }
 
-    public static ZyType random(Random random)
+    public static ZYType random(Random random)
     {
         return VALUES[random.nextInt(VALUES.length)];
     }
