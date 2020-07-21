@@ -26,7 +26,7 @@ public class ModItems
     public static final Map<ZyType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyItem("{type}_zychorium", type ->
             REGISTRY.item(properties -> new ZychoriumItem(type, properties))
                     .color(() -> () -> (stack, tintIndex) -> type.rgb())
-                    .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("obj/zychorium")))
+                    .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("item/zychorium")))
                     .tag(ModTags.Items.ZYCHORIUM)
                     .register());
 

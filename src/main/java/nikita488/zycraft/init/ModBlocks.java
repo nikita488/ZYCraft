@@ -1,6 +1,5 @@
 package nikita488.zycraft.init;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -10,7 +9,6 @@ import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
@@ -30,7 +28,6 @@ import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
 import net.minecraft.world.storage.loot.functions.ExplosionDecay;
 import net.minecraft.world.storage.loot.functions.SetCount;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
