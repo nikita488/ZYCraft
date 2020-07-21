@@ -1,3 +1,8 @@
+### 0.0.5 (2020-07-21)
+
+* Fixed translation key instead of death message when killed by Quartz Crystal ([20da448](https://github.com/nikita488/ZYCraft/commit/20da448d221d35798a8af1efdf58d4d0641cfe14))
+* Added temporary fix for broken emissive quads. Will be removed when ConnectedTexturesMod will fix bugs associated with this. ([612f15a](https://github.com/nikita488/ZYCraft/commit/612f15a339f3c9dae0ef7d1458bc74f0b1c8c987))
+
 ### 0.0.4 (2020-07-18)
 
 * Fixed texture of Aluminum Ore that used the old Stone texture ([bd83ae8](https://github.com/nikita488/ZYCraft/commit/bd83ae83b5feacafa9c6629f625149ca20c82990))
