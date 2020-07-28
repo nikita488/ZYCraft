@@ -1,3 +1,7 @@
+### 0.0.6 (2020-07-28)
+
+* Reworked Cloud sprite handling. Now should work with Optifine. ([c8dc3d6](https://github.com/nikita488/ZYCraft/commit/c8dc3d6d36432846d2dedf802c1acb910eba6045))
+
 ### 0.0.5 (2020-07-21)
 
 * Fixed translation key instead of death message when killed by Quartz Crystal ([20da448](https://github.com/nikita488/ZYCraft/commit/20da448d221d35798a8af1efdf58d4d0641cfe14))
