@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.util.DataIngredient;
 import net.minecraft.data.ShapedRecipeBuilder;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.client.ZYColors;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.item.ColorScannerItem;
 import nikita488.zycraft.item.ZychoriumItem;

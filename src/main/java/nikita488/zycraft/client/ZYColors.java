@@ -1,4 +1,4 @@
-package nikita488.zycraft.init;
+package nikita488.zycraft.client;
 
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.enums.ZYType;

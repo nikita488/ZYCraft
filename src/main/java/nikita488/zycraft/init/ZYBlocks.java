@@ -32,6 +32,7 @@ import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.*;
+import nikita488.zycraft.client.ZYColors;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.enums.ZYType;
 

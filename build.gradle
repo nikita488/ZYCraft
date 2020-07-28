@@ -1,20 +1,23 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
+        maven { url = 'https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'org.spongepowered', name:'mixingradle', version: '0.7-SNAPSHOT'
     }
 }
 
 plugins {
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'com.github.johnrengelman.shadow' version '4.0.4'
     id 'com.matthewprenger.cursegradle' version '1.4.0'
 }
 
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
 
 version = "${minecraft_version}-${mod_version}"
 group = 'nikita488.zycraft'
@@ -24,6 +27,10 @@ sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = co
 
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
+}
+
+sourceSets.main {
+    ext.refMap = "mixins.zycraft.refmap.json"
 }
 
 repositories {
@@ -38,8 +45,10 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
+
             //property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
             //property 'forge.logging.console.level', 'debug'
+            arg '-mixin.config=mixins.zycraft.json'
 
             mods {
                 zycraft {
@@ -87,6 +96,7 @@ dependencies {
     shade registrate
 
     implementation fg.deobf("team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}")
+    compile 'org.spongepowered:mixin:0.8'
 }
 
 processResources {
@@ -105,7 +115,8 @@ jar {
                 "Implementation-Title": project.name,
                 "Implementation-Version": "${version}",
                 "Implementation-Vendor" :"nikita488",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConnector": "nikita488.zycraft.mixin.ZYMixinConnector"
         ])
     }
 }
@@ -148,6 +159,7 @@ curseforge {
         addArtifact apiJar
         relations {
             requiredDependency 'ctm'
+            requiredDependency 'mixinbootstrap'
         }
     }
 }

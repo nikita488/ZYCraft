@@ -6,29 +6,21 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.util.Color4b;
 import nikita488.zycraft.util.IntBiConsumer;
 
 import java.util.Random;
-import java.util.function.Supplier;
 
 public class CloudSprite extends TextureAtlasSprite
 {
     public static final ResourceLocation NAME = ZYCraft.modLoc("cloud");
     private static final Random RANDOM = new Random();
-    private static final Supplier<NativeImage> IMAGE = () ->
-    {
-        NativeImage image = new NativeImage(ZYConfig.animationSize, ZYConfig.animationSize, false);
-        image.untrack();
-        return image;
-    };
     private final float[] pixels, baseLayer, adjustmentLayer;
     private final int[] offsets = new int[] {0, -1, 0, 1};
 
-    public CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y)
+    public CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y, NativeImage image)
     {
-        super(atlas, info, 0, atlasWidth, atlasHeight, x, y, IMAGE.get());
+        super(atlas, info, 0, atlasWidth, atlasHeight, x, y, image);
         this.pixels = new float[info.getSpriteWidth() * info.getSpriteHeight()];
         this.baseLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];
         this.adjustmentLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];

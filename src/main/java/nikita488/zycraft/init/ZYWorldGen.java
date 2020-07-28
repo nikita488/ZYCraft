@@ -29,7 +29,7 @@ public class ZYWorldGen
 
     public static void init() {}
 
-    public static void addFeature()
+    public static void addFeatures()
     {
         for (Biome biome : ForgeRegistries.BIOMES)
         {

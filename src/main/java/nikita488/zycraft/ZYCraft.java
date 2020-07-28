@@ -36,7 +36,7 @@ public class ZYCraft
 
     private void commonSetup(FMLCommonSetupEvent event)
     {
-        DeferredWorkQueue.runLater(ZYWorldGen::addFeature);
+        DeferredWorkQueue.runLater(ZYWorldGen::addFeatures);
     }
 
     public static ResourceLocation modLoc(String name)

@@ -1,1 +1,9 @@
-{	"ctm": {		"ctm_version": 1,		"type": "CTM",		"textures": [		    "zycraft:block/viewer_ctm"		]	}}
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "CTM",
+		"textures": [
+		    "zycraft:block/viewer_ctm"
+		]
+	}
+}

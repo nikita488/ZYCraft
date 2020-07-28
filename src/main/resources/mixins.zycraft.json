@@ -1,0 +1,10 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "nikita488.zycraft.mixin",
+  "refmap": "mixins.zycraft.refmap.json",
+  "compatibilityLevel": "JAVA_8",
+  "client": [
+    "CloudSpriteMixin"
+  ]
+}

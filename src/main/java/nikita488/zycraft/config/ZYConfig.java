@@ -15,7 +15,7 @@ public class ZYConfig
     private static final Pair<ZYClientConfig, ForgeConfigSpec> CLIENT = new ForgeConfigSpec.Builder().configure(ZYClientConfig::new);
     private static final Pair<ZYServerConfig, ForgeConfigSpec> SERVER = new ForgeConfigSpec.Builder().configure(ZYServerConfig::new);
     //Client values
-    public static int animationSize;
+
     //Server values
     public static OreFeatureConfig.FillerBlockType zychoriteReplaceableBlock;
     public static int zychoriteSize;
@@ -47,7 +47,6 @@ public class ZYConfig
         if (config.getSpec() == CLIENT.getValue())
         {
             ZYClientConfig client = CLIENT.getKey();
-            animationSize = client.animationSize.get();
         }
         else if (config.getSpec() == SERVER.getValue())
         {
