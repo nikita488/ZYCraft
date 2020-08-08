@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "SCS",
+    "#S#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:zychorized_dark_engineering_block"
+    },
+    "T": {
+      "item": "minecraft:iron_bars"
+    },
+    "S": {
+      "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "zycraft:fluid_void"
+  }
+}

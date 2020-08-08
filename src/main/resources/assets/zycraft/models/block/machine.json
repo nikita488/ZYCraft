@@ -1,0 +1,11 @@
+{
+    "parent": "zycraft:block/zy_cube",
+    "textures": {
+        "overlay_down": "#bottom",
+        "overlay_up": "#top",
+        "overlay_north": "#side",
+        "overlay_east": "#side",
+        "overlay_south": "#side",
+        "overlay_west": "#side"
+    }
+}

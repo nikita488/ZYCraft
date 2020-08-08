@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "SCS",
+    "#S#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:zychorized_light_engineering_block"
+    },
+    "T": {
+      "item": "zycraft:zychorite"
+    },
+    "S": {
+      "item": "zycraft:zychorite"
+    },
+    "C": {
+      "item": "minecraft:snowball"
+    }
+  },
+  "result": {
+    "item": "zycraft:zychorium_ice"
+  }
+}

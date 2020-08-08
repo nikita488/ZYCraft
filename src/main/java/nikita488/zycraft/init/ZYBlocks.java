@@ -28,6 +28,7 @@ import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
 import net.minecraft.world.storage.loot.functions.ApplyBonus;
 import net.minecraft.world.storage.loot.functions.ExplosionDecay;
 import net.minecraft.world.storage.loot.functions.SetCount;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
@@ -271,6 +272,12 @@ public class ZYBlocks
                     .recipe((ctx, provider) ->
                             engineering(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
+    public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_WATER = basicMachine("zychorium_water", ZYType.BLUE);
+    public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_SOIL = basicMachine("zychorium_soil", ZYType.GREEN);
+    public static final BlockEntry<BasicMachineBlock> FIRE_BASIN = basicMachine("fire_basin", ZYType.RED);
+    public static final BlockEntry<BasicMachineBlock> FLUID_VOID = basicMachine("fluid_void", ZYType.DARK);
+    public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_ICE = basicMachine("zychorium_ice", ZYType.LIGHT);
+
     private static ImmutableMap<ZYType, BlockEntry<ZYBlock>> zyBlock(String pattern, NonNullBiFunction<ZYType, BlockBuilder<ZYBlock, Registrate>, BlockBuilder<ZYBlock, Registrate>> factory)
     {
         return zyBase(pattern, false, factory);
@@ -446,6 +453,84 @@ public class ZYBlocks
         }
 
         return blocks.build();
+    }
+
+    private static BlockEntry<BasicMachineBlock> basicMachine(String name, ZYType type)
+    {
+        return REGISTRY.object(name)
+                .block(properties -> new BasicMachineBlock(type, properties))
+                .initialProperties(ZYCHORITE)
+                .addLayer(() -> RenderType::getCutout)
+                .color(() -> () -> ZYColors.zyBlockColor(type, false))
+                .blockstate((ctx, provider) ->
+                {
+                    ModelFile model = null;
+
+                    switch (type)
+                    {
+                        case BLUE:
+                        case LIGHT:
+                            model = provider.models()
+                                    .withExistingParent(name, provider.modLoc("block/machine"))
+                                    .texture("side", provider.modLoc("block/" + name))
+                                    .texture("top", provider.modLoc("block/machine_base"))
+                                    .texture("bottom", provider.modLoc("block/machine_base"));
+                            break;
+                        case GREEN:
+                        case RED:
+                            model = provider.models()
+                                    .withExistingParent(name, provider.modLoc("block/machine"))
+                                    .texture("side", provider.modLoc("block/" + name + "_side"))
+                                    .texture("top", provider.modLoc("block/" + name + "_top"))
+                                    .texture("bottom", provider.modLoc("block/machine_base"));
+                            break;
+                        case DARK:
+                            model = provider.models()
+                                    .withExistingParent(name, provider.modLoc("block/zy_cube_all"))
+                                    .texture("all", provider.modLoc("block/" + name));
+                            break;
+                    }
+
+                    provider.simpleBlock(ctx.getEntry(), model);
+                })
+                .item()
+                    .color(() -> () -> ZYColors.zyItemColor(type, false))
+                    .build()
+                .recipe((ctx, provider) ->
+                {
+                    DataIngredient core = null;
+
+                    switch (type)
+                    {
+                        case BLUE:
+                            core = DataIngredient.items(Items.WATER_BUCKET);
+                            break;
+                        case GREEN:
+                            core = DataIngredient.tag(ItemTags.SAPLINGS);
+                            break;
+                        case RED:
+                            core = DataIngredient.tag(Tags.Items.GUNPOWDER);
+                            break;
+                        case DARK:
+                            core = DataIngredient.items(Items.BUCKET);
+                            break;
+                        case LIGHT:
+                            core = DataIngredient.items(Items.SNOWBALL);
+                            break;
+                    }
+
+                    ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
+                            .patternLine("#T#")
+                            .patternLine("SCS")
+                            .patternLine("#S#")
+                            .key('#', DataIngredient.items(ZYCHORIZED_ENGINEERING_BLOCK.get(type)))
+                            .key('T', type == ZYType.RED || type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
+                            .key('S', type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
+                            .key('C', core)
+                            .addCriterion("has_" + provider.safeName(core), core.getCritereon(provider))
+                            .build(provider, provider.safeId(ctx.getEntry()));
+                })
+                .register();
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void storageBlock(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
