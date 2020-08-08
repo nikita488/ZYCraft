@@ -1,3 +1,8 @@
+### 0.1.0 (2020-08-08)
+
+* Added Zychorium Water, Soil, Ice, Fire Basin, Fluid Void ([fde0fa8](https://github.com/nikita488/ZYCraft/commit/fde0fa8ff60fd8db2da0a271bc9d19c6af073ab1))
+* Improved Zychorium gem model and texture ([cd96c07](https://github.com/nikita488/ZYCraft/commit/cd96c07680f8745681f1e4b47dcf3caa1b570ae4))
+
 ### 0.0.6 (2020-07-28)
 
 * Reworked Cloud sprite handling. Now should work with Optifine. ([c8dc3d6](https://github.com/nikita488/ZYCraft/commit/c8dc3d6d36432846d2dedf802c1acb910eba6045))
