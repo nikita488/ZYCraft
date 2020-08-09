@@ -2,7 +2,6 @@
   "parent": "zycraft:block/machine",
   "textures": {
     "side": "zycraft:block/zychorium_soil_side",
-    "top": "zycraft:block/zychorium_soil_top",
-    "bottom": "zycraft:block/machine_base"
+    "top": "zycraft:block/zychorium_soil_top"
   }
 }

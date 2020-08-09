@@ -2,7 +2,6 @@
   "parent": "zycraft:block/machine",
   "textures": {
     "side": "zycraft:block/zychorium_water",
-    "top": "zycraft:block/machine_base",
-    "bottom": "zycraft:block/machine_base"
+    "top": "zycraft:block/machine_base"
   }
 }

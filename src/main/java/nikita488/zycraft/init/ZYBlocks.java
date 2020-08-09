@@ -473,16 +473,14 @@ public class ZYBlocks
                             model = provider.models()
                                     .withExistingParent(name, provider.modLoc("block/machine"))
                                     .texture("side", provider.modLoc("block/" + name))
-                                    .texture("top", provider.modLoc("block/machine_base"))
-                                    .texture("bottom", provider.modLoc("block/machine_base"));
+                                    .texture("top", provider.modLoc("block/machine_base"));
                             break;
                         case GREEN:
                         case RED:
                             model = provider.models()
                                     .withExistingParent(name, provider.modLoc("block/machine"))
                                     .texture("side", provider.modLoc("block/" + name + "_side"))
-                                    .texture("top", provider.modLoc("block/" + name + "_top"))
-                                    .texture("bottom", provider.modLoc("block/machine_base"));
+                                    .texture("top", provider.modLoc("block/" + name + "_top"));
                             break;
                         case DARK:
                             model = provider.models()
