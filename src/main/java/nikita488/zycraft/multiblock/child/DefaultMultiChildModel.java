@@ -57,39 +57,45 @@ public class DefaultMultiChildModel implements IModelGeometry<DefaultMultiChildM
         }
 
         @Override
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random rand, IModelData data)
+        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random rand, IModelData modelData)
         {
+            if (state == null || face == null)
+                return ImmutableList.of();
+
             RenderType layer = MinecraftForgeClient.getRenderLayer();
 
-            if (layer == null || face == null)
+            if (layer == null)
                 return Minecraft.getInstance().getBlockRendererDispatcher()
                         .getBlockModelShapes()
                         .getModelManager()
-                        .getMissingModel().getQuads(state, face, rand, data);
+                        .getMissingModel().getQuads(state, face, rand, modelData);
 
-            if (!data.hasProperty(DefaultMultiChildTile.STATE))
+            if (!modelData.hasProperty(DefaultMultiChildTile.STATE) || !modelData.hasProperty(DefaultMultiChildTile.POS))
                 return ImmutableList.of();
 
-            BlockState childState = data.getData(DefaultMultiChildTile.STATE);
+            state = modelData.getData(DefaultMultiChildTile.STATE);
 
-            if (childState == null || !RenderTypeLookup.canRenderInLayer(childState, layer))
+            if (!RenderTypeLookup.canRenderInLayer(state, layer))
                 return ImmutableList.of();
 
-            return Minecraft.getInstance().getBlockRendererDispatcher()
-                    .getModelForState(childState).getQuads(childState, face, rand, data);
+            IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
+            modelData = model.getModelData(Minecraft.getInstance().world, modelData.getData(DefaultMultiChildTile.POS), state, modelData);
+
+            return model.getQuads(state, face, rand, modelData);
         }
 
         @Nonnull
         @Override
-        public IModelData getModelData(@Nonnull ILightReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData tileData)
+        public IModelData getModelData(@Nonnull ILightReader world, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData modelData)
         {
             TileEntity tile = world.getTileEntity(pos);
 
             if (!(tile instanceof DefaultMultiChildTile))
-                return tileData;
+                return modelData;
 
-            tileData.setData(DefaultMultiChildTile.STATE, ((DefaultMultiChildTile)tile).state());
-            return tileData;
+            modelData.setData(DefaultMultiChildTile.STATE, ((DefaultMultiChildTile)tile).state());
+            modelData.setData(DefaultMultiChildTile.POS, pos);
+            return modelData;
         }
 
         @Override
@@ -129,11 +135,10 @@ public class DefaultMultiChildModel implements IModelGeometry<DefaultMultiChildM
                 return missingSprite;
 
             BlockState state = data.getData(DefaultMultiChildTile.STATE);
+            IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
+            data = model.getModelData(Minecraft.getInstance().world, data.getData(DefaultMultiChildTile.POS), state, data);
 
-            if (state == null)
-                return missingSprite;
-
-            return Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state).getParticleTexture(data);
+            return model.getParticleTexture(data);
         }
 
         @Override
