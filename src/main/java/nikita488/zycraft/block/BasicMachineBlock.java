@@ -85,7 +85,8 @@ public class BasicMachineBlock extends ZYBlock
         if (type == ZYType.GREEN || type == ZYType.RED)
             return;
 
-        modifyAdjacentStates(world, pos);
+        for (Direction side : VALUES)
+            modifyAdjacentState(world, pos, pos.offset(side));
     }
 
     @Override
@@ -95,12 +96,6 @@ public class BasicMachineBlock extends ZYBlock
             return;
 
         modifyAdjacentState(world, pos, adjacentPos);
-    }
-
-    private void modifyAdjacentStates(World world, BlockPos pos)
-    {
-        for (Direction side : VALUES)
-            modifyAdjacentState(world, pos, pos.offset(side));
     }
 
     private void modifyAdjacentState(World world, BlockPos pos, BlockPos adjacentPos)

@@ -13,10 +13,10 @@ import org.apache.commons.lang3.tuple.Pair;
 public class ZYConfig
 {
     private static final Pair<ZYClientConfig, ForgeConfigSpec> CLIENT = new ForgeConfigSpec.Builder().configure(ZYClientConfig::new);
-    private static final Pair<ZYServerConfig, ForgeConfigSpec> SERVER = new ForgeConfigSpec.Builder().configure(ZYServerConfig::new);
+    private static final Pair<ZYCommonConfig, ForgeConfigSpec> COMMON = new ForgeConfigSpec.Builder().configure(ZYCommonConfig::new);
     //Client values
 
-    //Server values
+    //Common values
     public static OreFeatureConfig.FillerBlockType zychoriteReplaceableBlock;
     public static int zychoriteSize;
     public static int zychoriteOrePercentage;
@@ -36,11 +36,11 @@ public class ZYConfig
     public static void register()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT.getValue());
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, SERVER.getValue());
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON.getValue());
     }
 
     @SubscribeEvent
-    public static void reload(ModConfig.ModConfigEvent event)
+    public static void init(ModConfig.ModConfigEvent event)
     {
         ModConfig config = event.getConfig();
 
@@ -48,24 +48,25 @@ public class ZYConfig
         {
             ZYClientConfig client = CLIENT.getKey();
         }
-        else if (config.getSpec() == SERVER.getValue())
+        else if (config.getSpec() == COMMON.getValue())
         {
-            ZYServerConfig server = SERVER.getKey();
-            zychoriteReplaceableBlock = server.zychoriteReplaceableBlock.get();
-            zychoriteSize = server.zychoriteSize.get();
-            zychoriteOrePercentage = server.zychoriteOrePercentage.get();
-            zychoriteAmount = server.zychoriteAmount.get();
-            zychoriteMinHeight = server.zychoriteMinHeight.get();
-            zychoriteMaxHeight = server.zychoriteMaxHeight.get();
+            ZYCommonConfig common = COMMON.getKey();
 
-            aluminiumReplaceableBlock = server.aluminiumReplaceableBlock.get();
-            aluminiumSize = server.aluminiumSize.get();
-            aluminiumAmount = server.aluminiumAmount.get();
-            aluminiumMinHeight = server.aluminiumMinHeight.get();
-            aluminiumMaxHeight = server.aluminiumMaxHeight.get();
+            zychoriteReplaceableBlock = common.zychoriteReplaceableBlock.get();
+            zychoriteSize = common.zychoriteSize.get();
+            zychoriteOrePercentage = common.zychoriteOrePercentage.get();
+            zychoriteAmount = common.zychoriteAmount.get();
+            zychoriteMinHeight = common.zychoriteMinHeight.get();
+            zychoriteMaxHeight = common.zychoriteMaxHeight.get();
 
-            quartzCrystalGenerationAttempts = server.quartzCrystalGenerationAttempts.get();
-            quartzCrystalAmount = server.quartzCrystalAmount.get();
+            aluminiumReplaceableBlock = common.aluminiumReplaceableBlock.get();
+            aluminiumSize = common.aluminiumSize.get();
+            aluminiumAmount = common.aluminiumAmount.get();
+            aluminiumMinHeight = common.aluminiumMinHeight.get();
+            aluminiumMaxHeight = common.aluminiumMaxHeight.get();
+
+            quartzCrystalGenerationAttempts = common.quartzCrystalGenerationAttempts.get();
+            quartzCrystalAmount = common.quartzCrystalAmount.get();
         }
     }
 }

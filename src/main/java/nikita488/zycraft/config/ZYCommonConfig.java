@@ -3,7 +3,7 @@ package nikita488.zycraft.config;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ZYServerConfig
+public class ZYCommonConfig
 {
     protected final ForgeConfigSpec.EnumValue<OreFeatureConfig.FillerBlockType> zychoriteReplaceableBlock;
     protected final ForgeConfigSpec.IntValue zychoriteSize;
@@ -21,7 +21,7 @@ public class ZYServerConfig
     protected final ForgeConfigSpec.IntValue quartzCrystalGenerationAttempts;
     protected final ForgeConfigSpec.IntValue quartzCrystalAmount;
 
-    public ZYServerConfig(ForgeConfigSpec.Builder builder)
+    public ZYCommonConfig(ForgeConfigSpec.Builder builder)
     {
         builder.comment("WorldGen settings")
                 .push("worldGen");
