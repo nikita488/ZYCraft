@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/multi_interface",
+  "textures": {
+    "overlay": "zycraft:block/item_io"
+  }
+}

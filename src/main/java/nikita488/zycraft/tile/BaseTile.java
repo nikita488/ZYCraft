@@ -1,5 +1,6 @@
 package nikita488.zycraft.tile;
 
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -13,6 +14,11 @@ public class BaseTile extends TileEntity
     public BaseTile(TileEntityType<?> type)
     {
         super(type);
+    }
+
+    public boolean canInteractWith(PlayerEntity player)
+    {
+        return true;
     }
 
     public void decode(CompoundNBT compound) {}
