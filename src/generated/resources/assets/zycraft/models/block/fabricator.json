@@ -1,7 +1,0 @@
-{
-  "parent": "zycraft:block/machine",
-  "textures": {
-    "side": "zycraft:block/fabricator_side",
-    "top": "zycraft:block/fabricator_top"
-  }
-}

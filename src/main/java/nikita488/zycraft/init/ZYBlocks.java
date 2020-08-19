@@ -7,7 +7,6 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -37,10 +36,6 @@ import nikita488.zycraft.block.*;
 import nikita488.zycraft.client.ZYColors;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.multiblock.child.DefaultMultiChildBlock;
-import nikita488.zycraft.api.multiblock.child.MultiChildMaterial;
-import nikita488.zycraft.multiblock.test.TestBlock;
-import nikita488.zycraft.multiblock.test.TestTile;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -282,50 +277,6 @@ public class ZYBlocks
     public static final BlockEntry<BasicMachineBlock> FIRE_BASIN = basicMachine("fire_basin", ZYType.RED);
     public static final BlockEntry<BasicMachineBlock> FLUID_VOID = basicMachine("fluid_void", ZYType.DARK);
     public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_ICE = basicMachine("zychorium_ice", ZYType.LIGHT);
-
-    public static final BlockEntry<Block> FABRICATOR = REGISTRY.object("fabricator")
-            .block(Block::new)
-            .initialProperties(ZYCHORITE)
-            .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::fabricatorBlockColor)
-            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
-                    .withExistingParent(ctx.getName(), provider.modLoc("block/machine"))
-                    .texture("side", provider.modLoc("block/fabricator_side"))
-                    .texture("top", provider.modLoc("block/fabricator_top"))))
-            .item()
-                .color(() -> ZYColors::fabricatorItemColor)
-                .build()
-            .register();
-
-    public static final ImmutableMap<MultiChildMaterial, BlockEntry<DefaultMultiChildBlock>> DEFAULT_MULTI_CHILD = defaultMultiChild();
-
-    public static final BlockEntry<TestBlock> VALVE = REGISTRY.object("valve")
-            .block(TestBlock::new)
-            .initialProperties(ZYCHORITE)
-            .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::valveBlockColor)
-            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
-                    .withExistingParent(ctx.getName(), provider.modLoc("block/multi_interface"))
-                    .texture("overlay", provider.modLoc("block/valve"))))
-            .simpleTileEntity(TestTile::new)
-            .item()
-                .color(() -> ZYColors::valveItemColor)
-                .build()
-            .register();
-
-    public static final BlockEntry<Block> ITEM_IO = REGISTRY.object("item_io")
-            .block(Block::new)
-            .initialProperties(ZYCHORITE)
-            .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::itemIOBlockColor)
-            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
-                    .withExistingParent(ctx.getName(), provider.modLoc("block/multi_interface"))
-                    .texture("overlay", provider.modLoc("block/item_io"))))
-            .item()
-                .color(() -> ZYColors::itemIOItemColor)
-                .build()
-            .lang("Item IO")
-            .register();
 
     private static ImmutableMap<ZYType, BlockEntry<ZYBlock>> zyBlock(String pattern, NonNullBiFunction<ZYType, BlockBuilder<ZYBlock, Registrate>, BlockBuilder<ZYBlock, Registrate>> factory)
     {
@@ -578,27 +529,6 @@ public class ZYBlocks
                             .build(provider, provider.safeId(ctx.getEntry()));
                 })
                 .register();
-    }
-
-    private static ImmutableMap<MultiChildMaterial, BlockEntry<DefaultMultiChildBlock>> defaultMultiChild()
-    {
-        ImmutableMap.Builder<MultiChildMaterial, BlockEntry<DefaultMultiChildBlock>> blocks = ImmutableMap.builder();
-
-        for (MultiChildMaterial material : MultiChildMaterial.VALUES)
-        {
-            blocks.put(material, REGISTRY.object(material.getName() + "_multi_child")
-                    .block(material.material(), DefaultMultiChildBlock::new)
-                    .properties(properties -> properties.noDrops().variableOpacity())
-                    .properties(properties -> material.notSolid() ? properties.notSolid() : properties)
-                    .color(() -> ZYColors::defaultMultiChildColor)
-                    .blockstate((ctx, provider) ->
-                            provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.modLoc("block/default_multi_child"))))
-                    .loot((ctx, provider) -> NonNullBiConsumer.noop())
-                    //.tag(ZYTags.Blocks.FAKE_CHILD)
-                    .register());
-        }
-
-        return blocks.build();
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void storageBlock(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)

@@ -8,9 +8,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.init.*;
-import nikita488.zycraft.multiblock.capability.MultiChunkCapability;
-import nikita488.zycraft.multiblock.capability.MultiWorldCapability;
-import nikita488.zycraft.network.ZYChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -32,7 +29,6 @@ public class ZYCraft
         ZYGroups.init();
         ZYDamageSources.init();
         ZYWorldGen.init();
-        ZYChannel.init();
         ZYConfig.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
@@ -40,8 +36,6 @@ public class ZYCraft
 
     private void commonSetup(FMLCommonSetupEvent event)
     {
-        MultiWorldCapability.register();
-        MultiChunkCapability.register();
         DeferredWorkQueue.runLater(ZYWorldGen::addFeatures);
     }
 
