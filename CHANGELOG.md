@@ -1,3 +1,7 @@
+### 0.1.1 (2020-08-19)
+
+* Fixed broken world gen ([5795d50](https://github.com/nikita488/ZYCraft/commit/5795d50e56101a8b30eb15f82a3ff473d2523120))
+
 ### 0.1.0 (2020-08-08)
 
 * Added Zychorium Water, Soil, Ice, Fire Basin, Fluid Void ([fde0fa8](https://github.com/nikita488/ZYCraft/commit/fde0fa8ff60fd8db2da0a271bc9d19c6af073ab1))
