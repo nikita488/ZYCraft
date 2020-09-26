@@ -1,3 +1,9 @@
+### 0.1.2 (2020-09-26)
+
+* Added tooltips to Colorable blocks and Color Scanner; Now Dye item is not consumed when applied to Colorable blocks; Changed color values that Dye applies to Colorable blocks - now more vibrant colors! ([dae0e94](https://github.com/nikita488/ZYCraft/commit/dae0e944ba8c5b0b53d401aeceaee7eea64aae26))
+* Added functionality to Dark and Light Zychorium when used on Colorable blocks - used to adjust color brightness and to reset color ([888a19e](https://github.com/nikita488/ZYCraft/commit/888a19ef6e2da896c5f827bbf87e991aa4ad91f2))
+* Added some tags for blocks and items ([e86328d](https://github.com/nikita488/ZYCraft/commit/e86328d72fdc21ab5389c3aa319ae8c206b3732c))
+
 ### 0.1.1 (2020-08-19)
 
 * Fixed broken world gen ([5795d50](https://github.com/nikita488/ZYCraft/commit/5795d50e56101a8b30eb15f82a3ff473d2523120))
