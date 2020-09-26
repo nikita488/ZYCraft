@@ -5,7 +5,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -18,9 +17,6 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import nikita488.zycraft.enums.ZYType;
 
 import java.util.Random;
@@ -43,7 +39,8 @@ public class BasicMachineBlock extends ZYBlock
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (type != ZYType.BLUE)
+        return ActionResultType.PASS;
+        /*if (type != ZYType.BLUE)
             return ActionResultType.PASS;
 
         ItemStack stack = player.getHeldItem(hand);
@@ -65,7 +62,7 @@ public class BasicMachineBlock extends ZYBlock
             player.setHeldItem(hand, handler.getContainer());
 
             return ActionResultType.SUCCESS;
-        }).orElse(ActionResultType.CONSUME);
+        }).orElse(ActionResultType.CONSUME);*/
     }
 
     @Override
