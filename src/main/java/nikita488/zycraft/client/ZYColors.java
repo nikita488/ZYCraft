@@ -54,10 +54,9 @@ public class ZYColors
     {
         return (stack, tintIndex) ->
         {
-            CompoundNBT compound = stack.getTag();
-            if (compound == null || tintIndex != 0)
+            if (!stack.hasTag() || tintIndex != 0)
                 return 0xFFFFFF;
-            return compound.getInt("Color");
+            return stack.getTag().getInt("Color");
         };
     }
 }

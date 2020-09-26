@@ -1,6 +1,6 @@
 package nikita488.zycraft.util;
 
-import nikita488.zycraft.block.QuartzCrystalBlock;
+import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import nikita488.zycraft.particle.SparkleParticleData;
 import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.BlockState;
@@ -58,7 +58,7 @@ public class ParticleSpawn
         }
     }
 
-    public static void quartzCrystal(BlockState state, World world, BlockPos pos, Random rand)
+    public static void quartzCrystalCluster(BlockState state, World world, BlockPos pos, Random rand)
     {
         SparkleParticleData data = SparkleParticleData.builder()
                 .color(0xFFFFFF80)
@@ -70,7 +70,7 @@ public class ParticleSpawn
 
         float size = 6 / 16F;
         float height = 11 / 16F;
-        Direction dir = state.get(QuartzCrystalBlock.FACING);
+        Direction dir = state.get(QuartzCrystalClusterBlock.FACING);
         double xOffset = getOffset(rand, dir, Direction.Axis.X, size, height);
         double yOffset = getOffset(rand, dir, Direction.Axis.Y, size, height);
         double zOffset = getOffset(rand, dir, Direction.Axis.Z, size, height);

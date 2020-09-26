@@ -18,8 +18,8 @@ public class ZYCommonConfig
     protected final ForgeConfigSpec.IntValue aluminiumMinHeight;
     protected final ForgeConfigSpec.IntValue aluminiumMaxHeight;
 
-    protected final ForgeConfigSpec.IntValue quartzCrystalGenerationAttempts;
-    protected final ForgeConfigSpec.IntValue quartzCrystalAmount;
+    protected final ForgeConfigSpec.IntValue quartzCrystalClusterAttempts;
+    protected final ForgeConfigSpec.IntValue quartzCrystalClusterAmount;
 
     public ZYCommonConfig(ForgeConfigSpec.Builder builder)
     {
@@ -67,13 +67,13 @@ public class ZYCommonConfig
                 .defineInRange("maxHeight", 64, 0, 256);
         builder.pop();
 
-        builder.comment("Quartz Crystal")
-                .push("quartzCrystal");
-        quartzCrystalGenerationAttempts = builder
-                .comment("Defines the amount of attempts to generate crystals per chunk")
+        builder.comment("Quartz Crystal Cluster")
+                .push("quartzCrystalCluster");
+        quartzCrystalClusterAttempts = builder
+                .comment("Defines the amount of attempts to generate crystal clusters per chunk")
                 .defineInRange("generationAttempts", 64, 0, Integer.MAX_VALUE);
-        quartzCrystalAmount = builder
-                .comment("Defines the max amount of crystals per chunk")
+        quartzCrystalClusterAmount = builder
+                .comment("Defines the max amount of crystal clusters per chunk")
                 .defineInRange("amount", 4, 0, Integer.MAX_VALUE);
         builder.pop();
 

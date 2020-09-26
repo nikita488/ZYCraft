@@ -1,14 +1,14 @@
 package nikita488.zycraft.init;
 
+import com.tterrag.registrate.util.entry.TileEntityEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.tile.ColorableTile;
-import com.tterrag.registrate.util.entry.TileEntityEntry;
 
 public class ZYTiles
 {
     public static final TileEntityEntry<ColorableTile> COLORABLE = ZYCraft.REGISTRY.object("colorable")
-            .tileEntity(ColorableTile::new)
+            .<ColorableTile>tileEntity(ColorableTile::new)
             .validBlocks(ZYBlocks.ZYCHORIUM_LAMP,
                     ZYBlocks.INVERTED_ZYCHORIUM_LAMP,
                     ZYBlocks.IMMORTAL_BLOCK,

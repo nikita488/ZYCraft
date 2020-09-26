@@ -15,40 +15,40 @@ public class BaseTile extends TileEntity
         super(type);
     }
 
-    public void decode(CompoundNBT compound) {}
+    public void decode(CompoundNBT tag) {}
 
-    public void encode(CompoundNBT compound) {}
+    public void encode(CompoundNBT tag) {}
 
     @Override
     public CompoundNBT getUpdateTag()
     {
-        CompoundNBT nbt = super.getUpdateTag();
-        encode(nbt);
-        return nbt;
+        CompoundNBT tag = super.getUpdateTag();
+        encode(tag);
+        return tag;
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT compound)
+    public void handleUpdateTag(CompoundNBT tag)
     {
-        decode(compound);
+        decode(tag);
     }
 
-    public void decodeUpdate(CompoundNBT compound) {}
+    public void decodeUpdate(CompoundNBT tag) {}
 
-    public void encodeUpdate(CompoundNBT compound) {}
+    public void encodeUpdate(CompoundNBT tag) {}
 
     @Nullable
     @Override
     public SUpdateTileEntityPacket getUpdatePacket()
     {
-        CompoundNBT compound = new CompoundNBT();
-        encodeUpdate(compound);
-        return new SUpdateTileEntityPacket(pos, 0, compound);
+        CompoundNBT tag = new CompoundNBT();
+        encodeUpdate(tag);
+        return new SUpdateTileEntityPacket(pos, 0, tag);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt)
+    public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet)
     {
-        decodeUpdate(pkt.getNbtCompound());
+        decodeUpdate(packet.getNbtCompound());
     }
 }

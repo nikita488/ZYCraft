@@ -26,30 +26,30 @@ public class ZYItemGroup extends ItemGroup
     @Override
     public boolean hasSearchBar()
     {
-        return true;
+        return super.hasSearchBar();//true;
     }
 
     @Override
     public ResourceLocation getBackgroundImage()
     {
-        return ZYCraft.modLoc("textures/gui/container/creative_inventory/tab_zycraft.png");
+        return super.getBackgroundImage();//ZYCraft.modLoc("textures/gui/container/creative_inventory/tab_zycraft.png");
     }
 
     @Override
     public ResourceLocation getTabsImage()
     {
-        return ZYCraft.modLoc("textures/gui/container/creative_inventory/tabs.png");
+        return super.getTabsImage();//ZYCraft.modLoc("textures/gui/container/creative_inventory/tabs.png");
     }
 
     @Override
     public int getLabelColor()
     {
-        return 0xAAAAAA;
+        return super.getLabelColor();//0xAAAAAA;
     }
 
     @Override
     public int getSlotColor()
     {
-        return 0x80FFFFFF;
+        return super.getSlotColor();//0x80FFFFFF;
     }
 }

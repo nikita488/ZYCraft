@@ -12,20 +12,20 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.config.ZYConfig;
-import nikita488.zycraft.world.gen.feature.QuartzCrystalFeature;
+import nikita488.zycraft.world.gen.feature.QuartzCrystalClusterFeature;
 import nikita488.zycraft.world.gen.feature.ZychoriteVeinFeature;
-import nikita488.zycraft.world.gen.feature.placement.QuartzCrystalPlacement;
-import nikita488.zycraft.world.gen.feature.placement.config.QuartzCrystalPlacementConfig;
+import nikita488.zycraft.world.gen.feature.placement.QuartzCrystalClusterPlacement;
+import nikita488.zycraft.world.gen.feature.placement.config.QuartzCrystalClusterPlacementConfig;
 import nikita488.zycraft.world.gen.feature.сonfig.ZychoriteVeinFeatureConfig;
 
 public class ZYWorldGen
 {
     public static final RegistryEntry<ZychoriteVeinFeature> ZYCHORITE_VEIN = ZYCraft.REGISTRY.object("zychorite_vein")
             .simple(Feature.class, () -> new ZychoriteVeinFeature(ZychoriteVeinFeatureConfig::deserialize));
-    public static final RegistryEntry<QuartzCrystalFeature> QUARTZ_CRYSTAL = ZYCraft.REGISTRY.object("quartz_crystal")
-            .simple(Feature.class, () -> new QuartzCrystalFeature(NoFeatureConfig::deserialize));
-    public static final RegistryEntry<QuartzCrystalPlacement> QUARTZ_CRYSTAL_PLACEMENT = ZYCraft.REGISTRY.object("quartz_crystal")
-            .simple(Placement.class, () -> new QuartzCrystalPlacement(QuartzCrystalPlacementConfig::deserialize));
+    public static final RegistryEntry<QuartzCrystalClusterFeature> QUARTZ_CRYSTAL_CLUSTER = ZYCraft.REGISTRY.object("quartz_crystal")
+            .simple(Feature.class, () -> new QuartzCrystalClusterFeature(NoFeatureConfig::deserialize));
+    public static final RegistryEntry<QuartzCrystalClusterPlacement> QUARTZ_CRYSTAL_CLUSTER_PLACEMENT = ZYCraft.REGISTRY.object("quartz_crystal")
+            .simple(Placement.class, () -> new QuartzCrystalClusterPlacement(QuartzCrystalClusterPlacementConfig::deserialize));
 
     public static void init() {}
 
@@ -61,12 +61,12 @@ public class ZYWorldGen
                                     ZYConfig.aluminiumMinHeight,
                                     ZYConfig.aluminiumMaxHeight))));
 
-            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, QUARTZ_CRYSTAL.get()
+            biome.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, QUARTZ_CRYSTAL_CLUSTER.get()
                     .withConfiguration(NoFeatureConfig.NO_FEATURE_CONFIG)
-                    .withPlacement(QUARTZ_CRYSTAL_PLACEMENT.get()
-                            .configure(new QuartzCrystalPlacementConfig(
-                                    ZYConfig.quartzCrystalGenerationAttempts,
-                                    ZYConfig.quartzCrystalAmount))));
+                    .withPlacement(QUARTZ_CRYSTAL_CLUSTER_PLACEMENT.get()
+                            .configure(new QuartzCrystalClusterPlacementConfig(
+                                    ZYConfig.quartzCrystalClusterAttempts,
+                                    ZYConfig.quartzCrystalClusterAmount))));
         }
     }
 }

@@ -1,7 +1,7 @@
 package nikita488.zycraft.init;
 
-import nikita488.zycraft.enums.ZYType;
 import net.minecraft.item.ItemGroup;
+import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.util.ZYItemGroup;
 
 public class ZYGroups

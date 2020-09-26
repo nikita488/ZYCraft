@@ -4,12 +4,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.shapes.VoxelShape;
-import nikita488.zycraft.block.QuartzCrystalBlock;
+import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-public class QuartzCrystalShapes {
+public class QuartzCrystalClusterShapes {
     public static final VoxelShape[] DOWN = new VoxelShape[]
             {
                     Block.makeCuboidShape(6, 6, 6, 10, 16, 10),
@@ -77,6 +77,6 @@ public class QuartzCrystalShapes {
 
     public static VoxelShape get(BlockState state)
     {
-        return SHAPES.get(state.get(QuartzCrystalBlock.FACING))[state.get(QuartzCrystalBlock.AMOUNT) - 1];
+        return SHAPES.get(state.get(QuartzCrystalClusterBlock.FACING))[state.get(QuartzCrystalClusterBlock.AMOUNT) - 1];
     }
 }

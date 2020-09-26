@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ZYItems
 {
-    private static final Registrate REGISTRY = ZYCraft.REGISTRY.itemGroup(() -> ZYGroups.ITEMS, "ZYItems");
+    private static final Registrate REGISTRY = ZYCraft.REGISTRY.itemGroup(() -> ZYGroups.ITEMS, "ZYCraft Items");
 
     public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyItem("{type}_zychorium", type ->
             REGISTRY.item(properties -> new ZychoriumItem(type, properties))

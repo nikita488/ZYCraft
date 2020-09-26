@@ -2,10 +2,10 @@ package nikita488.zycraft.particle;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
-import nikita488.zycraft.init.ZYParticles;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
+import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements IParticleData
 {
@@ -77,7 +77,7 @@ public class SparkleParticleData implements IParticleData
     @Override
     public String getParameters()
     {
-        return "";//TODO: String.format(Locale.ROOT, "%s %.2f %.2f %.2f %.2f", getType().getRegistryName(), setR, setG, setB, a);
+        return getType().getRegistryName().toString();
     }
 
     public float r()

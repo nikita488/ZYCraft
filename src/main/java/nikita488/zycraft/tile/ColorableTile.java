@@ -1,17 +1,23 @@
 package nikita488.zycraft.tile;
 
-import nikita488.zycraft.util.BlockUpdate;
-import nikita488.zycraft.util.Color4b;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
+import nikita488.zycraft.util.BlockUpdate;
+import nikita488.zycraft.util.Color4b;
 
 public class ColorableTile extends BaseTile
 {
-    protected Color4b color = Color4b.from(0xFFFFFFFF);
+    protected Color4b color;
 
     public ColorableTile(TileEntityType<? extends ColorableTile> type)
     {
+        this(type, 0xFFFFFF);
+    }
+
+    public ColorableTile(TileEntityType<? extends ColorableTile> type, int defaultColor)
+    {
         super(type);
+        color = Color4b.from(defaultColor, 255);
     }
 
     public void setRGB(int rgb)
@@ -21,43 +27,43 @@ public class ColorableTile extends BaseTile
     }
 
     @Override
-    public void read(CompoundNBT compound)
+    public void read(CompoundNBT tag)
     {
-        super.read(compound);
-        color = Color4b.loadRGB(compound);
+        super.read(tag);
+        color = Color4b.loadRGB(tag);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT compound)
+    public CompoundNBT write(CompoundNBT tag)
     {
-        super.write(compound);
-        color.saveRGB(compound);
-        return compound;
+        super.write(tag);
+        color.saveRGB(tag);
+        return tag;
     }
 
     @Override
-    public void decode(CompoundNBT compound)
+    public void decode(CompoundNBT tag)
     {
-        color = Color4b.loadRGB(compound);
+        color = Color4b.loadRGB(tag);
     }
 
     @Override
-    public void decodeUpdate(CompoundNBT compound)
+    public void decodeUpdate(CompoundNBT tag)
     {
-        color = Color4b.loadRGB(compound);
+        color = Color4b.loadRGB(tag);
         BlockUpdate.scheduleRenderUpdate(world, pos);
     }
 
     @Override
-    public void encode(CompoundNBT compound)
+    public void encode(CompoundNBT tag)
     {
-        color.saveRGB(compound);
+        color.saveRGB(tag);
     }
 
     @Override
-    public void encodeUpdate(CompoundNBT compound)
+    public void encodeUpdate(CompoundNBT tag)
     {
-        color.saveRGB(compound);
+        color.saveRGB(tag);
     }
 
     public Color4b color()

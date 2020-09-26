@@ -5,12 +5,12 @@ import com.mojang.datafixers.Dynamic;
 import com.mojang.datafixers.types.DynamicOps;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 
-public class QuartzCrystalPlacementConfig implements IPlacementConfig
+public class QuartzCrystalClusterPlacementConfig implements IPlacementConfig
 {
     public final int generationAttempts;
     public final int count;
 
-    public QuartzCrystalPlacementConfig(int generationAttempts, int count)
+    public QuartzCrystalClusterPlacementConfig(int generationAttempts, int count)
     {
         this.generationAttempts = generationAttempts;
         this.count = count;
@@ -24,10 +24,10 @@ public class QuartzCrystalPlacementConfig implements IPlacementConfig
                 ops.createString("count"), ops.createInt(this.count))));
     }
 
-    public static QuartzCrystalPlacementConfig deserialize(Dynamic<?> dynamic)
+    public static QuartzCrystalClusterPlacementConfig deserialize(Dynamic<?> dynamic)
     {
         int generationAttempts = dynamic.get("generation_attempts").asInt(0);
         int count = dynamic.get("count").asInt(0);
-        return new QuartzCrystalPlacementConfig(generationAttempts, count);
+        return new QuartzCrystalClusterPlacementConfig(generationAttempts, count);
     }
 }
