@@ -117,6 +117,19 @@
   "item.zycraft.green_zychorium": "Green Zychorium",
   "item.zycraft.light_zychorium": "Light Zychorium",
   "item.zycraft.red_zychorium": "Red Zychorium",
-  "itemGroup.zycraft.blocks": "ZYBlocks",
-  "itemGroup.zycraft.items": "ZYItems"
+  "itemGroup.zycraft.blocks": "ZYCraft Blocks",
+  "itemGroup.zycraft.items": "ZYCraft Items",
+  "tooltip.zycraft.color_scanner.apply": "\u00A7a\u00A7oRight click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to apply color",
+  "tooltip.zycraft.color_scanner.blue": "\u00A79\u00A7oBlue:   %s",
+  "tooltip.zycraft.color_scanner.copy": "\u00A7a\u00A7oShift + Right click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to copy color",
+  "tooltip.zycraft.color_scanner.current_color": "\u00A77Current color:",
+  "tooltip.zycraft.color_scanner.green": "\u00A7a\u00A7oGreen: %s",
+  "tooltip.zycraft.color_scanner.red": "\u00A7c\u00A7oRed:    %s",
+  "tooltip.zycraft.colorable": "\u00A7e\u00A7oColorable",
+  "tooltip.zycraft.colorable.brightness": "\u00A78\u00A7oDark Zychorium\u00A77\u00A7o - to adjust color brightness",
+  "tooltip.zycraft.colorable.dye": "\u00A7e\u00A7oAny Dye\u00A77\u00A7o - to apply color of the dye",
+  "tooltip.zycraft.colorable.info": "\u00A7a\u00A7oRight click\u00A77\u00A7o or \u00A7a\u00A7oShift + Right click\u00A77\u00A7o on this block with one of the following:",
+  "tooltip.zycraft.colorable.reset": "\u00A7f\u00A7oLight Zychorium\u00A77\u00A7o - to reset color",
+  "tooltip.zycraft.colorable.rgb": "\u00A7c\u00A7oRed\u00A77\u00A7o, \u00A7a\u00A7oGreen\u00A77\u00A7o or \u00A79\u00A7oBlue Zychorium\u00A77\u00A7o - to adjust each individual RGB",
+  "tooltip.zycraft.hint": "\u00A77Press \u00A7a\u00A7oShift\u00A77 for info"
 }

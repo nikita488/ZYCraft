@@ -1,7 +1,9 @@
 package nikita488.zycraft.item;
 
+import net.minecraft.client.gui.screen.Screen;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.init.ZYTextComponents;
 import nikita488.zycraft.util.Color4b;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -32,34 +34,43 @@ public class ColorScannerItem extends Item implements IColorChanger
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
-        CompoundNBT compound = stack.getTag();
-        if (compound == null)
-            return;
+        if (!Screen.hasShiftDown() && !flag.isAdvanced())
+        {
+            tooltip.add(ZYTextComponents.TOOLTIP_HINT);
+        }
+        else
+        {
+            tooltip.add(ZYTextComponents.COLOR_SCANNER_APPLY);
+            tooltip.add(ZYTextComponents.COLOR_SCANNER_COPY);
+        }
 
-        int color = compound.getInt("Color");
-        tooltip.add(new StringTextComponent("R: " + Color4b.component(color, 1)).applyTextStyle(TextFormatting.RED));
-        tooltip.add(new StringTextComponent("G: " + Color4b.component(color, 2)).applyTextStyle(TextFormatting.GREEN));
-        tooltip.add(new StringTextComponent("B: " + Color4b.component(color, 3)).applyTextStyle(TextFormatting.BLUE));
+        int color = stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
+
+        tooltip.add(ZYTextComponents.COLOR_SCANNER_CURRENT_COLOR);
+        tooltip.add(ZYTextComponents.getColorScannerRed((color >> 16) & 0xFF));
+        tooltip.add(ZYTextComponents.getColorScannerGreen((color >> 8) & 0xFF));
+        tooltip.add(ZYTextComponents.getColorScannerBlue(color & 0xFF));
     }
 
     @Override
     public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        CompoundNBT compound = player.getHeldItem(hand).getOrCreateTag();
-        if (!compound.contains("Color", Constants.NBT.TAG_INT))
-            compound.putInt("Color", 0xFFFFFF);
-        return color != compound.getInt("Color");
+        ItemStack stack = player.getHeldItem(hand);
+        int scannerColor = stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
+
+        return color != scannerColor;
     }
 
     @Override
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        CompoundNBT compound = player.getHeldItem(hand).getTag();
-        if (compound == null) return 0xFFFFFF;
+        ItemStack stack = player.getHeldItem(hand);
+
         if (!player.isCrouching())
-            return compound.getInt("Color");
+            return stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
         else
-            compound.putInt("Color", color);
+            stack.getOrCreateTag().putInt("Color", color);
+
         return color;
     }
 

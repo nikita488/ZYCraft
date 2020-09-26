@@ -1,6 +1,11 @@
 package nikita488.zycraft.block;
 
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.api.colorable.IColorChanger;
+import nikita488.zycraft.enums.ZYDyeColor;
+import nikita488.zycraft.init.ZYTextComponents;
 import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.Block;
@@ -18,6 +23,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ColorableBlock extends Block
 {
@@ -40,6 +46,24 @@ public class ColorableBlock extends Block
     }
 
     @Override
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    {
+        if (!Screen.hasShiftDown() && !flag.isAdvanced())
+        {
+            tooltip.add(ZYTextComponents.TOOLTIP_HINT);
+        }
+        else
+        {
+            tooltip.add(ZYTextComponents.COLORABLE);
+            tooltip.add(ZYTextComponents.COLORABLE_INFO);
+            tooltip.add(ZYTextComponents.COLORABLE_RGB);
+            tooltip.add(ZYTextComponents.COLORABLE_BRIGHTNESS);
+            tooltip.add(ZYTextComponents.COLORABLE_RESET);
+            tooltip.add(ZYTextComponents.COLORABLE_DYE);
+        }
+    }
+
+    @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack stack = player.getHeldItem(hand);
@@ -52,7 +76,7 @@ public class ColorableBlock extends Block
             return ActionResultType.CONSUME;
 
         ColorableTile colorable = (ColorableTile)tile;
-        DyeColor dye;
+        ZYDyeColor dyeColor;
 
         if (item instanceof IColorChanger && ((IColorChanger)item).canChangeColor(state, world, pos, player, hand, hit, colorable.rgb()))
         {
@@ -60,14 +84,12 @@ public class ColorableBlock extends Block
                 colorable.setRGB(((IColorChanger)item).changeColor(state, world, pos, player, hand, hit, colorable.rgb()));
             return ActionResultType.SUCCESS;
         }
-        else if ((dye = DyeColor.getColor(stack)) != null && colorable.rgb() != dye.getColorValue())
+        else if ((dyeColor = ZYDyeColor.byDyeColor(stack)) != null && colorable.rgb() != dyeColor.rgb())
         {
             if (world.isRemote)
                 return ActionResultType.SUCCESS;
 
-            colorable.setRGB(dye.getColorValue());
-            if (!player.abilities.isCreativeMode)
-                stack.shrink(1);
+            colorable.setRGB(dyeColor.rgb());
             return ActionResultType.SUCCESS;
         }
 

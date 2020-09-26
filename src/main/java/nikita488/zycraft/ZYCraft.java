@@ -30,6 +30,7 @@ public class ZYCraft
         ZYDamageSources.init();
         ZYWorldGen.init();
         ZYConfig.register();
+        ZYTextComponents.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
     }
