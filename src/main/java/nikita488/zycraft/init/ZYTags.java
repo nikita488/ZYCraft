@@ -59,6 +59,8 @@ public class ZYTags
         public static final Tag<Block> VIEWERS_IMMORTAL = tag("viewers/immortal");
         public static final Tag<Block> VIEWERS_PHANTOMIZED_IMMORTAL = tag("viewers/phantomized_immortal");
 
+        public static final Tag<Block> BASIC_MACHINES = tag("basic_machines");
+
         private static Tag<Block> tag(String name)
         {
             return new BlockTags.Wrapper(ZYCraft.modLoc(name));
@@ -112,6 +114,8 @@ public class ZYTags
         public static final Tag<Item> VIEWERS_IMMORTAL = tag("viewers/immortal");
         public static final Tag<Item> VIEWERS_PHANTOMIZED_IMMORTAL = tag("viewers/phantomized_immortal");
 
+        public static final Tag<Item> BASIC_MACHINES = tag("basic_machines");
+
         public static final Tag<Item> ZYCHORIUM = tag("zychorium");
 
         private static Tag<Item> tag(String name)
@@ -131,31 +135,43 @@ public class ZYTags
         {
             provider.getBuilder(Tags.Blocks.ORES)
                     .add(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
+
             provider.getBuilder(Tags.Blocks.STORAGE_BLOCKS)
                     .add(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
+
             provider.getBuilder(Blocks.BASE_ZYCHORIUM_BRICKS)
                     .add(Blocks.BRICKS_ZYCHORIUM,
                             Blocks.BRICKS_SOLID_ZYCHORIUM,
                             Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM,
                             Blocks.BRICKS_ALUMINIZED_ZYCHORIUM);
+
             provider.getBuilder(Blocks.SMALL_ZYCHORIUM_BRICKS)
                     .add(Blocks.SMALL_BRICKS_ZYCHORIUM,
                             Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM,
                             Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM,
                             Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
+
             provider.getBuilder(Blocks.ZYCHORIUM_BRICKS)
                     .add(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
+
+            provider.getBuilder(BlockTags.STONE_BRICKS)
+                    .add(Blocks.ZYCHORIUM_BRICKS);
+
             provider.getBuilder(Blocks.ENGINEERING_BLOCK)
                     .add(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
 
             provider.getBuilder(Blocks.BASE_VIEWERS)
                     .add(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
+
             provider.getBuilder(Blocks.IMMORTAL_VIEWERS)
                     .add(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
+
             provider.getBuilder(Blocks.VIEWERS)
                     .add(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
+
             provider.getBuilder(Tags.Blocks.GLASS_COLORLESS)
                     .add(Blocks.BASE_VIEWERS);
+
             provider.getBuilder(Tags.Blocks.STAINED_GLASS)
                     .add(Blocks.IMMORTAL_VIEWERS);
 

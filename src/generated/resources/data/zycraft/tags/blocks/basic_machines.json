@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:zychorium_water",
+    "zycraft:zychorium_soil",
+    "zycraft:fire_basin",
+    "zycraft:fluid_void",
+    "zycraft:zychorium_ice"
+  ]
+}
