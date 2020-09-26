@@ -1,5 +1,6 @@
 package nikita488.zycraft.item;
 
+import net.minecraft.util.math.MathHelper;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.enums.ZYType;
@@ -34,6 +35,14 @@ public class ZychoriumItem extends ZYItem implements IColorChanger
                 return canChangeComponent(rgba.g(), sneaking);
             case BLUE:
                 return canChangeComponent(rgba.b(), sneaking);
+            case DARK:
+                float[] hsb = new float[3];
+                Color4b.RGBtoHSB(rgba.r(), rgba.g(), rgba.b(), hsb);
+
+                float brightness = hsb[2];
+                return sneaking ? brightness > 0.0F : brightness < 1.0F;
+            case LIGHT:
+                return sneaking ? color != 0x080808 : color != 0xFFFFFF;
         }
 
         return false;
@@ -48,26 +57,46 @@ public class ZychoriumItem extends ZYItem implements IColorChanger
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
         Color4b rgba = Color4b.from(color, 255);
+        boolean sneaking = player.isCrouching();
 
         switch (type)
         {
             case RED:
-                if (!player.isCrouching())
+                if (!sneaking)
                     rgba.add(8, 0, 0, 0);
                 else
                     rgba.subtract(8, 0, 0, 0);
                 break;
             case GREEN:
-                if (!player.isCrouching())
+                if (!sneaking)
                     rgba.add(0, 8, 0, 0);
                 else
                     rgba.subtract(0, 8, 0, 0);
                 break;
             case BLUE:
-                if (!player.isCrouching())
+                if (!sneaking)
                     rgba.add(0, 0, 8, 0);
                 else
                     rgba.subtract(0, 0, 8, 0);
+                break;
+            case DARK:
+                float[] hsb = new float[3];
+                Color4b.RGBtoHSB(rgba.r(), rgba.g(), rgba.b(), hsb);
+
+                float brightness = hsb[2];
+
+                if (!sneaking)
+                    brightness += 0.03125F;
+                else
+                    brightness -= 0.03125F;
+
+                rgba.set(Color4b.HSBtoRGB(hsb[0], hsb[1], MathHelper.clamp(brightness, 0.0F, 1.0F)), 255);
+                break;
+            case LIGHT:
+                if (!sneaking)
+                    rgba.set(0xFFFFFF, 255);
+                else
+                    rgba.set(0x080808, 255);
                 break;
         }
 
