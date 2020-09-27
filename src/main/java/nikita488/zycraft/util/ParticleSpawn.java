@@ -46,7 +46,7 @@ public class ParticleSpawn
 
             BlockPos adjPos = pos.offset(dir);
             BlockState adjState = world.getBlockState(adjPos);
-            if (state == adjState || adjState.isCollisionShapeOpaque(world, adjPos))
+            if (state == adjState || adjState.hasOpaqueCollisionShape(world, adjPos))
                 continue;
 
             Direction.Axis axis = dir.getAxis();

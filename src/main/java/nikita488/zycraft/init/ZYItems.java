@@ -59,7 +59,7 @@ public class ZYItems
 
         for (ZYType type : ZYType.VALUES)
         {
-            REGISTRY.object(pattern.replace("{type}", type.getName()));
+            REGISTRY.object(pattern.replace("{type}", type.getString()));
             items.put(type, factory.apply(type));
         }
 

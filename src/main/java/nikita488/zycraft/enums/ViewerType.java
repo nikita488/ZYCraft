@@ -1,5 +1,6 @@
 package nikita488.zycraft.enums;
 
+import net.minecraft.tags.ITag;
 import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.init.ZYTags;
 import com.tterrag.registrate.util.DataIngredient;
@@ -17,10 +18,10 @@ public enum ViewerType implements IStringSerializable
     DIRE("dire", () -> DataIngredient.tag(Tags.Items.GEMS_QUARTZ)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
     REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200.0F)),
-    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightValue(15)),
+    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
     DARK("dark", () -> DataIngredient.tag(Tags.Items.DYES_BLACK)),
     IMMORTAL("immortal", () -> DataIngredient.tag(Tags.Items.GLASS)),
-    GLOWING_IMMORTAL("glowing_immortal", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightValue(15)),
+    GLOWING_IMMORTAL("glowing_immortal", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
     DARK_IMMORTAL("dark_immortal", () -> DataIngredient.tag(Tags.Items.DYES_BLACK));
 
     private final String name;
@@ -42,7 +43,7 @@ public enum ViewerType implements IStringSerializable
     }
 
     @Override
-    public String getName()
+    public String getString()
     {
         return name;
     }
@@ -70,7 +71,7 @@ public enum ViewerType implements IStringSerializable
         return this == DARK ? RenderType.getTranslucent() : RenderType.getCutout();
     }
 
-    public Tag<Block> tag(boolean phantomized)
+    public ITag.INamedTag<Block> tag(boolean phantomized)
     {
         if (isImmortal())
             return phantomized ? ZYTags.Blocks.VIEWERS_PHANTOMIZED_IMMORTAL : ZYTags.Blocks.VIEWERS_IMMORTAL;

@@ -3,8 +3,8 @@ package nikita488.zycraft.block;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.IFluidState;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -12,6 +12,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
@@ -31,7 +32,7 @@ public class BasicMachineBlock extends ZYBlock
     }
 
     @Override
-    public IFluidState getFluidState(BlockState state)
+    public FluidState getFluidState(BlockState state)
     {
         return type == ZYType.BLUE ? Fluids.WATER.getFlowingFluidState(1, false) : Fluids.EMPTY.getDefaultState();
     }
@@ -87,7 +88,7 @@ public class BasicMachineBlock extends ZYBlock
         if (blockToTick instanceof IPlantable ||
                 (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
         {
-            BlockPos.Mutable checkPos = new BlockPos.Mutable(tickPos);
+            BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
 
             while (blockToTick == stateToTick.getBlock())
                 stateToTick = world.getBlockState(checkPos.move(Direction.UP));
@@ -113,7 +114,7 @@ public class BasicMachineBlock extends ZYBlock
     }
 
     @Override
-    public boolean isFireSource(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side)
     {
         return type == ZYType.RED && side == Direction.UP;
     }
@@ -141,7 +142,7 @@ public class BasicMachineBlock extends ZYBlock
     {
         BlockState state = world.getBlockState(adjacentPos);
         Block block = state.getBlock();
-        IFluidState fluidState = world.getFluidState(adjacentPos);
+        FluidState fluidState = world.getFluidState(adjacentPos);
 
         if (fluidState.isEmpty())
             return;

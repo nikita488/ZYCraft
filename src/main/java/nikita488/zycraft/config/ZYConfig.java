@@ -52,14 +52,14 @@ public class ZYConfig
         {
             ZYCommonConfig common = COMMON.getKey();
 
-            zychoriteReplaceableBlock = common.zychoriteReplaceableBlock.get();
+            //zychoriteReplaceableBlock = common.zychoriteReplaceableBlock.get();
             zychoriteSize = common.zychoriteSize.get();
             zychoriteOrePercentage = common.zychoriteOrePercentage.get();
             zychoriteAmount = common.zychoriteAmount.get();
             zychoriteMinHeight = common.zychoriteMinHeight.get();
             zychoriteMaxHeight = common.zychoriteMaxHeight.get();
 
-            aluminiumReplaceableBlock = common.aluminiumReplaceableBlock.get();
+            //aluminiumReplaceableBlock = common.aluminiumReplaceableBlock.get();
             aluminiumSize = common.aluminiumSize.get();
             aluminiumAmount = common.aluminiumAmount.get();
             aluminiumMinHeight = common.aluminiumMinHeight.get();

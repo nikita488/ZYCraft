@@ -1,15 +1,17 @@
 package nikita488.zycraft.client.particle;
 
-import nikita488.zycraft.particle.SparkleParticleData;
 import net.minecraft.client.particle.*;
-import net.minecraft.world.World;
+import net.minecraft.client.world.ClientWorld;
+import nikita488.zycraft.particle.SparkleParticleData;
+
+import javax.annotation.Nullable;
 
 public class SparkleParticle extends SpriteTexturedParticle
 {
     private final IAnimatedSprite sprites;
     private final boolean staticScale;
 
-    public SparkleParticle(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean staticScale)
+    public SparkleParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean staticScale)
     {
         super(world, x, y, z, xSpeed, ySpeed, zSpeed);
         this.sprites = sprites;
@@ -66,7 +68,9 @@ public class SparkleParticle extends SpriteTexturedParticle
             this.sprites = sprites;
         }
 
-        public Particle makeParticle(SparkleParticleData data, World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        @Nullable
+        @Override
+        public Particle makeParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.staticScale());
             particle.setColor(data.r(), data.g(), data.b());

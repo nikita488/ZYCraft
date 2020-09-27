@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[31,)"
+loaderVersion="[34,)"
 license="MIT"
 issueTrackerURL="https://github.com/nikita488/ZYCraft/issues"
 
@@ -16,13 +16,13 @@ An attempt to return the feeling of XyCraft to the latest versions of Minecraft.
 [[dependencies.zycraft]]
     modId="forge"
     mandatory=true
-    versionRange="[31,)"
+    versionRange="[34,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.zycraft]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.15.2]"
+    versionRange="[1.16.3]"
     ordering="NONE"
     side="BOTH"

@@ -1,5 +1,6 @@
 package nikita488.zycraft.tile;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import nikita488.zycraft.util.BlockUpdate;
@@ -27,9 +28,9 @@ public class ColorableTile extends BaseTile
     }
 
     @Override
-    public void read(CompoundNBT tag)
+    public void read(BlockState state, CompoundNBT tag)
     {
-        super.read(tag);
+        super.read(state, tag);
         color = Color4b.loadRGB(tag);
     }
 

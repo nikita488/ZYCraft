@@ -56,14 +56,14 @@ public class ZychoriumLampBlock extends ColorableBlock
         if (lit)
             world.getPendingBlockTicks().scheduleTick(pos, this, 4);
         else
-            world.setBlockState(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+            world.setBlockState(pos, state.func_235896_a_(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         if (isLit(state) && !world.isBlockPowered(pos))
-            world.setBlockState(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+            world.setBlockState(pos, state.func_235896_a_(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     private boolean isLit(BlockState state)

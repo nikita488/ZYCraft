@@ -46,7 +46,7 @@ public class ImmortalViewerBlock extends ColorableBlock
         return true;
     }
 
-    @Override
+/*    @Override
     public boolean causesSuffocation(BlockState state, IBlockReader world, BlockPos pos)
     {
         return false;
@@ -62,7 +62,7 @@ public class ImmortalViewerBlock extends ColorableBlock
     public boolean canEntitySpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
     {
         return false;
-    }
+    }*/
 
     @Override
     public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)

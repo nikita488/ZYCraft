@@ -8,6 +8,7 @@
   "detectCullableFaces": false,
   "ambientToFullbright": false,
   "diffuseLighting": true,
+  "gui_light": "front",
   "display": {
     "thirdperson_righthand": {
       "translation": [0, 4, 1],

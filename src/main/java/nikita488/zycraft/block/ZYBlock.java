@@ -18,7 +18,7 @@ public class ZYBlock extends Block
         this.type = type;
     }
 
-    @Override
+/*    @Override
     public boolean canEntitySpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
     {
         return false;
@@ -28,7 +28,7 @@ public class ZYBlock extends Block
     public MaterialColor getMaterialColor(BlockState state, IBlockReader world, BlockPos pos)
     {
         return type.mtlColor();
-    }
+    }*/
 
     public ZYType type()
     {

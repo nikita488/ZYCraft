@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven { url = 'https://files.minecraftforge.net/maven' }
-        maven { url = 'https://dist.creeper.host/Sponge/maven' }
+		maven { url = 'https://dist.creeper.host/Sponge/maven' }
         jcenter()
         mavenCentral()
     }
@@ -91,12 +91,11 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
+    def registrate = "com.tterrag.registrate:Registrate:MC1.16.2-${registrate_version}"
     implementation fg.deobf(registrate)
     shade registrate
 
-    implementation fg.deobf("team.chisel.ctm:CTM:MC${minecraft_version}-${ctm_version}")
-    compile 'org.spongepowered:mixin:0.8'
+    implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
 }
 
 processResources {
@@ -159,7 +158,6 @@ curseforge {
         addArtifact apiJar
         relations {
             requiredDependency 'ctm'
-            requiredDependency 'mixinbootstrap'
         }
     }
 }

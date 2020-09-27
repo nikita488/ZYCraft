@@ -2,13 +2,34 @@ package nikita488.zycraft.particle;
 
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
+import net.minecraft.particles.RedstoneParticleData;
 import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements IParticleData
 {
+    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create((codec) ->
+    {
+        return codec.group(Codec.INT.fieldOf("color").forGetter((data) -> {
+            return data.color;
+        }), Codec.INT.fieldOf("ageFactor").forGetter((p_239806_0_) -> {
+            return p_239806_0_.ageFactor;
+        }), Codec.FLOAT.fieldOf("scaleFactor").forGetter((p_239805_0_) -> {
+            return p_239805_0_.scaleFactor;
+        }), Codec.FLOAT.fieldOf("gravity").forGetter((p_239804_0_) -> {
+            return p_239804_0_.gravity;
+        }), Codec.BOOL.fieldOf("canCollide").forGetter((p_239804_0_) -> {
+            return p_239804_0_.canCollide;
+        }), Codec.BOOL.fieldOf("staticScale").forGetter((p_239804_0_) -> {
+            return p_239804_0_.staticScale;
+        }), Codec.BOOL.fieldOf("zeroMotion").forGetter((p_239804_0_) -> {
+            return p_239804_0_.zeroMotion;
+        })).apply(codec, SparkleParticleData::new);
+    });
     public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
     {
         @Override

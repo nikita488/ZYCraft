@@ -21,15 +21,15 @@ import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.loot.*;
+import net.minecraft.loot.conditions.BlockStateProperty;
+import net.minecraft.loot.conditions.SurvivesExplosion;
+import net.minecraft.loot.functions.ApplyBonus;
+import net.minecraft.loot.functions.ExplosionDecay;
+import net.minecraft.loot.functions.SetCount;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
-import net.minecraft.world.storage.loot.*;
-import net.minecraft.world.storage.loot.conditions.BlockStateProperty;
-import net.minecraft.world.storage.loot.conditions.SurvivesExplosion;
-import net.minecraft.world.storage.loot.functions.ApplyBonus;
-import net.minecraft.world.storage.loot.functions.ExplosionDecay;
-import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -113,7 +113,7 @@ public class ZYBlocks
     public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL_CLUSTER = REGISTRY.object("quartz_crystal")
             .block(QuartzCrystalClusterBlock::new)
             .initialProperties(Material.MISCELLANEOUS, MaterialColor.CYAN)
-            .properties(properties -> properties.hardnessAndResistance(0.3F).lightValue(9).sound(SoundType.GLASS).notSolid())
+            .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
             .loot((tables, block) -> tables.registerLootTable(block, LootTable.builder()
                     .addLootPool(LootPool.builder()
@@ -141,7 +141,7 @@ public class ZYBlocks
     public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BLOCK = REGISTRY.object("quartz_crystal_block")
             .block(QuartzCrystalBlock::new)
             .initialProperties(Material.GLASS, MaterialColor.CYAN)
-            .properties(properties -> properties.hardnessAndResistance(0.3F).lightValue(9).sound(SoundType.GLASS).notSolid())
+            .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
             .tag(Tags.Blocks.STORAGE_BLOCKS)
             .simpleItem()
@@ -302,7 +302,7 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getName()))
+            blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getString()))
                     .block(properties -> new ZYBlock(type, properties))
                     .initialProperties(ZYCHORITE)
                     .addLayer(() -> RenderType::getCutout)
@@ -326,7 +326,7 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getName()))
+            blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getString()))
                     .block(Block::new)
                     .simpleItem())
                     .register());
@@ -340,7 +340,7 @@ public class ZYBlocks
         String name = "zychorium_lamp";
         return REGISTRY.object(inverted ? "inverted_" + name : name)
                 .block(Material.REDSTONE_LIGHT, properties -> new ZychoriumLampBlock(inverted, properties))
-                .properties(properties -> properties.hardnessAndResistance(0.3F, 6.0F).lightValue(15).sound(SoundType.GLASS))
+                .properties(properties -> properties.hardnessAndResistance(0.3F, 6.0F).setLightLevel(state -> 15).sound(SoundType.GLASS))
                 .addLayer(() -> RenderType::getCutout)
                 .color(() -> ZYColors::colorableBlockColor)
                 .blockstate((ctx, provider) ->
@@ -385,7 +385,7 @@ public class ZYBlocks
 
         for (ViewerType type : ViewerType.VALUES)
         {
-            String name = type.getName() + "_viewer";
+            String name = type.getString() + "_viewer";
 
             blocks.put(type, REGISTRY.object(phantomized ? "phantomized_" + name : name)
                     .block(properties -> new ViewerBlock(type, properties))
@@ -423,7 +423,7 @@ public class ZYBlocks
 
         for (ViewerType type : ViewerType.IMMORTAL_VALUES)
         {
-            String registryName = type.getName() + "_viewer";
+            String registryName = type.getString() + "_viewer";
 
             blocks.put(type, REGISTRY.object(phantomized ? "phantomized_" + registryName : registryName)
                     .block(properties -> new ImmortalViewerBlock(type, properties))
