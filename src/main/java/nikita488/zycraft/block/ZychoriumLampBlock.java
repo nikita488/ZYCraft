@@ -1,8 +1,5 @@
 package nikita488.zycraft.block;
 
-import nikita488.zycraft.tile.ColorableTile;
-import nikita488.zycraft.util.Color4b;
-import nikita488.zycraft.util.ParticleSpawn;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.BlockItemUseContext;
@@ -11,10 +8,12 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.Constants;
+import nikita488.zycraft.tile.ColorableTile;
+import nikita488.zycraft.util.Color4b;
+import nikita488.zycraft.util.ParticleSpawn;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -29,12 +28,6 @@ public class ZychoriumLampBlock extends ColorableBlock
         super(properties);
         this.inverted = inverted;
         setDefaultState(getDefaultState().with(LIT, inverted));
-    }
-
-    @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return state.get(LIT) ? super.getLightValue(state, world, pos) : 0;
     }
 
     @Nullable

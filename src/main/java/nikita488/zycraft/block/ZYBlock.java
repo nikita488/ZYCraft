@@ -18,18 +18,6 @@ public class ZYBlock extends Block
         this.type = type;
     }
 
-/*    @Override
-    public boolean canEntitySpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
-    {
-        return false;
-    }
-
-    @Override
-    public MaterialColor getMaterialColor(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return type.mtlColor();
-    }*/
-
     public ZYType type()
     {
         return type;

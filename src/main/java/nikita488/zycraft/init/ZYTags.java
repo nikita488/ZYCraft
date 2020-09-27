@@ -1,21 +1,16 @@
 package nikita488.zycraft.init;
 
-import com.google.common.collect.Lists;
-import net.minecraft.tags.ITag;
-import nikita488.zycraft.ZYCraft;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.Tags.IOptionalNamedTag;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.List;
+import nikita488.zycraft.ZYCraft;
 
 public class ZYTags
 {

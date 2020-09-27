@@ -12,23 +12,23 @@ import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements IParticleData
 {
-    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create((codec) ->
+    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create((instance) ->
     {
-        return codec.group(Codec.INT.fieldOf("color").forGetter((data) -> {
+        return instance.group(Codec.INT.fieldOf("color").forGetter((data) -> {
             return data.color;
-        }), Codec.INT.fieldOf("ageFactor").forGetter((p_239806_0_) -> {
-            return p_239806_0_.ageFactor;
-        }), Codec.FLOAT.fieldOf("scaleFactor").forGetter((p_239805_0_) -> {
-            return p_239805_0_.scaleFactor;
-        }), Codec.FLOAT.fieldOf("gravity").forGetter((p_239804_0_) -> {
-            return p_239804_0_.gravity;
-        }), Codec.BOOL.fieldOf("canCollide").forGetter((p_239804_0_) -> {
-            return p_239804_0_.canCollide;
-        }), Codec.BOOL.fieldOf("staticScale").forGetter((p_239804_0_) -> {
-            return p_239804_0_.staticScale;
-        }), Codec.BOOL.fieldOf("zeroMotion").forGetter((p_239804_0_) -> {
-            return p_239804_0_.zeroMotion;
-        })).apply(codec, SparkleParticleData::new);
+        }), Codec.INT.fieldOf("age_factor").forGetter((data) -> {
+            return data.ageFactor;
+        }), Codec.FLOAT.fieldOf("scale_factor").forGetter((data) -> {
+            return data.scaleFactor;
+        }), Codec.FLOAT.fieldOf("gravity").forGetter((data) -> {
+            return data.gravity;
+        }), Codec.BOOL.fieldOf("can_collide").forGetter((data) -> {
+            return data.canCollide;
+        }), Codec.BOOL.fieldOf("static_scale").forGetter((data) -> {
+            return data.staticScale;
+        }), Codec.BOOL.fieldOf("zero_motion").forGetter((data) -> {
+            return data.zeroMotion;
+        })).apply(instance, SparkleParticleData::new);
     });
     public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
     {

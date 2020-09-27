@@ -1,13 +1,15 @@
 package nikita488.zycraft.block;
 
-import nikita488.zycraft.enums.ViewerType;
-import nikita488.zycraft.util.ParticleSpawn;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.EntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import nikita488.zycraft.enums.ViewerType;
+import nikita488.zycraft.util.ParticleSpawn;
 
 import java.util.Random;
 
@@ -35,6 +37,12 @@ public class ImmortalViewerBlock extends ColorableBlock
     }
 
     @Override
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context)
+    {
+        return VoxelShapes.empty();
+    }
+
+    @Override
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
     {
         return 1.0F;
@@ -46,27 +54,9 @@ public class ImmortalViewerBlock extends ColorableBlock
         return true;
     }
 
-/*    @Override
-    public boolean causesSuffocation(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(BlockState state, IBlockReader world, BlockPos pos)
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canEntitySpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
-    {
-        return false;
-    }*/
-
     @Override
     public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)
     {
-        return adjacentState.getBlock() == this;
+        return adjacentState.isIn(this);
     }
 }

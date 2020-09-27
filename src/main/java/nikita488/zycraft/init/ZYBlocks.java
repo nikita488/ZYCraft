@@ -27,6 +27,7 @@ import net.minecraft.loot.conditions.SurvivesExplosion;
 import net.minecraft.loot.functions.ApplyBonus;
 import net.minecraft.loot.functions.ExplosionDecay;
 import net.minecraft.loot.functions.SetCount;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
@@ -304,7 +305,8 @@ public class ZYBlocks
         {
             blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getString()))
                     .block(properties -> new ZYBlock(type, properties))
-                    .initialProperties(ZYCHORITE)
+                    .initialProperties(Material.ROCK, type.mtlColor())
+                    .properties(properties -> properties.hardnessAndResistance(1.5F, 6).setAllowsSpawn((state, world, pos, entity) -> false))
                     .addLayer(() -> RenderType::getCutout)
                     .color(() -> () -> ZYColors.zyBlockColor(type, bricks))
                     .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
@@ -328,6 +330,8 @@ public class ZYBlocks
         {
             blocks.put(type, factory.apply(type, REGISTRY.object(pattern.replace("{type}", type.getString()))
                     .block(Block::new)
+                    .initialProperties(Material.ROCK, type.mtlColor())
+                    .properties(properties -> properties.hardnessAndResistance(1.5F, 6))
                     .simpleItem())
                     .register());
         }
@@ -340,7 +344,9 @@ public class ZYBlocks
         String name = "zychorium_lamp";
         return REGISTRY.object(inverted ? "inverted_" + name : name)
                 .block(Material.REDSTONE_LIGHT, properties -> new ZychoriumLampBlock(inverted, properties))
-                .properties(properties -> properties.hardnessAndResistance(0.3F, 6.0F).setLightLevel(state -> 15).sound(SoundType.GLASS))
+                .properties(properties -> properties.hardnessAndResistance(0.3F, 6.0F)
+                        .setLightLevel(state -> state.get(BlockStateProperties.LIT) ? 15 : 0)
+                        .sound(SoundType.GLASS))
                 .addLayer(() -> RenderType::getCutout)
                 .color(() -> ZYColors::colorableBlockColor)
                 .blockstate((ctx, provider) ->
@@ -466,7 +472,8 @@ public class ZYBlocks
     {
         return REGISTRY.object(name)
                 .block(properties -> new BasicMachineBlock(type, properties))
-                .initialProperties(ZYCHORITE)
+                .initialProperties(Material.ROCK, type.mtlColor())
+                .properties(properties -> properties.hardnessAndResistance(1.5F, 6))
                 .addLayer(() -> RenderType::getCutout)
                 .color(() -> () -> ZYColors.zyBlockColor(type, false))
                 .blockstate((ctx, provider) ->
