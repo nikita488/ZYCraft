@@ -22,13 +22,15 @@ import nikita488.zycraft.enums.ZYType;
 
 import java.util.Random;
 
-public class BasicMachineBlock extends ZYBlock
+public class BasicMachineBlock extends Block
 {
+    private final ZYType type;
     private final Direction[] VALUES = Direction.values();
 
     public BasicMachineBlock(ZYType type, Properties properties)
     {
-        super(type, properties);
+        super(properties);
+        this.type = type;
     }
 
     @Override

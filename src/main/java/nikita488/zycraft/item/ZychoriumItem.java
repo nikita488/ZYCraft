@@ -1,24 +1,28 @@
 package nikita488.zycraft.item;
 
-import net.minecraft.util.math.MathHelper;
-import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.block.ColorableBlock;
-import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.util.Color4b;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import nikita488.zycraft.api.colorable.IColorChanger;
+import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.enums.ZYType;
+import nikita488.zycraft.util.Color4b;
 
-public class ZychoriumItem extends ZYItem implements IColorChanger
+public class ZychoriumItem extends Item implements IColorChanger
 {
+    private final ZYType type;
+
     public ZychoriumItem(ZYType type, Properties properties)
     {
-        super(type, properties);
+        super(properties);
+        this.type = type;
     }
 
     @Override
