@@ -11,9 +11,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.Tags.IOptionalNamedTag;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.util.ZYItemTagsProvider;
 
 public class ZYTags
 {
+    public static final ProviderType<ZYItemTagsProvider> ITEM_TAGS = ProviderType.register("tags/item", (p, e, existing) ->
+            new ZYItemTagsProvider(p, (RegistrateTagsProvider<Block>)existing.get(ProviderType.BLOCK_TAGS), e.getGenerator(), e.getExistingFileHelper()));
+
     public static class Blocks
     {
         public static final IOptionalNamedTag<Block> ORES_ZYCHORIUM = tag("ores/zychorium");
@@ -128,104 +132,130 @@ public class ZYTags
 
     public static void init()
     {
-        ZYCraft.REGISTRY.addDataGenerator(ProviderType.BLOCK_TAGS, blockProvider ->
+        ZYCraft.REGISTRY.addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
         {
-            blockProvider.getOrCreateBuilder(Tags.Blocks.ORES)
-                    .addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
-
-            blockProvider.getOrCreateBuilder(Tags.Blocks.STORAGE_BLOCKS)
-                    .addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
-
-            blockProvider.getOrCreateBuilder(Blocks.BASE_ZYCHORIUM_BRICKS)
-                    .addTags(Blocks.BRICKS_ZYCHORIUM,
-                            Blocks.BRICKS_SOLID_ZYCHORIUM,
-                            Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM,
-                            Blocks.BRICKS_ALUMINIZED_ZYCHORIUM);
-
-            blockProvider.getOrCreateBuilder(Blocks.SMALL_ZYCHORIUM_BRICKS)
-                    .addTags(Blocks.SMALL_BRICKS_ZYCHORIUM,
-                            Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM,
-                            Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM,
-                            Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
-
-            blockProvider.getOrCreateBuilder(Blocks.ZYCHORIUM_BRICKS)
-                    .addTags(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
-
-            blockProvider.getOrCreateBuilder(BlockTags.STONE_BRICKS)
-                    .addTag(Blocks.ZYCHORIUM_BRICKS);
-
-            blockProvider.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK)
-                    .addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
-
-            blockProvider.getOrCreateBuilder(Blocks.BASE_VIEWERS)
-                    .addTags(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
-
-            blockProvider.getOrCreateBuilder(Blocks.IMMORTAL_VIEWERS)
-                    .addTags(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
-
-            blockProvider.getOrCreateBuilder(Blocks.VIEWERS)
-                    .addTags(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
-
-            blockProvider.getOrCreateBuilder(Tags.Blocks.GLASS_COLORLESS)
-                    .addTag(Blocks.BASE_VIEWERS);
-
-            blockProvider.getOrCreateBuilder(Tags.Blocks.STAINED_GLASS)
-                    .addTag(Blocks.IMMORTAL_VIEWERS);
-
-            blockProvider.getOrCreateBuilder(Blocks.COLORABLE)
-                    .addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
-
-            ZYCraft.REGISTRY.addDataGenerator(ProviderType.ITEM_TAGS, itemProvider ->
-            {
-                copy(blockProvider, itemProvider, Blocks.ORES_ZYCHORIUM, Items.ORES_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.ORES_ALUMINIUM, Items.ORES_ALUMINIUM);
-                copy(blockProvider, itemProvider, Blocks.ORES_ALUMINUM, Items.ORES_ALUMINUM);
-
-                copy(blockProvider, itemProvider, Blocks.STORAGE_BLOCKS_ZYCHORIUM, Items.STORAGE_BLOCKS_ZYCHORIUM);
-
-                copy(blockProvider, itemProvider, Blocks.ZYCHORIUM_BRICKS, Items.ZYCHORIUM_BRICKS);
-
-                copy(blockProvider, itemProvider, Blocks.BASE_ZYCHORIUM_BRICKS, Items.BASE_ZYCHORIUM_BRICKS);
-                copy(blockProvider, itemProvider, Blocks.BRICKS_ZYCHORIUM, Items.BRICKS_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.BRICKS_SOLID_ZYCHORIUM, Items.BRICKS_SOLID_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM, Items.BRICKS_ZYCHORIZED_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.BRICKS_ALUMINIZED_ZYCHORIUM, Items.BRICKS_ALUMINIZED_ZYCHORIUM);
-
-                copy(blockProvider, itemProvider, Blocks.SMALL_ZYCHORIUM_BRICKS, Items.SMALL_ZYCHORIUM_BRICKS);
-                copy(blockProvider, itemProvider, Blocks.SMALL_BRICKS_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM, Items.SMALL_BRICKS_SOLID_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM);
-                copy(blockProvider, itemProvider, Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM, Items.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
-
-                copy(blockProvider, itemProvider, Blocks.ZYCHORIUM_PLATE, Items.ZYCHORIUM_PLATE);
-                copy(blockProvider, itemProvider, Blocks.ZYCHORIUM_SHIELD, Items.ZYCHORIUM_SHIELD);
-
-                copy(blockProvider, itemProvider, Blocks.ENGINEERING_BLOCK, Items.ENGINEERING_BLOCK);
-                copy(blockProvider, itemProvider, Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Items.ZYCHORIZED_ENGINEERING_BLOCK);
-                copy(blockProvider, itemProvider, Blocks.ALUMINIZED_ENGINEERING_BLOCK, Items.ALUMINIZED_ENGINEERING_BLOCK);
-
-                copy(blockProvider, itemProvider, Blocks.COLORABLE, Items.COLORABLE);
-                copy(blockProvider, itemProvider, Blocks.ZYCHORIUM_LAMPS, Items.ZYCHORIUM_LAMPS);
-
-                copy(blockProvider, itemProvider, Blocks.VIEWERS, Items.VIEWERS);
-
-                copy(blockProvider, itemProvider, Blocks.BASE_VIEWERS, Items.BASE_VIEWERS);
-                copy(blockProvider, itemProvider, Blocks.VIEWERS_BASE, Items.VIEWERS_BASE);
-                copy(blockProvider, itemProvider, Blocks.VIEWERS_PHANTOMIZED, Items.VIEWERS_PHANTOMIZED);
-
-                copy(blockProvider, itemProvider, Blocks.IMMORTAL_VIEWERS, Items.IMMORTAL_VIEWERS);
-                copy(blockProvider, itemProvider, Blocks.VIEWERS_IMMORTAL, Items.VIEWERS_IMMORTAL);
-                copy(blockProvider, itemProvider, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL, Items.VIEWERS_PHANTOMIZED_IMMORTAL);
-
-                itemProvider.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
-            });
+            tags.getOrCreateBuilder(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
+            tags.getOrCreateBuilder(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
+            tags.getOrCreateBuilder(Blocks.BASE_ZYCHORIUM_BRICKS).addTags(
+                    Blocks.BRICKS_ZYCHORIUM,
+                    Blocks.BRICKS_SOLID_ZYCHORIUM,
+                    Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM,
+                    Blocks.BRICKS_ALUMINIZED_ZYCHORIUM);
+            tags.getOrCreateBuilder(Blocks.SMALL_ZYCHORIUM_BRICKS).addTags(
+                    Blocks.SMALL_BRICKS_ZYCHORIUM,
+                    Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM,
+                    Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM,
+                    Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
+            tags.getOrCreateBuilder(Blocks.ZYCHORIUM_BRICKS).addTags(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
+            tags.getOrCreateBuilder(BlockTags.STONE_BRICKS).addTag(Blocks.ZYCHORIUM_BRICKS);
+            tags.getOrCreateBuilder(Blocks.BASE_VIEWERS).addTags(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
+            tags.getOrCreateBuilder(Blocks.IMMORTAL_VIEWERS).addTags(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
+            tags.getOrCreateBuilder(Blocks.VIEWERS).addTags(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
+            tags.getOrCreateBuilder(Tags.Blocks.GLASS_COLORLESS).addTag(Blocks.BASE_VIEWERS);
+            tags.getOrCreateBuilder(Tags.Blocks.STAINED_GLASS).addTag(Blocks.IMMORTAL_VIEWERS);
+            tags.getOrCreateBuilder(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
+            tags.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
         });
+
+        ZYCraft.REGISTRY.addDataGenerator(ITEM_TAGS, tags ->
+        {
+            tags.copy(Blocks.ORES_ZYCHORIUM, Items.ORES_ZYCHORIUM);
+            tags.copy(Blocks.ORES_ALUMINIUM, Items.ORES_ALUMINIUM);
+            tags.copy(Blocks.ORES_ALUMINUM, Items.ORES_ALUMINUM);
+
+            tags.copy(Blocks.STORAGE_BLOCKS_ZYCHORIUM, Items.STORAGE_BLOCKS_ZYCHORIUM);
+
+            tags.copy(Blocks.ZYCHORIUM_BRICKS, Items.ZYCHORIUM_BRICKS);
+
+            tags.copy(Blocks.BASE_ZYCHORIUM_BRICKS, Items.BASE_ZYCHORIUM_BRICKS);
+            tags.copy(Blocks.BRICKS_ZYCHORIUM, Items.BRICKS_ZYCHORIUM);
+            tags.copy(Blocks.BRICKS_SOLID_ZYCHORIUM, Items.BRICKS_SOLID_ZYCHORIUM);
+            tags.copy(Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM, Items.BRICKS_ZYCHORIZED_ZYCHORIUM);
+            tags.copy(Blocks.BRICKS_ALUMINIZED_ZYCHORIUM, Items.BRICKS_ALUMINIZED_ZYCHORIUM);
+
+            tags.copy(Blocks.SMALL_ZYCHORIUM_BRICKS, Items.SMALL_ZYCHORIUM_BRICKS);
+            tags.copy(Blocks.SMALL_BRICKS_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIUM);
+            tags.copy(Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM, Items.SMALL_BRICKS_SOLID_ZYCHORIUM);
+            tags.copy(Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM);
+            tags.copy(Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM, Items.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
+
+            tags.copy(Blocks.ZYCHORIUM_PLATE, Items.ZYCHORIUM_PLATE);
+            tags.copy(Blocks.ZYCHORIUM_SHIELD, Items.ZYCHORIUM_SHIELD);
+
+            tags.copy(Blocks.ENGINEERING_BLOCK, Items.ENGINEERING_BLOCK);
+            tags.copy(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Items.ZYCHORIZED_ENGINEERING_BLOCK);
+            tags.copy(Blocks.ALUMINIZED_ENGINEERING_BLOCK, Items.ALUMINIZED_ENGINEERING_BLOCK);
+
+            tags.copy(Blocks.COLORABLE, Items.COLORABLE);
+            tags.copy(Blocks.ZYCHORIUM_LAMPS, Items.ZYCHORIUM_LAMPS);
+
+            tags.copy(Blocks.VIEWERS, Items.VIEWERS);
+
+            tags.copy(Blocks.BASE_VIEWERS, Items.BASE_VIEWERS);
+            tags.copy(Blocks.VIEWERS_BASE, Items.VIEWERS_BASE);
+            tags.copy(Blocks.VIEWERS_PHANTOMIZED, Items.VIEWERS_PHANTOMIZED);
+
+            tags.copy(Blocks.IMMORTAL_VIEWERS, Items.IMMORTAL_VIEWERS);
+            tags.copy(Blocks.VIEWERS_IMMORTAL, Items.VIEWERS_IMMORTAL);
+            tags.copy(Blocks.VIEWERS_PHANTOMIZED_IMMORTAL, Items.VIEWERS_PHANTOMIZED_IMMORTAL);
+
+            tags.copy(Blocks.BASIC_MACHINES, Items.BASIC_MACHINES);
+
+            //tags.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
+        });
+
+        /*RegistrateTagsProvider<Block> blockTags = ZYCraft.REGISTRY.getDataProvider(ProviderType.BLOCK_TAGS).get();
+
+        ZYCraft.REGISTRY.addDataGenerator(ProviderType.ITEM_TAGS, itemTags ->
+        {
+            copy(blockTags, itemTags, Blocks.ORES_ZYCHORIUM, Items.ORES_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.ORES_ALUMINIUM, Items.ORES_ALUMINIUM);
+            copy(blockTags, itemTags, Blocks.ORES_ALUMINUM, Items.ORES_ALUMINUM);
+
+            copy(blockTags, itemTags, Blocks.STORAGE_BLOCKS_ZYCHORIUM, Items.STORAGE_BLOCKS_ZYCHORIUM);
+
+            copy(blockTags, itemTags, Blocks.ZYCHORIUM_BRICKS, Items.ZYCHORIUM_BRICKS);
+
+            copy(blockTags, itemTags, Blocks.BASE_ZYCHORIUM_BRICKS, Items.BASE_ZYCHORIUM_BRICKS);
+            copy(blockTags, itemTags, Blocks.BRICKS_ZYCHORIUM, Items.BRICKS_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.BRICKS_SOLID_ZYCHORIUM, Items.BRICKS_SOLID_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM, Items.BRICKS_ZYCHORIZED_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.BRICKS_ALUMINIZED_ZYCHORIUM, Items.BRICKS_ALUMINIZED_ZYCHORIUM);
+
+            copy(blockTags, itemTags, Blocks.SMALL_ZYCHORIUM_BRICKS, Items.SMALL_ZYCHORIUM_BRICKS);
+            copy(blockTags, itemTags, Blocks.SMALL_BRICKS_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM, Items.SMALL_BRICKS_SOLID_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM, Items.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM);
+            copy(blockTags, itemTags, Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM, Items.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
+
+            copy(blockTags, itemTags, Blocks.ZYCHORIUM_PLATE, Items.ZYCHORIUM_PLATE);
+            copy(blockTags, itemTags, Blocks.ZYCHORIUM_SHIELD, Items.ZYCHORIUM_SHIELD);
+
+            copy(blockTags, itemTags, Blocks.ENGINEERING_BLOCK, Items.ENGINEERING_BLOCK);
+            copy(blockTags, itemTags, Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Items.ZYCHORIZED_ENGINEERING_BLOCK);
+            copy(blockTags, itemTags, Blocks.ALUMINIZED_ENGINEERING_BLOCK, Items.ALUMINIZED_ENGINEERING_BLOCK);
+
+            copy(blockTags, itemTags, Blocks.COLORABLE, Items.COLORABLE);
+            copy(blockTags, itemTags, Blocks.ZYCHORIUM_LAMPS, Items.ZYCHORIUM_LAMPS);
+
+            copy(blockTags, itemTags, Blocks.VIEWERS, Items.VIEWERS);
+
+            copy(blockTags, itemTags, Blocks.BASE_VIEWERS, Items.BASE_VIEWERS);
+            copy(blockTags, itemTags, Blocks.VIEWERS_BASE, Items.VIEWERS_BASE);
+            copy(blockTags, itemTags, Blocks.VIEWERS_PHANTOMIZED, Items.VIEWERS_PHANTOMIZED);
+
+            copy(blockTags, itemTags, Blocks.IMMORTAL_VIEWERS, Items.IMMORTAL_VIEWERS);
+            copy(blockTags, itemTags, Blocks.VIEWERS_IMMORTAL, Items.VIEWERS_IMMORTAL);
+            copy(blockTags, itemTags, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL, Items.VIEWERS_PHANTOMIZED_IMMORTAL);
+
+            itemTags.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
+        });*/
     }
 
-    private static void copy(RegistrateTagsProvider<Block> blockProvider, RegistrateTagsProvider<Item> itemProvider, ITag.INamedTag<Block> blockTag, ITag.INamedTag<Item> itemTag)
+/*    private static void copy(RegistrateTagsProvider<Block> blockProvider, RegistrateTagsProvider<Item> itemProvider, ITag.INamedTag<Block> blockTag, ITag.INamedTag<Item> itemTag)
     {
-        ITag.Builder itemTagBuilder = itemProvider.getOrCreateBuilder(itemTag).getInternalBuilder();
-        ITag.Builder blockTagBuilder = blockProvider.getOrCreateBuilder(blockTag).getInternalBuilder();
+        ITag.Builder itemTagBuilder = itemProvider.createBuilderIfAbsent(itemTag);
+        ITag.Builder blockTagBuilder = blockProvider.createBuilderIfAbsent(blockTag);
         blockTagBuilder.getProxyStream().forEach(itemTagBuilder::addProxyTag);
-    }
+    }*/
 }

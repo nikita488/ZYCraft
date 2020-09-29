@@ -27,31 +27,28 @@ public class ZYItems
                     .tag(ZYTags.Items.ZYCHORIUM)
                     .register());
 
-    public static final ItemEntry<Item> ALUMINIUM =
-            REGISTRY.item("aluminium", Item::new)
-                    .register();
+    public static final ItemEntry<Item> ALUMINIUM = REGISTRY.item("aluminium", Item::new).register();
 
-    public static final ItemEntry<ColorScannerItem> COLOR_SCANNER =
-            REGISTRY.item("color_scanner", ColorScannerItem::new)
-                    .color(() -> ZYColors::colorScannerColor)
-                    .model((ctx, provider) -> NonNullBiConsumer.noop())
-                    .recipe((ctx, provider) ->
-                    {
-                        DataIngredient source = DataIngredient.items(ZYBlocks.ZYCHORITE);
-                        ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
-                                .patternLine("RGB")
-                                .patternLine("###")
-                                .patternLine("D#L")
-                                .key('#', source)
-                                .key('R', ZYItems.ZYCHORIUM.get(ZYType.RED).get())
-                                .key('G', ZYItems.ZYCHORIUM.get(ZYType.GREEN).get())
-                                .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
-                                .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
-                                .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
-                                .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
-                                .build(provider, provider.safeId(ctx.getEntry()));
-                    })
-                    .register();
+    public static final ItemEntry<ColorScannerItem> COLOR_SCANNER = REGISTRY.item("color_scanner", ColorScannerItem::new)
+            .color(() -> ZYColors::colorScannerColor)
+            .model((ctx, provider) -> NonNullBiConsumer.noop())
+            .recipe((ctx, provider) ->
+            {
+                DataIngredient source = DataIngredient.items(ZYBlocks.ZYCHORITE);
+                ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
+                        .patternLine("RGB")
+                        .patternLine("###")
+                        .patternLine("D#L")
+                        .key('#', source)
+                        .key('R', ZYItems.ZYCHORIUM.get(ZYType.RED).get())
+                        .key('G', ZYItems.ZYCHORIUM.get(ZYType.GREEN).get())
+                        .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
+                        .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
+                        .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
+                        .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
+                        .build(provider, provider.safeId(ctx.getEntry()));
+            })
+            .register();
 
     public static <T extends Item> ImmutableMap<ZYType, ItemEntry<T>> zyItem(NonNullFunction<ZYType, ItemEntry<T>> factory)
     {
