@@ -34,7 +34,7 @@ public class ClusterFeature extends Feature<NoFeatureConfig>
 
         for (Direction side : VALUES)
         {
-            if (world.getBlockState(adjPos.setPos(pos).move(side)).getMaterial() != Material.ROCK ||
+            if (world.getBlockState(adjPos.setAndMove(pos, side)).getMaterial() != Material.ROCK ||
                     !ZYBlocks.QUARTZ_CRYSTAL_CLUSTER.getDefaultState().with(QuartzCrystalClusterBlock.FACING, side.getOpposite()).isValidPosition(world, adjPos))
                 continue;
 

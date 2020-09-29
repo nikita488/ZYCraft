@@ -47,221 +47,207 @@ public class ZYBlocks
 {
     public static final Registrate REGISTRY = ZYCraft.REGISTRY.itemGroup(() -> ZYGroups.BLOCKS, "ZYCraft Blocks");
 
-    public static final BlockEntry<Block> ZYCHORITE =
-            REGISTRY.block("zychorite", Block::new)
-                    .initialProperties(Material.ROCK, MaterialColor.BLACK)
-                    .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
-                    .tag(Tags.Blocks.STONE)
-                    .simpleItem()
-                    .register();
+    public static final BlockEntry<Block> ZYCHORITE = REGISTRY.block("zychorite", Block::new)
+            .initialProperties(Material.ROCK, MaterialColor.BLACK)
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
+            .tag(Tags.Blocks.STONE)
+            .simpleItem()
+            .register();
 
-    public static final BlockEntry<Block> ZYCHORITE_BLOCK =
-            REGISTRY.block("zychorite_block", Block::new)
-                    .initialProperties(ZYCHORITE)
-                    .tag(Tags.Blocks.STORAGE_BLOCKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> storageBlock(provider, ZYCHORITE, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> ZYCHORITE_BLOCK = REGISTRY.block("zychorite_block", Block::new)
+            .initialProperties(ZYCHORITE)
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> storageBlock(provider, ZYCHORITE, ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<Block> ZYCHORITE_BRICKS =
-            REGISTRY.block("zychorite_bricks", Block::new)
-                    .initialProperties(ZYCHORITE)
-                    .tag(BlockTags.STONE_BRICKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> bricks(provider, DataIngredient.items(ZYCHORITE), ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> ZYCHORITE_BRICKS = REGISTRY.block("zychorite_bricks", Block::new)
+            .initialProperties(ZYCHORITE)
+            .tag(BlockTags.STONE_BRICKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> bricks(provider, DataIngredient.items(ZYCHORITE), ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS =
-            REGISTRY.block("small_zychorite_bricks", Block::new)
-                    .initialProperties(ZYCHORITE)
-                    .tag(BlockTags.STONE_BRICKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> smallBricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS = REGISTRY.block("small_zychorite_bricks", Block::new)
+            .initialProperties(ZYCHORITE)
+            .tag(BlockTags.STONE_BRICKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_ORE =
-            REGISTRY.block("aluminium_ore", Block::new)
-                    .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
-                    .tag(ZYTags.Blocks.ORES_ALUMINIUM, ZYTags.Blocks.ORES_ALUMINUM)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> provider.smeltingAndBlasting(DataIngredient.items(ctx.getEntry()), ZYItems.ALUMINIUM, 0.1F))
-                    .register();
+    public static final BlockEntry<Block> ALUMINIUM_ORE = REGISTRY.block("aluminium_ore", Block::new)
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
+            .tag(ZYTags.Blocks.ORES_ALUMINIUM, ZYTags.Blocks.ORES_ALUMINUM)
+            .simpleItem()
+            .recipe((ctx, provider) -> provider.smeltingAndBlasting(DataIngredient.items(ctx.getEntry()), ZYItems.ALUMINIUM, 0.1F))
+            .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_BLOCK =
-            REGISTRY.block("aluminium_block", Block::new)
-                    .initialProperties(Material.ROCK, MaterialColor.QUARTZ)
-                    .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
-                    .tag(Tags.Blocks.STORAGE_BLOCKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ALUMINIUM, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> ALUMINIUM_BLOCK = REGISTRY.block("aluminium_block", Block::new)
+            .initialProperties(Material.ROCK, MaterialColor.QUARTZ)
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ALUMINIUM, ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_BRICKS =
-            REGISTRY.block("aluminium_bricks", Block::new)
-                    .initialProperties(ALUMINIUM_BLOCK)
-                    .tag(BlockTags.STONE_BRICKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> ALUMINIUM_BRICKS = REGISTRY.block("aluminium_bricks", Block::new)
+            .initialProperties(ALUMINIUM_BLOCK)
+            .tag(BlockTags.STONE_BRICKS)
+            .simpleItem()
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS =
-            REGISTRY.block("small_aluminium_bricks", Block::new)
-                    .initialProperties(ALUMINIUM_BLOCK)
-                    .tag(BlockTags.STONE_BRICKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> smallBricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS = REGISTRY.block("small_aluminium_bricks", Block::new)
+            .initialProperties(ALUMINIUM_BLOCK)
+            .tag(BlockTags.STONE_BRICKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> smallBricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL_CLUSTER =
-            REGISTRY.block("quartz_crystal", QuartzCrystalClusterBlock::new)
-                    .initialProperties(Material.MISCELLANEOUS, MaterialColor.DIAMOND)
-                    .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
-                    .addLayer(() -> RenderType::getTranslucent)
-                    .loot((tables, block) -> tables.registerLootTable(block, LootTable.builder()
-                            .addLootPool(LootPool.builder()
-                                    .acceptCondition(SurvivesExplosion.builder())
-                                    .rolls(ConstantRange.of(1))
-                                    .addEntry(ItemLootEntry.builder(block)
-                                            .acceptFunction(SetCount.builder(ConstantRange.of(2))
-                                                    .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                                                            .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 2))))
-                                            .acceptFunction(SetCount.builder(ConstantRange.of(3))
-                                                    .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                                                            .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 3))))
-                                            .acceptFunction(SetCount.builder(ConstantRange.of(4))
-                                                    .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                                                            .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 4))))
-                                            .acceptFunction(SetCount.builder(ConstantRange.of(5))
-                                                    .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
-                                                            .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 5))))))))
-                    .blockstate((ctx, provider) -> NonNullConsumer.noop())
-                    .item()
-                        .model((ctx, provider) -> provider.blockItem(ctx::getEntry, "_1"))
-                        .build()
-                    .register();
+    public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL_CLUSTER = REGISTRY.block("quartz_crystal", QuartzCrystalClusterBlock::new)
+            .initialProperties(Material.MISCELLANEOUS, MaterialColor.DIAMOND)
+            .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
+            .addLayer(() -> RenderType::getTranslucent)
+            .loot((tables, block) -> tables.registerLootTable(block, LootTable.builder()
+                    .addLootPool(LootPool.builder()
+                            .acceptCondition(SurvivesExplosion.builder())
+                            .rolls(ConstantRange.of(1))
+                            .addEntry(ItemLootEntry.builder(block)
+                                    .acceptFunction(SetCount.builder(ConstantRange.of(2))
+                                            .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                                                    .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 2))))
+                                    .acceptFunction(SetCount.builder(ConstantRange.of(3))
+                                            .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                                                    .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 3))))
+                                    .acceptFunction(SetCount.builder(ConstantRange.of(4))
+                                            .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                                                    .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 4))))
+                                    .acceptFunction(SetCount.builder(ConstantRange.of(5))
+                                            .acceptCondition(BlockStateProperty.builder(block).fromProperties(StatePropertiesPredicate.Builder.newBuilder()
+                                                    .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 5))))))))
+            .blockstate((ctx, provider) -> NonNullConsumer.noop())
+            .item()
+                .model((ctx, provider) -> provider.blockItem(ctx::getEntry, "_1"))
+                .build()
+            .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BLOCK =
-            REGISTRY.block("quartz_crystal_block", QuartzCrystalBlock::new)
-                    .initialProperties(Material.GLASS, MaterialColor.DIAMOND)
-                    .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
-                    .addLayer(() -> RenderType::getTranslucent)
-                    .tag(Tags.Blocks.STORAGE_BLOCKS)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL_CLUSTER, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BLOCK = REGISTRY.block("quartz_crystal_block", QuartzCrystalBlock::new)
+            .initialProperties(Material.GLASS, MaterialColor.DIAMOND)
+            .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
+            .addLayer(() -> RenderType::getTranslucent)
+            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .simpleItem()
+            .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL_CLUSTER, ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS =
-            REGISTRY.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
-                    .initialProperties(QUARTZ_CRYSTAL_BLOCK)
-                    .addLayer(() -> RenderType::getTranslucent)
-                    .simpleItem()
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.items(QUARTZ_CRYSTAL_CLUSTER), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
-                    .register();
+    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
+            .initialProperties(QUARTZ_CRYSTAL_BLOCK)
+            .addLayer(() -> RenderType::getTranslucent)
+            .simpleItem()
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.items(QUARTZ_CRYSTAL_CLUSTER), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> SMALL_QUARTZ_CRYSTAL_BRICKS =
-            REGISTRY.block("small_quartz_crystal_bricks", QuartzCrystalBlock::new)
-                    .initialProperties(QUARTZ_CRYSTAL_BLOCK)
-                    .addLayer(() -> RenderType::getTranslucent)
-                    .simpleItem()
-                    .recipe((ctx, provider) -> smallBricks(provider, QUARTZ_CRYSTAL_BRICKS, ctx::getEntry))
-                    .register();
+    public static final BlockEntry<QuartzCrystalBlock> SMALL_QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("small_quartz_crystal_bricks", QuartzCrystalBlock::new)
+            .initialProperties(QUARTZ_CRYSTAL_BLOCK)
+            .addLayer(() -> RenderType::getTranslucent)
+            .simpleItem()
+            .recipe((ctx, provider) -> smallBricks(provider, QUARTZ_CRYSTAL_BRICKS, ctx::getEntry))
+            .register();
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_ORE = zyBlock("{type}_zychorium_ore", (type, builder) ->
-            builder.properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
-                    .tag(ZYTags.Blocks.ORES_ZYCHORIUM)
-                    .loot((tables, block) -> tables.registerLootTable(block, RegistrateBlockLootTables.droppingWithSilkTouch(block,
-                            ItemLootEntry.builder(ZYItems.ZYCHORIUM.get(type).get())
-                                    .acceptFunction(ExplosionDecay.builder())
-                                    .acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))
-                                    .acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))))));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_ORE = zyBlock("{type}_zychorium_ore", (type, block) -> block
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
+            .tag(ZYTags.Blocks.ORES_ZYCHORIUM)
+            .loot((tables, ore) -> tables.registerLootTable(ore, RegistrateBlockLootTables.droppingWithSilkTouch(ore,
+                    ItemLootEntry.builder(ZYItems.ZYCHORIUM.get(type).get())
+                            .acceptFunction(ExplosionDecay.builder())
+                            .acceptFunction(SetCount.builder(RandomValueRange.of(1, 3)))
+                            .acceptFunction(ApplyBonus.uniformBonusCount(Enchantments.FORTUNE))))));
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, builder) ->
-            builder.tag(ZYTags.Blocks.STORAGE_BLOCKS_ZYCHORIUM)
-                    .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ZYCHORIUM.get(type), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, block) -> block
+            .tag(ZYTags.Blocks.STORAGE_BLOCKS_ZYCHORIUM)
+            .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ZYCHORIUM.get(type), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BRICKS = zyBricks("{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.BRICKS_ZYCHORIUM)
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.items(ZYItems.ZYCHORIUM.get(type)), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BRICKS = zyBricks("{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.BRICKS_ZYCHORIUM)
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.items(ZYItems.ZYCHORIUM.get(type)), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIUM_BRICKS = zyBricks("small_{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIUM)
-                    .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIUM_BRICKS = zyBricks("small_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIUM)
+            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> SOLID_ZYCHORIUM_BRICKS = solidZyBricks("solid_{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.BRICKS_SOLID_ZYCHORIUM)
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.items(Blocks.STONE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> SOLID_ZYCHORIUM_BRICKS = solidZyBricks("solid_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.BRICKS_SOLID_ZYCHORIUM)
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.items(Blocks.STONE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> SMALL_SOLID_ZYCHORIUM_BRICKS = solidZyBricks("small_solid_{type}_zychorium_bricks", (color, builder) ->
-            builder.tag(ZYTags.Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM)
-                    .recipe((ctx, provider) -> smallBricks(provider, SOLID_ZYCHORIUM_BRICKS.get(color), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> SMALL_SOLID_ZYCHORIUM_BRICKS = solidZyBricks("small_solid_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM)
+            .recipe((ctx, provider) -> smallBricks(provider, SOLID_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("zychorized_{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM)
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.items(ZYCHORITE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("zychorized_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM)
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.items(ZYCHORITE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("small_zychorized_{type}_zychorium_bricks", (color, builder) ->
-            builder.tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM)
-                    .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIZED_ZYCHORIUM_BRICKS.get(color), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("small_zychorized_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM)
+            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("aluminized_{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.BRICKS_ALUMINIZED_ZYCHORIUM)
-                    .recipe((ctx, provider) ->
+    public static final Map<ZYType, BlockEntry<Block>> ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("aluminized_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.BRICKS_ALUMINIZED_ZYCHORIUM)
+            .recipe((ctx, provider) ->
                     infused(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> SMALL_ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("small_aluminized_{type}_zychorium_bricks", (type, builder) ->
-            builder.tag(ZYTags.Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM)
-                    .recipe((ctx, provider) -> smallBricks(provider, ALUMINIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> SMALL_ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("small_aluminized_{type}_zychorium_bricks", (type, block) -> block
+            .tag(ZYTags.Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM)
+            .recipe((ctx, provider) -> smallBricks(provider, ALUMINIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_PLATE = zyBlock("{type}_zychorium_plate", (type, builder) ->
-            builder.properties(properties -> properties.hardnessAndResistance(1.5F, 12))
-                    .tag(ZYTags.Blocks.ZYCHORIUM_PLATE)
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.tag(Tags.Items.INGOTS_IRON), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_PLATE = zyBlock("{type}_zychorium_plate", (type, block) -> block
+            .properties(properties -> properties.hardnessAndResistance(1.5F, 12))
+            .tag(ZYTags.Blocks.ZYCHORIUM_PLATE)
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.tag(Tags.Items.INGOTS_IRON), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_SHIELD = zyBlock("{type}_zychorium_shield", (type, builder) ->
-            builder.properties(properties -> properties.hardnessAndResistance(1.5F, 1200))
-                    .tag(ZYTags.Blocks.ZYCHORIUM_SHIELD)
-                    .recipe((ctx, provider) ->
-                            infused(provider, DataIngredient.tag(Tags.Items.OBSIDIAN), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_SHIELD = zyBlock("{type}_zychorium_shield", (type, block) -> block
+            .properties(properties -> properties.hardnessAndResistance(1.5F, 1200))
+            .tag(ZYTags.Blocks.ZYCHORIUM_SHIELD)
+            .recipe((ctx, provider) ->
+                    infused(provider, DataIngredient.tag(Tags.Items.OBSIDIAN), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
     public static final BlockEntry<ZychoriumLampBlock> ZYCHORIUM_LAMP = lamp(false);
 
     public static final BlockEntry<ZychoriumLampBlock> INVERTED_ZYCHORIUM_LAMP = lamp(true);
 
-    public static final BlockEntry<ColorableBlock> IMMORTAL_BLOCK =
-            REGISTRY.block("immortal_block", ColorableBlock::new)
-                    .initialProperties(Material.ROCK, MaterialColor.SNOW)
-                    .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
-                    .addLayer(() -> RenderType::getCutout)
-                    .color(() -> ZYColors::colorableBlockColor)
-                    .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
-                            .withExistingParent(ctx.getName(), provider.modLoc("block/zy_cube_all"))
-                            .texture("all", provider.modLoc("block/zychorium_block"))))
-                    .tag(ZYTags.Blocks.COLORABLE)
-                    .simpleItem()
-                    .recipe((ctx, provider) ->
-                            colorable(provider, DataIngredient.tag(ZYTags.Items.STORAGE_BLOCKS_ZYCHORIUM), ctx::getEntry))
-                    .register();
+    public static final BlockEntry<ColorableBlock> IMMORTAL_BLOCK = REGISTRY.block("immortal_block", ColorableBlock::new)
+            .initialProperties(Material.ROCK, MaterialColor.SNOW)
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
+            .addLayer(() -> RenderType::getCutout)
+            .color(() -> ZYColors::colorableBlockColor)
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
+                    .withExistingParent(ctx.getName(), provider.modLoc("block/zy_cube_all"))
+                    .texture("all", provider.modLoc("block/zychorium_block"))))
+            .tag(ZYTags.Blocks.COLORABLE)
+            .simpleItem()
+            .recipe((ctx, provider) ->
+                    colorable(provider, DataIngredient.tag(ZYTags.Items.STORAGE_BLOCKS_ZYCHORIUM), ctx::getEntry))
+            .register();
 
-    public static final BlockEntry<ColorableBlock> THE_AUREY_BLOCK =
-            REGISTRY.block("the_aurey_block", ColorableBlock::new)
-                    .initialProperties(IMMORTAL_BLOCK)
-                    .addLayer(() -> RenderType::getCutout)
-                    .color(() -> ZYColors::colorableBlockColor)
-                    .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
-                            .withExistingParent(ctx.getName(), provider.modLoc("block/colorable_cube_all"))
-                            .texture("base", provider.modLoc("block/" + ctx.getName()))
-                            .texture("all", provider.modLoc("block/zychorium_block"))))
-                    .tag(ZYTags.Blocks.COLORABLE)
-                    .simpleItem()
-                    .recipe((ctx, provider) ->
-                            colorable(provider, DataIngredient.items(ALUMINIUM_BLOCK), ctx::getEntry))
-                    .register();
+    public static final BlockEntry<ColorableBlock> THE_AUREY_BLOCK = REGISTRY.block("the_aurey_block", ColorableBlock::new)
+            .initialProperties(IMMORTAL_BLOCK)
+            .addLayer(() -> RenderType::getCutout)
+            .color(() -> ZYColors::colorableBlockColor)
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
+                    .withExistingParent(ctx.getName(), provider.modLoc("block/colorable_cube_all"))
+                    .texture("base", provider.modLoc("block/" + ctx.getName()))
+                    .texture("all", provider.modLoc("block/zychorium_block"))))
+            .tag(ZYTags.Blocks.COLORABLE)
+            .simpleItem()
+            .recipe((ctx, provider) ->
+                    colorable(provider, DataIngredient.items(ALUMINIUM_BLOCK), ctx::getEntry))
+            .register();
 
     public static final Map<ViewerType, BlockEntry<ViewerBlock>> VIEWER = viewer(false);
 
@@ -271,17 +257,17 @@ public class ZYBlocks
 
     public static final Map<ViewerType, BlockEntry<ImmortalViewerBlock>> PHANTOMIZED_IMMORTAL_VIEWER = immortalViewer(true);
 
-    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIZED_ENGINEERING_BLOCK = zyBlock("zychorized_{type}_engineering_block", (type, builder) ->
-            builder.addLayer(() -> RenderType::getTranslucent)
-                    .tag(ZYTags.Blocks.ZYCHORIZED_ENGINEERING_BLOCK)
-                    .recipe((ctx, provider) ->
-                            engineering(provider, DataIngredient.items(ZYCHORITE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ZYCHORIZED_ENGINEERING_BLOCK = zyBlock("zychorized_{type}_engineering_block", (type, block) -> block
+            .addLayer(() -> RenderType::getTranslucent)
+            .tag(ZYTags.Blocks.ZYCHORIZED_ENGINEERING_BLOCK)
+            .recipe((ctx, provider) ->
+                    engineering(provider, DataIngredient.items(ZYCHORITE), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
-    public static final Map<ZYType, BlockEntry<Block>> ALUMINIZED_ENGINEERING_BLOCK = zyBlock("aluminized_{type}_engineering_block", (type, builder) ->
-            builder.addLayer(() -> RenderType::getTranslucent)
-                    .tag(ZYTags.Blocks.ALUMINIZED_ENGINEERING_BLOCK)
-                    .recipe((ctx, provider) ->
-                            engineering(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
+    public static final Map<ZYType, BlockEntry<Block>> ALUMINIZED_ENGINEERING_BLOCK = zyBlock("aluminized_{type}_engineering_block", (type, block) -> block
+            .addLayer(() -> RenderType::getTranslucent)
+            .tag(ZYTags.Blocks.ALUMINIZED_ENGINEERING_BLOCK)
+            .recipe((ctx, provider) ->
+                    engineering(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
     public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_WATER = basicMachine("zychorium_water", ZYType.BLUE);
     public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_SOIL = basicMachine("zychorium_soil", ZYType.GREEN);
