@@ -6,16 +6,12 @@ import net.minecraft.world.gen.placement.IPlacementConfig;
 
 public class ClusterConfig implements IPlacementConfig
 {
-    public static final Codec<ClusterConfig> CODEC = RecordCodecBuilder.create((instance) ->
-    {
-        return instance.group(Codec.INT.fieldOf("generation_attempts").orElse(0).forGetter((config) ->
-        {
-            return config.generationAttempts;
-        }), Codec.INT.fieldOf("count").orElse(0).forGetter((config) ->
-        {
-            return config.count;
-        })).apply(instance, ClusterConfig::new);
-    });
+    public static final Codec<ClusterConfig> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("generation_attempts").orElse(0).forGetter(config -> config.generationAttempts),
+                    Codec.INT.fieldOf("count").orElse(0).forGetter(config -> config.count))
+                    .apply(instance, ClusterConfig::new));
+
     public final int generationAttempts;
     public final int count;
 

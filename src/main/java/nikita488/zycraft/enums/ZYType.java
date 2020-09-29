@@ -11,7 +11,7 @@ public enum ZYType implements IStringSerializable
     GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
     RED("red", 0xFF0000, 0x200000, MaterialColor.RED),
     DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.BLACK),
-    LIGHT("light", 0xFFFFFF, 0xFFFFFF, MaterialColor.SNOW);
+    LIGHT("light", 0xFFFFFF, 0xFFFFFF, MaterialColor.QUARTZ);
 
     private final String name;
     private final int color, darkColor;

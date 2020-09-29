@@ -1,4 +1,4 @@
-package nikita488.zycraft.util;
+package nikita488.zycraft.block.shape;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -9,7 +9,7 @@ import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class QuartzCrystalClusterShapes {
+public class ClusterShapes {
     public static final VoxelShape[] DOWN = new VoxelShape[]
             {
                     Block.makeCuboidShape(6, 6, 6, 10, 16, 10),

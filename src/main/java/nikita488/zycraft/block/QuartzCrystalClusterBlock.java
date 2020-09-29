@@ -2,7 +2,7 @@ package nikita488.zycraft.block;
 
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleSpawn;
-import nikita488.zycraft.util.QuartzCrystalClusterShapes;
+import nikita488.zycraft.block.shape.ClusterShapes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -75,7 +75,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
     {
-        return QuartzCrystalClusterShapes.get(state);
+        return ClusterShapes.get(state);
     }
 
     @Override

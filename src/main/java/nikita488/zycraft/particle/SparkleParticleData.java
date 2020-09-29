@@ -12,24 +12,17 @@ import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements IParticleData
 {
-    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create((instance) ->
-    {
-        return instance.group(Codec.INT.fieldOf("color").forGetter((data) -> {
-            return data.color;
-        }), Codec.INT.fieldOf("age_factor").forGetter((data) -> {
-            return data.ageFactor;
-        }), Codec.FLOAT.fieldOf("scale_factor").forGetter((data) -> {
-            return data.scaleFactor;
-        }), Codec.FLOAT.fieldOf("gravity").forGetter((data) -> {
-            return data.gravity;
-        }), Codec.BOOL.fieldOf("can_collide").forGetter((data) -> {
-            return data.canCollide;
-        }), Codec.BOOL.fieldOf("static_scale").forGetter((data) -> {
-            return data.staticScale;
-        }), Codec.BOOL.fieldOf("zero_motion").forGetter((data) -> {
-            return data.zeroMotion;
-        })).apply(instance, SparkleParticleData::new);
-    });
+    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                    Codec.INT.fieldOf("color").forGetter(data -> data.color),
+                    Codec.INT.fieldOf("age_factor").forGetter(data -> data.ageFactor),
+                    Codec.FLOAT.fieldOf("scale_factor").forGetter(data -> data.scaleFactor),
+                    Codec.FLOAT.fieldOf("gravity").forGetter(data -> data.gravity),
+                    Codec.BOOL.fieldOf("can_collide").forGetter(data -> data.canCollide),
+                    Codec.BOOL.fieldOf("static_scale").forGetter(data -> data.staticScale),
+                    Codec.BOOL.fieldOf("zero_motion").forGetter(data -> data.zeroMotion))
+                    .apply(instance, SparkleParticleData::new));
+
     public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
     {
         @Override

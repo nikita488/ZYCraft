@@ -28,29 +28,29 @@ public class ZYCraft
     public ZYCraft()
     {
         REGISTRY = Registrate.create(MOD_ID);
+
         ZYBlocks.init();
         ZYItems.init();
-        ZYTags.init();
         ZYTiles.init();
         ZYParticles.init();
-        ZYGroups.init();
-        ZYDamageSources.init();
-        ZYConfig.register();
-        ZYTextComponents.init();
-
         ZYFeatures.init();
         ZYPlacements.init();
+
+        ZYTags.init();
+        ZYGroups.init();
+        ZYTextComponents.init();
+        ZYConfig.register();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
     }
 
     private void commonSetup(FMLCommonSetupEvent event)
     {
-        //event.enqueueWork(ZYConfiguredFeatures::init);
-        for (Map.Entry<RegistryKey<ConfiguredFeature<?, ?>>, ConfiguredFeature<?, ?>> entry : WorldGenRegistries.CONFIGURED_FEATURE.getEntries())
+        event.enqueueWork(ZYConfiguredFeatures::init);
+/*        for (Map.Entry<RegistryKey<ConfiguredFeature<?, ?>>, ConfiguredFeature<?, ?>> entry : WorldGenRegistries.CONFIGURED_FEATURE.getEntries())
         {
             System.out.println(entry.getKey().getLocation());
-        }
+        }*/
     }
 
     public static ResourceLocation modLoc(String name)

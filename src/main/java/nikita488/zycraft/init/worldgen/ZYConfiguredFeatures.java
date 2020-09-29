@@ -6,6 +6,7 @@ import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.worldgen.placement.ClusterConfig;
 import nikita488.zycraft.worldgen.feature.ZychoriteVeinConfig;
@@ -38,7 +39,7 @@ public class ZYConfiguredFeatures
 
     private static <FC extends IFeatureConfig> ConfiguredFeature<FC, ?> register(String key, ConfiguredFeature<FC, ?> feature)
     {
-        return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, key, feature);
+        return Registry.register(WorldGenRegistries.CONFIGURED_FEATURE, ZYCraft.modLoc(key), feature);
     }
 
     public static void init() {}
