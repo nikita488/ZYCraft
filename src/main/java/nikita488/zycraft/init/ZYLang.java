@@ -3,7 +3,7 @@ package nikita488.zycraft.init;
 import net.minecraft.util.text.TranslationTextComponent;
 import nikita488.zycraft.ZYCraft;
 
-public class ZYTextComponents
+public class ZYLang
 {
     public static final TranslationTextComponent TOOLTIP_HINT =
             ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("hint"), "\u00A77Press \u00A7a\u00A7oShift\u00A77 for info");

@@ -1,6 +1,5 @@
 package nikita488.zycraft.config;
 
-import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -17,17 +16,13 @@ public class ZYConfig
     //Client values
 
     //Common values
-    public static OreFeatureConfig.FillerBlockType zychoriteReplaceableBlock;
     public static int zychoriteSize;
     public static int zychoriteOrePercentage;
     public static int zychoriteAmount;
-    public static int zychoriteMinHeight;
     public static int zychoriteMaxHeight;
 
-    public static OreFeatureConfig.FillerBlockType aluminiumReplaceableBlock;
     public static int aluminiumSize;
     public static int aluminiumAmount;
-    public static int aluminiumMinHeight;
     public static int aluminiumMaxHeight;
 
     public static int quartzCrystalClusterAttempts;
@@ -52,17 +47,13 @@ public class ZYConfig
         {
             ZYCommonConfig common = COMMON.getKey();
 
-            //zychoriteReplaceableBlock = common.zychoriteReplaceableBlock.get();
             zychoriteSize = common.zychoriteSize.get();
             zychoriteOrePercentage = common.zychoriteOrePercentage.get();
             zychoriteAmount = common.zychoriteAmount.get();
-            zychoriteMinHeight = common.zychoriteMinHeight.get();
             zychoriteMaxHeight = common.zychoriteMaxHeight.get();
 
-            //aluminiumReplaceableBlock = common.aluminiumReplaceableBlock.get();
             aluminiumSize = common.aluminiumSize.get();
             aluminiumAmount = common.aluminiumAmount.get();
-            aluminiumMinHeight = common.aluminiumMinHeight.get();
             aluminiumMaxHeight = common.aluminiumMaxHeight.get();
 
             quartzCrystalClusterAttempts = common.quartzCrystalClusterAttempts.get();

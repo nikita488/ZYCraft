@@ -7,7 +7,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.init.worldgen.ZYConfiguredFeatures;
 
 @Mod.EventBusSubscriber(modid = ZYCraft.MOD_ID)
 public class ZYWorldGen

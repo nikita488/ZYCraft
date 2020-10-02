@@ -63,14 +63,12 @@ public class ZYBlocks
 
     public static final BlockEntry<Block> ZYCHORITE_BRICKS = REGISTRY.block("zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
-            .tag(BlockTags.STONE_BRICKS)
             .simpleItem()
             .recipe((ctx, provider) -> bricks(provider, DataIngredient.items(ZYCHORITE), ctx::getEntry))
             .register();
 
     public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS = REGISTRY.block("small_zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
-            .tag(BlockTags.STONE_BRICKS)
             .simpleItem()
             .recipe((ctx, provider) -> smallBricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
             .register();
@@ -92,7 +90,6 @@ public class ZYBlocks
 
     public static final BlockEntry<Block> ALUMINIUM_BRICKS = REGISTRY.block("aluminium_bricks", Block::new)
             .initialProperties(ALUMINIUM_BLOCK)
-            .tag(BlockTags.STONE_BRICKS)
             .simpleItem()
             .recipe((ctx, provider) ->
                     infused(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
@@ -100,7 +97,6 @@ public class ZYBlocks
 
     public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS = REGISTRY.block("small_aluminium_bricks", Block::new)
             .initialProperties(ALUMINIUM_BLOCK)
-            .tag(BlockTags.STONE_BRICKS)
             .simpleItem()
             .recipe((ctx, provider) -> smallBricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
             .register();

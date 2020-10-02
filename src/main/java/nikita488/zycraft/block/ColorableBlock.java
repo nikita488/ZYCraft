@@ -5,13 +5,12 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.enums.ZYDyeColor;
-import nikita488.zycraft.init.ZYTextComponents;
+import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -50,16 +49,16 @@ public class ColorableBlock extends Block
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
-            tooltip.add(ZYTextComponents.TOOLTIP_HINT);
+            tooltip.add(ZYLang.TOOLTIP_HINT);
         }
         else
         {
-            tooltip.add(ZYTextComponents.COLORABLE);
-            tooltip.add(ZYTextComponents.COLORABLE_INFO);
-            tooltip.add(ZYTextComponents.COLORABLE_RGB);
-            tooltip.add(ZYTextComponents.COLORABLE_BRIGHTNESS);
-            tooltip.add(ZYTextComponents.COLORABLE_RESET);
-            tooltip.add(ZYTextComponents.COLORABLE_DYE);
+            tooltip.add(ZYLang.COLORABLE);
+            tooltip.add(ZYLang.COLORABLE_INFO);
+            tooltip.add(ZYLang.COLORABLE_RGB);
+            tooltip.add(ZYLang.COLORABLE_BRIGHTNESS);
+            tooltip.add(ZYLang.COLORABLE_RESET);
+            tooltip.add(ZYLang.COLORABLE_DYE);
         }
     }
 

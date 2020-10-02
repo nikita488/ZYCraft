@@ -1,14 +1,12 @@
 package nikita488.zycraft.worldgen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import nikita488.zycraft.init.ZYBlocks;
@@ -17,25 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class ClusterFeature extends Feature<NoFeatureConfig>
+public class ClusterFeature extends Feature<ClusterFeatureConfig>
 {
     private static final Direction[] VALUES = Direction.values();
 
-    public ClusterFeature(Codec<NoFeatureConfig> codec)
+    public ClusterFeature(Codec<ClusterFeatureConfig> codec)
     {
         super(codec);
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, NoFeatureConfig config)
+    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
     {
         List<Direction> possibleSides = new ArrayList<>();
         BlockPos.Mutable adjPos = new BlockPos.Mutable();
 
         for (Direction side : VALUES)
         {
-            if (world.getBlockState(adjPos.setAndMove(pos, side)).getMaterial() != Material.ROCK ||
-                    !ZYBlocks.QUARTZ_CRYSTAL_CLUSTER.getDefaultState().with(QuartzCrystalClusterBlock.FACING, side.getOpposite()).isValidPosition(world, adjPos))
+            if (!config.target.test(world.getBlockState(adjPos.setAndMove(pos, side)), random))
                 continue;
 
             possibleSides.add(side);
@@ -46,7 +43,7 @@ public class ClusterFeature extends Feature<NoFeatureConfig>
 
         world.setBlockState(pos, ZYBlocks.QUARTZ_CRYSTAL_CLUSTER.getDefaultState()
                 .with(QuartzCrystalClusterBlock.FACING, possibleSides.get(random.nextInt(possibleSides.size())).getOpposite())
-                .with(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, 5)), Constants.BlockFlags.BLOCK_UPDATE);
+                .with(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, config.size)), Constants.BlockFlags.BLOCK_UPDATE);
         return true;
     }
 }

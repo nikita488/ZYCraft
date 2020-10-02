@@ -4,18 +4,18 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 
-public class ClusterConfig implements IPlacementConfig
+public class ClusterPlacementConfig implements IPlacementConfig
 {
-    public static final Codec<ClusterConfig> CODEC = RecordCodecBuilder.create(instance ->
+    public static final Codec<ClusterPlacementConfig> CODEC = RecordCodecBuilder.create(instance ->
             instance.group(
                     Codec.INT.fieldOf("generation_attempts").orElse(0).forGetter(config -> config.generationAttempts),
                     Codec.INT.fieldOf("count").orElse(0).forGetter(config -> config.count))
-                    .apply(instance, ClusterConfig::new));
+                    .apply(instance, ClusterPlacementConfig::new));
 
     public final int generationAttempts;
     public final int count;
 
-    public ClusterConfig(int generationAttempts, int count)
+    public ClusterPlacementConfig(int generationAttempts, int count)
     {
         this.generationAttempts = generationAttempts;
         this.count = count;

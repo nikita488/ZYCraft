@@ -278,6 +278,7 @@ ba048f509325b3a57dbfe9e504a4141ceb7f8e2a assets/zycraft/models/item/zychorium_ic
 4a4cd6d48245dc9278ab695f27d8482171a06bd8 data/forge/tags/blocks/stained_glass.json
 8fc52c88575a79f3c0304c7fa9f0304abfee44bf data/forge/tags/blocks/stone.json
 8ee952cec7e5b38874855285903732ce62a460ed data/forge/tags/blocks/storage_blocks.json
+1fae03ffdf30a7fde0525c73cc21221fd2669a9a data/forge/tags/items/gems.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/items/ores/aluminium.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/items/ores/aluminum.json
 d866511ae33ea5c6e941db0721f58bb7e5b8df0b data/minecraft/tags/blocks/stone_bricks.json
@@ -759,6 +760,7 @@ b2ab301c09453fcba0d179c9556025e94ebb6e53 data/zycraft/tags/items/viewers/base.js
 e408be94fbcbab6cd8c9eb18ff2c5f2719f08896 data/zycraft/tags/items/viewers/immortal.json
 abdf4397c1631e4876e23e1c15d41fa9c2779e6d data/zycraft/tags/items/viewers/phantomized.json
 0e02ae472984c769bf085cfde6e8dbc2d96a65d8 data/zycraft/tags/items/viewers/phantomized_immortal.json
+7ceaf6234c357c6ac213308b9b6d886f402751b7 data/zycraft/tags/items/zychorium.json
 b760600402dd6fe79d74a7fe51d147bcc4981432 data/zycraft/tags/items/zychorium_bricks.json
 97d9323331d8ce19f7350019c4b18fe057a850eb data/zycraft/tags/items/zychorium_lamps.json
 96e3f7bb4b07a768d128cc40acfcf24717880bb2 data/zycraft/tags/items/zychorium_plate.json

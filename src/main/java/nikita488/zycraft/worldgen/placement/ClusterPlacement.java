@@ -11,15 +11,15 @@ import net.minecraft.world.gen.placement.Placement;
 import java.util.Random;
 import java.util.stream.Stream;
 
-public class ClusterPlacement extends Placement<ClusterConfig>
+public class ClusterPlacement extends Placement<ClusterPlacementConfig>
 {
-    public ClusterPlacement(Codec<ClusterConfig> codec)
+    public ClusterPlacement(Codec<ClusterPlacementConfig> codec)
     {
         super(codec);
     }
 
     @Override
-    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper helper, Random random, ClusterConfig config, BlockPos pos)
+    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper helper, Random random, ClusterPlacementConfig config, BlockPos pos)
     {
         ObjectArrayList<BlockPos> clusters = new ObjectArrayList<>();
         BlockPos.Mutable clusterPos = new BlockPos.Mutable();
