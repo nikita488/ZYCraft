@@ -1,5 +1,7 @@
 package nikita488.zycraft.block;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.util.ParticleSpawn;
 import net.minecraft.block.AbstractGlassBlock;
@@ -27,6 +29,7 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
         if (type == ViewerType.GLOWING)

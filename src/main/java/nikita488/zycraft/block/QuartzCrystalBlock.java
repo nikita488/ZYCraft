@@ -1,5 +1,7 @@
 package nikita488.zycraft.block;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.util.ParticleSpawn;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BreakableBlock;
@@ -16,6 +18,7 @@ public class QuartzCrystalBlock extends BreakableBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
         ParticleSpawn.glowingBlock(state, world, pos, rand);

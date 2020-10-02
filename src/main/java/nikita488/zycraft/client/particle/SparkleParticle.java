@@ -9,13 +9,13 @@ import javax.annotation.Nullable;
 public class SparkleParticle extends SpriteTexturedParticle
 {
     private final IAnimatedSprite sprites;
-    private final boolean staticScale;
+    private final boolean scalable;
 
-    public SparkleParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean staticScale)
+    public SparkleParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean scalable)
     {
         super(world, x, y, z, xSpeed, ySpeed, zSpeed);
         this.sprites = sprites;
-        this.staticScale = staticScale;
+        this.scalable = scalable;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class SparkleParticle extends SpriteTexturedParticle
     @Override
     public float getScale(float partialTicks)
     {
-        return staticScale ? particleScale : particleScale * (float)(maxAge - age) / (float)maxAge;
+        return scalable ? particleScale * (float)(maxAge - age) / (float)maxAge : particleScale;
     }
 
     @Override
@@ -72,14 +72,14 @@ public class SparkleParticle extends SpriteTexturedParticle
         @Override
         public Particle makeParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.staticScale());
+            SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.scalable());
             particle.setColor(data.r(), data.g(), data.b());
             particle.setAlphaF(data.a());
             particle.setMaxAge(5 * data.ageFactor());
             particle.multiplyParticleScaleBy(data.scaleFactor());
             particle.setGravity(data.gravity());
-            particle.canCollide = data.canCollide();
-            if (data.zeroMotion())
+            particle.canCollide = data.collidable();
+            if (data.motionless())
                 particle.motionX = particle.motionY = particle.motionZ = 0;
             particle.selectSpriteWithAge(sprites);
             return particle;

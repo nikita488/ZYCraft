@@ -7,21 +7,19 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ParticleType;
-import net.minecraft.particles.RedstoneParticleData;
 import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements IParticleData
 {
-    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                    Codec.INT.fieldOf("color").forGetter(data -> data.color),
-                    Codec.INT.fieldOf("age_factor").forGetter(data -> data.ageFactor),
-                    Codec.FLOAT.fieldOf("scale_factor").forGetter(data -> data.scaleFactor),
-                    Codec.FLOAT.fieldOf("gravity").forGetter(data -> data.gravity),
-                    Codec.BOOL.fieldOf("can_collide").forGetter(data -> data.canCollide),
-                    Codec.BOOL.fieldOf("static_scale").forGetter(data -> data.staticScale),
-                    Codec.BOOL.fieldOf("zero_motion").forGetter(data -> data.zeroMotion))
-                    .apply(instance, SparkleParticleData::new));
+    public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            Codec.INT.fieldOf("color").forGetter(data -> data.color),
+            Codec.INT.fieldOf("age_factor").forGetter(data -> data.ageFactor),
+            Codec.FLOAT.fieldOf("scale_factor").forGetter(data -> data.scaleFactor),
+            Codec.FLOAT.fieldOf("gravity").forGetter(data -> data.gravity),
+            Codec.BOOL.fieldOf("collidable").forGetter(data -> data.collidable),
+            Codec.BOOL.fieldOf("scalable").forGetter(data -> data.scalable),
+            Codec.BOOL.fieldOf("motionless").forGetter(data -> data.motionless))
+            .apply(instance, SparkleParticleData::new));
 
     public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
     {
@@ -37,12 +35,12 @@ public class SparkleParticleData implements IParticleData
             reader.expect(' ');
             float gravity = reader.readFloat();
             reader.expect(' ');
-            boolean canCollide = reader.readBoolean();
+            boolean collidable = reader.readBoolean();
             reader.expect(' ');
-            boolean staticScale = reader.readBoolean();
+            boolean scalable = reader.readBoolean();
             reader.expect(' ');
-            boolean zeroMotion = reader.readBoolean();
-            return new SparkleParticleData(color, ageFactor, scaleFactor, gravity, canCollide, staticScale, zeroMotion);
+            boolean motionless = reader.readBoolean();
+            return new SparkleParticleData(color, ageFactor, scaleFactor, gravity, collidable, scalable, motionless);
         }
 
         @Override
@@ -55,19 +53,19 @@ public class SparkleParticleData implements IParticleData
     private final int ageFactor;
     private final float scaleFactor;
     private final float gravity;
-    private final boolean canCollide;
-    private final boolean staticScale;
-    private final boolean zeroMotion;
+    private final boolean collidable;
+    private final boolean scalable;
+    private final boolean motionless;
 
-    public SparkleParticleData(int rgba, int ageFactor, float scaleFactor, float gravity, boolean canCollide, boolean staticScale, boolean zeroMotion)
+    public SparkleParticleData(int rgba, int ageFactor, float scaleFactor, float gravity, boolean collidable, boolean scalable, boolean motionless)
     {
         this.color = rgba;
         this.ageFactor = ageFactor;
         this.scaleFactor = scaleFactor;
         this.gravity = gravity;
-        this.canCollide = canCollide;
-        this.staticScale = staticScale;
-        this.zeroMotion = zeroMotion;
+        this.collidable = collidable;
+        this.scalable = scalable;
+        this.motionless = motionless;
     }
 
     @Override
@@ -83,9 +81,9 @@ public class SparkleParticleData implements IParticleData
         buffer.writeVarInt(ageFactor);
         buffer.writeFloat(scaleFactor);
         buffer.writeFloat(gravity);
-        buffer.writeBoolean(canCollide);
-        buffer.writeBoolean(staticScale);
-        buffer.writeBoolean(zeroMotion);
+        buffer.writeBoolean(collidable);
+        buffer.writeBoolean(scalable);
+        buffer.writeBoolean(motionless);
     }
 
     @Override
@@ -129,19 +127,19 @@ public class SparkleParticleData implements IParticleData
         return gravity;
     }
 
-    public boolean canCollide()
+    public boolean collidable()
     {
-        return canCollide;
+        return collidable;
     }
 
-    public boolean staticScale()
+    public boolean scalable()
     {
-        return staticScale;
+        return scalable;
     }
 
-    public boolean zeroMotion()
+    public boolean motionless()
     {
-        return zeroMotion;
+        return motionless;
     }
 
     public static Builder builder()
@@ -155,9 +153,9 @@ public class SparkleParticleData implements IParticleData
         private int ageFactor = 1;
         private float scaleFactor = 1;
         private float gravity;
-        private boolean canCollide = true;
-        private boolean staticScale;
-        private boolean zeroMotion;
+        private boolean collidable = true;
+        private boolean scalable = true;
+        private boolean motionless;
 
         public Builder color(int rgba)
         {
@@ -185,25 +183,25 @@ public class SparkleParticleData implements IParticleData
 
         public Builder noClip()
         {
-            this.canCollide = false;
+            this.collidable = false;
             return this;
         }
 
-        public Builder staticScale()
+        public Builder fixedScale()
         {
-            this.staticScale = true;
+            this.scalable = false;
             return this;
         }
 
-        public Builder zeroMotion()
+        public Builder motionless()
         {
-            this.zeroMotion = true;
+            this.motionless = true;
             return this;
         }
 
         public SparkleParticleData build()
         {
-            return new SparkleParticleData(color, ageFactor, scaleFactor, gravity, canCollide, staticScale, zeroMotion);
+            return new SparkleParticleData(color, ageFactor, scaleFactor, gravity, collidable, scalable, motionless);
         }
     }
 }

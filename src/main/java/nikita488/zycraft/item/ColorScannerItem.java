@@ -1,6 +1,8 @@
 package nikita488.zycraft.item;
 
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.init.ZYLang;
@@ -27,6 +29,7 @@ public class ColorScannerItem extends Item implements IColorChanger
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())

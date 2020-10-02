@@ -3,6 +3,8 @@ package nikita488.zycraft.block;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.enums.ZYDyeColor;
 import nikita488.zycraft.init.ZYLang;
@@ -45,6 +47,7 @@ public class ColorableBlock extends Block
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())

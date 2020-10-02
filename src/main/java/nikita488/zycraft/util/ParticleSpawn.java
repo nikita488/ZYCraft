@@ -1,13 +1,13 @@
 package nikita488.zycraft.util;
 
-import nikita488.zycraft.block.QuartzCrystalClusterBlock;
-import nikita488.zycraft.particle.SparkleParticleData;
-import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nikita488.zycraft.block.QuartzCrystalClusterBlock;
+import nikita488.zycraft.particle.SparkleParticleData;
+import nikita488.zycraft.tile.ColorableTile;
 
 import java.util.Random;
 
@@ -34,7 +34,7 @@ public class ParticleSpawn
                 .ageFactor(6)
                 .scaleFactor(0.5F)
                 .noClip()
-                .zeroMotion()
+                .motionless()
                 .build();
 
         double offset = 9 / 16F;
@@ -65,7 +65,7 @@ public class ParticleSpawn
                 .ageFactor(6)
                 .scaleFactor(0.5F)
                 .noClip()
-                .zeroMotion()
+                .motionless()
                 .build();
 
         float size = 6 / 16F;

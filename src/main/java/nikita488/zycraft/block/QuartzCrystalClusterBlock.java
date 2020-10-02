@@ -1,5 +1,7 @@
 package nikita488.zycraft.block;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleSpawn;
 import nikita488.zycraft.block.shape.ClusterShapes;
@@ -67,6 +69,7 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
         ParticleSpawn.quartzCrystalCluster(state, world, pos, rand);

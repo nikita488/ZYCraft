@@ -8,6 +8,8 @@ import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.util.ParticleSpawn;
 
@@ -24,6 +26,7 @@ public class ImmortalViewerBlock extends ColorableBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
         if (type == ViewerType.GLOWING_IMMORTAL)
@@ -43,6 +46,7 @@ public class ImmortalViewerBlock extends ColorableBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
     {
         return 1.0F;
@@ -55,6 +59,7 @@ public class ImmortalViewerBlock extends ColorableBlock
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)
     {
         return adjacentState.isIn(this);

@@ -9,8 +9,8 @@ import nikita488.zycraft.particle.SparkleParticleData;
 
 public class ZYParticles
 {
-    public static final RegistryEntry<ParticleType<SparkleParticleData>> SPARKLE =
-            ZYCraft.REGISTRY.simple("sparkle", ParticleType.class, () -> new ZYParticleType<>(SparkleParticleData.CODEC, false, SparkleParticleData.DESERIALIZER));
+    public static final RegistryEntry<ParticleType<SparkleParticleData>> SPARKLE = ZYCraft.REGISTRY.simple("sparkle", ParticleType.class, () ->
+            new ZYParticleType<>(SparkleParticleData.CODEC, false, SparkleParticleData.DESERIALIZER));
 
     public static void init() {}
 

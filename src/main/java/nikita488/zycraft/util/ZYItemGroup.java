@@ -1,5 +1,7 @@
 package nikita488.zycraft.util;
 
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.ZYCraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -18,6 +20,7 @@ public class ZYItemGroup extends ItemGroup
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public ItemStack createIcon()
     {
         return iconFactory.get();
@@ -30,12 +33,14 @@ public class ZYItemGroup extends ItemGroup
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public ResourceLocation getBackgroundImage()
     {
         return super.getBackgroundImage();//ZYCraft.modLoc("textures/gui/container/creative_inventory/tab_zycraft.png");
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTabsImage()
     {
         return super.getTabsImage();//ZYCraft.modLoc("textures/gui/container/creative_inventory/tabs.png");
