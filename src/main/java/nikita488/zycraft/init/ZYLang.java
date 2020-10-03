@@ -1,5 +1,6 @@
 package nikita488.zycraft.init;
 
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import nikita488.zycraft.ZYCraft;
 
@@ -28,11 +29,11 @@ public class ZYLang
     public static final TranslationTextComponent COLOR_SCANNER_CURRENT_COLOR =
             ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "current_color", "\u00A77Current color:");
     public static final TranslationTextComponent COLOR_SCANNER_RED =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "red", "\u00A7c\u00A7oRed:    %s");
+            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "red", "Red:    %s");
     public static final TranslationTextComponent COLOR_SCANNER_GREEN =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "green", "\u00A7a\u00A7oGreen: %s");
+            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "green", "Green: %s");
     public static final TranslationTextComponent COLOR_SCANNER_BLUE =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "blue", "\u00A79\u00A7oBlue:   %s");
+            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "blue", "Blue:   %s");
 
     public static final TranslationTextComponent QUARTZ_CRYSTAL =
             ZYCraft.REGISTRY.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "%1$s was slowly poked by Quartz Crystal");
@@ -43,16 +44,22 @@ public class ZYLang
 
     public static TranslationTextComponent getColorScannerRed(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount);
+        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount);
+        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
+        return component;
     }
 
     public static TranslationTextComponent getColorScannerGreen(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount);
+        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount);
+        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
+        return component;
     }
 
     public static TranslationTextComponent getColorScannerBlue(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount);
+        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount);
+        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
+        return component;
     }
 }
