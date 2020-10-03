@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:quartz_crystal_block",
+    "zycraft:quartz_crystal_bricks",
+    "zycraft:small_quartz_crystal_bricks",
+    "#zycraft:viewers"
+  ]
+}

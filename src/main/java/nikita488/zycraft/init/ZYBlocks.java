@@ -50,8 +50,9 @@ public class ZYBlocks
     public static final BlockEntry<Block> ZYCHORITE = REGISTRY.block("zychorite", Block::new)
             .initialProperties(Material.ROCK, MaterialColor.BLACK)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
-            .tag(Tags.Blocks.STONE)
-            .simpleItem()
+            .item()
+                .tag(ItemTags.STONE_TOOL_MATERIALS, ItemTags.STONE_CRAFTING_MATERIALS)
+                .build()
             .register();
 
     public static final BlockEntry<Block> ZYCHORITE_BLOCK = REGISTRY.block("zychorite_block", Block::new)
@@ -132,7 +133,7 @@ public class ZYBlocks
             .initialProperties(Material.GLASS, MaterialColor.DIAMOND)
             .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
-            .tag(Tags.Blocks.STORAGE_BLOCKS)
+            .tag(Tags.Blocks.STORAGE_BLOCKS, BlockTags.IMPERMEABLE)
             .simpleItem()
             .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL_CLUSTER, ctx::getEntry))
             .register();
@@ -140,6 +141,7 @@ public class ZYBlocks
     public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
             .initialProperties(QUARTZ_CRYSTAL_BLOCK)
             .addLayer(() -> RenderType::getTranslucent)
+            .tag(BlockTags.IMPERMEABLE)
             .simpleItem()
             .recipe((ctx, provider) ->
                     infused(provider, DataIngredient.items(QUARTZ_CRYSTAL_CLUSTER), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
@@ -148,6 +150,7 @@ public class ZYBlocks
     public static final BlockEntry<QuartzCrystalBlock> SMALL_QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("small_quartz_crystal_bricks", QuartzCrystalBlock::new)
             .initialProperties(QUARTZ_CRYSTAL_BLOCK)
             .addLayer(() -> RenderType::getTranslucent)
+            .tag(BlockTags.IMPERMEABLE)
             .simpleItem()
             .recipe((ctx, provider) -> smallBricks(provider, QUARTZ_CRYSTAL_BRICKS, ctx::getEntry))
             .register();

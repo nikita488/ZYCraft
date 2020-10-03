@@ -129,7 +129,8 @@ public class ZYTags
         }
     }
 
-    public static void init() {
+    public static void init()
+    {
         ZYCraft.REGISTRY.addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
         {
             tags.getOrCreateBuilder(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
@@ -152,6 +153,7 @@ public class ZYTags
             tags.getOrCreateBuilder(Tags.Blocks.STAINED_GLASS).addTag(Blocks.IMMORTAL_VIEWERS);
             tags.getOrCreateBuilder(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
             tags.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
+            tags.getOrCreateBuilder(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
         });
 
         ZYCraft.REGISTRY.addDataGenerator(ITEM_TAGS, tags ->
