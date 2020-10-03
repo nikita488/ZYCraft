@@ -1,5 +1,6 @@
 package nikita488.zycraft.init.worldgen;
 
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -14,6 +15,9 @@ public class ZYWorldGen
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void addFeatures(BiomeLoadingEvent event)
     {
+        if (event.getCategory() == Biome.Category.NETHER || event.getCategory() == Biome.Category.THEEND)
+            return;
+
         BiomeGenerationSettingsBuilder builder = event.getGeneration();
 
         builder.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ZYCHORITE_VEIN);
