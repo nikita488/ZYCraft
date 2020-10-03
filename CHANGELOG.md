@@ -1,3 +1,7 @@
+### 1.0.0 (2020-10-03)
+
+* Changed version scheme until it's not too late ([769ba4d](https://github.com/nikita488/ZYCraft/commit/769ba4dab8c7b9ffcdc4cbbb5c920e58486bde2b))
+
 ### 0.1.5 (2020-10-03)
 
 * Removed worldgen from biomes with NETHER and THEEND categories ([dc9f759](https://github.com/nikita488/ZYCraft/commit/dc9f759c439bdfd6ca329e1df5fff45e83d3e557))
