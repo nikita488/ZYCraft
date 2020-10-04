@@ -75,7 +75,7 @@ public class BasicMachineBlock extends Block
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random rand)
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random rand)
     {
         if (type != ZYType.GREEN)
             return;
@@ -97,10 +97,10 @@ public class BasicMachineBlock extends Block
 
 
             stateToTick = world.getBlockState(checkPos.move(Direction.DOWN));
-            stateToTick.tick(world, checkPos.toImmutable(), rand);
+            stateToTick.randomTick(world, checkPos.toImmutable(), rand);
         }
         else if (blockToTick == this)
-            stateToTick.tick(world, tickPos, rand);
+            stateToTick.randomTick(world, tickPos, rand);
     }
 
     @Override
