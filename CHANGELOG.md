@@ -1,3 +1,7 @@
+### 1.0.1 (2020-10-04)
+
+* Fixed Zychorium Soil does not make crops grow faster when stacked up ([12d0b26](https://github.com/nikita488/ZYCraft/commit/12d0b2653dd11846f21959349083476586f59962))
+
 ### 1.0.0 (2020-10-03)
 
 * Changed version scheme until it's not too late ([769ba4d](https://github.com/nikita488/ZYCraft/commit/769ba4dab8c7b9ffcdc4cbbb5c920e58486bde2b))
