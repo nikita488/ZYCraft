@@ -1,3 +1,7 @@
+### 1.0.2 (2020-10-06)
+
+* Added ability to use Bucket on Zychorium Water to get Water Bucket ([29b46a2](https://github.com/nikita488/ZYCraft/commit/29b46a21657df8fa46cecdf21ca7e9d7526be6b1))
+
 ### 1.0.1 (2020-10-04)
 
 * Fixed Zychorium Soil does not make crops grow faster when stacked up ([12d0b26](https://github.com/nikita488/ZYCraft/commit/12d0b2653dd11846f21959349083476586f59962))
