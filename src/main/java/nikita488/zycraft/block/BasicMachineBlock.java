@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
@@ -18,6 +19,12 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.items.CapabilityItemHandler;
 import nikita488.zycraft.enums.ZYType;
 
 import java.util.Random;
@@ -42,8 +49,7 @@ public class BasicMachineBlock extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        return ActionResultType.PASS;
-        /*if (type != ZYType.BLUE)
+        if (type != ZYType.BLUE)
             return ActionResultType.PASS;
 
         ItemStack stack = player.getHeldItem(hand);
@@ -51,7 +57,22 @@ public class BasicMachineBlock extends Block
         if (stack.isEmpty())
             return ActionResultType.PASS;
 
-        return FluidUtil.getFluidHandler(stack).map(handler ->
+        return player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(inventory ->
+        {
+            FluidTank tank = new FluidTank(1000);
+            tank.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
+
+            FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, tank, inventory, 1000, player, true);
+
+            if (!result.isSuccess())
+                return ActionResultType.CONSUME;
+
+            if (!world.isRemote)
+                player.setHeldItem(hand, result.getResult());
+
+            return ActionResultType.SUCCESS;
+        }).orElse(ActionResultType.CONSUME);
+/*        return FluidUtil.getFluidHandler(stack).map(handler ->
         {
             FluidStack water = new FluidStack(Fluids.WATER, 1000);
 
@@ -62,7 +83,26 @@ public class BasicMachineBlock extends Block
                 return ActionResultType.SUCCESS;
 
             handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
-            player.setHeldItem(hand, handler.getContainer());
+            player.playSound(water.getFluid().getAttributes().getFillSound(water), SoundCategory.BLOCKS, 1.0F, 1.0F);
+
+            ItemStack container = handler.getContainer();
+
+*//*            if (container.isEmpty())
+                return ActionResultType.SUCCESS;*//*
+
+            if (container.getCount() == 1)
+            {
+                player.setHeldItem(hand, container);
+            }
+            else if (container.getCount() > 1 && player.inventory.addItemStackToInventory(container))
+            {
+                container.shrink(1);
+            }
+            else
+            {
+                player.dropItem(container, false, true);
+                container.shrink(1);
+            }
 
             return ActionResultType.SUCCESS;
         }).orElse(ActionResultType.CONSUME);*/
@@ -87,20 +127,20 @@ public class BasicMachineBlock extends Block
         if (!stateToTick.ticksRandomly())
             return;
 
-        if (blockToTick instanceof IPlantable ||
-                (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
+        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
         {
             BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
 
             while (blockToTick == stateToTick.getBlock())
                 stateToTick = world.getBlockState(checkPos.move(Direction.UP));
 
-
             stateToTick = world.getBlockState(checkPos.move(Direction.DOWN));
             stateToTick.randomTick(world, checkPos.toImmutable(), rand);
         }
         else if (blockToTick == this)
+        {
             stateToTick.randomTick(world, tickPos, rand);
+        }
     }
 
     @Override
