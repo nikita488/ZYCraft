@@ -1,7 +1,7 @@
 {
   "variants": {
     "amount=1,facing=down": {
-      "model": "zycraft:block/quartz_crystal_1",
+      "model": "zycraft:block/quartz_crystal",
       "x": 180
     },
     "amount=2,facing=down": {
@@ -21,7 +21,7 @@
       "x": 180
     },
     "amount=1,facing=up": {
-      "model": "zycraft:block/quartz_crystal_1"
+      "model": "zycraft:block/quartz_crystal"
     },
     "amount=2,facing=up": {
       "model": "zycraft:block/quartz_crystal_2"
@@ -36,7 +36,7 @@
       "model": "zycraft:block/quartz_crystal_5"
     },
     "amount=1,facing=north": {
-      "model": "zycraft:block/quartz_crystal_1",
+      "model": "zycraft:block/quartz_crystal",
       "x": -90,
       "y": 180
     },
@@ -61,7 +61,7 @@
       "y": 180
     },
     "amount=1,facing=south": {
-      "model": "zycraft:block/quartz_crystal_1",
+      "model": "zycraft:block/quartz_crystal",
       "x": -90
     },
     "amount=2,facing=south": {
@@ -81,7 +81,7 @@
       "x": -90
     },
     "amount=1,facing=west": {
-      "model": "zycraft:block/quartz_crystal_1",
+      "model": "zycraft:block/quartz_crystal",
       "x": -90,
       "y": 90
     },
@@ -106,7 +106,7 @@
       "y": 90
     },
     "amount=1,facing=east": {
-      "model": "zycraft:block/quartz_crystal_1",
+      "model": "zycraft:block/quartz_crystal",
       "x": -90,
       "y": -90
     },

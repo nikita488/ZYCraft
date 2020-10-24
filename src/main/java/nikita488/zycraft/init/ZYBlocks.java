@@ -125,7 +125,7 @@ public class ZYBlocks
                                                     .withIntProp(QuartzCrystalClusterBlock.AMOUNT, 5))))))))
             .blockstate((ctx, provider) -> NonNullConsumer.noop())
             .item()
-                .model((ctx, provider) -> provider.blockItem(ctx::getEntry, "_1"))
+                .model((ctx, provider) -> provider.blockItem(ctx::getEntry))
                 .build()
             .register();
 
