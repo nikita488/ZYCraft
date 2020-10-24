@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:scythe"
+    ]
+  },
+  "criteria": {
+    "has_quartz_crystal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:quartz_crystal"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:scythe"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_quartz_crystal",
+      "has_the_recipe"
+    ]
+  ]
+}
