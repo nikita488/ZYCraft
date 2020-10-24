@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntityType;
 import nikita488.zycraft.util.BlockUpdate;
 import nikita488.zycraft.util.Color4b;
 
-public class ColorableTile extends BaseTile
+public class ColorableTile extends ZYTile
 {
     protected Color4b color;
 

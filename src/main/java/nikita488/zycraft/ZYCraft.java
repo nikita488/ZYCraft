@@ -1,6 +1,7 @@
 package nikita488.zycraft;
 
 import com.tterrag.registrate.Registrate;
+import com.tterrag.registrate.util.NonNullLazyValue;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import nikita488.zycraft.config.ZYConfig;
@@ -15,12 +16,10 @@ public class ZYCraft
 {
     public static final String MOD_ID = "zycraft";
     public static final Logger LOGGER = LogManager.getLogger();
-    public static Registrate REGISTRY;
+    private static final NonNullLazyValue<Registrate> REGISTRATE = new NonNullLazyValue<>(() -> Registrate.create(MOD_ID));
 
     public ZYCraft()
     {
-        REGISTRY = Registrate.create(MOD_ID);
-
         ZYBlocks.init();
         ZYItems.init();
         ZYTiles.init();
@@ -32,6 +31,11 @@ public class ZYCraft
         ZYGroups.init();
         ZYLang.init();
         ZYConfig.register();
+    }
+
+    public static Registrate registrate()
+    {
+        return REGISTRATE.get();
     }
 
     public static ResourceLocation modLoc(String name)

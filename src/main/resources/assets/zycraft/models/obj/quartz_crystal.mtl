@@ -1,3 +1,4 @@
 newmtl texture
 Kd 1.0 1.0 1.0 1.0
+forge_TintIndex -1
 map_Kd #texture

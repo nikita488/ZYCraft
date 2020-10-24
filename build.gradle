@@ -96,6 +96,8 @@ dependencies {
     shade registrate
 
     implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
+
+    runtimeOnly fg.deobf("curse.maven:mekanism:3075056")
 }
 
 processResources {
@@ -118,6 +120,21 @@ jar {
                 "MixinConnector": "nikita488.zycraft.mixin.ZYMixinConnector"
         ])
     }
+}
+
+task replaceResources(type: Copy) {
+    outputs.upToDateWhen { false }
+    from(sourceSets.main.resources) {
+        include "META-INF/mods.toml"
+        expand "version": mod_version, "mc_version": minecraft_version, "forge_version": min_forge_version, "loader_version": loader_version
+    }
+    into "$buildDir/resources/main/"
+}
+
+processResources {
+    //Exclude the mods.toml file as we manually handle that and don't want it to invalidate our cache
+    exclude 'META-INF/mods.toml'
+    finalizedBy replaceResources
 }
 
 shadowJar {

@@ -1,11 +1,11 @@
 modLoader="javafml"
-loaderVersion="[34,)"
+loaderVersion="[${loader_version},)"
 license="MIT"
 issueTrackerURL="https://github.com/nikita488/ZYCraft/issues"
 
 [[mods]]
 modId="zycraft"
-version="${file.jarVersion}"
+version="${version}"
 displayName="ZYCraft"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/zycraft"
 authors="nikita488"
@@ -16,13 +16,13 @@ An attempt to return the feeling of XyCraft to the latest versions of Minecraft.
 [[dependencies.zycraft]]
     modId="forge"
     mandatory=true
-    versionRange="[34,)"
+    versionRange="[${forge_version},)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.zycraft]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16.3]"
+    versionRange="[${mc_version}]"
     ordering="NONE"
     side="BOTH"

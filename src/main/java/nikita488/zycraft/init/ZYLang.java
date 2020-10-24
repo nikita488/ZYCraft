@@ -1,65 +1,63 @@
 package nikita488.zycraft.init;
 
+import com.tterrag.registrate.Registrate;
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 import nikita488.zycraft.ZYCraft;
 
 public class ZYLang
 {
+    private static final Registrate REGISTRATE = ZYCraft.registrate();
+
     public static final TranslationTextComponent TOOLTIP_HINT =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("hint"), "\u00A77Press \u00A7a\u00A7oShift\u00A77 for info");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("hint"), "\u00A77Press \u00A7a\u00A7oShift\u00A77 for info");
 
     public static final TranslationTextComponent COLORABLE =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "\u00A7e\u00A7oColorable");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "\u00A7e\u00A7oColorable");
     public static final TranslationTextComponent COLORABLE_INFO =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "info", "\u00A7a\u00A7oRight click\u00A77\u00A7o or \u00A7a\u00A7oShift + Right click\u00A77\u00A7o on this block with one of the following:");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "info", "\u00A7a\u00A7oRight click\u00A77\u00A7o or \u00A7a\u00A7oShift + Right click\u00A77\u00A7o on this block with one of the following:");
     public static final TranslationTextComponent COLORABLE_RGB =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "rgb", "\u00A7c\u00A7oRed\u00A77\u00A7o, \u00A7a\u00A7oGreen\u00A77\u00A7o or \u00A79\u00A7oBlue Zychorium\u00A77\u00A7o - to adjust each individual RGB");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "rgb", "\u00A7c\u00A7oRed\u00A77\u00A7o, \u00A7a\u00A7oGreen\u00A77\u00A7o or \u00A79\u00A7oBlue Zychorium\u00A77\u00A7o - to adjust each individual RGB");
     public static final TranslationTextComponent COLORABLE_BRIGHTNESS =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "brightness", "\u00A78\u00A7oDark Zychorium\u00A77\u00A7o - to adjust color brightness");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "brightness", "\u00A78\u00A7oDark Zychorium\u00A77\u00A7o - to adjust color brightness");
     public static final TranslationTextComponent COLORABLE_RESET =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "reset", "\u00A7f\u00A7oLight Zychorium\u00A77\u00A7o - to reset color");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "reset", "\u00A7f\u00A7oLight Zychorium\u00A77\u00A7o - to reset color");
     public static final TranslationTextComponent COLORABLE_DYE =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("colorable"), "dye", "\u00A7e\u00A7oAny Dye\u00A77\u00A7o - to apply color of the dye");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("colorable"), "dye", "\u00A7e\u00A7oAny Dye\u00A77\u00A7o - to apply color of the dye");
 
     public static final TranslationTextComponent COLOR_SCANNER_APPLY =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "apply", "\u00A7a\u00A7oRight click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to apply color");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "apply", "\u00A7a\u00A7oRight click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to apply color");
     public static final TranslationTextComponent COLOR_SCANNER_COPY =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "copy", "\u00A7a\u00A7oShift + Right click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to copy color");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "copy", "\u00A7a\u00A7oShift + Right click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to copy color");
     public static final TranslationTextComponent COLOR_SCANNER_CURRENT_COLOR =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "current_color", "\u00A77Current color:");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "current_color", "\u00A77Current color:");
     public static final TranslationTextComponent COLOR_SCANNER_RED =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "red", "Red:    %s");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "red", "Red:    %s");
     public static final TranslationTextComponent COLOR_SCANNER_GREEN =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "green", "Green: %s");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "green", "Green: %s");
     public static final TranslationTextComponent COLOR_SCANNER_BLUE =
-            ZYCraft.REGISTRY.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "blue", "Blue:   %s");
+            REGISTRATE.addLang("tooltip", ZYCraft.modLoc("color_scanner"), "blue", "Blue:   %s");
 
     public static final TranslationTextComponent QUARTZ_CRYSTAL =
-            ZYCraft.REGISTRY.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "%1$s was slowly poked by Quartz Crystal");
+            REGISTRATE.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "%1$s was slowly poked by Quartz Crystal");
     public static final TranslationTextComponent QUARTZ_CRYSTAL_PLAYER =
-            ZYCraft.REGISTRY.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "player", "%1$s was slowly poked by Quartz Crystal because of %2$s");
+            REGISTRATE.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "player", "%1$s was slowly poked by Quartz Crystal because of %2$s");
 
     public static void init() {}
 
-    public static TranslationTextComponent getColorScannerRed(int amount)
+    public static IFormattableTextComponent getColorScannerRed(int amount)
     {
-        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount);
-        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
-        return component;
+        return new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
     }
 
-    public static TranslationTextComponent getColorScannerGreen(int amount)
+    public static IFormattableTextComponent getColorScannerGreen(int amount)
     {
-        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount);
-        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
-        return component;
+        return new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
     }
 
-    public static TranslationTextComponent getColorScannerBlue(int amount)
+    public static IFormattableTextComponent getColorScannerBlue(int amount)
     {
-        TranslationTextComponent component = new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount);
-        component.mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
-        return component;
+        return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
     }
 }

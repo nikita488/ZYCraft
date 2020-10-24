@@ -41,7 +41,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
         if (possibleSides.isEmpty())
             return false;
 
-        world.setBlockState(pos, ZYBlocks.QUARTZ_CRYSTAL_CLUSTER.getDefaultState()
+        world.setBlockState(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
                 .with(QuartzCrystalClusterBlock.FACING, possibleSides.get(random.nextInt(possibleSides.size())).getOpposite())
                 .with(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, config.size)), Constants.BlockFlags.BLOCK_UPDATE);
         return true;

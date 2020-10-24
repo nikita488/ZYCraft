@@ -45,9 +45,9 @@ import java.util.function.Supplier;
 
 public class ZYBlocks
 {
-    public static final Registrate REGISTRY = ZYCraft.REGISTRY.itemGroup(() -> ZYGroups.BLOCKS, "ZYCraft Blocks");
+    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.BLOCKS, "ZYCraft Blocks");
 
-    public static final BlockEntry<Block> ZYCHORITE = REGISTRY.block("zychorite", Block::new)
+    public static final BlockEntry<Block> ZYCHORITE = REGISTRATE.block("zychorite", Block::new)
             .initialProperties(Material.ROCK, MaterialColor.BLACK)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
             .item()
@@ -55,33 +55,33 @@ public class ZYBlocks
                 .build()
             .register();
 
-    public static final BlockEntry<Block> ZYCHORITE_BLOCK = REGISTRY.block("zychorite_block", Block::new)
+    public static final BlockEntry<Block> ZYCHORITE_BLOCK = REGISTRATE.block("zychorite_block", Block::new)
             .initialProperties(ZYCHORITE)
             .tag(Tags.Blocks.STORAGE_BLOCKS)
             .simpleItem()
             .recipe((ctx, provider) -> storageBlock(provider, ZYCHORITE, ctx::getEntry))
             .register();
 
-    public static final BlockEntry<Block> ZYCHORITE_BRICKS = REGISTRY.block("zychorite_bricks", Block::new)
+    public static final BlockEntry<Block> ZYCHORITE_BRICKS = REGISTRATE.block("zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
             .simpleItem()
             .recipe((ctx, provider) -> bricks(provider, DataIngredient.items(ZYCHORITE), ctx::getEntry))
             .register();
 
-    public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS = REGISTRY.block("small_zychorite_bricks", Block::new)
+    public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS = REGISTRATE.block("small_zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
             .simpleItem()
             .recipe((ctx, provider) -> smallBricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
             .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_ORE = REGISTRY.block("aluminium_ore", Block::new)
+    public static final BlockEntry<Block> ALUMINIUM_ORE = REGISTRATE.block("aluminium_ore", Block::new)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
             .tag(ZYTags.Blocks.ORES_ALUMINIUM, ZYTags.Blocks.ORES_ALUMINUM)
             .simpleItem()
             .recipe((ctx, provider) -> provider.smeltingAndBlasting(DataIngredient.items(ctx.getEntry()), ZYItems.ALUMINIUM, 0.1F))
             .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_BLOCK = REGISTRY.block("aluminium_block", Block::new)
+    public static final BlockEntry<Block> ALUMINIUM_BLOCK = REGISTRATE.block("aluminium_block", Block::new)
             .initialProperties(Material.ROCK, MaterialColor.QUARTZ)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
@@ -89,20 +89,20 @@ public class ZYBlocks
             .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ALUMINIUM, ctx::getEntry))
             .register();
 
-    public static final BlockEntry<Block> ALUMINIUM_BRICKS = REGISTRY.block("aluminium_bricks", Block::new)
+    public static final BlockEntry<Block> ALUMINIUM_BRICKS = REGISTRATE.block("aluminium_bricks", Block::new)
             .initialProperties(ALUMINIUM_BLOCK)
             .simpleItem()
             .recipe((ctx, provider) ->
                     infused(provider, DataIngredient.items(ZYItems.ALUMINIUM), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
             .register();
 
-    public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS = REGISTRY.block("small_aluminium_bricks", Block::new)
+    public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS = REGISTRATE.block("small_aluminium_bricks", Block::new)
             .initialProperties(ALUMINIUM_BLOCK)
             .simpleItem()
             .recipe((ctx, provider) -> smallBricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
             .register();
 
-    public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL_CLUSTER = REGISTRY.block("quartz_crystal", QuartzCrystalClusterBlock::new)
+    public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL = REGISTRATE.block("quartz_crystal", QuartzCrystalClusterBlock::new)
             .initialProperties(Material.MISCELLANEOUS, MaterialColor.DIAMOND)
             .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
@@ -129,25 +129,25 @@ public class ZYBlocks
                 .build()
             .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BLOCK = REGISTRY.block("quartz_crystal_block", QuartzCrystalBlock::new)
+    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BLOCK = REGISTRATE.block("quartz_crystal_block", QuartzCrystalBlock::new)
             .initialProperties(Material.GLASS, MaterialColor.DIAMOND)
             .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
             .tag(Tags.Blocks.STORAGE_BLOCKS, BlockTags.IMPERMEABLE)
             .simpleItem()
-            .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL_CLUSTER, ctx::getEntry))
+            .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL, ctx::getEntry))
             .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
+    public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS = REGISTRATE.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
             .initialProperties(QUARTZ_CRYSTAL_BLOCK)
             .addLayer(() -> RenderType::getTranslucent)
             .tag(BlockTags.IMPERMEABLE)
             .simpleItem()
             .recipe((ctx, provider) ->
-                    infused(provider, DataIngredient.items(QUARTZ_CRYSTAL_CLUSTER), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
+                    infused(provider, DataIngredient.items(QUARTZ_CRYSTAL), DataIngredient.tag(ItemTags.STONE_BRICKS), ctx::getEntry))
             .register();
 
-    public static final BlockEntry<QuartzCrystalBlock> SMALL_QUARTZ_CRYSTAL_BRICKS = REGISTRY.block("small_quartz_crystal_bricks", QuartzCrystalBlock::new)
+    public static final BlockEntry<QuartzCrystalBlock> SMALL_QUARTZ_CRYSTAL_BRICKS = REGISTRATE.block("small_quartz_crystal_bricks", QuartzCrystalBlock::new)
             .initialProperties(QUARTZ_CRYSTAL_BLOCK)
             .addLayer(() -> RenderType::getTranslucent)
             .tag(BlockTags.IMPERMEABLE)
@@ -220,7 +220,7 @@ public class ZYBlocks
 
     public static final BlockEntry<ZychoriumLampBlock> INVERTED_ZYCHORIUM_LAMP = lamp(true);
 
-    public static final BlockEntry<ColorableBlock> IMMORTAL_BLOCK = REGISTRY.block("immortal_block", ColorableBlock::new)
+    public static final BlockEntry<ColorableBlock> IMMORTAL_BLOCK = REGISTRATE.block("immortal_block", ColorableBlock::new)
             .initialProperties(Material.ROCK, MaterialColor.SNOW)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
             .addLayer(() -> RenderType::getCutout)
@@ -234,7 +234,7 @@ public class ZYBlocks
                     colorable(provider, DataIngredient.tag(ZYTags.Items.STORAGE_BLOCKS_ZYCHORIUM), ctx::getEntry))
             .register();
 
-    public static final BlockEntry<ColorableBlock> THE_AUREY_BLOCK = REGISTRY.block("the_aurey_block", ColorableBlock::new)
+    public static final BlockEntry<ColorableBlock> THE_AUREY_BLOCK = REGISTRATE.block("the_aurey_block", ColorableBlock::new)
             .initialProperties(IMMORTAL_BLOCK)
             .addLayer(() -> RenderType::getCutout)
             .color(() -> ZYColors::colorableBlockColor)
@@ -291,7 +291,7 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRY.block(pattern.replace("{type}", type.getString()), Block::new)
+            blocks.put(type, factory.apply(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
                     .initialProperties(Material.ROCK, type.mtlColor())
                     .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6).setAllowsSpawn((state, world, pos, entity) -> false))
                     .addLayer(() -> RenderType::getCutout)
@@ -315,7 +315,7 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRY.block(pattern.replace("{type}", type.getString()), Block::new)
+            blocks.put(type, factory.apply(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
                     .initialProperties(Material.ROCK, type.mtlColor())
                     .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
                     .simpleItem())
@@ -328,7 +328,7 @@ public class ZYBlocks
     private static BlockEntry<ZychoriumLampBlock> lamp(boolean inverted)
     {
         String name = "zychorium_lamp";
-        return REGISTRY.block(inverted ? "inverted_" + name : name, properties -> new ZychoriumLampBlock(inverted, properties))
+        return REGISTRATE.block(inverted ? "inverted_" + name : name, properties -> new ZychoriumLampBlock(inverted, properties))
                 .initialProperties(Material.ROCK, MaterialColor.SNOW)
                 .properties(properties -> properties.hardnessAndResistance(0.3F, 6)
                         .setLightLevel(state -> state.get(BlockStateProperties.LIT) ? 15 : 0)
@@ -379,7 +379,7 @@ public class ZYBlocks
         {
             String name = type.getString() + "_viewer";
 
-            blocks.put(type, REGISTRY.block(phantomized ? "phantomized_" + name : name, properties -> new ViewerBlock(type, properties))
+            blocks.put(type, REGISTRATE.block(phantomized ? "phantomized_" + name : name, properties -> new ViewerBlock(type, properties))
                     .initialProperties(() -> Blocks.GLASS)
                     .properties(properties -> type.properties(properties, phantomized))
                     .addLayer(() -> type::layer)
@@ -416,7 +416,7 @@ public class ZYBlocks
         {
             String registryName = type.getString() + "_viewer";
 
-            blocks.put(type, REGISTRY.block(phantomized ? "phantomized_" + registryName : registryName, properties -> new ImmortalViewerBlock(type, properties))
+            blocks.put(type, REGISTRATE.block(phantomized ? "phantomized_" + registryName : registryName, properties -> new ImmortalViewerBlock(type, properties))
                     .initialProperties(() -> Blocks.GLASS)
                     .properties(properties -> type.properties(properties, phantomized))
                     .addLayer(() -> type::layer)
@@ -454,7 +454,7 @@ public class ZYBlocks
 
     private static BlockEntry<BasicMachineBlock> basicMachine(String name, ZYType type)
     {
-        return REGISTRY.block(name, properties -> new BasicMachineBlock(type, properties))
+        return REGISTRATE.block(name, properties -> new BasicMachineBlock(type, properties))
                 .initialProperties(Material.ROCK, type.mtlColor())
                 .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
                 .addLayer(() -> RenderType::getCutout)

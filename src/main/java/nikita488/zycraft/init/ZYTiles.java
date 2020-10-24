@@ -7,7 +7,7 @@ import nikita488.zycraft.tile.ColorableTile;
 
 public class ZYTiles
 {
-    public static final TileEntityEntry<ColorableTile> COLORABLE = ZYCraft.REGISTRY.<ColorableTile>tileEntity("colorable", ColorableTile::new)
+    public static final TileEntityEntry<ColorableTile> COLORABLE = ZYCraft.registrate().<ColorableTile>tileEntity("colorable", ColorableTile::new)
             .validBlocks(ZYBlocks.ZYCHORIUM_LAMP,
                     ZYBlocks.INVERTED_ZYCHORIUM_LAMP,
                     ZYBlocks.IMMORTAL_BLOCK,

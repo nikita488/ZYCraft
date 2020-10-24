@@ -10,9 +10,9 @@ import nikita488.zycraft.worldgen.feature.ZychoriteVeinFeature;
 
 public class ZYFeatures
 {
-    public static final RegistryEntry<ZychoriteVeinFeature> ZYCHORITE_VEIN = ZYCraft.REGISTRY.simple("zychorite_vein", Feature.class, () ->
+    public static final RegistryEntry<ZychoriteVeinFeature> ZYCHORITE_VEIN = ZYCraft.registrate().simple("zychorite_vein", Feature.class, () ->
             new ZychoriteVeinFeature(ZychoriteVeinConfig.CODEC));
-    public static final RegistryEntry<ClusterFeature> QUARTZ_CRYSTAL_CLUSTER = ZYCraft.REGISTRY.simple("quartz_crystal_cluster", Feature.class, () ->
+    public static final RegistryEntry<ClusterFeature> QUARTZ_CRYSTAL_CLUSTER = ZYCraft.registrate().simple("quartz_crystal_cluster", Feature.class, () ->
             new ClusterFeature(ClusterFeatureConfig.CODEC));
 
     public static void init() {}

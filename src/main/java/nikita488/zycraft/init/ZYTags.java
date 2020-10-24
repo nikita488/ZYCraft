@@ -131,7 +131,7 @@ public class ZYTags
 
     public static void init()
     {
-        ZYCraft.REGISTRY.addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
+        ZYCraft.registrate().addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
         {
             tags.getOrCreateBuilder(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
             tags.getOrCreateBuilder(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
@@ -156,7 +156,7 @@ public class ZYTags
             tags.getOrCreateBuilder(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
         });
 
-        ZYCraft.REGISTRY.addDataGenerator(ITEM_TAGS, tags ->
+        ZYCraft.registrate().addDataGenerator(ITEM_TAGS, tags ->
         {
             tags.copy(Blocks.ORES_ZYCHORIUM, Items.ORES_ZYCHORIUM);
             tags.copy(Blocks.ORES_ALUMINIUM, Items.ORES_ALUMINIUM);
@@ -201,7 +201,7 @@ public class ZYTags
             tags.copy(Blocks.BASIC_MACHINES, Items.BASIC_MACHINES);
         });
 
-        ZYCraft.REGISTRY.addDataGenerator(ProviderType.ITEM_TAGS, tags ->
+        ZYCraft.registrate().addDataGenerator(ProviderType.ITEM_TAGS, tags ->
         {
             tags.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
         });
