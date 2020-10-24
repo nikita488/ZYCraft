@@ -21,7 +21,7 @@ public abstract class AtlasTextureMixin
     @Inject(method = "loadSprite", at = @At("HEAD"), cancellable = true)
     private void stitchCloudSprite(IResourceManager manager, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int mipMapLevel, int originX, int originY, CallbackInfoReturnable<TextureAtlasSprite> cir)
     {
-        if (!this.getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE) || !info.getSpriteLocation().equals(CloudSprite.NAME))
+        if (!this.getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE) || (!info.getSpriteLocation().equals(CloudSprite.NAME) && !info.getSpriteLocation().equals(CloudSprite.NAME2)))
             return;
 
         NativeImage image = new NativeImage(info.getSpriteWidth(), info.getSpriteHeight(), false);

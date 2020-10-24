@@ -3,7 +3,7 @@
   "loader": "forge:obj",
   "model": "zycraft:models/obj/zychorium.obj",
   "textures": {
-    "inside": "zycraft:cloud",
+    "inside": "zycraft:cloud2",
     "outside": "zycraft:obj/zychorium"
   },
   "detectCullableFaces": false,
