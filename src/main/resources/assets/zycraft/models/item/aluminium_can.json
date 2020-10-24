@@ -1,0 +1,11 @@
+{
+  "parent": "forge:item/default",
+  "loader": "forge:bucket",
+  "textures": {
+    "base": "zycraft:item/aluminium_can",
+    "fluid": "zycraft:item/aluminium_can_fluid",
+    "cover": "zycraft:item/aluminium_can"
+  },
+  "fluid": "minecraft:empty",
+  "coverIsMask": false
+}

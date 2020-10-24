@@ -1,0 +1,106 @@
+{
+  "parent": "block/block",
+  "loader": "zycraft:aluminium_foil",
+  "fluid_textures": [ "fluid", "inside" ],
+  "model": {
+    "parent": "zycraft:item/aluminium_foil_empty",
+    "overrides": [
+      {
+        "predicate": {
+          "zycraft:filled": 0.0625
+        },
+        "model": "zycraft:item/aluminium_foil_level_1"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.125
+        },
+        "model": "zycraft:item/aluminium_foil_level_2"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.1875
+        },
+        "model": "zycraft:item/aluminium_foil_level_3"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.25
+        },
+        "model": "zycraft:item/aluminium_foil_level_4"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.3125
+        },
+        "model": "zycraft:item/aluminium_foil_level_5"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.375
+        },
+        "model": "zycraft:item/aluminium_foil_level_6"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.4375
+        },
+        "model": "zycraft:item/aluminium_foil_level_7"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.5
+        },
+        "model": "zycraft:item/aluminium_foil_level_8"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.5625
+        },
+        "model": "zycraft:item/aluminium_foil_level_9"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.625
+        },
+        "model": "zycraft:item/aluminium_foil_level_10"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.6875
+        },
+        "model": "zycraft:item/aluminium_foil_level_11"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.75
+        },
+        "model": "zycraft:item/aluminium_foil_level_12"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.8125
+        },
+        "model": "zycraft:item/aluminium_foil_level_13"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.875
+        },
+        "model": "zycraft:item/aluminium_foil_level_14"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 0.9375
+        },
+        "model": "zycraft:item/aluminium_foil_level_15"
+      },
+      {
+        "predicate": {
+          "zycraft:filled": 1.0
+        },
+        "model": "zycraft:item/aluminium_foil_level_16"
+      }
+    ]
+  }
+}

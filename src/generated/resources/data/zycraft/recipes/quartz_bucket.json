@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "# #",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:quartz_crystal"
+    }
+  },
+  "result": {
+    "item": "zycraft:quartz_bucket"
+  }
+}

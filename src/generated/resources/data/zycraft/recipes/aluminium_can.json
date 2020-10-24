@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "X#X",
+    " X "
+  ],
+  "key": {
+    "#": {
+      "tag": "forge:glass_panes"
+    },
+    "X": {
+      "item": "zycraft:aluminium"
+    }
+  },
+  "result": {
+    "item": "zycraft:aluminium_can",
+    "count": 16
+  }
+}

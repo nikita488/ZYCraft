@@ -1,0 +1,12 @@
+{
+  "parent": "forge:item/default",
+  "loader": "forge:bucket",
+  "textures": {
+    "base": "zycraft:item/quartz_bucket",
+    "fluid": "zycraft:item/quartz_bucket_fluid",
+    "cover": "zycraft:item/quartz_bucket_overlay"
+  },
+  "fluid": "minecraft:empty",
+  "flipGas": true,
+  "coverIsMask": false
+}

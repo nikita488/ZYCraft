@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:aluminium_can"
+    ]
+  },
+  "criteria": {
+    "has_aluminium": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "zycraft:aluminium"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:aluminium_can"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminium",
+      "has_the_recipe"
+    ]
+  ]
+}

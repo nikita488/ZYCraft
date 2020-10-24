@@ -1,0 +1,30 @@
+{
+  "parent": "forge:block/default",
+  "loader": "forge:obj",
+  "model": "zycraft:models/obj/aluminium_foil.obj",
+  "textures": {
+    "inside": "zycraft:cloud2",
+    "outside": "zycraft:obj/aluminium_foil",
+    "fluid": "block/water_still"
+  },
+  "visibility": {
+    "level_1": false,
+    "level_2": false,
+    "level_3": false,
+    "level_4": false,
+    "level_5": false,
+    "level_6": false,
+    "level_7": false,
+    "level_8": false,
+    "level_9": false,
+    "level_10": false,
+    "level_11": false,
+    "level_12": false,
+    "level_13": false,
+    "level_14": false,
+    "level_15": false,
+    "level_16": false
+  },
+  "detectCullableFaces": false,
+  "flip-v": true
+}

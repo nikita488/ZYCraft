@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#G#",
+    "ACA",
+    "#G#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:zychorite"
+    },
+    "G": {
+      "item": "zycraft:green_zychorium"
+    },
+    "A": {
+      "item": "zycraft:aluminium"
+    },
+    "C": {
+      "tag": "forge:glass"
+    }
+  },
+  "result": {
+    "item": "zycraft:aluminium_foil"
+  }
+}

@@ -8,6 +8,7 @@ public class ZYGroups
 {
     public static final ItemGroup BLOCKS = new ZYItemGroup("blocks", () -> ZYBlocks.ZYCHORIUM_BRICKS.get(ZYType.BLUE).asStack());
     public static final ItemGroup ITEMS = new ZYItemGroup("items", () -> ZYItems.ZYCHORIUM.get(ZYType.BLUE).asStack());
+    public static final ItemGroup FLUIDS = new ZYItemGroup("fluids", ZYItems.QUARTZ_BUCKET::asStack);
 
     public static void init() {}
 }

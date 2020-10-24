@@ -1,5 +1,7 @@
 package nikita488.zycraft.client;
 
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.tile.ColorableTile;
@@ -57,6 +59,20 @@ public class ZYColors
             if (!stack.hasTag() || tintIndex != 0)
                 return 0xFFFFFF;
             return stack.getTag().getInt("Color");
+        };
+    }
+
+    public static IItemColor aluminiumFoilColor()
+    {
+        return (stack, tintIndex) ->
+        {
+            if (tintIndex == 0)
+                return ZYType.GREEN.rgb();
+            if (tintIndex == 1)
+                return FluidUtil.getFluidContained(stack)
+                        .map(containedFluid -> containedFluid.getFluid().getAttributes().getColor(containedFluid))
+                        .orElse(0xFFFFFF);
+            return 0xFFFFFF;
         };
     }
 }
