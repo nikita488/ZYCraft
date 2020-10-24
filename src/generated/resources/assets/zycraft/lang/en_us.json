@@ -122,6 +122,7 @@
   "item.zycraft.red_zychorium": "Red Zychorium",
   "item.zycraft.scythe": "\u00A79Scythe",
   "itemGroup.zycraft.blocks": "ZYCraft Blocks",
+  "itemGroup.zycraft.fluids": "ZYCraft Fluids",
   "itemGroup.zycraft.items": "ZYCraft Items",
   "tooltip.zycraft.color_scanner.apply": "\u00A7a\u00A7oRight click\u00A77\u00A7o on \u00A7e\u00A7oColorable \u00A77\u00A7oblock to apply color",
   "tooltip.zycraft.color_scanner.blue": "Blue:   %s",

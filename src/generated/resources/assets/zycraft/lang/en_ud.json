@@ -122,6 +122,7 @@
   "item.zycraft.red_zychorium": "\u026Fn\u0131\u0279o\u0265\u0254\u028EZ p\u01DD\u1D1A",
   "item.zycraft.scythe": "\u01DD\u0265\u0287\u028E\u0254S6\u00A7",
   "itemGroup.zycraft.blocks": "s\u029E\u0254o\u05DF\u15FA \u0287\u025F\u0250\u0279\u0186\u028EZ",
+  "itemGroup.zycraft.fluids": "sp\u0131n\u05DF\u2132 \u0287\u025F\u0250\u0279\u0186\u028EZ",
   "itemGroup.zycraft.items": "s\u026F\u01DD\u0287I \u0287\u025F\u0250\u0279\u0186\u028EZ",
   "tooltip.zycraft.color_scanner.apply": "\u0279o\u05DFo\u0254 \u028E\u05DFdd\u0250 o\u0287 \u029E\u0254o\u05DFqo\u00A7\u3125\u00A7 \u01DD\u05DFq\u0250\u0279o\u05DFo\u0186o\u00A7\u01DD\u00A7 uo o\u00A7\u3125\u00A7\u029E\u0254\u0131\u05DF\u0254 \u0287\u0265b\u0131\u1D1Ao\u00A7\u0250\u00A7",
   "tooltip.zycraft.color_scanner.blue": "%s   :\u01DDn\u05DF\u15FA",

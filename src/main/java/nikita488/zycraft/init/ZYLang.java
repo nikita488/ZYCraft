@@ -44,6 +44,9 @@ public class ZYLang
     public static final TranslationTextComponent QUARTZ_CRYSTAL_PLAYER =
             REGISTRATE.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "player", "%1$s was slowly poked by Quartz Crystal because of %2$s");
 
+    public static final TranslationTextComponent FLUIDS_ITEM_GROUP =
+            REGISTRATE.addLang("itemGroup", ZYCraft.modLoc("fluids"), "ZYCraft Fluids");
+
     public static void init() {}
 
     public static IFormattableTextComponent getColorScannerRed(int amount)
