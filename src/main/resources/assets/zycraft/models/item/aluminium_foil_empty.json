@@ -26,5 +26,11 @@
     "level_16": false
   },
   "detectCullableFaces": false,
-  "flip-v": true
+  "flip-v": true,
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 0],
+      "scale": [0.9375, 0.9375, 0.9375]
+    }
+  }
 }
