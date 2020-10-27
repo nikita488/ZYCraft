@@ -1,14 +1,18 @@
 package nikita488.zycraft.block;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.DrinkHelper;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -19,14 +23,15 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.items.ItemHandlerHelper;
 import nikita488.zycraft.enums.ZYType;
 
+import java.util.Optional;
 import java.util.Random;
 
 public class BasicMachineBlock extends Block
@@ -52,60 +57,37 @@ public class BasicMachineBlock extends Block
         if (type != ZYType.BLUE)
             return ActionResultType.PASS;
 
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack heldStack = player.getHeldItem(hand);
 
-        if (stack.isEmpty())
+        if (heldStack.isEmpty())
             return ActionResultType.PASS;
 
-        return player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).map(inventory ->
-        {
-            FluidTank tank = new FluidTank(1000);
-            tank.fill(new FluidStack(Fluids.WATER, 1000), IFluidHandler.FluidAction.EXECUTE);
+        Optional<IFluidHandlerItem> capability = FluidUtil.getFluidHandler(ItemHandlerHelper.copyStackWithSize(heldStack, 1)).resolve();
 
-            FluidActionResult result = FluidUtil.tryFillContainerAndStow(stack, tank, inventory, 1000, player, true);
+        if (!capability.isPresent())
+            return ActionResultType.PASS;
 
-            if (!result.isSuccess())
-                return ActionResultType.CONSUME;
+        IFluidHandlerItem handler = capability.get();
+        FluidStack water = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
 
-            if (!world.isRemote)
-                player.setHeldItem(hand, result.getResult());
+        if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
+            return ActionResultType.PASS;
 
+        player.addStat(Stats.ITEM_USED.get(heldStack.getItem()));
+        player.playSound(water.getFluid().getAttributes().getFillSound(), 1.0F, 1.0F);
+
+        if (world.isRemote)
             return ActionResultType.SUCCESS;
-        }).orElse(ActionResultType.CONSUME);
-/*        return FluidUtil.getFluidHandler(stack).map(handler ->
-        {
-            FluidStack water = new FluidStack(Fluids.WATER, 1000);
 
-            if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
-                return ActionResultType.CONSUME;
+        handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
 
-            if (world.isRemote)
-                return ActionResultType.SUCCESS;
+        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
+        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
 
-            handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
-            player.playSound(water.getFluid().getAttributes().getFillSound(water), SoundCategory.BLOCKS, 1.0F, 1.0F);
+        if (heldStack != filledContainer)
+            player.setHeldItem(hand, filledContainer);
 
-            ItemStack container = handler.getContainer();
-
-*//*            if (container.isEmpty())
-                return ActionResultType.SUCCESS;*//*
-
-            if (container.getCount() == 1)
-            {
-                player.setHeldItem(hand, container);
-            }
-            else if (container.getCount() > 1 && player.inventory.addItemStackToInventory(container))
-            {
-                container.shrink(1);
-            }
-            else
-            {
-                player.dropItem(container, false, true);
-                container.shrink(1);
-            }
-
-            return ActionResultType.SUCCESS;
-        }).orElse(ActionResultType.CONSUME);*/
+        return ActionResultType.SUCCESS;
     }
 
     @Override
