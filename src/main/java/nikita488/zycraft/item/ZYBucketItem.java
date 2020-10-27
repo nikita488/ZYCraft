@@ -167,7 +167,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
         player.addStat(Stats.ITEM_USED.get(this));
         player.playSound(fluid.getAttributes().getFillSound(), 1.0F, 1.0F);
 
-        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer().copy(), false);
+        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
 
         if (!world.isRemote)
             CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);

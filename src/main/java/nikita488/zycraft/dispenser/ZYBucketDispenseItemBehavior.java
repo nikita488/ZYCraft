@@ -71,10 +71,10 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         ItemStack filledContainer = handler.getContainer();
 
         if (stack.isEmpty())
-            return filledContainer.copy();
+            return filledContainer;
 
-        if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(filledContainer.copy()) < 0)
-            defaultBehaviour.dispense(source, filledContainer.copy());
+        if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(filledContainer) < 0)
+            defaultBehaviour.dispense(source, filledContainer);
 
         return stack;
     }
