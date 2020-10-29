@@ -25,11 +25,10 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
 import nikita488.zycraft.enums.ZYType;
+import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
 import java.util.Random;
@@ -62,7 +61,7 @@ public class BasicMachineBlock extends Block
         if (heldStack.isEmpty())
             return ActionResultType.PASS;
 
-        Optional<IFluidHandlerItem> capability = FluidUtil.getFluidHandler(ItemHandlerHelper.copyStackWithSize(heldStack, 1)).resolve();
+        Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
 
         if (!capability.isPresent())
             return ActionResultType.PASS;

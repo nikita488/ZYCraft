@@ -3,7 +3,7 @@ package nikita488.zycraft.tile;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
-import nikita488.zycraft.util.BlockUpdate;
+import nikita488.zycraft.util.BlockUtils;
 import nikita488.zycraft.util.Color4b;
 
 public class ColorableTile extends ZYTile
@@ -24,7 +24,7 @@ public class ColorableTile extends ZYTile
     public void setRGB(int rgb)
     {
         color.set(rgb, 255);
-        BlockUpdate.scheduleTileUpdate(world, pos, getBlockState());
+        BlockUtils.scheduleTileUpdate(world, pos, getBlockState());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ColorableTile extends ZYTile
     public void decodeUpdate(CompoundNBT tag)
     {
         color = Color4b.loadRGB(tag);
-        BlockUpdate.scheduleRenderUpdate(world, pos);
+        BlockUtils.scheduleRenderUpdate(world, pos);
     }
 
     @Override

@@ -14,12 +14,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.items.ItemHandlerHelper;
 import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.item.ZYBucketItem;
+import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
 
@@ -31,7 +30,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
     @Override
     public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
     {
-        Optional<IFluidHandlerItem> capability = FluidUtil.getFluidHandler(ItemHandlerHelper.copyStackWithSize(stack, 1)).resolve();
+        Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(stack);
 
         if (!capability.isPresent())
             return stack;
@@ -43,8 +42,8 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
 
         if (!containedFluid.isEmpty())
         {
-            if (ZYBucketItem.tryPlaceFluid(containedFluid.getFluid(), null, world, pos, null))
-                return ZYItems.QUARTZ_BUCKET.asStack();
+            if (FluidUtils.tryPlaceFluid(containedFluid.getFluid(), null, world, pos, null))
+                return new ItemStack(stack.getItem());
 
             return defaultBehaviour.dispense(source, stack);
         }
