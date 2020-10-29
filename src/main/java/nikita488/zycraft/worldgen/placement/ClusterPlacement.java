@@ -19,7 +19,7 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
     }
 
     @Override
-    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper helper, Random random, ClusterPlacementConfig config, BlockPos pos)
+    public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random random, ClusterPlacementConfig config, BlockPos pos)
     {
         ObjectArrayList<BlockPos> clusters = new ObjectArrayList<>();
         BlockPos.Mutable clusterPos = new BlockPos.Mutable();

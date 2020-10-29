@@ -25,7 +25,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
+    public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
     {
         List<Direction> possibleSides = new ArrayList<>();
         BlockPos.Mutable adjPos = new BlockPos.Mutable();

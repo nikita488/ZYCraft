@@ -24,7 +24,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
+    public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
     {
         float f = random.nextFloat() * (float)Math.PI;
         float f1 = (float)config.size / 8.0F;
