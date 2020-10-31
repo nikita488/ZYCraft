@@ -1,14 +1,13 @@
 package nikita488.zycraft.client;
 
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.tile.ColorableTile;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntity;
+import nikita488.zycraft.util.ItemStackUtils;
 
 public class ZYColors
 {
@@ -26,7 +25,7 @@ public class ZYColors
     {
         if (tintIndex == 0)
             return type.rgb();
-        else if (tintIndex == 1 && coloredOverlay)
+        if (tintIndex == 1 && coloredOverlay)
             return type.darkRGB();
         return 0xFFFFFF;
     }
@@ -54,12 +53,7 @@ public class ZYColors
 
     public static IItemColor colorScannerColor()
     {
-        return (stack, tintIndex) ->
-        {
-            if (!stack.hasTag() || tintIndex != 0)
-                return 0xFFFFFF;
-            return stack.getTag().getInt("Color");
-        };
+        return (stack, tintIndex) -> tintIndex == 0 ? ItemStackUtils.getInt(stack, "Color", 0xFFFFFF) : 0xFFFFFF;
     }
 
     public static IItemColor aluminiumFoilColor()

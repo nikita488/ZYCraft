@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import nikita488.zycraft.util.ItemStackUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -42,7 +43,7 @@ public class ColorScannerItem extends Item implements IColorChanger
             tooltip.add(ZYLang.COLOR_SCANNER_COPY);
         }
 
-        int color = stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
+        int color = ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
 
         tooltip.add(ZYLang.COLOR_SCANNER_CURRENT_COLOR);
         tooltip.add(ZYLang.getColorScannerRed((color >> 16) & 0xFF));
@@ -53,10 +54,7 @@ public class ColorScannerItem extends Item implements IColorChanger
     @Override
     public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        ItemStack stack = player.getHeldItem(hand);
-        int scannerColor = stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
-
-        return color != scannerColor;
+        return color != ItemStackUtils.getInt(player.getHeldItem(hand), "Color", 0xFFFFFF);
     }
 
     @Override
@@ -65,7 +63,7 @@ public class ColorScannerItem extends Item implements IColorChanger
         ItemStack stack = player.getHeldItem(hand);
 
         if (!player.isCrouching())
-            return stack.hasTag() ? stack.getTag().getInt("Color") : 0xFFFFFF;
+            return ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
         else
             stack.getOrCreateTag().putInt("Color", color);
 
