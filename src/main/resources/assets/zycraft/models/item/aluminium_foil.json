@@ -1,6 +1,6 @@
 {
   "parent": "block/block",
-  "loader": "zycraft:aluminium_foil",
+  "loader": "zycraft:fluid_container",
   "fluid_textures": [ "fluid" ],
   "model": {
     "parent": "zycraft:item/aluminium_foil_empty",
