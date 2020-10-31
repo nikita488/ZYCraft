@@ -1,15 +1,15 @@
 package nikita488.zycraft.block;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.IGrowable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Stats;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.DrinkHelper;
@@ -21,8 +21,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -149,7 +147,7 @@ public class BasicMachineBlock extends Block
             return;
 
         for (Direction side : VALUES)
-            modifyAdjacentState(world, pos, pos.offset(side));
+            modifyAdjacentState(world, pos.offset(side));
     }
 
     @Override
@@ -158,56 +156,22 @@ public class BasicMachineBlock extends Block
         if (type == ZYType.GREEN || type == ZYType.RED)
             return;
 
-        modifyAdjacentState(world, pos, adjacentPos);
+        modifyAdjacentState(world, adjacentPos);
     }
 
-    private void modifyAdjacentState(World world, BlockPos pos, BlockPos adjacentPos)
+    private void modifyAdjacentState(World world, BlockPos pos)
     {
-        BlockState state = world.getBlockState(adjacentPos);
-        Block block = state.getBlock();
-        FluidState fluidState = world.getFluidState(adjacentPos);
+        BlockState blockState = world.getBlockState(pos);
+        FluidState fluidState = world.getFluidState(pos);
 
         if (fluidState.isEmpty())
             return;
 
         if (type == ZYType.BLUE)
-        {
-            if (!fluidState.isTagged(FluidTags.LAVA))
-                return;
-
-            if (fluidState.isSource())
-                state = Blocks.OBSIDIAN.getDefaultState();
-            else if (fluidState.getActualHeight(world, adjacentPos) >= 0.44444445F)
-                state = Blocks.COBBLESTONE.getDefaultState();
-            else
-                return;
-            world.setBlockState(adjacentPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjacentPos, pos, state));
-            world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, adjacentPos, -1);
-        }
+            FluidUtils.turnLavaIntoBlock(world, pos, fluidState);
         else if (type == ZYType.DARK)
-        {
-            Material material = state.getMaterial();
-
-            if (block instanceof IBucketPickupHandler && ((IBucketPickupHandler)block).pickupFluid(world, adjacentPos, state) != Fluids.EMPTY)
-            {
-                return;
-            }
-            else if (block instanceof FlowingFluidBlock)
-            {
-                world.setBlockState(adjacentPos, Blocks.AIR.getDefaultState());
-            }
-            else if (material == Material.OCEAN_PLANT || material == Material.SEA_GRASS)
-            {
-                spawnDrops(state, world, adjacentPos, state.hasTileEntity() ? world.getTileEntity(adjacentPos) : null);
-                world.setBlockState(adjacentPos, Blocks.AIR.getDefaultState());
-            }
-        }
-        else if (type == ZYType.LIGHT)
-        {
-            if (!fluidState.isTagged(FluidTags.WATER) || fluidState.getActualHeight(world, adjacentPos) < 0.44444445F || !(block instanceof FlowingFluidBlock))
-                return;
-            state = Blocks.ICE.getDefaultState();
-            world.setBlockState(adjacentPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjacentPos, pos, state));
-        }
+            FluidUtils.voidFluid(blockState, world, pos);
+        else if (type == ZYType.LIGHT && !FluidUtils.turnLavaIntoBasalt(world, pos, fluidState))
+            FluidUtils.turnWaterIntoIce(blockState, world, pos, fluidState);
     }
 }

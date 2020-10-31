@@ -74,7 +74,7 @@ public class BlockUtils
         boolean removed = removeBlock(state, world, pos, player, canHarvest);
 
         if (removed && canHarvest)
-            state.getBlock().harvestBlock(world, player, pos, state, world.getTileEntity(pos), heldStackCopy);
+            state.getBlock().harvestBlock(world, player, pos, state, state.hasTileEntity() ? world.getTileEntity(pos) : null, heldStackCopy);
 
         if (removed && experience > 0)
             state.getBlock().dropXpOnBlockBreak(world, pos, experience);

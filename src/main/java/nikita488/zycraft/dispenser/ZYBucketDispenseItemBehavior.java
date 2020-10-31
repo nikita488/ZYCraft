@@ -42,7 +42,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
 
         if (!containedFluid.isEmpty())
         {
-            if (FluidUtils.tryPlaceFluid(containedFluid.getFluid(), null, world, pos, null))
+            if (FluidUtils.tryPlaceFluid(containedFluid, null, world, pos, null))
                 return new ItemStack(stack.getItem());
 
             return defaultBehaviour.dispense(source, stack);

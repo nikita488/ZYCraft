@@ -91,13 +91,12 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         if (!containedFluid.isEmpty())
         {
-            Fluid fluid = containedFluid.getFluid();
-            BlockPos fluidPos = FluidUtils.canBlockContainFluid(world, pos, state, fluid) ? pos : adjPos;
+            BlockPos fluidPos = FluidUtils.canBlockContainFluid(world, pos, state, containedFluid.getFluid()) ? pos : adjPos;
 
-            if (!FluidUtils.tryPlaceFluid(fluid, player, world, fluidPos, rayCastResult))
+            if (!FluidUtils.tryPlaceFluid(containedFluid, player, world, fluidPos, rayCastResult))
                 return ActionResult.resultFail(heldStack);
 
-            if (player instanceof ServerPlayerEntity)
+            if (!world.isRemote)
                 CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)player, fluidPos, heldStack);
 
             player.addStat(Stats.ITEM_USED.get(this));
