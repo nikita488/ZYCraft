@@ -3,7 +3,6 @@ package nikita488.zycraft.item;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.IBucketPickupHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -27,7 +26,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
-import nikita488.zycraft.dispenser.ZYBucketDispenseItemBehavior;
 import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
@@ -42,7 +40,6 @@ public class ZYBucketItem extends ZYFluidContainerItem
     public ZYBucketItem(Properties properties, int capacity)
     {
         super(properties, capacity);
-        DispenserBlock.registerDispenseBehavior(this, ZYBucketDispenseItemBehavior.INSTANCE);
     }
 
     @Override

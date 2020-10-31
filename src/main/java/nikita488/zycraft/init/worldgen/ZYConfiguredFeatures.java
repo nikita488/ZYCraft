@@ -1,8 +1,11 @@
 package nikita488.zycraft.init.worldgen;
 
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
+import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.worldgen.feature.ClusterFeatureConfig;
@@ -24,4 +27,13 @@ public class ZYConfiguredFeatures
     public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL_CLUSTER = ZYFeatures.QUARTZ_CRYSTAL_CLUSTER.get()
             .withConfiguration(new ClusterFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 5))
             .withPlacement(ZYPlacements.QUARTZ_CRYSTAL_CLUSTER.get().configure(new ClusterPlacementConfig(ZYConfig.quartzCrystalClusterAttempts, ZYConfig.quartzCrystalClusterAmount)));
+
+    public static void init()
+    {
+        Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;
+
+        Registry.register(registry, ZYCraft.modLoc("zychorite_vein"), ZYCHORITE_VEIN);
+        Registry.register(registry, ZYCraft.modLoc("ore_aluminium"), ORE_ALUMINIUM);
+        Registry.register(registry, ZYCraft.modLoc("quartz_crystal_cluster"), QUARTZ_CRYSTAL_CLUSTER);
+    }
 }
