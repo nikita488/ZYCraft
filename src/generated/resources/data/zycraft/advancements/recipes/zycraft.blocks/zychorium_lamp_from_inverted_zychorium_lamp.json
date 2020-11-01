@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "minecraft:zychorium_lamp_from_inverted_zychorium_lamp"
+      "zycraft:zychorium_lamp_from_inverted_zychorium_lamp"
     ]
   },
   "criteria": {
-    "has_glowstone": {
+    "has_redstone_torch": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:glowstone"
+            "item": "minecraft:redstone_torch"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "minecraft:zychorium_lamp_from_inverted_zychorium_lamp"
+        "recipe": "zycraft:zychorium_lamp_from_inverted_zychorium_lamp"
       }
     }
   },
   "requirements": [
     [
-      "has_glowstone",
+      "has_redstone_torch",
       "has_the_recipe"
     ]
   ]

@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_glass": {
+    "has_glass_viewer": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:glass"
+            "item": "zycraft:glass_viewer"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_glass",
+      "has_glass_viewer",
       "has_the_recipe"
     ]
   ]

@@ -356,9 +356,6 @@ public class ZYBlocks
                     DataIngredient source = DataIngredient.items(Blocks.GLOWSTONE);
 
                     ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
-                            .patternLine("RGB")
-                            .patternLine("PSP")
-                            .patternLine("D#L")
                             .key('S', source)
                             .key('P', Tags.Items.DUSTS_REDSTONE)
                             .key('#', inverted ? Ingredient.fromItems(Items.REDSTONE_TORCH) : Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE))
@@ -367,9 +364,11 @@ public class ZYBlocks
                             .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
                             .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
                             .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
+                            .patternLine("RGB")
+                            .patternLine("PSP")
+                            .patternLine("D#L")
                             .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
                             .build(provider, provider.safeId(ctx.getEntry()));
-
 
                     if (!inverted)
                         colorable(ZYCraft.modLoc(name + "_from_" + provider.safeName(Blocks.REDSTONE_LAMP)), provider, DataIngredient.items(Blocks.REDSTONE_LAMP), ctx::getEntry);
@@ -377,8 +376,8 @@ public class ZYBlocks
                     ShapelessRecipeBuilder.shapelessRecipe(inverted ? ZYCHORIUM_LAMP.get() : INVERTED_ZYCHORIUM_LAMP.get())
                             .addIngredient(inverted ? INVERTED_ZYCHORIUM_LAMP.get() : ZYCHORIUM_LAMP.get())
                             .addIngredient(Ingredient.fromItems(Items.REDSTONE_TORCH))
-                            .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
-                            .build(provider, inverted ? "zychorium_lamp_from_inverted_zychorium_lamp" : "inverted_zychorium_lamp_from_zychorium_lamp");
+                            .addCriterion("has_redstone_torch", RegistrateRecipeProvider.hasItem(Items.REDSTONE_TORCH))
+                            .build(provider, ZYCraft.modLoc(inverted ? "zychorium_lamp_from_inverted_zychorium_lamp" : "inverted_zychorium_lamp_from_zychorium_lamp"));
                 })
                 .register();
     }
@@ -410,7 +409,14 @@ public class ZYBlocks
                     {
                         if (!phantomized)
                             if (type == ViewerType.GLASS)
-                                infused(provider, type.ingredient(), DataIngredient.tag(Tags.Items.GLASS), ctx::getEntry);
+                                ShapedRecipeBuilder.shapedRecipe(ctx.getEntry(), 8)
+                                        .key('#', Tags.Items.GLASS)
+                                        .key('X', type.ingredient())
+                                        .patternLine("###")
+                                        .patternLine("#X#")
+                                        .patternLine("###")
+                                        .addCriterion("has_" + provider.safeName(type.ingredient()), type.ingredient().getCritereon(provider))
+                                        .build(provider, provider.safeId(ctx.getEntry()));
                             else
                                 infused(provider, type.ingredient(), DataIngredient.items(VIEWER.get(ViewerType.GLASS)), ctx::getEntry);
                         else
@@ -455,7 +461,7 @@ public class ZYBlocks
                     {
                         if (!phantomized)
                             if (type == ViewerType.IMMORTAL)
-                                colorable(provider, DataIngredient.tag(Tags.Items.GLASS), ctx::getEntry);
+                                colorable(provider, DataIngredient.items(VIEWER.get(ViewerType.GLASS)), ctx::getEntry);
                             else
                                 infused(provider, type.ingredient(), DataIngredient.items(IMMORTAL_VIEWER.get(ViewerType.IMMORTAL)), ctx::getEntry);
                         else
@@ -532,13 +538,13 @@ public class ZYBlocks
                     }
 
                     ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
-                            .patternLine("#T#")
-                            .patternLine("SXS")
-                            .patternLine("#S#")
                             .key('#', DataIngredient.items(ZYCHORIZED_ENGINEERING_BLOCK.get(type)))
                             .key('T', type == ZYType.RED || type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
                             .key('S', type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
                             .key('X', base)
+                            .patternLine("#T#")
+                            .patternLine("SXS")
+                            .patternLine("#S#")
                             .addCriterion("has_" + provider.safeName(base), base.getCritereon(provider))
                             .build(provider, provider.safeId(ctx.getEntry()));
                 })
@@ -572,9 +578,9 @@ public class ZYBlocks
     {
         provider.square(source, result, true);
         ShapedRecipeBuilder.shapedRecipe(reverseSource.get())
-                .patternLine("XX")
-                .patternLine("XX")
                 .key('X', result.get())
+                .patternLine("XX")
+                .patternLine("XX")
                 .addCriterion("has_" + provider.safeName(result.get()), RegistrateRecipeProvider.hasItem(result.get()))
                 .build(provider, provider.safeId(source) + "_from_" + provider.safeName(result.get()));
         provider.stonecutting(source, result);
@@ -583,11 +589,11 @@ public class ZYBlocks
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, Supplier<? extends T> result)
     {
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
+                .key('I', infusionSource)
+                .key('#', source)
                 .patternLine("I#I")
                 .patternLine("# #")
                 .patternLine("I#I")
-                .key('I', infusionSource)
-                .key('#', source)
                 .addCriterion("has_" + provider.safeName(infusionSource), infusionSource.getCritereon(provider))
                 .build(provider, provider.safeId(result.get()));
     }
@@ -597,12 +603,12 @@ public class ZYBlocks
         DataIngredient core = DataIngredient.tag(Tags.Items.DUSTS_REDSTONE);
 
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
-                .patternLine("I#I")
-                .patternLine("#X#")
-                .patternLine("I#I")
                 .key('I', infusionSource)
                 .key('#', source)
                 .key('X', core)
+                .patternLine("I#I")
+                .patternLine("#X#")
+                .patternLine("I#I")
                 .addCriterion("has_" + provider.safeName(core), core.getCritereon(provider))
                 .build(provider, provider.safeId(result.get()));
     }
@@ -615,15 +621,15 @@ public class ZYBlocks
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result)
     {
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
-                .patternLine("#L#")
-                .patternLine("RGB")
-                .patternLine("#D#")
                 .key('#', source)
                 .key('R', ZYItems.ZYCHORIUM.get(ZYType.RED).get())
                 .key('G', ZYItems.ZYCHORIUM.get(ZYType.GREEN).get())
                 .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
                 .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
                 .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
+                .patternLine("#L#")
+                .patternLine("RGB")
+                .patternLine("#D#")
                 .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
                 .build(provider, name);
     }

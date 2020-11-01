@@ -7,7 +7,7 @@
   ],
   "key": {
     "#": {
-      "tag": "forge:glass"
+      "item": "zycraft:glass_viewer"
     },
     "R": {
       "item": "zycraft:red_zychorium"

@@ -42,15 +42,15 @@ public class ZYItems
             {
                 DataIngredient source = DataIngredient.items(ZYBlocks.ZYCHORITE);
                 ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
-                        .patternLine("RGB")
-                        .patternLine("###")
-                        .patternLine("D#L")
                         .key('#', source)
                         .key('R', ZYItems.ZYCHORIUM.get(ZYType.RED).get())
                         .key('G', ZYItems.ZYCHORIUM.get(ZYType.GREEN).get())
                         .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
                         .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
                         .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
+                        .patternLine("RGB")
+                        .patternLine("###")
+                        .patternLine("D#L")
                         .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
                         .build(provider, provider.safeId(ctx.getEntry()));
             })
