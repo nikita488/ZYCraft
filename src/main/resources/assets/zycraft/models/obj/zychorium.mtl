@@ -1,10 +1,8 @@
 newmtl outside
-Kd 1.0 1.0 1.0
 forge_TintIndex 0
 map_Kd #outside
 
 newmtl inside
 Ka 1.0 1.0 1.0
-Kd 1.0 1.0 1.0
 forge_TintIndex 0
 map_Kd #inside

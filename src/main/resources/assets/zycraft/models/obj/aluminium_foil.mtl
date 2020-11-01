@@ -2,17 +2,14 @@
 # Material Count: 3
 
 newmtl texture
-Kd 1.000000 1.000000 1.000000
 forge_TintIndex -1
 map_Kd #outside
 
 newmtl animation
-Kd 1.000000 1.000000 1.000000
-Ka 1.000000 1.000000 1.000000
+Ka 1.0 1.0 1.0
 forge_TintIndex 0
 map_Kd #inside
 
 newmtl fluid
-Kd 1.000000 1.000000 1.000000
 forge_TintIndex 1
 map_Kd #fluid
