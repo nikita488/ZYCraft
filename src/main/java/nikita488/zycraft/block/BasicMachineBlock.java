@@ -110,7 +110,7 @@ public class BasicMachineBlock extends Block
         {
             BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
 
-            while (blockToTick == stateToTick.getBlock())
+            while (blockToTick == stateToTick.getBlock() && stateToTick.ticksRandomly())
                 stateToTick = world.getBlockState(checkPos.move(Direction.UP));
 
             stateToTick = world.getBlockState(checkPos.move(Direction.DOWN));
