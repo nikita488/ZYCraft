@@ -1,3 +1,14 @@
+### 1.1.0 (2020-11-01)
+
+* Added 3 fluid containers: Aluminium Foil, Quartz Bucket and Aluminium Can ([7dc9e87](https://github.com/nikita488/ZYCraft/commit/7dc9e87690a369e81c5bda7ff6345f0608af5191))
+* Added Scythe ([270c004](https://github.com/nikita488/ZYCraft/commit/270c004d1c6c5ae5f8d4cdc0cbe7352eea64114a))
+* Added secondary Cloud sprite for use in OBJ models (temporary) ([bd9677c](https://github.com/nikita488/ZYCraft/commit/bd9677c0c4120b6c3d39dd672f7d024353b581c5))
+* Improved the logic of filling fluid containers when used on Zychorium Water ([62be522](https://github.com/nikita488/ZYCraft/commit/62be522caf770d640a693b98b9084e3c5df1a4df))
+* Added BiomeDictionary support again ([6a023f9](https://github.com/nikita488/ZYCraft/commit/6a023f9f3124623433e5c5a1e2659dcae10ecea3))
+* Reworked Basic Machines code a little bit, now it's much better. Added FluidAttributes support for placing fluid with fluid containers ([fef8a7e](https://github.com/nikita488/ZYCraft/commit/fef8a7eab8f8d55eb872b1654e2f79d9ca6c17ed))
+* Register ConfiguredFeatures properly. Closes #7 ([18b88f3](https://github.com/nikita488/ZYCraft/commit/18b88f33ca660a1e1fdd091fc3d1f47ec66d8352))
+* Refactored some recipes. Added new recipes for Zychorium Lamp. Added missing item tags ([bdf77c3](https://github.com/nikita488/ZYCraft/commit/bdf77c39dd07d2de3bc7ba91a4c3f9f771c3a863))
+
 ### 1.0.2 (2020-10-06)
 
 * Added ability to use Bucket on Zychorium Water to get Water Bucket ([29b46a2](https://github.com/nikita488/ZYCraft/commit/29b46a21657df8fa46cecdf21ca7e9d7526be6b1))
