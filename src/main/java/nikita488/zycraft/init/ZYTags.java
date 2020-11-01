@@ -199,6 +199,11 @@ public class ZYTags
             tags.copy(Blocks.VIEWERS_PHANTOMIZED_IMMORTAL, Items.VIEWERS_PHANTOMIZED_IMMORTAL);
 
             tags.copy(Blocks.BASIC_MACHINES, Items.BASIC_MACHINES);
+
+            tags.getOrCreateBuilder(Tags.Items.ORES).addTags(Items.ORES_ZYCHORIUM, Items.ORES_ALUMINIUM, Items.ORES_ALUMINUM);
+            tags.getOrCreateBuilder(Tags.Items.STORAGE_BLOCKS).addTag(Items.STORAGE_BLOCKS_ZYCHORIUM);
+            tags.getOrCreateBuilder(Tags.Items.GLASS_COLORLESS).addTag(Items.BASE_VIEWERS);
+            tags.getOrCreateBuilder(Tags.Items.STAINED_GLASS).addTag(Items.IMMORTAL_VIEWERS);
         });
 
         ZYCraft.registrate().addDataGenerator(ProviderType.ITEM_TAGS, tags ->

@@ -1,7 +1,7 @@
 {
-  "parent": "zycraft:block/machine",
+  "parent": "zycraft:block/basic_machine",
   "textures": {
     "side": "zycraft:block/zychorium_ice",
-    "top": "zycraft:block/machine_base"
+    "top": "zycraft:block/basic_machine"
   }
 }

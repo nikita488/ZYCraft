@@ -10,7 +10,7 @@
       "tag": "forge:dusts/glowstone"
     },
     "#": {
-      "tag": "forge:glass"
+      "item": "zycraft:glass_viewer"
     }
   },
   "result": {

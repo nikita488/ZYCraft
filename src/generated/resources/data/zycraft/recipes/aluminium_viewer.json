@@ -10,7 +10,7 @@
       "item": "zycraft:aluminium"
     },
     "#": {
-      "tag": "forge:glass"
+      "item": "zycraft:glass_viewer"
     }
   },
   "result": {

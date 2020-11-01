@@ -18,6 +18,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.ShapedRecipeBuilder;
+import net.minecraft.data.ShapelessRecipeBuilder;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
 import net.minecraft.item.crafting.Ingredient;
@@ -31,6 +32,7 @@ import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.IItemProvider;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
@@ -367,6 +369,16 @@ public class ZYBlocks
                             .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
                             .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
                             .build(provider, provider.safeId(ctx.getEntry()));
+
+
+                    if (!inverted)
+                        colorable(ZYCraft.modLoc(name + "_from_" + provider.safeName(Blocks.REDSTONE_LAMP)), provider, DataIngredient.items(Blocks.REDSTONE_LAMP), ctx::getEntry);
+
+                    ShapelessRecipeBuilder.shapelessRecipe(inverted ? ZYCHORIUM_LAMP.get() : INVERTED_ZYCHORIUM_LAMP.get())
+                            .addIngredient(inverted ? INVERTED_ZYCHORIUM_LAMP.get() : ZYCHORIUM_LAMP.get())
+                            .addIngredient(Ingredient.fromItems(Items.REDSTONE_TORCH))
+                            .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
+                            .build(provider, inverted ? "zychorium_lamp_from_inverted_zychorium_lamp" : "inverted_zychorium_lamp_from_zychorium_lamp");
                 })
                 .register();
     }
@@ -397,7 +409,10 @@ public class ZYBlocks
                     .recipe((ctx, provider) ->
                     {
                         if (!phantomized)
-                            infused(provider, type.ingredient(), DataIngredient.tag(Tags.Items.GLASS), ctx::getEntry);
+                            if (type == ViewerType.GLASS)
+                                infused(provider, type.ingredient(), DataIngredient.tag(Tags.Items.GLASS), ctx::getEntry);
+                            else
+                                infused(provider, type.ingredient(), DataIngredient.items(VIEWER.get(ViewerType.GLASS)), ctx::getEntry);
                         else
                             infused(provider, DataIngredient.items(Items.PHANTOM_MEMBRANE), DataIngredient.items(VIEWER.get(type)), ctx::getEntry);
                     })
@@ -468,14 +483,14 @@ public class ZYBlocks
                         case BLUE:
                         case LIGHT:
                             model = provider.models()
-                                    .withExistingParent(name, provider.modLoc("block/machine"))
+                                    .withExistingParent(name, provider.modLoc("block/basic_machine"))
                                     .texture("side", provider.modLoc("block/" + name))
-                                    .texture("top", provider.modLoc("block/machine_base"));
+                                    .texture("top", provider.modLoc("block/basic_machine"));
                             break;
                         case GREEN:
                         case RED:
                             model = provider.models()
-                                    .withExistingParent(name, provider.modLoc("block/machine"))
+                                    .withExistingParent(name, provider.modLoc("block/basic_machine"))
                                     .texture("side", provider.modLoc("block/" + name + "_side"))
                                     .texture("top", provider.modLoc("block/" + name + "_top"));
                             break;
@@ -495,36 +510,36 @@ public class ZYBlocks
                     .build()
                 .recipe((ctx, provider) ->
                 {
-                    DataIngredient core = null;
+                    DataIngredient base = null;
 
                     switch (type)
                     {
                         case BLUE:
-                            core = DataIngredient.items(Items.WATER_BUCKET);
+                            base = DataIngredient.items(Items.WATER_BUCKET);
                             break;
                         case GREEN:
-                            core = DataIngredient.tag(ItemTags.SAPLINGS);
+                            base = DataIngredient.tag(ItemTags.SAPLINGS);
                             break;
                         case RED:
-                            core = DataIngredient.tag(Tags.Items.GUNPOWDER);
+                            base = DataIngredient.tag(Tags.Items.GUNPOWDER);
                             break;
                         case DARK:
-                            core = DataIngredient.items(Items.BUCKET);
+                            base = DataIngredient.items(Items.BUCKET);
                             break;
                         case LIGHT:
-                            core = DataIngredient.items(Items.SNOWBALL);
+                            base = DataIngredient.items(Items.SNOWBALL);
                             break;
                     }
 
                     ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
                             .patternLine("#T#")
-                            .patternLine("SCS")
+                            .patternLine("SXS")
                             .patternLine("#S#")
                             .key('#', DataIngredient.items(ZYCHORIZED_ENGINEERING_BLOCK.get(type)))
                             .key('T', type == ZYType.RED || type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
                             .key('S', type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
-                            .key('C', core)
-                            .addCriterion("has_" + provider.safeName(core), core.getCritereon(provider))
+                            .key('X', base)
+                            .addCriterion("has_" + provider.safeName(base), base.getCritereon(provider))
                             .build(provider, provider.safeId(ctx.getEntry()));
                 })
                 .register();
@@ -560,7 +575,7 @@ public class ZYBlocks
                 .patternLine("XX")
                 .patternLine("XX")
                 .key('X', result.get())
-                .addCriterion("has_" + provider.safeName(result.get()), provider.hasItem(result.get()))
+                .addCriterion("has_" + provider.safeName(result.get()), RegistrateRecipeProvider.hasItem(result.get()))
                 .build(provider, provider.safeId(source) + "_from_" + provider.safeName(result.get()));
         provider.stonecutting(source, result);
     }
@@ -583,16 +598,21 @@ public class ZYBlocks
 
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
                 .patternLine("I#I")
-                .patternLine("#R#")
+                .patternLine("#X#")
                 .patternLine("I#I")
                 .key('I', infusionSource)
                 .key('#', source)
-                .key('R', core)
+                .key('X', core)
                 .addCriterion("has_" + provider.safeName(core), core.getCritereon(provider))
                 .build(provider, provider.safeId(result.get()));
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result)
+    {
+        colorable(provider.safeId(result.get()), provider, source, result);
+    }
+
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result)
     {
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
                 .patternLine("#L#")
@@ -605,7 +625,7 @@ public class ZYBlocks
                 .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
                 .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
                 .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
-                .build(provider, provider.safeId(result.get()));
+                .build(provider, name);
     }
 
     public static void init() {}

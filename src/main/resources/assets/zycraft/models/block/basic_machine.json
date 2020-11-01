@@ -1,7 +1,7 @@
 {
     "parent": "zycraft:block/zy_cube",
     "textures": {
-        "overlay_down": "zycraft:block/machine_base",
+        "overlay_down": "zycraft:block/basic_machine",
         "overlay_up": "#top",
         "overlay_north": "#side",
         "overlay_east": "#side",

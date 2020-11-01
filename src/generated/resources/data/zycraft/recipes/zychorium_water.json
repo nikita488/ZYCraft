@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "#T#",
-    "SCS",
+    "SXS",
     "#S#"
   ],
   "key": {
@@ -15,7 +15,7 @@
     "S": {
       "item": "zycraft:zychorite"
     },
-    "C": {
+    "X": {
       "item": "minecraft:water_bucket"
     }
   },

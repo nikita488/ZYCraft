@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "#zycraft:ores/zychorium",
+    "#forge:ores/aluminium",
+    "#forge:ores/aluminum"
+  ]
+}
