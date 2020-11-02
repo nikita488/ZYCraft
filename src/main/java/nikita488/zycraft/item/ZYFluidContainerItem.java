@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -23,19 +24,28 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.init.ZYGroups;
-import nikita488.zycraft.util.ZYItemGroup;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ZYFluidContainerItem extends Item
 {
-    protected final int capacity;
+    protected final int capacity, filledStackSize;
 
-    public ZYFluidContainerItem(Properties properties, int capacity)
+    public ZYFluidContainerItem(Properties properties, int capacity, int filledStackSize)
     {
         super(properties);
         this.capacity = capacity;
+        this.filledStackSize = filledStackSize;
+    }
+
+    @Override
+    public int getItemStackLimit(ItemStack stack)
+    {
+        if (stack.hasTag() && stack.getTag().contains(FluidHandlerItemStackSimple.FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND))
+            return filledStackSize;
+
+        return super.getItemStackLimit(stack);
     }
 
     @Override

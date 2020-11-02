@@ -13,7 +13,7 @@ public class AluminiumFoilItem extends ZYFluidContainerItem
 {
     public AluminiumFoilItem(Properties properties)
     {
-        super(properties, 16 * FluidAttributes.BUCKET_VOLUME);
+        super(properties, 16 * FluidAttributes.BUCKET_VOLUME, 1);
     }
 
     @Override

@@ -95,7 +95,7 @@ public class ZYItems
                     .build(provider))
             .register();
 
-    public static final ItemEntry<ZYFluidContainerItem> ALUMINIUM_CAN = REGISTRATE.item("aluminium_can", properties -> new ZYFluidContainerItem(properties, FluidAttributes.BUCKET_VOLUME))
+    public static final ItemEntry<ZYFluidContainerItem> ALUMINIUM_CAN = REGISTRATE.item("aluminium_can", properties -> new ZYFluidContainerItem(properties, FluidAttributes.BUCKET_VOLUME, 16))
             .model((ctx, provider) -> NonNullBiConsumer.noop())
             .recipe((ctx, provider) -> ShapedRecipeBuilder.shapedRecipe(ctx.getEntry(), 16)
                     .key('#', Tags.Items.GLASS_PANES)

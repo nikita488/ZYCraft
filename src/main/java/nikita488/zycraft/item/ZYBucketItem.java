@@ -19,13 +19,11 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
@@ -39,16 +37,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
     public ZYBucketItem(Properties properties, int capacity)
     {
-        super(properties, capacity);
-    }
-
-    @Override
-    public int getItemStackLimit(ItemStack stack)
-    {
-        if (stack.hasTag() && stack.getTag().contains(FluidHandlerItemStackSimple.FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND))
-            return 1;
-
-        return super.getItemStackLimit(stack);
+        super(properties, capacity, 1);
     }
 
     protected ItemStack emptyBucket(IFluidHandlerItem handler, ItemStack stack, PlayerEntity player)
