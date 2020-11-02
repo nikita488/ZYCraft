@@ -1,3 +1,7 @@
+### 1.1.1 (2020-11-02)
+
+* Fixed not balanced stack sizes of fluid containers when they are filled with fluid ([add3d5c](https://github.com/nikita488/ZYCraft/commit/add3d5ca0153f1f2da13e85245d4959530980a08))
+
 ### 1.1.0 (2020-11-01)
 
 * Added 3 fluid containers: Aluminium Foil, Quartz Bucket and Aluminium Can ([7dc9e87](https://github.com/nikita488/ZYCraft/commit/7dc9e87690a369e81c5bda7ff6345f0608af5191))
