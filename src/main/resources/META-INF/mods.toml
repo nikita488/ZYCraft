@@ -23,6 +23,6 @@ An attempt to return the feeling of XyCraft to the latest versions of Minecraft.
 [[dependencies.zycraft]]
     modId="minecraft"
     mandatory=true
-    versionRange="[${mc_version}]"
+    versionRange="[${mc_version},)"
     ordering="NONE"
     side="BOTH"
