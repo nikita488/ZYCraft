@@ -23,10 +23,13 @@ public class ZYClientSetup
     @SubscribeEvent
     public static void setup(FMLClientSetupEvent event)
     {
-        ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.modLoc("filled"), (stack, world, entity) ->
+        event.enqueueWork(() ->
         {
-            FluidStack containedFluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
-            return containedFluid.getAmount() / 16000.0F;
+            ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.modLoc("filled"), (stack, world, entity) ->
+            {
+                FluidStack containedFluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
+                return containedFluid.getAmount() / 16000.0F;
+            });
         });
     }
 

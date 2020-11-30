@@ -34,9 +34,15 @@ public class ZYTile extends TileEntity
         decode(tag);
     }
 
-    public void decodeUpdate(CompoundNBT tag) {}
+    public void decodeUpdate(CompoundNBT tag)
+    {
+        decode(tag);
+    }
 
-    public void encodeUpdate(CompoundNBT tag) {}
+    public void encodeUpdate(CompoundNBT tag)
+    {
+        encode(tag);
+    }
 
     @Nullable
     @Override

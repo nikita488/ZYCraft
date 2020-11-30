@@ -46,12 +46,12 @@ public class ZychoriumLampBlock extends ColorableBlock
             return;
 
         boolean lit = isLit(state);
-        if (lit == world.isBlockPowered(pos))
-            return;
-        if (lit)
-            world.getPendingBlockTicks().scheduleTick(pos, this, 4);
-        else
-            world.setBlockState(pos, state.func_235896_a_(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+
+        if (lit != world.isBlockPowered(pos))
+            if (lit)
+                world.getPendingBlockTicks().scheduleTick(pos, this, 4);
+            else
+                world.setBlockState(pos, state.func_235896_a_(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
