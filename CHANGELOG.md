@@ -1,3 +1,8 @@
+### 2.0.0 (2020-11-30)
+
+* Update to 1.16.4 ([1ba750a](https://github.com/nikita488/ZYCraft/commit/1ba750a9717ddfb607d25cc12253df3e7ee623d0))
+* Fixed crash when crystal cluster placement finds 0 or negative surface height. Closes #9 ([b51630e](https://github.com/nikita488/ZYCraft/commit/b51630ee5d3a449f6763ef6e052fb4d75447c233))
+
 ### 1.1.1 (2020-11-02)
 
 * Fixed not balanced stack sizes of fluid containers when they are filled with fluid ([add3d5c](https://github.com/nikita488/ZYCraft/commit/add3d5ca0153f1f2da13e85245d4959530980a08))
