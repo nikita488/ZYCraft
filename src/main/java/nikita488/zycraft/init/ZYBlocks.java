@@ -512,7 +512,6 @@ public class ZYBlocks
                 .tag(ZYTags.Blocks.BASIC_MACHINES)
                 .item()
                     .color(() -> () -> ZYColors.zyItemColor(type, false))
-                    .tag(ZYTags.Items.BASIC_MACHINES)
                     .build()
                 .recipe((ctx, provider) ->
                 {

@@ -272,6 +272,7 @@ ba048f509325b3a57dbfe9e504a4141ceb7f8e2a assets/zycraft/models/item/zychorium_ic
 07b5fc5f771cb6865c5b6bb76f481a34a11a6b8a assets/zycraft/models/item/zychorized_light_zychorium_bricks.json
 086c99f7feac548681b4c6b203522c3152f7cd1c assets/zycraft/models/item/zychorized_red_engineering_block.json
 07b5fc5f771cb6865c5b6bb76f481a34a11a6b8a assets/zycraft/models/item/zychorized_red_zychorium_bricks.json
+b92a36207f03f762a91ad3ef0ef62fd55c8ce4ac data/forge/tags/blocks/dirt.json
 034c90ab440ff740ec72ea95f8affc2f7d634f75 data/forge/tags/blocks/glass/colorless.json
 44590633dab6cfde31deb8e0c604a2dcc1ce2b73 data/forge/tags/blocks/ores.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/blocks/ores/aluminium.json

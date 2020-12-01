@@ -1,7 +1,6 @@
 package nikita488.zycraft.init;
 
 import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.tags.BlockTags;
@@ -10,13 +9,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.common.Tags.IOptionalNamedTag;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.util.ZYItemTagsProvider;
 
 public class ZYTags
 {
-    public static final ProviderType<ZYItemTagsProvider> ITEM_TAGS = ProviderType.register(ZYCraft.MOD_ID + ":tags/item", (p, e, existing) ->
-            new ZYItemTagsProvider(p, (RegistrateTagsProvider<Block>)existing.get(ProviderType.BLOCK_TAGS), e.getGenerator(), e.getExistingFileHelper()));
-
     public static class Blocks
     {
         public static final IOptionalNamedTag<Block> ORES_ZYCHORIUM = tag("ores/zychorium");
@@ -154,9 +149,10 @@ public class ZYTags
             tags.getOrCreateBuilder(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
             tags.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
             tags.getOrCreateBuilder(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
+            tags.getOrCreateBuilder(Tags.Blocks.DIRT).add(ZYBlocks.ZYCHORIUM_SOIL.get());
         });
 
-        ZYCraft.registrate().addDataGenerator(ITEM_TAGS, tags ->
+        ZYCraft.registrate().addDataGenerator(ProviderType.ITEM_TAGS, tags ->
         {
             tags.copy(Blocks.ORES_ZYCHORIUM, Items.ORES_ZYCHORIUM);
             tags.copy(Blocks.ORES_ALUMINIUM, Items.ORES_ALUMINIUM);
@@ -204,10 +200,7 @@ public class ZYTags
             tags.getOrCreateBuilder(Tags.Items.STORAGE_BLOCKS).addTag(Items.STORAGE_BLOCKS_ZYCHORIUM);
             tags.getOrCreateBuilder(Tags.Items.GLASS_COLORLESS).addTag(Items.BASE_VIEWERS);
             tags.getOrCreateBuilder(Tags.Items.STAINED_GLASS).addTag(Items.IMMORTAL_VIEWERS);
-        });
 
-        ZYCraft.registrate().addDataGenerator(ProviderType.ITEM_TAGS, tags ->
-        {
             tags.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
         });
     }
