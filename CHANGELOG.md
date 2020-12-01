@@ -1,3 +1,7 @@
+### 2.0.1 (2020-12-01)
+
+* Fixed trees not growing on Zychorium Soil. Closes #10 ([68da7aa](https://github.com/nikita488/ZYCraft/commit/68da7aa881123d6b77858acf11219edb9163081a))
+
 ### 2.0.0 (2020-11-30)
 
 * Update to 1.16.4 ([1ba750a](https://github.com/nikita488/ZYCraft/commit/1ba750a9717ddfb607d25cc12253df3e7ee623d0))
