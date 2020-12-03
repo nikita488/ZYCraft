@@ -26,12 +26,14 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import nikita488.zycraft.enums.ZYType;
+import nikita488.zycraft.multiblock.IMultiFluidSource;
+import nikita488.zycraft.multiblock.IMultiFluidVoid;
 import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
 import java.util.Random;
 
-public class BasicMachineBlock extends Block
+public class BasicMachineBlock extends Block implements IMultiFluidSource, IMultiFluidVoid
 {
     private final ZYType type;
     private final Direction[] VALUES = Direction.values();
@@ -173,5 +175,17 @@ public class BasicMachineBlock extends Block
             FluidUtils.voidFluid(blockState, world, pos);
         else if (type == ZYType.LIGHT && !FluidUtils.turnLavaIntoBasalt(world, pos, fluidState))
             FluidUtils.turnWaterIntoIce(blockState, world, pos, fluidState);
+    }
+
+    @Override
+    public FluidStack fill(World world, BlockPos pos, Direction side)
+    {
+        return type == ZYType.BLUE ? new FluidStack(Fluids.WATER, 50) : FluidStack.EMPTY;
+    }
+
+    @Override
+    public int drain(World world, BlockPos pos, Direction side)
+    {
+        return type == ZYType.DARK ? 50 : 0;
     }
 }

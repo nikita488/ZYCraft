@@ -7,12 +7,14 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.BlockEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.advancements.criterion.StatePropertiesPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SixWayBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -31,9 +33,12 @@ import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
@@ -41,6 +46,14 @@ import nikita488.zycraft.block.*;
 import nikita488.zycraft.client.ZYColors;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.enums.ZYType;
+import nikita488.zycraft.multiblock.MultiChildType;
+import nikita488.zycraft.multiblock.block.ItemIOBlock;
+import nikita488.zycraft.multiblock.block.SidedInterfaceBlock;
+import nikita488.zycraft.multiblock.block.ValveBlock;
+import nikita488.zycraft.multiblock.child.DefaultMultiChildBlock;
+import nikita488.zycraft.multiblock.block.MultiInterfaceBlock;
+import nikita488.zycraft.multiblock.tile.ItemIOTile;
+import nikita488.zycraft.multiblock.tile.ValveTile;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -275,6 +288,65 @@ public class ZYBlocks
     public static final BlockEntry<BasicMachineBlock> FIRE_BASIN = basicMachine("fire_basin", ZYType.RED);
     public static final BlockEntry<BasicMachineBlock> FLUID_VOID = basicMachine("fluid_void", ZYType.DARK);
     public static final BlockEntry<BasicMachineBlock> ZYCHORIUM_ICE = basicMachine("zychorium_ice", ZYType.LIGHT);
+
+    public static final Map<MultiChildType, BlockEntry<DefaultMultiChildBlock>> DEFAULT_MULTI_CHILD = defaultMultiChild();
+
+    public static final BlockEntry<ValveBlock> VALVE = REGISTRATE.block("valve", ValveBlock::new)
+            .initialProperties(ZYCHORITE)
+            .color(() -> ZYColors::valveBlockColor)
+            .addLayer(() -> RenderType::getCutout)
+            .blockstate((ctx, provider) ->
+            {
+                ModelFile base = provider.models().getExistingFile(provider.modLoc("block/multi_interface"));
+                ModelFile side = provider.models()
+                        .singleTexture("valve_side", provider.modLoc("block/multi_interface_side"), "side", provider.modLoc("block/valve"));
+
+                MultiPartBlockStateBuilder builder = provider.getMultipartBuilder(ctx.getEntry())
+                        .part().modelFile(base).addModel().end();
+
+                SidedInterfaceBlock.SIDES.forEach((dir, property) ->
+                        builder.part()
+                                .modelFile(side)
+                                .rotationX(dir == Direction.DOWN ? 90 : dir == Direction.UP ? 270 : 0)
+                                .rotationY(dir.getAxis().isVertical() ? 0 : (((int)dir.getHorizontalAngle()) + 180) % 360)
+                                .addModel()
+                                .condition(property, true));
+            })
+            .simpleTileEntity(ValveTile::new)
+            .item()
+                .color(() -> ZYColors::valveItemColor)
+                .model((ctx, provider) -> provider.singleTexture(ctx.getName(), provider.modLoc("item/multi_interface"), "side", provider.modLoc("block/valve")))
+                .build()
+            .register();
+
+    public static final BlockEntry<ItemIOBlock> ITEM_IO = REGISTRATE.block("item_io", ItemIOBlock::new)
+            .initialProperties(ZYCHORITE)
+            .lang("Item IO")
+            .color(() -> ZYColors::itemIOBlockColor)
+            .addLayer(() -> RenderType::getCutout)
+            .blockstate((ctx, provider) ->
+            {
+                ModelFile base = provider.models().getExistingFile(provider.modLoc("block/multi_interface"));
+                ModelFile side = provider.models()
+                        .singleTexture("item_io_side", provider.modLoc("block/multi_interface_side"), "side", provider.modLoc("block/item_io"));
+
+                MultiPartBlockStateBuilder builder = provider.getMultipartBuilder(ctx.getEntry())
+                        .part().modelFile(base).addModel().end();
+
+                SidedInterfaceBlock.SIDES.forEach((dir, property) ->
+                        builder.part()
+                                .modelFile(side)
+                                .rotationX(dir == Direction.DOWN ? 90 : dir == Direction.UP ? 270 : 0)
+                                .rotationY(dir.getAxis().isVertical() ? 0 : (((int)dir.getHorizontalAngle()) + 180) % 360)
+                                .addModel()
+                                .condition(property, true));
+            })
+            .simpleTileEntity(ItemIOTile::new)
+            .item()
+                .color(() -> ZYColors::itemIOItemColor)
+                .model((ctx, provider) -> provider.singleTexture(ctx.getName(), provider.modLoc("item/multi_interface"), "side", provider.modLoc("block/item_io")))
+                .build()
+            .register();
 
     private static ImmutableMap<ZYType, BlockEntry<Block>> zyBlock(String pattern, NonNullBiFunction<ZYType, BlockBuilder<Block, Registrate>, BlockBuilder<Block, Registrate>> factory)
     {
@@ -548,6 +620,39 @@ public class ZYBlocks
                             .build(provider, provider.safeId(ctx.getEntry()));
                 })
                 .register();
+    }
+
+    private static ImmutableMap<MultiChildType, BlockEntry<DefaultMultiChildBlock>> defaultMultiChild()
+    {
+        ImmutableMap.Builder<MultiChildType, BlockEntry<DefaultMultiChildBlock>> blocks = ImmutableMap.builder();
+
+        for (MultiChildType type : MultiChildType.VALUES)
+        {
+            blocks.put(type, REGISTRATE.block(type.isAir() ? "multi_air" : type.getString() + "_multi_child", type.material(), DefaultMultiChildBlock::new)
+                    .properties(properties -> properties
+                            .variableOpacity()
+                            .noDrops()
+                            .setAllowsSpawn(DefaultMultiChildBlock::allowsSpawn)
+                            .setOpaque(DefaultMultiChildBlock::opaque)
+                            .setSuffocates(DefaultMultiChildBlock::suffocates)
+                            .setBlocksVision(DefaultMultiChildBlock::blocksVision)
+                            .setEmmisiveRendering(DefaultMultiChildBlock::emissiveRendering))
+                    .properties(properties -> type.isGlass() ? properties.notSolid() : properties)
+                    .properties(properties -> type.isAir() ? properties.doesNotBlockMovement().setAir() : properties)
+                    .color(() -> ZYColors::defaultMultiChildColor)
+                    .lang("")
+                    .blockstate((ctx, provider) ->
+                    {
+                        if (type.isAir())
+                            provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.mcLoc("block/air")));
+                        else
+                            provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.modLoc("block/multi_child")));
+                    })
+                    .loot((ctx, provider) -> NonNullBiConsumer.noop())
+                    .register());
+        }
+
+        return blocks.build();
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void storageBlock(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
