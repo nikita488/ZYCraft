@@ -128,7 +128,7 @@
   "tooltip.zycraft.color_scanner.blue": "파란색:   %s",
   "tooltip.zycraft.color_scanner.copy": "\u00A7a\u00A7o색상 변경이 가능한 \u00A77\u00A7o블록을 \u00A7e\u00A7oShift + 우클릭하여 \u00A77\u00A7o색상을 복사합니다.",
   "tooltip.zycraft.color_scanner.current_color": "\u00A77현재 색상:",
-  "tooltip.zycraft.color_scanner.green": "초록색: %s",
+  "tooltip.zycraft.color_scanner.green": "초록색:    %s",
   "tooltip.zycraft.color_scanner.red": "빨간색:    %s",
   "tooltip.zycraft.colorable": "\u00A7e\u00A7o색상 변경",
   "tooltip.zycraft.colorable.brightness": "\u00A78\u00A7o검은색 자이코륨\u00A77\u00A7o - 색 밝기를 조절합니다.",
