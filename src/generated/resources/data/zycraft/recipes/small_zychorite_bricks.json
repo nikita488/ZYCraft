@@ -10,6 +10,7 @@
     }
   },
   "result": {
-    "item": "zycraft:small_zychorite_bricks"
+    "item": "zycraft:small_zychorite_bricks",
+    "count": 4
   }
 }

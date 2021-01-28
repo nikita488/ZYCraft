@@ -61,19 +61,19 @@ public class ZYBlocks
             .initialProperties(ZYCHORITE)
             .tag(Tags.Blocks.STORAGE_BLOCKS)
             .simpleItem()
-            .recipe((ctx, provider) -> storageBlock(provider, ZYCHORITE, ctx::getEntry))
+            .recipe((ctx, provider) -> provider.storage(ZYCHORITE, ctx::getEntry))
             .register();
 
     public static final BlockEntry<Block> ZYCHORITE_BRICKS = REGISTRATE.block("zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
             .simpleItem()
-            .recipe((ctx, provider) -> bricks(provider, DataIngredient.items(ZYCHORITE), ctx::getEntry))
+            .recipe((ctx, provider) -> bricks(provider, ZYCHORITE, ctx::getEntry))
             .register();
 
     public static final BlockEntry<Block> SMALL_ZYCHORITE_BRICKS = REGISTRATE.block("small_zychorite_bricks", Block::new)
             .initialProperties(ZYCHORITE)
             .simpleItem()
-            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
+            .recipe((ctx, provider) -> bricks(provider, ZYCHORITE_BRICKS, ctx::getEntry))
             .register();
 
     public static final BlockEntry<Block> ALUMINIUM_ORE = REGISTRATE.block("aluminium_ore", Block::new)
@@ -88,7 +88,7 @@ public class ZYBlocks
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
             .simpleItem()
-            .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ALUMINIUM, ctx::getEntry))
+            .recipe((ctx, provider) -> provider.storage(ZYItems.ALUMINIUM, ctx::getEntry))
             .register();
 
     public static final BlockEntry<Block> ALUMINIUM_BRICKS = REGISTRATE.block("aluminium_bricks", Block::new)
@@ -101,7 +101,7 @@ public class ZYBlocks
     public static final BlockEntry<Block> SMALL_ALUMINIUM_BRICKS = REGISTRATE.block("small_aluminium_bricks", Block::new)
             .initialProperties(ALUMINIUM_BLOCK)
             .simpleItem()
-            .recipe((ctx, provider) -> smallBricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
+            .recipe((ctx, provider) -> bricks(provider, ALUMINIUM_BRICKS, ctx::getEntry))
             .register();
 
     public static final BlockEntry<QuartzCrystalClusterBlock> QUARTZ_CRYSTAL = REGISTRATE.block("quartz_crystal", QuartzCrystalClusterBlock::new)
@@ -137,7 +137,7 @@ public class ZYBlocks
             .addLayer(() -> RenderType::getTranslucent)
             .tag(Tags.Blocks.STORAGE_BLOCKS, BlockTags.IMPERMEABLE)
             .simpleItem()
-            .recipe((ctx, provider) -> storageBlock(provider, QUARTZ_CRYSTAL, ctx::getEntry))
+            .recipe((ctx, provider) -> provider.storage(QUARTZ_CRYSTAL, ctx::getEntry))
             .register();
 
     public static final BlockEntry<QuartzCrystalBlock> QUARTZ_CRYSTAL_BRICKS = REGISTRATE.block("quartz_crystal_bricks", QuartzCrystalBlock::new)
@@ -154,7 +154,7 @@ public class ZYBlocks
             .addLayer(() -> RenderType::getTranslucent)
             .tag(BlockTags.IMPERMEABLE)
             .simpleItem()
-            .recipe((ctx, provider) -> smallBricks(provider, QUARTZ_CRYSTAL_BRICKS, ctx::getEntry))
+            .recipe((ctx, provider) -> bricks(provider, QUARTZ_CRYSTAL_BRICKS, ctx::getEntry))
             .register();
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_ORE = zyBlock("{type}_zychorium_ore", (type, block) -> block
@@ -168,7 +168,7 @@ public class ZYBlocks
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, block) -> block
             .tag(ZYTags.Blocks.STORAGE_BLOCKS_ZYCHORIUM)
-            .recipe((ctx, provider) -> storageBlock(provider, ZYItems.ZYCHORIUM.get(type), ctx::getEntry)));
+            .recipe((ctx, provider) -> provider.storage(ZYItems.ZYCHORIUM.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BRICKS = zyBricks("{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.BRICKS_ZYCHORIUM)
@@ -177,7 +177,7 @@ public class ZYBlocks
 
     public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIUM_BRICKS = zyBricks("small_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIUM)
-            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+            .recipe((ctx, provider) -> bricks(provider, ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> SOLID_ZYCHORIUM_BRICKS = solidZyBricks("solid_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.BRICKS_SOLID_ZYCHORIUM)
@@ -186,7 +186,7 @@ public class ZYBlocks
 
     public static final Map<ZYType, BlockEntry<Block>> SMALL_SOLID_ZYCHORIUM_BRICKS = solidZyBricks("small_solid_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM)
-            .recipe((ctx, provider) -> smallBricks(provider, SOLID_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+            .recipe((ctx, provider) -> bricks(provider, SOLID_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("zychorized_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM)
@@ -195,7 +195,7 @@ public class ZYBlocks
 
     public static final Map<ZYType, BlockEntry<Block>> SMALL_ZYCHORIZED_ZYCHORIUM_BRICKS = zyBlock("small_zychorized_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM)
-            .recipe((ctx, provider) -> smallBricks(provider, ZYCHORIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+            .recipe((ctx, provider) -> bricks(provider, ZYCHORIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("aluminized_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.BRICKS_ALUMINIZED_ZYCHORIUM)
@@ -204,7 +204,7 @@ public class ZYBlocks
 
     public static final Map<ZYType, BlockEntry<Block>> SMALL_ALUMINIZED_ZYCHORIUM_BRICKS = zyBlock("small_aluminized_{type}_zychorium_bricks", (type, block) -> block
             .tag(ZYTags.Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM)
-            .recipe((ctx, provider) -> smallBricks(provider, ALUMINIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
+            .recipe((ctx, provider) -> bricks(provider, ALUMINIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_PLATE = zyBlock("{type}_zychorium_plate", (type, block) -> block
             .properties(properties -> properties.hardnessAndResistance(1.5F, 12))
@@ -550,42 +550,34 @@ public class ZYBlocks
                 .register();
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void storageBlock(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)
     {
-        storageBlock(provider, DataIngredient.items(source), result, source);
+        ShapedRecipeBuilder builder = ShapedRecipeBuilder.shapedRecipe(result.get(), count).key('X', source);
+
+        if (small)
+            builder.patternLine("XX")
+                    .patternLine("XX");
+        else
+            builder.patternLine("XXX")
+                    .patternLine("XXX")
+                    .patternLine("XXX");
+
+        builder.addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
+                .build(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void storageBlock(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result, NonNullSupplier<? extends T> reverseSource)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
     {
-        provider.square(source, result, false);
-        provider.singleItemUnfinished(DataIngredient.items(result), reverseSource, 1, 9)
-                .build(provider, provider.safeId(source) + "_from_" + provider.safeName(result.get()));
+        bricks(provider, DataIngredient.items(source), result);
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
-        provider.square(source, result, true);
+        square(provider, source, result, 4, true);
         provider.stonecutting(source, result);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void smallBricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
-    {
-        smallBricks(provider, DataIngredient.items(source), result, source);
-    }
-
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void smallBricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result, NonNullSupplier<? extends T> reverseSource)
-    {
-        provider.square(source, result, true);
-        ShapedRecipeBuilder.shapedRecipe(reverseSource.get())
-                .key('X', result.get())
-                .patternLine("XX")
-                .patternLine("XX")
-                .addCriterion("has_" + provider.safeName(result.get()), RegistrateRecipeProvider.hasItem(result.get()))
-                .build(provider, provider.safeId(source) + "_from_" + provider.safeName(result.get()));
-        provider.stonecutting(source, result);
-    }
-
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, Supplier<? extends T> result)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
                 .key('I', infusionSource)
@@ -597,7 +589,7 @@ public class ZYBlocks
                 .build(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, Supplier<? extends T> result)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         DataIngredient core = DataIngredient.tag(Tags.Items.DUSTS_REDSTONE);
 
@@ -612,12 +604,12 @@ public class ZYBlocks
                 .build(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         colorable(provider.safeId(result.get()), provider, source, result);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result)
+    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shapedRecipe(result.get(), 4)
                 .key('#', source)

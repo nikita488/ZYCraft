@@ -10,6 +10,7 @@
     }
   },
   "result": {
-    "item": "zycraft:small_quartz_crystal_bricks"
+    "item": "zycraft:small_quartz_crystal_bricks",
+    "count": 4
   }
 }
