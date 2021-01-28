@@ -52,8 +52,9 @@ public class ZYBlocks
     public static final BlockEntry<Block> ZYCHORITE = REGISTRATE.block("zychorite", Block::new)
             .initialProperties(Material.ROCK, MaterialColor.BLACK)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
+            .tag(Tags.Blocks.STONE)
             .item()
-                .tag(ItemTags.STONE_TOOL_MATERIALS, ItemTags.STONE_CRAFTING_MATERIALS)
+                .tag(Tags.Items.STONE, ItemTags.STONE_TOOL_MATERIALS, ItemTags.STONE_CRAFTING_MATERIALS)
                 .build()
             .register();
 

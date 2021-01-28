@@ -278,6 +278,7 @@ b92a36207f03f762a91ad3ef0ef62fd55c8ce4ac data/forge/tags/blocks/dirt.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/blocks/ores/aluminium.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/blocks/ores/aluminum.json
 4a4cd6d48245dc9278ab695f27d8482171a06bd8 data/forge/tags/blocks/stained_glass.json
+8fc52c88575a79f3c0304c7fa9f0304abfee44bf data/forge/tags/blocks/stone.json
 8ee952cec7e5b38874855285903732ce62a460ed data/forge/tags/blocks/storage_blocks.json
 1fae03ffdf30a7fde0525c73cc21221fd2669a9a data/forge/tags/items/gems.json
 034c90ab440ff740ec72ea95f8affc2f7d634f75 data/forge/tags/items/glass/colorless.json
@@ -285,6 +286,7 @@ b92a36207f03f762a91ad3ef0ef62fd55c8ce4ac data/forge/tags/blocks/dirt.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/items/ores/aluminium.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/items/ores/aluminum.json
 4a4cd6d48245dc9278ab695f27d8482171a06bd8 data/forge/tags/items/stained_glass.json
+8fc52c88575a79f3c0304c7fa9f0304abfee44bf data/forge/tags/items/stone.json
 6ed9175413a0544172a54d531a959b187ec88b0f data/forge/tags/items/storage_blocks.json
 714180d2fd4d143ebafd66ee2d1d70759c733dc9 data/minecraft/tags/blocks/impermeable.json
 8fc52c88575a79f3c0304c7fa9f0304abfee44bf data/minecraft/tags/items/stone_crafting_materials.json
