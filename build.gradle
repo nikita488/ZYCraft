@@ -97,7 +97,8 @@ dependencies {
 
     implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
 
-    runtimeOnly fg.deobf("curse.maven:mekanism:3075056")
+    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3183270")
+    runtimeOnly fg.deobf("curse.maven:jei-238222:3157864")
 }
 
 processResources {

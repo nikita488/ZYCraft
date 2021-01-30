@@ -1,3 +1,10 @@
+### 2.0.2 (2021-01-30)
+
+* Fixed all bricks recipes had 1 output instead of 4 ([a281beb](https://github.com/nikita488/ZYCraft/commit/a281beb432c2504388c9191dcbeec094c178a26b))
+* Added Zychorite to the forge:stone tag again ([6ac1dfc](https://github.com/nikita488/ZYCraft/commit/6ac1dfcf510a1c6b09598439caf4317816743093))
+* Zychorium Shields now Wither and Dragon immune ([3fb91aa](https://github.com/nikita488/ZYCraft/commit/3fb91aa468bf6994ec954b68878ae7b24eced0fd))
+* Added/changed/removed some recipes. Added missing item tags for storage blocks ([2ba9421](https://github.com/nikita488/ZYCraft/commit/2ba9421a21972acf545ca0090670281e221e3657))
+
 ### 2.0.1 (2020-12-01)
 
 * Fixed trees not growing on Zychorium Soil. Closes #10 ([68da7aa](https://github.com/nikita488/ZYCraft/commit/68da7aa881123d6b77858acf11219edb9163081a))
