@@ -150,6 +150,8 @@ public class ZYTags
             tags.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
             tags.getOrCreateBuilder(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
             tags.getOrCreateBuilder(Tags.Blocks.DIRT).add(ZYBlocks.ZYCHORIUM_SOIL.get());
+            tags.getOrCreateBuilder(BlockTags.WITHER_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
+            tags.getOrCreateBuilder(BlockTags.DRAGON_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
         });
 
         ZYCraft.registrate().addDataGenerator(ProviderType.ITEM_TAGS, tags ->
