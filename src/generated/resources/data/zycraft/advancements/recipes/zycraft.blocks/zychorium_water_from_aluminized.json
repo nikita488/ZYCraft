@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:dark_viewer"
+      "zycraft:zychorium_water_from_aluminized"
     ]
   },
   "criteria": {
-    "has_ink_sac": {
+    "has_water_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:ink_sac"
+            "item": "minecraft:water_bucket"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:dark_viewer"
+        "recipe": "zycraft:zychorium_water_from_aluminized"
       }
     }
   },
   "requirements": [
     [
-      "has_ink_sac",
+      "has_water_bucket",
       "has_the_recipe"
     ]
   ]

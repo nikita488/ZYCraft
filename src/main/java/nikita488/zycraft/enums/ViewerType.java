@@ -1,6 +1,8 @@
 package nikita488.zycraft.enums;
 
+import net.minecraft.item.Items;
 import net.minecraft.tags.ITag;
+import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.init.ZYTags;
 import com.tterrag.registrate.util.DataIngredient;
@@ -15,11 +17,11 @@ import net.minecraftforge.common.Tags;
 public enum ViewerType implements IStringSerializable
 {
     GLASS("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6.0F)),
-    DIRE("dire", () -> DataIngredient.tag(Tags.Items.GEMS_QUARTZ)),
+    DIRE("dire", () -> DataIngredient.items(ZYBlocks.QUARTZ_CRYSTAL)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
     REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200.0F)),
     GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
-    DARK("dark", () -> DataIngredient.tag(Tags.Items.DYES_BLACK)),
+    DARK("dark", () -> DataIngredient.items(Items.INK_SAC)),
     IMMORTAL("immortal", () -> DataIngredient.tag(Tags.Items.GLASS)),
     GLOWING_IMMORTAL("glowing_immortal", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
     DARK_IMMORTAL("dark_immortal", () -> DataIngredient.tag(Tags.Items.DYES_BLACK));

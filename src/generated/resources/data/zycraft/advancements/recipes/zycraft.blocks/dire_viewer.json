@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_gems_quartz": {
+    "has_quartz_crystal": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:gems/quartz"
+            "item": "zycraft:quartz_crystal"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_gems_quartz",
+      "has_quartz_crystal",
       "has_the_recipe"
     ]
   ]

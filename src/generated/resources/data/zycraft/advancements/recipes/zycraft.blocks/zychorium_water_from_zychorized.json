@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:zychorium_ice"
+      "zycraft:zychorium_water_from_zychorized"
     ]
   },
   "criteria": {
-    "has_snowball": {
+    "has_water_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:snowball"
+            "item": "minecraft:water_bucket"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:zychorium_ice"
+        "recipe": "zycraft:zychorium_water_from_zychorized"
       }
     }
   },
   "requirements": [
     [
-      "has_snowball",
+      "has_water_bucket",
       "has_the_recipe"
     ]
   ]

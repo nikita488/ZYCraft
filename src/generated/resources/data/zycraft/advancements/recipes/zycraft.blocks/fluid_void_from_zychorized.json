@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:dark_viewer"
+      "zycraft:fluid_void_from_zychorized"
     ]
   },
   "criteria": {
-    "has_ink_sac": {
+    "has_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:ink_sac"
+            "item": "minecraft:bucket"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:dark_viewer"
+        "recipe": "zycraft:fluid_void_from_zychorized"
       }
     }
   },
   "requirements": [
     [
-      "has_ink_sac",
+      "has_bucket",
       "has_the_recipe"
     ]
   ]

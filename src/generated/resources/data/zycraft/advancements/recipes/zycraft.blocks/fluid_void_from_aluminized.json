@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:fluid_void"
+      "zycraft:fluid_void_from_aluminized"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:fluid_void"
+        "recipe": "zycraft:fluid_void_from_aluminized"
       }
     }
   },

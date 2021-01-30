@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "SXS",
+    "#S#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:aluminized_green_engineering_block"
+    },
+    "T": {
+      "item": "zycraft:zychorite"
+    },
+    "S": {
+      "item": "zycraft:zychorite"
+    },
+    "X": {
+      "tag": "minecraft:saplings"
+    }
+  },
+  "result": {
+    "item": "zycraft:zychorium_soil"
+  }
+}

@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_redstone_torch": {
+    "has_inverted_zychorium_lamp": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:redstone_torch"
+            "item": "zycraft:inverted_zychorium_lamp"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_redstone_torch",
+      "has_inverted_zychorium_lamp",
       "has_the_recipe"
     ]
   ]

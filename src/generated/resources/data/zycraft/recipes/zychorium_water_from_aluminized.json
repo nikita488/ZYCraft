@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "SXS",
+    "#S#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:aluminized_blue_engineering_block"
+    },
+    "T": {
+      "item": "zycraft:zychorite"
+    },
+    "S": {
+      "item": "zycraft:zychorite"
+    },
+    "X": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "result": {
+    "item": "zycraft:zychorium_water"
+  }
+}

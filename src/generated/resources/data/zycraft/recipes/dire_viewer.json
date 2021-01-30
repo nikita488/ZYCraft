@@ -7,7 +7,7 @@
   ],
   "key": {
     "I": {
-      "tag": "forge:gems/quartz"
+      "item": "zycraft:quartz_crystal"
     },
     "#": {
       "item": "zycraft:glass_viewer"

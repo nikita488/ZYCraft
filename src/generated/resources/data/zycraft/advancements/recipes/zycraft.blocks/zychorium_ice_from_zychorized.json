@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:fire_basin"
+      "zycraft:zychorium_ice_from_zychorized"
     ]
   },
   "criteria": {
-    "has_gunpowder": {
+    "has_snowball": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:gunpowder"
+            "item": "minecraft:snowball"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:fire_basin"
+        "recipe": "zycraft:zychorium_ice_from_zychorized"
       }
     }
   },
   "requirements": [
     [
-      "has_gunpowder",
+      "has_snowball",
       "has_the_recipe"
     ]
   ]

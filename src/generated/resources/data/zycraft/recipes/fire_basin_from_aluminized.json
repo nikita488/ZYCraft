@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#T#",
+    "SXS",
+    "#S#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:aluminized_red_engineering_block"
+    },
+    "T": {
+      "item": "minecraft:iron_bars"
+    },
+    "S": {
+      "item": "zycraft:zychorite"
+    },
+    "X": {
+      "tag": "forge:gunpowder"
+    }
+  },
+  "result": {
+    "item": "zycraft:fire_basin"
+  }
+}

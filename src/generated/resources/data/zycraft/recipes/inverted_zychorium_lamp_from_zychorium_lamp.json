@@ -3,9 +3,6 @@
   "ingredients": [
     {
       "item": "zycraft:zychorium_lamp"
-    },
-    {
-      "item": "minecraft:redstone_torch"
     }
   ],
   "result": {

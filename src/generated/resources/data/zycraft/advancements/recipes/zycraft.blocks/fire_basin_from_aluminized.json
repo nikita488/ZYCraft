@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:zychorium_lamp_from_redstone_lamp"
+      "zycraft:fire_basin_from_aluminized"
     ]
   },
   "criteria": {
-    "has_redstone_lamp": {
+    "has_gunpowder": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:redstone_lamp"
+            "tag": "forge:gunpowder"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:zychorium_lamp_from_redstone_lamp"
+        "recipe": "zycraft:fire_basin_from_aluminized"
       }
     }
   },
   "requirements": [
     [
-      "has_redstone_lamp",
+      "has_gunpowder",
       "has_the_recipe"
     ]
   ]

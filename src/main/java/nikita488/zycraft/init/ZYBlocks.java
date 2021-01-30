@@ -61,7 +61,9 @@ public class ZYBlocks
     public static final BlockEntry<Block> ZYCHORITE_BLOCK = REGISTRATE.block("zychorite_block", Block::new)
             .initialProperties(ZYCHORITE)
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .simpleItem()
+            .item()
+                .tag(Tags.Items.STORAGE_BLOCKS)
+                .build()
             .recipe((ctx, provider) -> provider.storage(ZYCHORITE, ctx::getEntry))
             .register();
 
@@ -88,7 +90,9 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.QUARTZ)
             .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
-            .simpleItem()
+            .item()
+                .tag(Tags.Items.STORAGE_BLOCKS)
+                .build()
             .recipe((ctx, provider) -> provider.storage(ZYItems.ALUMINIUM, ctx::getEntry))
             .register();
 
@@ -137,7 +141,9 @@ public class ZYBlocks
             .properties(properties -> properties.hardnessAndResistance(0.3F).setLightLevel(state -> 9).sound(SoundType.GLASS).notSolid())
             .addLayer(() -> RenderType::getTranslucent)
             .tag(Tags.Blocks.STORAGE_BLOCKS, BlockTags.IMPERMEABLE)
-            .simpleItem()
+            .item()
+                .tag(Tags.Items.STORAGE_BLOCKS)
+                .build()
             .recipe((ctx, provider) -> provider.storage(QUARTZ_CRYSTAL, ctx::getEntry))
             .register();
 
@@ -294,14 +300,15 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
+            blocks.put(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
                     .initialProperties(Material.ROCK, type.mtlColor())
                     .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6).setAllowsSpawn((state, world, pos, entity) -> false))
                     .addLayer(() -> RenderType::getCutout)
                     .color(() -> () -> ZYColors.zyBlockColor(type, bricks))
                     .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                             .withExistingParent(name, provider.modLoc("block/" + (bricks ? "zy_bricks" : "zy_cube_all")))
-                            .texture("all", provider.modLoc("block/" + name)))))
+                            .texture("all", provider.modLoc("block/" + name))))
+                    .transform(builder -> factory.apply(type, builder))
                     .item()
                         .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("block/" + name)))
                         .color(() -> () -> ZYColors.zyItemColor(type, bricks))
@@ -318,10 +325,11 @@ public class ZYBlocks
 
         for (ZYType type : ZYType.VALUES)
         {
-            blocks.put(type, factory.apply(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
+            blocks.put(type, REGISTRATE.block(pattern.replace("{type}", type.getString()), Block::new)
                     .initialProperties(Material.ROCK, type.mtlColor())
                     .properties(properties -> properties.setRequiresTool().hardnessAndResistance(1.5F, 6))
-                    .simpleItem())
+                    .transform(builder -> factory.apply(type, builder))
+                    .simpleItem()
                     .register());
         }
 
@@ -354,31 +362,27 @@ public class ZYBlocks
                     .build()
                 .recipe((ctx, provider) ->
                 {
-                    DataIngredient source = DataIngredient.items(Blocks.GLOWSTONE);
+                    DataIngredient quartzCrystalSource = DataIngredient.items(QUARTZ_CRYSTAL);
 
                     ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
-                            .key('S', source)
-                            .key('P', Tags.Items.DUSTS_REDSTONE)
-                            .key('#', inverted ? Ingredient.fromItems(Items.REDSTONE_TORCH) : Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE))
+                            .key('X', Tags.Items.GLASS)
+                            .key('#', quartzCrystalSource)
+                            .key('$', inverted ? Ingredient.fromItems(Items.REDSTONE_TORCH) : Ingredient.fromTag(Tags.Items.DUSTS_REDSTONE))
                             .key('R', ZYItems.ZYCHORIUM.get(ZYType.RED).get())
                             .key('G', ZYItems.ZYCHORIUM.get(ZYType.GREEN).get())
                             .key('B', ZYItems.ZYCHORIUM.get(ZYType.BLUE).get())
                             .key('D', ZYItems.ZYCHORIUM.get(ZYType.DARK).get())
                             .key('L', ZYItems.ZYCHORIUM.get(ZYType.LIGHT).get())
                             .patternLine("RGB")
-                            .patternLine("PSP")
-                            .patternLine("D#L")
-                            .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
+                            .patternLine("#X#")
+                            .patternLine("D$L")
+                            .addCriterion("has_" + provider.safeName(quartzCrystalSource), quartzCrystalSource.getCritereon(provider))
                             .build(provider, provider.safeId(ctx.getEntry()));
 
-                    if (!inverted)
-                        colorable(ZYCraft.modLoc(name + "_from_" + provider.safeName(Blocks.REDSTONE_LAMP)), provider, DataIngredient.items(Blocks.REDSTONE_LAMP), ctx::getEntry);
-
-                    ShapelessRecipeBuilder.shapelessRecipe(inverted ? ZYCHORIUM_LAMP.get() : INVERTED_ZYCHORIUM_LAMP.get())
-                            .addIngredient(inverted ? INVERTED_ZYCHORIUM_LAMP.get() : ZYCHORIUM_LAMP.get())
-                            .addIngredient(Ingredient.fromItems(Items.REDSTONE_TORCH))
-                            .addCriterion("has_redstone_torch", RegistrateRecipeProvider.hasItem(Items.REDSTONE_TORCH))
-                            .build(provider, ZYCraft.modLoc(inverted ? "zychorium_lamp_from_inverted_zychorium_lamp" : "inverted_zychorium_lamp_from_zychorium_lamp"));
+                    provider.singleItemUnfinished(
+                            DataIngredient.items(inverted ? INVERTED_ZYCHORIUM_LAMP : ZYCHORIUM_LAMP),
+                            () -> inverted ? ZYCHORIUM_LAMP.get() : INVERTED_ZYCHORIUM_LAMP.get(), 1, 1)
+                    .build(provider, ZYCraft.modLoc(inverted ? "zychorium_lamp_from_inverted_zychorium_lamp" : "inverted_zychorium_lamp_from_zychorium_lamp"));
                 })
                 .register();
     }
@@ -546,7 +550,18 @@ public class ZYBlocks
                             .patternLine("SXS")
                             .patternLine("#S#")
                             .addCriterion("has_" + provider.safeName(base), base.getCritereon(provider))
-                            .build(provider, provider.safeId(ctx.getEntry()));
+                            .build(provider, provider.safeId(ctx.getEntry()) + "_from_zychorized");
+
+                    ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
+                            .key('#', DataIngredient.items(ALUMINIZED_ENGINEERING_BLOCK.get(type)))
+                            .key('T', type == ZYType.RED || type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
+                            .key('S', type == ZYType.DARK ? DataIngredient.items(Items.IRON_BARS) : DataIngredient.items(ZYCHORITE))
+                            .key('X', base)
+                            .patternLine("#T#")
+                            .patternLine("SXS")
+                            .patternLine("#S#")
+                            .addCriterion("has_" + provider.safeName(base), base.getCritereon(provider))
+                            .build(provider, provider.safeId(ctx.getEntry()) + "_from_aluminized");
                 })
                 .register();
     }

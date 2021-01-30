@@ -2,17 +2,17 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "RGB",
-    "PSP",
-    "D#L"
+    "#X#",
+    "D$L"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:glowstone"
-    },
-    "P": {
-      "tag": "forge:dusts/redstone"
+    "X": {
+      "tag": "forge:glass"
     },
     "#": {
+      "item": "zycraft:quartz_crystal"
+    },
+    "$": {
       "item": "minecraft:redstone_torch"
     },
     "R": {

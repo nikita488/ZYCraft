@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:zychorium_water"
+      "zycraft:zychorium_soil_from_zychorized"
     ]
   },
   "criteria": {
-    "has_water_bucket": {
+    "has_saplings": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:water_bucket"
+            "tag": "minecraft:saplings"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:zychorium_water"
+        "recipe": "zycraft:zychorium_soil_from_zychorized"
       }
     }
   },
   "requirements": [
     [
-      "has_water_bucket",
+      "has_saplings",
       "has_the_recipe"
     ]
   ]

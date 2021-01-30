@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:dark_viewer"
+      "zycraft:fire_basin_from_zychorized"
     ]
   },
   "criteria": {
-    "has_ink_sac": {
+    "has_gunpowder": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:ink_sac"
+            "tag": "forge:gunpowder"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:dark_viewer"
+        "recipe": "zycraft:fire_basin_from_zychorized"
       }
     }
   },
   "requirements": [
     [
-      "has_ink_sac",
+      "has_gunpowder",
       "has_the_recipe"
     ]
   ]
