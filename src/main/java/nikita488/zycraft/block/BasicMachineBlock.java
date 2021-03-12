@@ -31,6 +31,8 @@ import nikita488.zycraft.util.FluidUtils;
 import java.util.Optional;
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class BasicMachineBlock extends Block
 {
     private final ZYType type;
@@ -45,16 +47,16 @@ public class BasicMachineBlock extends Block
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return type == ZYType.BLUE ? Fluids.WATER.getFlowingFluidState(1, false) : Fluids.EMPTY.getDefaultState();
+        return type == ZYType.BLUE ? Fluids.WATER.getFlowing(1, false) : Fluids.EMPTY.defaultFluidState();
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         if (type != ZYType.BLUE)
             return ActionResultType.PASS;
 
-        ItemStack heldStack = player.getHeldItem(hand);
+        ItemStack heldStack = player.getItemInHand(hand);
 
         if (heldStack.isEmpty())
             return ActionResultType.PASS;
@@ -70,25 +72,25 @@ public class BasicMachineBlock extends Block
         if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
             return ActionResultType.PASS;
 
-        player.addStat(Stats.ITEM_USED.get(heldStack.getItem()));
+        player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
         player.playSound(water.getFluid().getAttributes().getFillSound(), 1.0F, 1.0F);
 
-        if (world.isRemote)
+        if (world.isClientSide)
             return ActionResultType.SUCCESS;
 
         handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
 
-        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
+        ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
         CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
 
         if (heldStack != filledContainer)
-            player.setHeldItem(hand, filledContainer);
+            player.setItemInHand(hand, filledContainer);
 
         return ActionResultType.SUCCESS;
     }
 
     @Override
-    public boolean ticksRandomly(BlockState state)
+    public boolean isRandomlyTicking(BlockState state)
     {
         return type == ZYType.GREEN;
     }
@@ -99,22 +101,22 @@ public class BasicMachineBlock extends Block
         if (type != ZYType.GREEN)
             return;
 
-        BlockPos tickPos = pos.up();
+        BlockPos tickPos = pos.above();
         BlockState stateToTick = world.getBlockState(tickPos);
         Block blockToTick = stateToTick.getBlock();
 
-        if (!stateToTick.ticksRandomly())
+        if (!stateToTick.isRandomlyTicking())
             return;
 
-        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
+        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).isValidBonemealTarget(world, tickPos, stateToTick, false)))
         {
-            BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
+            BlockPos.Mutable checkPos = new BlockPos.Mutable().set(tickPos);
 
-            while (blockToTick == stateToTick.getBlock() && stateToTick.ticksRandomly())
+            while (blockToTick == stateToTick.getBlock() && stateToTick.isRandomlyTicking())
                 stateToTick = world.getBlockState(checkPos.move(Direction.UP));
 
             stateToTick = world.getBlockState(checkPos.move(Direction.DOWN));
-            stateToTick.randomTick(world, checkPos.toImmutable(), rand);
+            stateToTick.randomTick(world, checkPos.immutable(), rand);
         }
         else if (blockToTick == this)
         {
@@ -141,13 +143,13 @@ public class BasicMachineBlock extends Block
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         if (type == ZYType.GREEN || type == ZYType.RED)
             return;
 
         for (Direction side : VALUES)
-            modifyAdjacentState(world, pos.offset(side));
+            modifyAdjacentState(world, pos.relative(side));
     }
 
     @Override

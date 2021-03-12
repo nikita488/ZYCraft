@@ -16,15 +16,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class AtlasTextureMixin
 {
     @Shadow
-    public abstract ResourceLocation getTextureLocation();
+    public abstract ResourceLocation location();
 
-    @Inject(method = "loadSprite", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "load(Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", at = @At("HEAD"), cancellable = true)
     private void stitchCloudSprite(IResourceManager manager, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int mipMapLevel, int originX, int originY, CallbackInfoReturnable<TextureAtlasSprite> cir)
     {
-        if (!this.getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE) || (!info.getSpriteLocation().equals(CloudSprite.NAME) && !info.getSpriteLocation().equals(CloudSprite.NAME2)))
+        if (!location().equals(AtlasTexture.LOCATION_BLOCKS) || (!info.name().equals(CloudSprite.NAME) && !info.name().equals(CloudSprite.NAME2)))
             return;
 
-        NativeImage image = new NativeImage(info.getSpriteWidth(), info.getSpriteHeight(), false);
+        NativeImage image = new NativeImage(info.width(), info.height(), false);
         image.untrack();
         cir.setReturnValue(new CloudSprite((AtlasTexture)(Object)this, info, mipMapLevel, atlasWidth, atlasHeight, originX, originY, image));
     }

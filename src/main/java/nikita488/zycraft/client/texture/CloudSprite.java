@@ -22,13 +22,13 @@ public class CloudSprite extends TextureAtlasSprite
     public CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y, NativeImage image)
     {
         super(atlas, info, 0, atlasWidth, atlasHeight, x, y, image);
-        this.pixels = new float[info.getSpriteWidth() * info.getSpriteHeight()];
-        this.baseLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];
-        this.adjustmentLayer = new float[info.getSpriteWidth() * info.getSpriteHeight()];
+        this.pixels = new float[info.width() * info.height()];
+        this.baseLayer = new float[info.width() * info.height()];
+        this.adjustmentLayer = new float[info.width() * info.height()];
     }
 
     @Override
-    public boolean hasAnimationMetadata()
+    public boolean isAnimation()
     {
         return true;
     }
@@ -60,7 +60,7 @@ public class CloudSprite extends TextureAtlasSprite
     private void set(int x, int y)
     {
         int color = (int)(MathHelper.clamp(pixel(pixels, x, y) * 2, 0, 1) * 255);
-        frames[0].setPixelRGBA(x, y, Color4b.rgba(255, color, color, color));
+        mainImage[0].setPixelRGBA(x, y, Color4b.rgba(255, color, color, color));
     }
 
     private float pixel(float[] pixels, int x, int y)
@@ -70,30 +70,30 @@ public class CloudSprite extends TextureAtlasSprite
 
     private int pixelIndex(int x, int y)
     {
-        int mask = spriteInfo.getSpriteWidth() - 1;
-        return (x & mask) + (y & mask) * spriteInfo.getSpriteWidth();
+        int mask = info.width() - 1;
+        return (x & mask) + (y & mask) * info.width();
     }
 
     private void forEachPixel(IntBiConsumer consumer)
     {
-        for (int x = 0; x < spriteInfo.getSpriteWidth(); x++)
-            for (int y = 0; y < spriteInfo.getSpriteHeight(); y++)
+        for (int x = 0; x < info.width(); x++)
+            for (int y = 0; y < info.height(); y++)
                 consumer.accept(x, y);
     }
 
     @Override
-    public void updateAnimation()
+    public void cycleFrames()
     {
-        tickCounter++;
+        subFrame++;
         forEachPixel(this::calculate);
         forEachPixel(this::set);
-        uploadMipmaps();
+        uploadFirstFrame();
     }
 
     @Override
     public void close()
     {
-        for(int i = 1; i < frames.length; i++)
-            frames[i].close();
+        for(int i = 1; i < mainImage.length; i++)
+            mainImage[i].close();
     }
 }

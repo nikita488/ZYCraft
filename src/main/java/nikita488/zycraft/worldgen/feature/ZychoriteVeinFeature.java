@@ -24,7 +24,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
     }
 
     @Override
-    public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
+    public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
     {
         float f = random.nextFloat() * (float)Math.PI;
         float f1 = (float)config.size / 8.0F;
@@ -45,7 +45,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
         for(int l1 = k; l1 <= k + j1; ++l1) {
             for(int i2 = i1; i2 <= i1 + j1; ++i2) {
                 if (l <= world.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, l1, i2)) {
-                    return this.func_207803_a(world, random, config, d0, d1, d2, d3, d4, d5, k, l, i1, j1, k1);
+                    return this.doPlace(world, random, config, d0, d1, d2, d3, d4, d5, k, l, i1, j1, k1);
                 }
             }
         }
@@ -53,7 +53,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
         return false;
     }
 
-    protected boolean func_207803_a(IWorld world, Random random, ZychoriteVeinConfig config, double p_207803_4_, double p_207803_6_, double p_207803_8_, double p_207803_10_, double p_207803_12_, double p_207803_14_, int p_207803_16_, int p_207803_17_, int p_207803_18_, int p_207803_19_, int p_207803_20_)
+    protected boolean doPlace(IWorld world, Random random, ZychoriteVeinConfig config, double p_207803_4_, double p_207803_6_, double p_207803_8_, double p_207803_10_, double p_207803_12_, double p_207803_14_, int p_207803_16_, int p_207803_17_, int p_207803_18_, int p_207803_19_, int p_207803_20_)
     {
         int i = 0;
         BitSet bitset = new BitSet(p_207803_19_ * p_207803_20_ * p_207803_19_);
@@ -119,14 +119,14 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
                                         int l2 = i2 - p_207803_16_ + (j2 - p_207803_17_) * p_207803_19_ + (k2 - p_207803_18_) * p_207803_19_ * p_207803_20_;
                                         if (!bitset.get(l2)) {
                                             bitset.set(l2);
-                                            blockpos$mutable.setPos(i2, j2, k2);
+                                            blockpos$mutable.set(i2, j2, k2);
                                             if (config.target.test(world.getBlockState(blockpos$mutable), random)) {
                                                 Block block = ZYBlocks.ZYCHORITE.get();
 
                                                 if (random.nextFloat() < config.orePercentage)
                                                     block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.random(random)).get();
 
-                                                world.setBlockState(blockpos$mutable, block.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+                                                world.setBlock(blockpos$mutable, block.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
                                                 ++i;
                                             }
                                         }

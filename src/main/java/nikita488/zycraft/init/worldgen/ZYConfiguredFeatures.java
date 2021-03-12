@@ -15,18 +15,18 @@ import nikita488.zycraft.worldgen.placement.ClusterPlacementConfig;
 public class ZYConfiguredFeatures
 {
     public static final ConfiguredFeature<?, ?> ZYCHORITE_VEIN = ZYFeatures.ZYCHORITE_VEIN.get()
-            .withConfiguration(new ZychoriteVeinConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ZYConfig.zychoriteSize, ZYConfig.zychoriteOrePercentage * 0.01F))
+            .configured(new ZychoriteVeinConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ZYConfig.zychoriteSize, ZYConfig.zychoriteOrePercentage * 0.01F))
             .range(ZYConfig.zychoriteMaxHeight)
-            .square()
-            .func_242731_b(ZYConfig.zychoriteAmount);
+            .squared()
+            .count(ZYConfig.zychoriteAmount);
     public static final ConfiguredFeature<?, ?> ORE_ALUMINIUM = Feature.ORE
-            .withConfiguration(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, ZYBlocks.ALUMINIUM_ORE.getDefaultState(), ZYConfig.aluminiumSize))
+            .configured(new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ZYBlocks.ALUMINIUM_ORE.getDefaultState(), ZYConfig.aluminiumSize))
             .range(ZYConfig.aluminiumMaxHeight)
-            .square()
-            .func_242731_b(ZYConfig.aluminiumAmount);
+            .squared()
+            .count(ZYConfig.aluminiumAmount);
     public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL_CLUSTER = ZYFeatures.QUARTZ_CRYSTAL_CLUSTER.get()
-            .withConfiguration(new ClusterFeatureConfig(OreFeatureConfig.FillerBlockType.BASE_STONE_OVERWORLD, 5))
-            .withPlacement(ZYPlacements.QUARTZ_CRYSTAL_CLUSTER.get().configure(new ClusterPlacementConfig(ZYConfig.quartzCrystalClusterAttempts, ZYConfig.quartzCrystalClusterAmount)));
+            .configured(new ClusterFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 5))
+            .decorated(ZYPlacements.QUARTZ_CRYSTAL_CLUSTER.get().configured(new ClusterPlacementConfig(ZYConfig.quartzCrystalClusterAttempts, ZYConfig.quartzCrystalClusterAmount)));
 
     public static void init()
     {

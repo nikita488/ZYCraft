@@ -28,7 +28,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
     private final DefaultDispenseItemBehavior defaultBehaviour = new DefaultDispenseItemBehavior();
 
     @Override
-    public ItemStack dispenseStack(IBlockSource source, ItemStack stack)
+    public ItemStack execute(IBlockSource source, ItemStack stack)
     {
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(stack);
 
@@ -37,8 +37,8 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
 
         IFluidHandlerItem handler = capability.get();
         FluidStack containedFluid = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        World world = source.getWorld();
-        BlockPos pos = source.getBlockPos().offset(source.getBlockState().get(DispenserBlock.FACING));
+        World world = source.getLevel();
+        BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
 
         if (!containedFluid.isEmpty())
         {
@@ -52,17 +52,17 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         Block block = state.getBlock();
 
         if (!(block instanceof IBucketPickupHandler))
-            return super.dispenseStack(source, stack);
+            return super.execute(source, stack);
 
-        Fluid fluid = ((IBucketPickupHandler)block).pickupFluid(world, pos, state);
+        Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(world, pos, state);
 
         if (!(fluid instanceof FlowingFluid))
-            return super.dispenseStack(source, stack);
+            return super.execute(source, stack);
 
         FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
         if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-            return super.dispenseStack(source, stack);
+            return super.execute(source, stack);
 
         handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
         stack.shrink(1);
@@ -72,7 +72,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         if (stack.isEmpty())
             return filledContainer;
 
-        if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(filledContainer) < 0)
+        if (source.<DispenserTileEntity>getEntity().addItem(filledContainer) < 0)
             defaultBehaviour.dispense(source, filledContainer);
 
         return stack;

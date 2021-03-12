@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class ColorableBlock extends Block
 {
     public ColorableBlock(Properties properties)
@@ -48,7 +50,7 @@ public class ColorableBlock extends Block
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
@@ -66,14 +68,14 @@ public class ColorableBlock extends Block
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (stack.isEmpty())
             return ActionResultType.PASS;
 
         Item item = stack.getItem();
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         if (!(tile instanceof ColorableTile))
             return ActionResultType.CONSUME;
 
@@ -82,13 +84,13 @@ public class ColorableBlock extends Block
 
         if (item instanceof IColorChanger && ((IColorChanger)item).canChangeColor(state, world, pos, player, hand, hit, colorable.rgb()))
         {
-            if (!world.isRemote)
+            if (!world.isClientSide)
                 colorable.setRGB(((IColorChanger)item).changeColor(state, world, pos, player, hand, hit, colorable.rgb()));
             return ActionResultType.SUCCESS;
         }
         else if ((dyeColor = ZYDyeColor.byDyeColor(stack)) != null && colorable.rgb() != dyeColor.rgb())
         {
-            if (world.isRemote)
+            if (world.isClientSide)
                 return ActionResultType.SUCCESS;
 
             colorable.setRGB(dyeColor.rgb());

@@ -4,6 +4,7 @@ import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.util.NonNullLazyValue;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -21,7 +22,7 @@ public class ZYCraft
 {
     public static final String MOD_ID = "zycraft";
     public static final Logger LOGGER = LogManager.getLogger();
-    private static final NonNullLazyValue<Registrate> REGISTRATE = new NonNullLazyValue<>(() -> Registrate.create(MOD_ID));
+    private static final NonNullLazy<Registrate> REGISTRATE = NonNullLazy.of(() -> Registrate.create(MOD_ID));
 
     public ZYCraft()
     {
@@ -45,7 +46,7 @@ public class ZYCraft
         event.enqueueWork(() ->
         {
             ZYConfiguredFeatures.init();
-            DispenserBlock.registerDispenseBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
+            DispenserBlock.registerBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
     }
 

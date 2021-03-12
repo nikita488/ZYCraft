@@ -50,12 +50,12 @@ public class ZYTile extends TileEntity
     {
         CompoundNBT tag = new CompoundNBT();
         encodeUpdate(tag);
-        return new SUpdateTileEntityPacket(pos, 0, tag);
+        return new SUpdateTileEntityPacket(worldPosition, 0, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet)
     {
-        decodeUpdate(packet.getNbtCompound());
+        decodeUpdate(packet.getTag());
     }
 }

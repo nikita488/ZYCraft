@@ -51,16 +51,16 @@ public class ZYLang
 
     public static IFormattableTextComponent getColorScannerRed(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
+        return new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount).withStyle(TextFormatting.ITALIC, TextFormatting.RED);
     }
 
     public static IFormattableTextComponent getColorScannerGreen(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
+        return new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount).withStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
     }
 
     public static IFormattableTextComponent getColorScannerBlue(int amount)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount).mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
+        return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount).withStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
     }
 }

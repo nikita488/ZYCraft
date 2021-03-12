@@ -37,7 +37,7 @@ public class ZYColors
             if (!(state.getBlock() instanceof ColorableBlock) && world == null || pos == null)
                 return 0xFFFFFF;
 
-            TileEntity tile = world.getTileEntity(pos);
+            TileEntity tile = world.getBlockEntity(pos);
 
             if (!(tile instanceof ColorableTile))
                 return 0xFFFFFF;

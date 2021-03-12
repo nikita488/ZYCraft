@@ -16,14 +16,14 @@ import net.minecraftforge.common.Tags;
 
 public enum ViewerType implements IStringSerializable
 {
-    GLASS("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6.0F)),
+    GLASS("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.strength(0.3F, 6.0F)),
     DIRE("dire", () -> DataIngredient.items(ZYBlocks.QUARTZ_CRYSTAL)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
-    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200.0F)),
-    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
+    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.strength(0.3F, 1200.0F)),
+    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightLevel(state -> 15)),
     DARK("dark", () -> DataIngredient.items(Items.INK_SAC)),
     IMMORTAL("immortal", () -> DataIngredient.tag(Tags.Items.GLASS)),
-    GLOWING_IMMORTAL("glowing_immortal", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
+    GLOWING_IMMORTAL("glowing_immortal", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightLevel(state -> 15)),
     DARK_IMMORTAL("dark_immortal", () -> DataIngredient.tag(Tags.Items.DYES_BLACK));
 
     private final String name;
@@ -45,7 +45,7 @@ public enum ViewerType implements IStringSerializable
     }
 
     @Override
-    public String getString()
+    public String getSerializedName()
     {
         return name;
     }
@@ -57,7 +57,7 @@ public enum ViewerType implements IStringSerializable
 
     public Block.Properties properties(Block.Properties initialProperties, boolean phantomized)
     {
-        return propertiesCallback.andThen(p -> phantomized ? p.doesNotBlockMovement() : p).apply(initialProperties);
+        return propertiesCallback.andThen(p -> phantomized ? p.noCollission() : p).apply(initialProperties);
     }
 
     public boolean isImmortal()
@@ -68,9 +68,9 @@ public enum ViewerType implements IStringSerializable
     public RenderType layer()
     {
         if (isImmortal())
-            return RenderType.getTranslucent();
+            return RenderType.translucent();
 
-        return this == DARK ? RenderType.getTranslucent() : RenderType.getCutout();
+        return this == DARK ? RenderType.translucent() : RenderType.cutout();
     }
 
     public ITag.INamedTag<Block> tag(boolean phantomized)

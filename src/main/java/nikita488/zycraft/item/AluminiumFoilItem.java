@@ -9,6 +9,8 @@ import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.item.Item.Properties;
+
 public class AluminiumFoilItem extends ZYFluidContainerItem
 {
     public AluminiumFoilItem(Properties properties)

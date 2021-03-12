@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class QuartzCrystalBlock extends BreakableBlock
 {
     public QuartzCrystalBlock(Properties properties)

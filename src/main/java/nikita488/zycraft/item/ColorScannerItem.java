@@ -22,6 +22,8 @@ import nikita488.zycraft.util.ItemStackUtils;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import net.minecraft.item.Item.Properties;
+
 public class ColorScannerItem extends Item implements IColorChanger
 {
     public ColorScannerItem(Properties properties)
@@ -31,7 +33,7 @@ public class ColorScannerItem extends Item implements IColorChanger
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
@@ -54,13 +56,13 @@ public class ColorScannerItem extends Item implements IColorChanger
     @Override
     public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        return color != ItemStackUtils.getInt(player.getHeldItem(hand), "Color", 0xFFFFFF);
+        return color != ItemStackUtils.getInt(player.getItemInHand(hand), "Color", 0xFFFFFF);
     }
 
     @Override
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
 
         if (!player.isCrouching())
             return ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);

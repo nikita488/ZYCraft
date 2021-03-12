@@ -7,10 +7,10 @@ import java.util.Random;
 
 public enum ZYType implements IStringSerializable
 {
-    BLUE("blue", 0x0064FF, 0x001940, MaterialColor.BLUE),
-    GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
-    RED("red", 0xFF0000, 0x200000, MaterialColor.RED),
-    DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.BLACK),
+    BLUE("blue", 0x0064FF, 0x001940, MaterialColor.COLOR_BLUE),
+    GREEN("green", 0x00FF00, 0x002000, MaterialColor.COLOR_GREEN),
+    RED("red", 0xFF0000, 0x200000, MaterialColor.COLOR_RED),
+    DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.COLOR_BLACK),
     LIGHT("light", 0xFFFFFF, 0xFFFFFF, MaterialColor.QUARTZ);
 
     private final String name;
@@ -32,7 +32,7 @@ public enum ZYType implements IStringSerializable
     }
 
     @Override
-    public String getString()
+    public String getSerializedName()
     {
         return name;
     }

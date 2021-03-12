@@ -24,20 +24,20 @@ public class ColorableTile extends ZYTile
     public void setRGB(int rgb)
     {
         color.set(rgb, 255);
-        BlockUtils.scheduleTileUpdate(world, pos, getBlockState());
+        BlockUtils.scheduleTileUpdate(level, worldPosition, getBlockState());
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundNBT tag)
     {
-        super.read(state, tag);
+        super.load(state, tag);
         color = Color4b.loadRGB(tag);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
-        super.write(tag);
+        super.save(tag);
         color.saveRGB(tag);
         return tag;
     }
@@ -52,7 +52,7 @@ public class ColorableTile extends ZYTile
     public void decodeUpdate(CompoundNBT tag)
     {
         color = Color4b.loadRGB(tag);
-        BlockUtils.scheduleRenderUpdate(world, pos);
+        BlockUtils.scheduleRenderUpdate(level, worldPosition);
     }
 
     @Override

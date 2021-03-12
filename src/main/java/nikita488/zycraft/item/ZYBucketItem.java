@@ -28,6 +28,8 @@ import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
 
+import net.minecraft.item.Item.Properties;
+
 public class ZYBucketItem extends ZYFluidContainerItem
 {
     public ZYBucketItem(Properties properties)
@@ -42,35 +44,35 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
     protected ItemStack emptyBucket(IFluidHandlerItem handler, ItemStack stack, PlayerEntity player)
     {
-        return !player.abilities.isCreativeMode ? new ItemStack(this) : stack;
+        return !player.abilities.instabuild ? new ItemStack(this) : stack;
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
+    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
     {
-        ItemStack heldStack = player.getHeldItem(hand);
+        ItemStack heldStack = player.getItemInHand(hand);
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
 
         if (!capability.isPresent())
-            return ActionResult.resultPass(heldStack);
+            return ActionResult.pass(heldStack);
 
         IFluidHandlerItem handler = capability.get();
         FluidStack containedFluid = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        BlockRayTraceResult rayCastResult = rayTrace(world, player, containedFluid.isEmpty() ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
+        BlockRayTraceResult rayCastResult = getPlayerPOVHitResult(world, player, containedFluid.isEmpty() ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
         ActionResult<ItemStack> eventResult = ForgeEventFactory.onBucketUse(player, world, heldStack, rayCastResult);
 
         if (eventResult != null)
             return eventResult;
 
         if (rayCastResult.getType() != RayTraceResult.Type.BLOCK)
-            return ActionResult.resultPass(heldStack);
+            return ActionResult.pass(heldStack);
 
-        BlockPos pos = rayCastResult.getPos();
-        Direction side = rayCastResult.getFace();
-        BlockPos adjPos = pos.offset(side);
+        BlockPos pos = rayCastResult.getBlockPos();
+        Direction side = rayCastResult.getDirection();
+        BlockPos adjPos = pos.relative(side);
 
-        if (!world.isBlockModifiable(player, pos) || !player.canPlayerEdit(adjPos, side, heldStack))
-            return ActionResult.resultFail(heldStack);
+        if (!world.mayInteract(player, pos) || !player.mayUseItemAt(adjPos, side, heldStack))
+            return ActionResult.fail(heldStack);
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
@@ -80,37 +82,37 @@ public class ZYBucketItem extends ZYFluidContainerItem
             BlockPos fluidPos = FluidUtils.canBlockContainFluid(world, pos, state, containedFluid.getFluid()) ? pos : adjPos;
 
             if (!FluidUtils.tryPlaceFluid(containedFluid, player, world, fluidPos, rayCastResult))
-                return ActionResult.resultFail(heldStack);
+                return ActionResult.fail(heldStack);
 
-            if (!world.isRemote)
+            if (!world.isClientSide)
                 CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)player, fluidPos, heldStack);
 
-            player.addStat(Stats.ITEM_USED.get(this));
-            return ActionResult.func_233538_a_(emptyBucket(handler, heldStack, player), world.isRemote());
+            player.awardStat(Stats.ITEM_USED.get(this));
+            return ActionResult.sidedSuccess(emptyBucket(handler, heldStack, player), world.isClientSide());
         }
 
         if (!(block instanceof IBucketPickupHandler))
-            return ActionResult.resultFail(heldStack);
+            return ActionResult.fail(heldStack);
 
-        Fluid fluid = ((IBucketPickupHandler)block).pickupFluid(world, pos, state);
+        Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(world, pos, state);
 
         if (fluid == Fluids.EMPTY)
-            return ActionResult.resultFail(heldStack);
+            return ActionResult.fail(heldStack);
 
         FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
         if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-            return ActionResult.resultFail(heldStack);
+            return ActionResult.fail(heldStack);
 
         handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-        player.addStat(Stats.ITEM_USED.get(this));
+        player.awardStat(Stats.ITEM_USED.get(this));
         player.playSound(fluid.getAttributes().getFillSound(), 1.0F, 1.0F);
 
-        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
+        ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
 
-        if (!world.isRemote)
+        if (!world.isClientSide)
             CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
 
-        return ActionResult.func_233538_a_(filledContainer, world.isRemote());
+        return ActionResult.sidedSuccess(filledContainer, world.isClientSide());
     }
 }

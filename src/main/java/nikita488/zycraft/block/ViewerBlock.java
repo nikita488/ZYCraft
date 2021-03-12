@@ -12,6 +12,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class ViewerBlock extends AbstractGlassBlock
 {
     protected final ViewerType type;
@@ -23,9 +25,9 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
-    public int getOpacity(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return type == ViewerType.DARK ? 15 : super.getOpacity(state, world, pos);
+        return type == ViewerType.DARK ? 15 : super.getLightBlock(state, world, pos);
     }
 
     @Override
