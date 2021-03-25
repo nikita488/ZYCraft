@@ -92,23 +92,25 @@ public class ZYScreen<T extends Container> extends ContainerScreen<T>
         blit(stack, x, y, z, width, height, ZYClientSetup.getWidgetAtlas().getSprite(widget));
     }
 
-    public static void drawFluidTank(MatrixStack stack, int x, int y, int z, int width, int height, IFluidHandler handler)
+    public static void drawFluidTank(MatrixStack stack, int x, int y, int z, float width, float height, IFluidHandler handler)
     {
         drawFluidStack(stack, x, y, z, width, height, handler.getFluidInTank(0), handler.getTankCapacity(0));
     }
 
-    public static void drawFluidStack(MatrixStack stack, int x, int y, int z, int width, int height, FluidStack fluidStack, int capacity)
+    public static void drawFluidStack(MatrixStack stack, int x, int y, int z, float width, float height, FluidStack fluidStack, int capacity)
     {
+        if (fluidStack.isEmpty())
+            return;
+
         FluidAttributes attributes = fluidStack.getFluid().getAttributes();
         int color = attributes.getColor(fluidStack);
         TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(fluidStack)).getSprite();
-        float fluidHeight = height * (float)fluidStack.getAmount() / capacity;
+        height *= (float)fluidStack.getAmount() / capacity;
 
-        if (fluidHeight >= 1.0F)
-            drawRepeatableQuad(stack, x, y, z, width, (int)fluidHeight, color, sprite, 16);
+        drawRepeatableQuad(stack, x, y, z, width, height, color, sprite, 16);
     }
 
-    public static void drawRepeatableQuad(MatrixStack stack, int x, int y, int z, int width, int height, int color, TextureAtlasSprite sprite, float resolution)
+    public static void drawRepeatableQuad(MatrixStack stack, int x, int y, int z, float width, float height, int color, TextureAtlasSprite sprite, float resolution)
     {
         BufferBuilder buffer = Tessellator.getInstance().getBuffer();
         int r = (color >> 16) & 0xFF;

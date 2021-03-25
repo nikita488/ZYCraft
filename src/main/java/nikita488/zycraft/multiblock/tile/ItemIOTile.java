@@ -58,12 +58,12 @@ public class ItemIOTile extends MultiChildTile
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        if (!removed && capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
-            return getMultiCapability(capability, side, -1);
+        if (!removed && type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return getMultiCapability(type, -1);
 
-        return super.getCapability(capability, side);
+        return super.getCapability(type, side);
     }
 
     public IOType getIO()

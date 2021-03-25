@@ -18,6 +18,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nonnull;
@@ -26,6 +27,31 @@ import java.util.Optional;
 
 public class FluidUtils
 {
+    public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount)
+    {
+        transferFromTo(from, to, amount, FluidAttributes.BUCKET_VOLUME);
+    }
+
+    public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount, int maxDrain)
+    {
+        if (amount > 0)
+            tryTransfer(from, to, amount, maxDrain);
+        else if (amount < 0)
+            tryTransfer(to, from, -amount, maxDrain);
+    }
+
+    private static void tryTransfer(IFluidHandler from, IFluidHandler to, int amount, int maxDrain)
+    {
+        FluidStack drained = from.drain(Math.min(amount, maxDrain), IFluidHandler.FluidAction.SIMULATE);
+        int filled = to.fill(drained, IFluidHandler.FluidAction.SIMULATE);
+
+        if (filled <= 0)
+            return;
+
+        drained = from.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+        to.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+    }
+
     public static Optional<IFluidHandlerItem> getItemFluidHandler(@Nonnull ItemStack stack)
     {
         if (stack.isEmpty())

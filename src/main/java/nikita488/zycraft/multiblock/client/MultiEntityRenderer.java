@@ -1,16 +1,10 @@
 package nikita488.zycraft.multiblock.client;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import nikita488.zycraft.multiblock.Cuboid6i;
 import nikita488.zycraft.multiblock.MultiBlock;
 import nikita488.zycraft.multiblock.MultiEntity;
 
@@ -28,11 +22,6 @@ public class MultiEntityRenderer extends EntityRenderer<MultiEntity>
 
         if (multiBlock != null)
             multiBlock.render(stack, buffer, lightMap, partialTicks);
-/*        FluidTank tank = new FluidTank(16000);
-        Cuboid6i cuboid = new Cuboid6i(0, 0, 0, 3, 5, 9);
-
-        tank.fill(new FluidStack(Fluids.LAVA, 1000), IFluidHandler.FluidAction.EXECUTE);
-        FluidCuboidRenderer.render(tank, cuboid, 1, stack, buffer, lightMap);*/
     }
 
     @Override

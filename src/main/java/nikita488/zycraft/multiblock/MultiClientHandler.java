@@ -24,8 +24,11 @@ import nikita488.zycraft.multiblock.tile.MultiChildTile;
 public class MultiClientHandler
 {
     private static final Direction[] VALUES = Direction.values();
+    private static final float MIN = -0.009F;
+    private static final float MAX = 1.009F;
     private static final BlockPos.Mutable prevHighlightPos = new BlockPos.Mutable();
     private static final BlockPos.Mutable adjPos = new BlockPos.Mutable();
+    private static final ObjectSet<BlockPos> highlightBlocks = new ObjectOpenHashSet<>();
     private static long highlightStartTime;
 
     @SubscribeEvent
@@ -64,8 +67,6 @@ public class MultiClientHandler
         if (strength == 0)
             return;
 
-        ObjectSet<BlockPos> highlightBlocks = new ObjectOpenHashSet<>();
-
         for (MultiBlock multiBlock : child.parentMultiBlocks())
             highlightBlocks.addAll(multiBlock.childBlocks());
 
@@ -75,64 +76,61 @@ public class MultiClientHandler
         stack.push();
         stack.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
 
-        IVertexBuilder builder = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
+        IVertexBuilder buffer = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
 
         for (BlockPos pos : highlightBlocks)
             for (Direction side : VALUES)
                 if (!highlightBlocks.contains(adjPos.setAndMove(pos, side)))
-                    fillHighlightQuad(stack, builder, pos, side, strength);
+                    fillHighlightQuad(stack, buffer, pos, side, 0.3F * strength);
 
         stack.pop();
+        highlightBlocks.clear();
     }
 
-    private static void fillHighlightQuad(MatrixStack stack, IVertexBuilder builder, BlockPos highlightPos, Direction side, float strength)
+    private static void fillHighlightQuad(MatrixStack stack, IVertexBuilder buffer, BlockPos pos, Direction side, float alpha)
     {
-        float min = -0.009F;
-        float max = 1.009F;
-        float alpha = 0.3F * strength;
-
         stack.push();
-        stack.translate(highlightPos.getX(), highlightPos.getY(), highlightPos.getZ());
+        stack.translate(pos.getX(), pos.getY(), pos.getZ());
 
         Matrix4f matrix = stack.getLast().getMatrix();
 
         switch (side)
         {
             case DOWN:
-                builder.pos(matrix, min, min, min).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, max, min, min).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, max, min, max).color(1, 1, 1, alpha).tex(1, 1).endVertex();
-                builder.pos(matrix, min, min, max).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MIN, MIN, MIN).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MAX, MIN, MIN).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MAX, MIN, MAX).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MIN, MIN, MAX).color(1, 1, 1, alpha).tex(0, 1).endVertex();
                 break;
             case UP:
-                builder.pos(matrix, max, max, min).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, min, max, min).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, min, max, max).color(1, 1, 1, alpha).tex(0, 1).endVertex();
-                builder.pos(matrix, max, max, max).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MAX, MAX, MIN).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MIN, MAX, MIN).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MIN, MAX, MAX).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MAX, MAX, MAX).color(1, 1, 1, alpha).tex(1, 1).endVertex();
                 break;
             case NORTH:
-                builder.pos(matrix, min, max, min).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, max, max, min).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, max, min, min).color(1, 1, 1, alpha).tex(0, 1).endVertex();
-                builder.pos(matrix, min, min, min).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MIN, MAX, MIN).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MAX, MAX, MIN).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MAX, MIN, MIN).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MIN, MIN, MIN).color(1, 1, 1, alpha).tex(1, 1).endVertex();
                 break;
             case SOUTH:
-                builder.pos(matrix, max, max, max).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, min, max, max).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, min, min, max).color(1, 1, 1, alpha).tex(0, 1).endVertex();
-                builder.pos(matrix, max, min, max).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MAX, MAX, MAX).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MIN, MAX, MAX).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MIN, MIN, MAX).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MAX, MIN, MAX).color(1, 1, 1, alpha).tex(1, 1).endVertex();
                 break;
             case WEST:
-                builder.pos(matrix, min, max, max).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, min, max, min).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, min, min, min).color(1, 1, 1, alpha).tex(0, 1).endVertex();
-                builder.pos(matrix, min, min, max).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MIN, MAX, MAX).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MIN, MAX, MIN).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MIN, MIN, MIN).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MIN, MIN, MAX).color(1, 1, 1, alpha).tex(1, 1).endVertex();
                 break;
             case EAST:
-                builder.pos(matrix, max, max, min).color(1, 1, 1, alpha).tex(1, 0).endVertex();
-                builder.pos(matrix, max, max, max).color(1, 1, 1, alpha).tex(0, 0).endVertex();
-                builder.pos(matrix, max, min, max).color(1, 1, 1, alpha).tex(0, 1).endVertex();
-                builder.pos(matrix, max, min, min).color(1, 1, 1, alpha).tex(1, 1).endVertex();
+                buffer.pos(matrix, MAX, MAX, MIN).color(1, 1, 1, alpha).tex(1, 0).endVertex();
+                buffer.pos(matrix, MAX, MAX, MAX).color(1, 1, 1, alpha).tex(0, 0).endVertex();
+                buffer.pos(matrix, MAX, MIN, MAX).color(1, 1, 1, alpha).tex(0, 1).endVertex();
+                buffer.pos(matrix, MAX, MIN, MIN).color(1, 1, 1, alpha).tex(1, 1).endVertex();
                 break;
         }
 

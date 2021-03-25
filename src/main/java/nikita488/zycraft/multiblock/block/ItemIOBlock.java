@@ -9,8 +9,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.multiblock.tile.ItemIOTile;
+import nikita488.zycraft.multiblock.tile.ValveTile;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -53,6 +59,13 @@ public class ItemIOBlock extends SidedInterfaceBlock
     @Override
     public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
     {
-        return 4;
+        ItemIOTile itemIO = ZYTiles.ITEM_IO.getNullable(world, pos);
+
+        if (itemIO == null)
+            return 0;
+
+        Optional<IItemHandler> capability = itemIO.getMultiCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, -1).resolve();
+        return capability.map(ItemHandlerHelper::calcRedstoneFromInventory).orElse(0);
+
     }
 }

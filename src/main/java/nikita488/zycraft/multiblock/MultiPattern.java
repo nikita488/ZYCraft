@@ -103,7 +103,7 @@ public class MultiPattern
                 {
                     int id = pattern[i][j][k];
 
-                    if (id >= 0 && !matchers[id].matches(world, checkPos.setAndOffset(cornerPos, i, j, k)))
+                    if (id >= 0 && !matchers[id].matches(world, checkPos.setAndOffset(cornerPos, i, j, k).toImmutable()))
                         return false;
                 }
             }

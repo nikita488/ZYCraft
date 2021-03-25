@@ -11,6 +11,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -22,6 +23,7 @@ import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.PacketDistributor;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.multiblock.network.AddMultiPacket;
 import nikita488.zycraft.multiblock.network.RemoveMultiPacket;
 import nikita488.zycraft.multiblock.network.UpdateMultiPacket;
@@ -53,6 +55,14 @@ public class MultiManager extends WorldSavedData
         if (world.isRemote())
             return CLIENT_INSTANCE;
         return ((ServerWorld)world).getSavedData().getOrCreate(MultiManager::new, NAME);
+    }
+
+    public static boolean tryFormMultiBlock(World world, BlockPos pos, @Nullable Direction side)
+    {
+        for (MultiType<?> type : ZYRegistries.MULTI_TYPES.get().getValues())
+            if (type.form(world, pos, side))
+                return true;
+        return false;
     }
 
     @Nullable
@@ -115,7 +125,7 @@ public class MultiManager extends WorldSavedData
         if (!multiBlock.world().isRemote && fromChunk)
             multiBlock.sendToTracking(new RemoveMultiPacket(multiBlock));
 
-        multiBlock.invalidate();
+        multiBlock.invalidate(fromChunk);
     }
 
     private void deferMultiBlock(MultiBlock multiBlock)
@@ -138,7 +148,7 @@ public class MultiManager extends WorldSavedData
         if (!multiBlock.world().isRemote)
             multiBlock.sendToTracking(new RemoveMultiPacket(multiBlock));
 
-        multiBlock.invalidate();
+        multiBlock.invalidate(false);
     }
 
     public void scheduleMultiUpdate(MultiBlock multiBlock)

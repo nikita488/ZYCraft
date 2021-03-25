@@ -1,5 +1,8 @@
 package nikita488.zycraft.multiblock;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.SetMultimap;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
@@ -23,15 +26,24 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYRegistries;
+import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.multiblock.tank.MultiFluidTank;
 import nikita488.zycraft.multiblock.tile.MultiChildTile;
+import nikita488.zycraft.multiblock.tile.ValveTile;
 import nikita488.zycraft.network.ZYChannel;
+import nikita488.zycraft.tile.ZYTile;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -59,13 +71,18 @@ public abstract class MultiBlock
         this.manager = MultiManager.getInstance(world);
     }
 
+    public AxisAlignedBB getBoundingBox()
+    {
+        return null;
+    }
+
     public void tick() {}
 
     public void render(MatrixStack stack, IRenderTypeBuffer buffer, int lightMap, float partialTicks) {}
 
     public AxisAlignedBB getRenderBoundingBox()
     {
-        return null;
+        return getBoundingBox();
     }
 
     public boolean isInRangeToRenderDist(double distance)
@@ -145,16 +162,12 @@ public abstract class MultiBlock
     {
         if (!world.isBlockPresent(pos))
         {
-            ZYCraft.LOGGER.error("THA BLOCK AT {} IS NOT LOADED FOR FACK SAKE", pos);
+            ZYCraft.LOGGER.error("THA BLOCK AT {} IS NOT LOADED", pos);
             return null;
         }
 
         TileEntity tile = world.getTileEntity(pos);
-
-        if (tile instanceof MultiChildTile)
-            return (MultiChildTile)tile;
-
-        return null;
+        return tile instanceof MultiChildTile ? (MultiChildTile)tile : null;
     }
 
     public void validate()
@@ -178,8 +191,56 @@ public abstract class MultiBlock
         this.valid = true;
     }
 
-    public void invalidate()
+    public void invalidate(boolean destroy)
     {
+        if (!world.isRemote && destroy)
+        {
+            SetMultimap<LazyOptional<IFluidHandler>, ValveTile> capabilities = HashMultimap.create();
+
+            for (BlockPos pos : childBlocks)
+            {
+                ValveTile valve = ZYTiles.VALVE.getNullable(world, pos);
+
+                if (valve == null)
+                    continue;
+
+                LazyOptional<IFluidHandler> capability = getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, valve);//we need full tank here, not just level
+
+                if (capability.isPresent())
+                    capabilities.put(capability, valve);
+            }
+
+            for (LazyOptional<IFluidHandler> capability : capabilities.keySet())
+            {
+                IFluidHandler handler = capability.orElse(EmptyFluidHandler.INSTANCE);
+
+                if (handler instanceof MultiFluidTank.Level)
+                    handler = ((MultiFluidTank.Level)handler).getTank();
+
+                if (handler.getFluidInTank(0).isEmpty())
+                    continue;
+
+                ObjectList<ValveTile> valves = new ObjectArrayList<>();
+
+                for (ValveTile valve : capabilities.get(capability))
+                    if (valve.getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, -1) == capability && valve.getStoredFluid().isEmpty())
+                        valves.add(valve);
+
+                if (valves.isEmpty())
+                    continue;
+
+                FluidStack stack = handler.getFluidInTank(0).copy();
+
+                stack.setAmount(stack.getAmount() / valves.size());
+
+                for (ValveTile valve : valves)
+                {
+                    valve.setStoredFluid(stack);
+                    valve.markDirty();
+                }
+            }
+        }
+
         this.valid = false;
 
         //TODO: Check for dead lock
@@ -259,24 +320,15 @@ public abstract class MultiBlock
     }
 
     @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull MultiChildTile child, @Nullable Direction side)
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nonnull MultiChildTile child)
     {
         return LazyOptional.empty();
-    }
-
-    @Nonnull
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull MultiChildTile child)
-    {
-        return getCapability(cap, child, null);
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
-
-        return id == ((MultiBlock)obj).id;
+        return obj == this || (obj instanceof MultiBlock && id == ((MultiBlock)obj).id);
     }
 
     @Override

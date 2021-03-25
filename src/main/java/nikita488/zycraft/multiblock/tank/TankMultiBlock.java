@@ -1,7 +1,6 @@
 package nikita488.zycraft.multiblock.tank;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -12,22 +11,20 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import nikita488.zycraft.init.ZYContainers;
@@ -35,7 +32,6 @@ import nikita488.zycraft.init.ZYMultiTypes;
 import nikita488.zycraft.multiblock.Cuboid6i;
 import nikita488.zycraft.multiblock.IterableItemHandler;
 import nikita488.zycraft.multiblock.MultiBlock;
-import nikita488.zycraft.multiblock.client.FluidCuboidRenderer;
 import nikita488.zycraft.multiblock.tile.MultiChildTile;
 import nikita488.zycraft.util.FluidUtils;
 
@@ -45,24 +41,26 @@ import java.util.Optional;
 
 public class TankMultiBlock extends MultiBlock implements IContainerProvider
 {
-    private Cuboid6i cuboid;
+    private Cuboid6i insideArea;
     private final IterableItemHandler inventory = new IterableItemHandler(2);
-    private final FluidTank fluidTank = new FluidTank(16000)
+    private final NonNullLazy<MultiFluidTank> fluidTank = NonNullLazy.of(() -> new MultiFluidTank(insideArea)
     {
         @Override
         protected void onContentsChanged()
         {
             markDirty();
             scheduleUpdate();
+            updateLight();
         }
-    };
+    });
+    private final LazyOptional<IFluidHandler> fluidCap = Util.make(LazyOptional.of(fluidTank::get), capability ->
+            capability.addListener(instance -> fluidTank.get().invalidate()));
     private final LazyOptional<IItemHandler> itemCap = LazyOptional.of(() -> inventory);
-    private final LazyOptional<IFluidHandler> fluidCap = LazyOptional.of(() -> fluidTank);
 
-    public TankMultiBlock(World world, Cuboid6i cuboid)
+    public TankMultiBlock(World world, Cuboid6i insideArea)
     {
-        this(world, new ChunkPos(cuboid.center()));
-        this.cuboid = cuboid;
+        this(world, new ChunkPos(insideArea.center()));
+        this.insideArea = insideArea;
     }
 
     public TankMultiBlock(World world, ChunkPos mainChunk)
@@ -86,7 +84,7 @@ public class TankMultiBlock extends MultiBlock implements IContainerProvider
 
         if (!containerFluid.isEmpty())
         {
-            int filled = fluidTank.fill(containerFluid, IFluidHandler.FluidAction.SIMULATE);
+            int filled = fluidTank.get().fill(containerFluid, IFluidHandler.FluidAction.SIMULATE);
             FluidStack drained;
 
             if (filled <= 0 || (drained = handler.drain(filled, IFluidHandler.FluidAction.EXECUTE)).isEmpty())
@@ -99,11 +97,11 @@ public class TankMultiBlock extends MultiBlock implements IContainerProvider
 
             inventory.extractItem(0, 1, false);
             inventory.insertItem(1, container, false);
-            fluidTank.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.get().fill(drained, IFluidHandler.FluidAction.EXECUTE);
         }
         else
         {
-            FluidStack tankFluid = fluidTank.getFluidInTank(0);
+            FluidStack tankFluid = fluidTank.get().getFluidInTank(0);
 
             if (tankFluid.isEmpty())
                 return;
@@ -116,29 +114,33 @@ public class TankMultiBlock extends MultiBlock implements IContainerProvider
 
             inventory.extractItem(0, 1, false);
             inventory.insertItem(1, container, false);
-            fluidTank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+            fluidTank.get().drain(filled, IFluidHandler.FluidAction.EXECUTE);
         }
     }
 
     @Override
-    public AxisAlignedBB getRenderBoundingBox()
+    public AxisAlignedBB getBoundingBox()
     {
-        return new AxisAlignedBB(cuboid.minX(), cuboid.minY(), cuboid.minZ(), cuboid.maxX(), cuboid.maxY(), cuboid.maxZ());
+        return new AxisAlignedBB(insideArea.minX(), insideArea.minY(), insideArea.minZ(), insideArea.maxX() + 1, insideArea.maxY() + 1, insideArea.maxZ() + 1);
     }
 
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer buffer, int lightMap, float partialTicks)
     {
         stack.push();
-        stack.translate(-cuboid.minX() + 1, -cuboid.minY() + 1, -cuboid.minZ() + 1);
-        FluidCuboidRenderer.render(fluidTank.getFluid(), fluidTank.getCapacity(), cuboid, 1, stack, buffer, lightMap);
+        stack.translate(-insideArea.minX() + 1, -insideArea.minY() + 1, -insideArea.minZ() + 1);
+        fluidTank.get().render(stack, buffer, lightMap, partialTicks);
         stack.pop();
     }
 
     @Override
-    public void invalidate()
+    public void invalidate(boolean destroy)
     {
-        super.invalidate();
+        super.invalidate(destroy);
+
+        if (!destroy)//TODO: I think we need this check to invalidate caps only when multiblock is destroyed and not unloaded
+            return;
+
         itemCap.invalidate();
         fluidCap.invalidate();
     }
@@ -146,8 +148,11 @@ public class TankMultiBlock extends MultiBlock implements IContainerProvider
     @Override
     public ActionResultType onChildInteraction(MultiChildTile child, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
+        if (child.parentMultiBlocks().size() > 1)
+            return ActionResultType.CONSUME;
+
         if (!world.isRemote)
-            ZYContainers.TANK.open((ServerPlayerEntity)player, new StringTextComponent("Multi-Tank"), this, buffer -> buffer.writeVarInt(fluidTank.getCapacity()));
+            ZYContainers.TANK.open((ServerPlayerEntity)player, new StringTextComponent("Multi-Tank"), this, buffer -> buffer.writeVarInt(fluidTank.get().getCapacity()));
 
         return ActionResultType.SUCCESS;
     }
@@ -155,66 +160,77 @@ public class TankMultiBlock extends MultiBlock implements IContainerProvider
     @Override
     public int getChildLightValue(MultiChildTile child)
     {
-        return 0;
+        return fluidTank.get().getLightValue(child.getPos());//TODO: Why light on client is 0 here?!
     }
 
     @Override
     public void initChildBlocks()
     {
-        addChildBlocks(cuboid.expand(1));
+        addChildBlocks(insideArea.expand(1));
     }
 
     @Override
     public void load(CompoundNBT tag)
     {
-        this.cuboid = Cuboid6i.load(tag.getCompound("Cuboid"));
-        fluidTank.readFromNBT(tag.getCompound("Tank"));
+        this.insideArea = Cuboid6i.load(tag.getCompound("InsideArea"));
+        fluidTank.get().readFromNBT(tag.getCompound("FluidTank"));
     }
 
     @Override
     public void save(CompoundNBT tag)
     {
-        tag.put("Cuboid", cuboid.save());
-        tag.put("Tank", fluidTank.writeToNBT(new CompoundNBT()));
+        tag.put("InsideArea", insideArea.save(new CompoundNBT()));
+        tag.put("FluidTank", fluidTank.get().writeToNBT(new CompoundNBT()));
     }
 
     @Override
     public void decode(PacketBuffer buffer)
     {
-        this.cuboid = Cuboid6i.decode(buffer);
-        fluidTank.setFluid(buffer.readFluidStack());
+        this.insideArea = Cuboid6i.decode(buffer);
+    }
+
+    @Override
+    public void decodeUpdate(PacketBuffer buffer)
+    {
+        fluidTank.get().decode(buffer);
+        updateLight();
     }
 
     @Override
     public void encode(PacketBuffer buffer)
     {
-        cuboid.encode(buffer);
-        buffer.writeFluidStack(fluidTank.getFluid());
+        insideArea.encode(buffer);
+    }
+
+    @Override
+    public void encodeUpdate(PacketBuffer buffer)
+    {
+        fluidTank.get().encode(buffer);
     }
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nonnull MultiChildTile child, @Nullable Direction side)
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nonnull MultiChildTile child)
     {
         if (!valid)
             return LazyOptional.empty();
 
-        if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+        if (type == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return fluidTank.get().getLevel(child.getPos().getY()).cast();
+        if (type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
             return itemCap.cast();
-        else if (cap == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return fluidCap.cast();
 
         return LazyOptional.empty();
+    }
+
+    public MultiFluidTank getFluidTank()
+    {
+        return fluidTank.get();
     }
 
     public IterableItemHandler getInventory()
     {
         return inventory;
-    }
-
-    public FluidTank getFluidTank()
-    {
-        return fluidTank;
     }
 
     @Nullable

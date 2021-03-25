@@ -105,10 +105,8 @@ public class Cuboid6i implements Iterable<BlockPos>
         return new Cuboid6i(tag.getInt("MinX"), tag.getInt("MinY"), tag.getInt("MinZ"), tag.getInt("MaxX"), tag.getInt("MaxY"), tag.getInt("MaxZ"));
     }
 
-    public CompoundNBT save()
+    public CompoundNBT save(CompoundNBT tag)
     {
-        CompoundNBT tag = new CompoundNBT();
-
         tag.putInt("MinX", x1);
         tag.putInt("MinY", y1);
         tag.putInt("MinZ", z1);
@@ -223,10 +221,5 @@ public class Cuboid6i implements Iterable<BlockPos>
     public Stream<BlockPos> stream()
     {
         return BlockPos.getAllInBox(x1, y1, z1, x2, y2, z2);
-    }
-
-    public boolean test(Predicate<BlockPos> predicate)
-    {
-        return stream().allMatch(predicate);
     }
 }

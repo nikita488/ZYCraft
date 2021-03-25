@@ -18,8 +18,13 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import nikita488.zycraft.multiblock.IMultiFluidSource;
 import nikita488.zycraft.multiblock.IMultiFluidVoid;
+import nikita488.zycraft.multiblock.IPressurizedFluidHandler;
+import nikita488.zycraft.multiblock.MultiBlock;
+import nikita488.zycraft.multiblock.block.ValveBlock;
 import nikita488.zycraft.multiblock.io.IOType;
+import nikita488.zycraft.multiblock.tank.MultiFluidTank;
 import nikita488.zycraft.util.BlockUtils;
+import nikita488.zycraft.util.FluidUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -27,7 +32,6 @@ import java.util.Optional;
 
 public class ValveTile extends MultiChildTile implements ITickableTileEntity
 {
-    private static final Direction[] VALUES = Direction.values();
     private IOType io = IOType.ALL_IN;
     private FluidStack storedFluid = FluidStack.EMPTY;
 
@@ -37,33 +41,63 @@ public class ValveTile extends MultiChildTile implements ITickableTileEntity
     }
 
     @Override
+    public void onMultiValidation(MultiBlock multiBlock)
+    {
+        super.onMultiValidation(multiBlock);
+
+        if (storedFluid.isEmpty())
+            return;
+
+        Optional<IFluidHandler> capability = multiBlock.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, this)
+                .filter(handler -> handler.isFluidValid(0, storedFluid));
+
+        if (!capability.isPresent())
+            return;
+
+        capability.get().fill(storedFluid, IFluidHandler.FluidAction.EXECUTE);
+        this.storedFluid = FluidStack.EMPTY;
+        markDirty();
+    }
+
+    @Override
     public void tick()
     {
         if (world.isRemote || parentMultiBlocks.isEmpty())
             return;
 
-        Optional<IFluidHandler> multiCap = getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null, -1).resolve();
+        balanceTanks();
 
-        if (!multiCap.isPresent())
+        Optional<IFluidHandler> capability = getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, -1).resolve();
+
+        if (!capability.isPresent())
             return;
 
-        IFluidHandler multiHandler = multiCap.get();
-        FluidStack containerFluid = multiHandler.getFluidInTank(0);
+        IFluidHandler handler = capability.get();
+        FluidStack containedFluid = handler.getFluidInTank(0);
 
         if (io.isOutput())
         {
-            if (containerFluid.getAmount() <= 0)
+            if (containedFluid.isEmpty())
                 return;
         }
         else
         {
-            if (multiHandler.getTankCapacity(0) - containerFluid.getAmount() <= 0)
+            if (handler.getTankCapacity(0) - containedFluid.getAmount() <= 0)
                 return;
         }
 
-        for (Direction side : VALUES)
+        BlockState valveState = getBlockState();
+
+        ValveBlock.SIDES.forEach((side, property) ->
         {
+            if (!valveState.get(property))
+                return;
+
             BlockPos adjPos = pos.offset(side);
+
+            if (!world.isBlockPresent(adjPos))
+                return;
+
             BlockState adjState = world.getBlockState(adjPos);
             Block adjBlock = adjState.getBlock();
 
@@ -74,49 +108,47 @@ public class ValveTile extends MultiChildTile implements ITickableTileEntity
                     int toDrain = ((IMultiFluidVoid)adjBlock).drain(world, pos, side);
 
                     if (toDrain > 0)
-                        multiHandler.drain(toDrain, IFluidHandler.FluidAction.EXECUTE);
+                        handler.drain(toDrain, IFluidHandler.FluidAction.EXECUTE);
                 }
                 else if (adjState.hasTileEntity())
                 {
                     TileEntity tile = world.getTileEntity(adjPos);
 
-                    if (tile == null)
-                        continue;
-
-                    Optional<IFluidHandler> capability = tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite()).resolve();
-
-                    if (!capability.isPresent())
-                        continue;
-
-                    IFluidHandler handler = capability.get();
-                    FluidStack drained = multiHandler.drain(200, IFluidHandler.FluidAction.SIMULATE);
-                    int filled = handler.fill(drained, IFluidHandler.FluidAction.SIMULATE);
-
-                    if (filled <= 0)
-                        continue;
-
-                    drained = multiHandler.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-                    handler.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+                    if (tile != null)
+                        tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())
+                                .ifPresent(adjHandler -> FluidUtils.transferFromTo(handler, adjHandler, 200));
                 }
             }
             else
             {
+                FluidStack toFill = FluidStack.EMPTY;
+                FluidState fluidState = adjState.getFluidState();
+
                 if (adjBlock instanceof IMultiFluidSource)
-                {
-                    FluidStack toFill = ((IMultiFluidSource)adjBlock).fill(world, pos, side);
+                    toFill = ((IMultiFluidSource)adjBlock).fill(world, pos, side);
+                else if (!fluidState.isEmpty() && fluidState.isSource() && fluidState.isTagged(FluidTags.WATER))
+                    toFill = new FluidStack(Fluids.WATER, 50);
 
-                    if (!toFill.isEmpty())
-                        multiHandler.fill(toFill, IFluidHandler.FluidAction.EXECUTE);
-                }
-                else
-                {
-                    FluidState fluidState = adjState.getFluidState();
-
-                    if (!fluidState.isEmpty() && fluidState.isSource() && fluidState.isTagged(FluidTags.WATER))
-                        multiHandler.fill(new FluidStack(Fluids.WATER, 50), IFluidHandler.FluidAction.EXECUTE);
-                }
+                if (!toFill.isEmpty())
+                    handler.fill(toFill, IFluidHandler.FluidAction.EXECUTE);
             }
-        }
+        });
+    }
+
+    private void balanceTanks()
+    {
+        Optional<IFluidHandler> fromCap = getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, 0)
+                .filter(handler -> handler instanceof IPressurizedFluidHandler);
+        Optional<IFluidHandler> toCap = getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, 1)
+                .filter(handler -> handler instanceof IPressurizedFluidHandler);
+
+        if (!fromCap.isPresent() || !toCap.isPresent())
+            return;
+
+        IPressurizedFluidHandler fromHandler = (IPressurizedFluidHandler)fromCap.get();
+        IPressurizedFluidHandler toHandler = (IPressurizedFluidHandler)toCap.get();
+
+        fromHandler.applyPressure(toHandler);
     }
 
     public void toggleIO()
@@ -158,16 +190,26 @@ public class ValveTile extends MultiChildTile implements ITickableTileEntity
 
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        if (!removed && capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-            return getMultiCapability(capability, side, -1);
+        if (!removed && type == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return getMultiCapability(type, -1);
 
-        return super.getCapability(capability, side);
+        return super.getCapability(type, side);
     }
 
     public IOType getIO()
     {
         return io;
+    }
+
+    public FluidStack getStoredFluid()
+    {
+        return storedFluid;
+    }
+
+    public void setStoredFluid(FluidStack fluid)
+    {
+        this.storedFluid = fluid;
     }
 }

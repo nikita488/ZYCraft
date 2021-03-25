@@ -180,7 +180,7 @@ public class BasicMachineBlock extends Block implements IMultiFluidSource, IMult
     @Override
     public FluidStack fill(World world, BlockPos pos, Direction side)
     {
-        return type == ZYType.BLUE ? new FluidStack(Fluids.WATER, 50) : FluidStack.EMPTY;
+        return type == ZYType.BLUE ? new FluidStack(Fluids.WATER, 500) : FluidStack.EMPTY;
     }
 
     @Override

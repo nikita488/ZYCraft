@@ -1,5 +1,7 @@
 package nikita488.zycraft.multiblock;
 
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
@@ -21,6 +23,11 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
     public T create(World world, ChunkPos pos)
     {
         return factory.create(world, pos);
+    }
+
+    public boolean form(World world, BlockPos pos, @Nullable Direction side)
+    {
+        return former != null && former.form(world, pos, side);
     }
 
     public boolean is(@Nullable MultiBlock multiBlock)

@@ -39,35 +39,35 @@ public class MultiChildTile extends ZYTile
         parentMultiBlocks.remove(multiBlock);
     }
 
-    public <T> LazyOptional<T> getMultiCapability(Capability<T> cap, Direction side, int index)
+    public <T> LazyOptional<T> getMultiCapability(Capability<T> type, int index)
     {
-        LazyOptional<T> multiCap = LazyOptional.empty();
-        int capIndex = 0;
+        LazyOptional<T> foundCapability = LazyOptional.empty();
+        int count = 0;
 
         for (MultiBlock multiBlock : parentMultiBlocks)
         {
-            LazyOptional<T> inst2 = multiBlock.getCapability(cap, this, side);
+            LazyOptional<T> capability = multiBlock.getCapability(type, this);
 
-            if (!inst2.isPresent())
+            if (!capability.isPresent())
                 continue;
 
             if (index < 0)
             {
-                if (multiCap.isPresent())
+                if (foundCapability.isPresent())
                     return LazyOptional.empty();
 
-                multiCap = inst2;
+                foundCapability = capability;
             }
             else
             {
-                if (capIndex == index)
-                    return multiCap;
+                if (index == count)
+                    return capability;
 
-                capIndex++;
+                count++;
             }
         }
 
-        return index < 0 ? multiCap : LazyOptional.empty();
+        return index < 0 ? foundCapability : LazyOptional.empty();
     }
 
     public boolean hasParent()

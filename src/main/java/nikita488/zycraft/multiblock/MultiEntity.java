@@ -71,7 +71,17 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     public void setPosition(double x, double y, double z)
     {
         setRawPosition(x, y, z);
-        setBoundingBox(new AxisAlignedBB(x, y, z, x + 1, y + 1, z + 1));
+
+        MultiBlock multiBlock = getMultiBlock();
+
+        if (multiBlock != null)
+            setBoundingBox(multiBlock.getBoundingBox());
+    }
+
+    @Override
+    public boolean canPassengerSteer()
+    {
+        return super.canPassengerSteer();//Needed here or otherwise it will spam motion packets, this entity is static and don't need to move at all
     }
 
     @Override

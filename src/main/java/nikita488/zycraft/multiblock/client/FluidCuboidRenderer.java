@@ -22,14 +22,28 @@ public class FluidCuboidRenderer
         render(fluidStack, capacity, cuboid, resolution, stack, buffer, WorldRenderer.getCombinedLight(Minecraft.getInstance().world, lightPos));
     }
 
+    public static void render(FluidStack fluidStack, float density, Cuboid6i cuboid, float resolution, MatrixStack stack, IRenderTypeBuffer buffer, BlockPos lightPos)
+    {
+        render(fluidStack, density, cuboid, resolution, stack, buffer, WorldRenderer.getCombinedLight(Minecraft.getInstance().world, lightPos));
+    }
+
     public static void render(FluidStack fluidStack, int capacity, Cuboid6i cuboid, float resolution, MatrixStack stack, IRenderTypeBuffer buffer, int lightMap)
     {
+        render(fluidStack, (float)fluidStack.getAmount() / capacity, cuboid, resolution, stack, buffer, lightMap);
+    }
+
+    public static void render(FluidStack fluidStack, float density, Cuboid6i cuboid, float resolution, MatrixStack stack, IRenderTypeBuffer buffer, int lightMap)
+    {
+        if (fluidStack.isEmpty())
+            return;
+
+        //TODO: Render gaseous fluids differently
         Vector3f start = new Vector3f();
-        float height = cuboid.lengthY() * (float)fluidStack.getAmount() / capacity;
+        float height = cuboid.lengthY() * density;
         FluidAttributes attributes = fluidStack.getFluid().getAttributes();
-        int color = attributes.getColor(fluidStack);
         TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(fluidStack)).getSprite();
-        lightMap = LightTexture.packLight(Math.max(LightTexture.getLightBlock(lightMap), attributes.getLuminosity(fluidStack)), LightTexture.getLightSky(lightMap));
+        int color = attributes.getColor(fluidStack);
+        lightMap = Math.max((lightMap & 0xFFFF) >> 4, attributes.getLuminosity(fluidStack)) << 4 | lightMap;
 
         for (RenderType type : RenderType.getBlockRenderTypes())
         {

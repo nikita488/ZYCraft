@@ -637,8 +637,9 @@ public class ZYBlocks
                             .setSuffocates(DefaultMultiChildBlock::suffocates)
                             .setBlocksVision(DefaultMultiChildBlock::blocksVision)
                             .setEmmisiveRendering(DefaultMultiChildBlock::emissiveRendering))
-                    .properties(properties -> type.isGlass() ? properties.notSolid() : properties)
                     .properties(properties -> type.isAir() ? properties.doesNotBlockMovement().setAir() : properties)
+                    .properties(properties -> type.isGlass() ? properties.notSolid() : properties)
+                    .properties(properties -> type == MultiChildType.HARD ? properties.setRequiresTool() : properties)
                     .color(() -> ZYColors::defaultMultiChildColor)
                     .lang("")
                     .blockstate((ctx, provider) ->

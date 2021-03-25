@@ -6,6 +6,8 @@ import net.minecraft.world.World;
 import nikita488.zycraft.multiblock.*;
 import nikita488.zycraft.multiblock.child.MultiChildMatcher;
 
+import javax.annotation.Nullable;
+
 public class TankFormer implements IMultiFormer
 {
     public static final TankFormer INSTANCE = new TankFormer();
@@ -14,40 +16,39 @@ public class TankFormer implements IMultiFormer
     private static final MultiChildMatcher HARD = MultiChildMatcher.of(MultiChildType.HARD);
 
     @Override
-    public boolean form(World world, BlockPos pos)
+    public boolean form(World world, BlockPos pos, @Nullable Direction side)
     {
-        for (Direction side : VALUES)
-        {
-            BlockPos adjPos = pos.offset(side);
+        if (side == null)
+            return false;
 
-            if (!world.isAirBlock(adjPos))
-                continue;
+        Direction oppositeSide = side.getOpposite();
+        BlockPos adjPos = pos.offset(oppositeSide);
 
-            Cuboid6i cuboid = new Cuboid6i(adjPos);
+        if (!world.isAirBlock(adjPos))
+            return false;
 
-            for (Direction expandSide : VALUES)
-                if (expandSide != side.getOpposite())
-                    while (cuboid.length(expandSide.getAxis()) < 10 && isAir(world, cuboid.expand(expandSide).side(expandSide)))
-                        cuboid = cuboid.expand(expandSide);
+        Cuboid6i cuboid = new Cuboid6i(adjPos);
 
-            BlockPos cornerPos = cuboid.min().add(-1, -1, -1);
-            MultiPattern pattern = new MultiPattern(cuboid.lengthX() + 2, cuboid.lengthY() + 2, cuboid.lengthZ() + 2, new IMultiChildMatcher[]{HARD, FACE});
+        for (Direction expandSide : VALUES)
+            if (expandSide != side)
+                while (cuboid.length(expandSide.getAxis()) < 10 && isAir(world, cuboid.expand(expandSide).side(expandSide)))
+                    cuboid = cuboid.expand(expandSide);
 
-            pattern.setFrameMatcher(0, 0, 0, pattern.width() - 1, pattern.height() - 1, pattern.depth() - 1, 0);
-            pattern.setFacesMatcher(0, 0, 0, pattern.width() - 1, pattern.height() - 1, pattern.depth() - 1, 1);
-            pattern.setCuboidMatcher(1, 1, 1, pattern.width() - 2, pattern.height() - 2, pattern.depth() - 2, -1);
+        BlockPos cornerPos = cuboid.min().add(-1, -1, -1);
+        MultiPattern pattern = new MultiPattern(cuboid.lengthX() + 2, cuboid.lengthY() + 2, cuboid.lengthZ() + 2, new IMultiChildMatcher[]{HARD, FACE});
 
-            if (!pattern.matches(world, cornerPos))
-                continue;
+        pattern.setFrameMatcher(0, 0, 0, pattern.width() - 1, pattern.height() - 1, pattern.depth() - 1, 0);
+        pattern.setFacesMatcher(0, 0, 0, pattern.width() - 1, pattern.height() - 1, pattern.depth() - 1, 1);
+        pattern.setCuboidMatcher(1, 1, 1, pattern.width() - 2, pattern.height() - 2, pattern.depth() - 2, -1);
 
-            TankMultiBlock tank = new TankMultiBlock(world, cuboid);
+        if (!pattern.matches(world, cornerPos))
+            return false;
 
-            pattern.addChildBlocks(tank, cornerPos);
-            tank.create();
-            return true;
-        }
+        TankMultiBlock tank = new TankMultiBlock(world, cuboid);
 
-        return false;
+        pattern.addChildBlocks(tank, cornerPos);
+        tank.create();
+        return true;
     }
 
     private boolean isAir(World world, Cuboid6i cuboid)
