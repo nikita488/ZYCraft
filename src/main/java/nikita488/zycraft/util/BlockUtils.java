@@ -16,21 +16,13 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class BlockUtils
 {
-    public static void scheduleTileUpdate(World world, BlockPos pos, BlockState state)
+    public static void sendBlockUpdated(World world, BlockPos pos, BlockState state)
     {
-        if (world.isClientSide) return;
-        world.sendBlockUpdated(pos, state, state, 0);
+        sendBlockUpdated(world, pos, state, false);
     }
 
-    public static void scheduleRenderUpdate(World world, BlockPos pos)
+    public static void sendBlockUpdated(World world, BlockPos pos, BlockState state, boolean mainThread)
     {
-        scheduleRenderUpdate(world, pos, false);
-    }
-
-    public static void scheduleRenderUpdate(World world, BlockPos pos, boolean mainThread)
-    {
-        if (!world.isClientSide) return;
-        BlockState state = Blocks.AIR.defaultBlockState();
         world.sendBlockUpdated(pos, state, state, mainThread ? Constants.BlockFlags.RERENDER_MAIN_THREAD : 0);
     }
 

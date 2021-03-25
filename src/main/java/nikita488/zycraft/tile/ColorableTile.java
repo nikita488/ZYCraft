@@ -24,7 +24,7 @@ public class ColorableTile extends ZYTile
     public void setRGB(int rgb)
     {
         color.set(rgb, 255);
-        BlockUtils.scheduleTileUpdate(level, worldPosition, getBlockState());
+        BlockUtils.sendBlockUpdated(level, worldPosition, getBlockState());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class ColorableTile extends ZYTile
     public void decodeUpdate(CompoundNBT tag)
     {
         color = Color4b.loadRGB(tag);
-        BlockUtils.scheduleRenderUpdate(level, worldPosition);
+        BlockUtils.sendBlockUpdated(level, worldPosition, getBlockState());
     }
 
     @Override
