@@ -1,12 +1,7 @@
 package nikita488.zycraft.item;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.block.ColorableBlock;
-import nikita488.zycraft.init.ZYLang;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,12 +12,15 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.api.colorable.IColorChanger;
+import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.util.ItemStackUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.item.Item.Properties;
 
 public class ColorScannerItem extends Item implements IColorChanger
 {

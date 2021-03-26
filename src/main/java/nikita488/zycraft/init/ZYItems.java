@@ -1,18 +1,13 @@
 package nikita488.zycraft.init;
 
-import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import nikita488.zycraft.ZYCraft;
@@ -22,16 +17,17 @@ import nikita488.zycraft.item.*;
 
 import java.util.Map;
 
+import static nikita488.zycraft.util.RegistrateUtils.zyBase;
+
 public class ZYItems
 {
     private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.ITEMS, "ZYCraft Items");
 
-    public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyItem(type ->
-            REGISTRATE.item("{type}_zychorium".replace("{type}", type.getSerializedName()), properties -> new ZychoriumItem(type, properties))
-                    .color(() -> () -> (stack, tintIndex) -> type.rgb())
-                    .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("item/zychorium")))
-                    .tag(ZYTags.Items.ZYCHORIUM)
-                    .register());
+    public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyBase("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
+            .color(() -> () -> (stack, tintIndex) -> type.rgb())
+            .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("item/zychorium")))
+            .tag(ZYTags.Items.ZYCHORIUM)
+            .register());
 
     public static final ItemEntry<Item> ALUMINIUM = REGISTRATE.item("aluminium", Item::new).register();
 
@@ -106,16 +102,6 @@ public class ZYItems
                     .unlockedBy("has_aluminium", RegistrateRecipeProvider.hasItem(ALUMINIUM.get()))
                     .save(provider))
             .register();
-
-    public static <T extends Item> ImmutableMap<ZYType, ItemEntry<T>> zyItem(NonNullFunction<ZYType, ItemEntry<T>> factory)
-    {
-        ImmutableMap.Builder<ZYType, ItemEntry<T>> items = ImmutableMap.builder();
-
-        for (ZYType type : ZYType.VALUES)
-            items.put(type, factory.apply(type));
-
-        return items.build();
-    }
 
     public static void init() {}
 }

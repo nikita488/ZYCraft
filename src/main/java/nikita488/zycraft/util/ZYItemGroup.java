@@ -1,11 +1,11 @@
 package nikita488.zycraft.util;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.ZYCraft;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.ZYCraft;
 
 import java.util.function.Supplier;
 

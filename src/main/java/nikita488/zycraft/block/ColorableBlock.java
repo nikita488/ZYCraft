@@ -1,17 +1,9 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.enums.ZYDyeColor;
-import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.tile.ColorableTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,13 +12,19 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.api.colorable.IColorChanger;
+import nikita488.zycraft.enums.ZYDyeColor;
+import nikita488.zycraft.init.ZYLang;
+import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.tile.ColorableTile;
 
 import javax.annotation.Nullable;
 import java.util.List;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class ColorableBlock extends Block
 {

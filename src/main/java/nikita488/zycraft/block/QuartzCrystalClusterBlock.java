@@ -1,10 +1,5 @@
 package nikita488.zycraft.block;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.init.ZYDamageSources;
-import nikita488.zycraft.util.ParticleSpawn;
-import nikita488.zycraft.block.shape.ClusterShapes;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,10 +18,13 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.block.shape.ClusterShapes;
+import nikita488.zycraft.init.ZYDamageSources;
+import nikita488.zycraft.util.ParticleSpawn;
 
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class QuartzCrystalClusterBlock extends Block
 {

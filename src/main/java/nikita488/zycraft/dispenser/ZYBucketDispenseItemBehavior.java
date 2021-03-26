@@ -16,8 +16,6 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import nikita488.zycraft.init.ZYItems;
-import nikita488.zycraft.item.ZYBucketItem;
 import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;

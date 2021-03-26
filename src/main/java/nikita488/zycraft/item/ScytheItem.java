@@ -17,8 +17,6 @@ import nikita488.zycraft.util.BlockUtils;
 import java.util.Collections;
 import java.util.Set;
 
-import net.minecraft.item.Item.Properties;
-
 public class ScytheItem extends ToolItem
 {
     private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);

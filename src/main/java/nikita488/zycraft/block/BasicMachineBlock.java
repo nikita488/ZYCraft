@@ -31,8 +31,6 @@ import nikita488.zycraft.util.FluidUtils;
 import java.util.Optional;
 import java.util.Random;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class BasicMachineBlock extends Block
 {
     private final ZYType type;
@@ -75,7 +73,7 @@ public class BasicMachineBlock extends Block
         player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
         player.playSound(water.getFluid().getAttributes().getFillSound(), 1.0F, 1.0F);
 
-        if (world.isClientSide)
+        if (world.isClientSide())
             return ActionResultType.SUCCESS;
 
         handler.fill(water, IFluidHandler.FluidAction.EXECUTE);

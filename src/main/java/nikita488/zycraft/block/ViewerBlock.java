@@ -1,18 +1,16 @@
 package nikita488.zycraft.block;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.enums.ViewerType;
-import nikita488.zycraft.util.ParticleSpawn;
 import net.minecraft.block.AbstractGlassBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.enums.ViewerType;
+import nikita488.zycraft.util.ParticleSpawn;
 
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
 
 public class ViewerBlock extends AbstractGlassBlock
 {

@@ -1,7 +1,6 @@
 package nikita488.zycraft.util;
 
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -38,7 +37,7 @@ public class BlockUtils
 
     public static boolean tryHarvestBlock(PlayerEntity player,  BlockState state, BlockPos pos)
     {
-        return !player.level.isClientSide && tryHarvestBlock(((ServerPlayerEntity)player).gameMode, state, pos);
+        return !player.level.isClientSide() && tryHarvestBlock(((ServerPlayerEntity)player).gameMode, state, pos);
     }
 
     public static boolean tryHarvestBlock(PlayerInteractionManager manager, BlockState state, BlockPos pos)

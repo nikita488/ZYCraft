@@ -15,8 +15,6 @@ import nikita488.zycraft.util.ParticleSpawn;
 
 import java.util.Random;
 
-import net.minecraft.block.AbstractBlock.Properties;
-
 public class ImmortalViewerBlock extends ColorableBlock
 {
     protected final ViewerType type;
@@ -31,14 +29,14 @@ public class ImmortalViewerBlock extends ColorableBlock
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
-        if (type == ViewerType.GLOWING_IMMORTAL)
+        if (type == ViewerType.GLOWING)
             ParticleSpawn.glowingColorableBlock(state, world, pos, rand);
     }
 
     @Override
     public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return type == ViewerType.DARK_IMMORTAL ? 15 : super.getLightBlock(state, world, pos);
+        return type == ViewerType.DARK ? 15 : super.getLightBlock(state, world, pos);
     }
 
     @Override

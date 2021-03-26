@@ -28,8 +28,6 @@ import nikita488.zycraft.init.ZYGroups;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import net.minecraft.item.Item.Properties;
-
 public class ZYFluidContainerItem extends Item
 {
     protected final int capacity, filledStackSize;

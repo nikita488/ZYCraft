@@ -15,8 +15,6 @@ import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.util.Color4b;
 
-import net.minecraft.item.Item.Properties;
-
 public class ZychoriumItem extends Item implements IColorChanger
 {
     private final ZYType type;

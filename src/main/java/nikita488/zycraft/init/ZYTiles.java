@@ -12,12 +12,12 @@ public class ZYTiles
                     ZYBlocks.INVERTED_ZYCHORIUM_LAMP,
                     ZYBlocks.IMMORTAL_BLOCK,
                     ZYBlocks.THE_AUREY_BLOCK,
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.IMMORTAL),
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.GLOWING_IMMORTAL),
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.DARK_IMMORTAL),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.IMMORTAL),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.GLOWING_IMMORTAL),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.DARK_IMMORTAL))
+                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.BASIC),
+                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.GLOWING),
+                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.DARK),
+                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.BASIC),
+                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.GLOWING),
+                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.DARK))
             .register();
 
     public static void init() {}

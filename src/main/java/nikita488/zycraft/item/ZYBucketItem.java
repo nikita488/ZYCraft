@@ -28,8 +28,6 @@ import nikita488.zycraft.util.FluidUtils;
 
 import java.util.Optional;
 
-import net.minecraft.item.Item.Properties;
-
 public class ZYBucketItem extends ZYFluidContainerItem
 {
     public ZYBucketItem(Properties properties)

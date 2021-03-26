@@ -1,7 +1,6 @@
 package nikita488.zycraft;
 
 import com.tterrag.registrate.Registrate;
-import com.tterrag.registrate.util.NonNullLazyValue;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.NonNullLazy;
