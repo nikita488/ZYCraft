@@ -6,6 +6,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
+import nikita488.zycraft.util.BlockUtils;
 
 import javax.annotation.Nullable;
 
@@ -14,6 +15,11 @@ public class ZYTile extends TileEntity
     public ZYTile(TileEntityType<?> type)
     {
         super(type);
+    }
+
+    public void sendUpdated()
+    {
+        BlockUtils.sendBlockUpdated(world, pos, getBlockState());
     }
 
     public void decode(CompoundNBT tag) {}
@@ -50,12 +56,12 @@ public class ZYTile extends TileEntity
     {
         CompoundNBT tag = new CompoundNBT();
         encodeUpdate(tag);
-        return new SUpdateTileEntityPacket(worldPosition, 0, tag);
+        return new SUpdateTileEntityPacket(pos, 0, tag);
     }
 
     @Override
     public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet)
     {
-        decodeUpdate(packet.getTag());
+        decodeUpdate(packet.getNbtCompound());
     }
 }

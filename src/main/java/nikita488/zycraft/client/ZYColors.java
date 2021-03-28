@@ -4,9 +4,8 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fluids.FluidUtil;
-import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.tile.ColorableTile;
 import nikita488.zycraft.util.ItemStackUtils;
 
 public class ZYColors
@@ -26,7 +25,7 @@ public class ZYColors
         if (tintIndex == 0)
             return type.rgb();
         if (tintIndex == 1 && coloredOverlay)
-            return type.darkRGB();
+            return type.overlayRGB();
         return 0xFFFFFF;
     }
 
@@ -34,15 +33,11 @@ public class ZYColors
     {
         return (state, world, pos, tintIndex) ->
         {
-            if (!(state.getBlock() instanceof ColorableBlock) && world == null || pos == null)
+            if (world == null || pos == null)
                 return 0xFFFFFF;
 
-            TileEntity tile = world.getBlockEntity(pos);
-
-            if (!(tile instanceof ColorableTile))
-                return 0xFFFFFF;
-
-            return ((ColorableBlock)state.getBlock()).getColor(state, (ColorableTile)tile, tintIndex);
+            TileEntity tile = world.getTileEntity(pos);
+            return tile instanceof IColorable ? ((IColorable)tile).getColor(state, world, pos, tintIndex) : 0xFFFFFF;
         };
     }
 

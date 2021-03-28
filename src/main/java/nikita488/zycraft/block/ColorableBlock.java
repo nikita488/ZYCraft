@@ -18,10 +18,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorChanger;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ZYDyeColor;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.tile.ColorableTile;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -48,7 +48,7 @@ public class ColorableBlock extends Block
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
@@ -66,40 +66,38 @@ public class ColorableBlock extends Block
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getItemInHand(hand);
+        ItemStack stack = player.getHeldItem(hand);
+
         if (stack.isEmpty())
             return ActionResultType.PASS;
 
         Item item = stack.getItem();
-        TileEntity tile = world.getBlockEntity(pos);
-        if (!(tile instanceof ColorableTile))
+        TileEntity tile = world.getTileEntity(pos);
+
+        if (!(tile instanceof IColorable))
             return ActionResultType.CONSUME;
 
-        ColorableTile colorable = (ColorableTile)tile;
+        IColorable colorable = (IColorable)tile;
+        int rgb = colorable.getColor(state, world, pos);
         ZYDyeColor dyeColor;
 
-        if (item instanceof IColorChanger && ((IColorChanger)item).canChangeColor(state, world, pos, player, hand, hit, colorable.rgb()))
+        if (item instanceof IColorChanger && ((IColorChanger)item).canChangeColor(state, world, pos, player, hand, hit, rgb))
         {
-            if (!world.isClientSide)
-                colorable.setRGB(((IColorChanger)item).changeColor(state, world, pos, player, hand, hit, colorable.rgb()));
+            if (!world.isRemote())
+                colorable.setColor(state, world, pos, ((IColorChanger)item).changeColor(state, world, pos, player, hand, hit, rgb));
             return ActionResultType.SUCCESS;
         }
-        else if ((dyeColor = ZYDyeColor.byDyeColor(stack)) != null && colorable.rgb() != dyeColor.rgb())
+        else if ((dyeColor = ZYDyeColor.byDyeColor(stack)) != null && rgb != dyeColor.rgb())
         {
-            if (world.isClientSide)
+            if (world.isRemote())
                 return ActionResultType.SUCCESS;
 
-            colorable.setRGB(dyeColor.rgb());
+            colorable.setColor(state, world, pos, dyeColor.rgb());
             return ActionResultType.SUCCESS;
         }
 
         return ActionResultType.PASS;
-    }
-
-    public int getColor(BlockState state, ColorableTile colorable, int tintIndex)
-    {
-        return colorable.rgb();
     }
 }

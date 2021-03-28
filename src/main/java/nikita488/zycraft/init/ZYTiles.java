@@ -1,15 +1,18 @@
 package nikita488.zycraft.init;
 
+import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.util.entry.TileEntityEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.tile.ColorableTile;
+import nikita488.zycraft.tile.ZychoriumLampTile;
 
 public class ZYTiles
 {
-    public static final TileEntityEntry<ColorableTile> COLORABLE = ZYCraft.registrate().<ColorableTile>tileEntity("colorable", ColorableTile::new)
-            .validBlocks(ZYBlocks.ZYCHORIUM_LAMP,
-                    ZYBlocks.INVERTED_ZYCHORIUM_LAMP,
+    private static final Registrate REGISTRATE = ZYCraft.registrate();
+
+    public static final TileEntityEntry<ColorableTile> COLORABLE = REGISTRATE.<ColorableTile>tileEntity("colorable", ColorableTile::new)
+            .validBlocks(
                     ZYBlocks.IMMORTAL_BLOCK,
                     ZYBlocks.THE_AUREY_BLOCK,
                     ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.BASIC),
@@ -18,6 +21,10 @@ public class ZYTiles
                     ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.BASIC),
                     ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.GLOWING),
                     ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.DARK))
+            .register();
+
+    public static final TileEntityEntry<ZychoriumLampTile> ZYCHORIUM_LAMP = REGISTRATE.tileEntity("zychorium_lamp", ZychoriumLampTile::new)
+            .validBlocks(ZYBlocks.ZYCHORIUM_LAMP, ZYBlocks.INVERTED_ZYCHORIUM_LAMP)
             .register();
 
     public static void init() {}

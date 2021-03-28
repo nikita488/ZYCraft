@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.util.ItemStackUtils;
 
@@ -31,7 +31,7 @@ public class ColorScannerItem extends Item implements IColorChanger
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
@@ -54,13 +54,13 @@ public class ColorScannerItem extends Item implements IColorChanger
     @Override
     public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        return color != ItemStackUtils.getInt(player.getItemInHand(hand), "Color", 0xFFFFFF);
+        return color != ItemStackUtils.getInt(player.getHeldItem(hand), "Color", 0xFFFFFF);
     }
 
     @Override
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
     {
-        ItemStack stack = player.getItemInHand(hand);
+        ItemStack stack = player.getHeldItem(hand);
 
         if (!player.isCrouching())
             return ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
@@ -73,6 +73,6 @@ public class ColorScannerItem extends Item implements IColorChanger
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
     {
-        return world.getBlockState(pos).getBlock() instanceof ColorableBlock;
+        return world.getTileEntity(pos) instanceof IColorable;
     }
 }

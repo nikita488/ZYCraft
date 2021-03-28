@@ -3,12 +3,14 @@ package nikita488.zycraft.tile;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
-import nikita488.zycraft.util.BlockUtils;
-import nikita488.zycraft.util.Color4b;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockDisplayReader;
+import nikita488.zycraft.api.colorable.IColorable;
+import nikita488.zycraft.util.Color;
 
-public class ColorableTile extends ZYTile
+public class ColorableTile extends ZYTile implements IColorable
 {
-    protected Color4b color;
+    protected Color color;
 
     public ColorableTile(TileEntityType<? extends ColorableTile> type)
     {
@@ -18,56 +20,63 @@ public class ColorableTile extends ZYTile
     public ColorableTile(TileEntityType<? extends ColorableTile> type, int defaultColor)
     {
         super(type);
-        color = Color4b.from(defaultColor, 255);
-    }
-
-    public void setRGB(int rgb)
-    {
-        color.set(rgb, 255);
-        BlockUtils.sendBlockUpdated(level, worldPosition, getBlockState());
+        this.color = Color.fromRGB(defaultColor);
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag)
+    public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos)
     {
-        super.load(state, tag);
-        color = Color4b.loadRGB(tag);
+        return color.rgb();
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb)
     {
-        super.save(tag);
-        color.saveRGB(tag);
+        this.color = Color.fromRGB(rgb);
+        sendUpdated();
+    }
+
+    @Override
+    public void read(BlockState state, CompoundNBT tag)
+    {
+        super.read(state, tag);
+        this.color = Color.load(tag);
+    }
+
+    @Override
+    public CompoundNBT write(CompoundNBT tag)
+    {
+        super.write(tag);
+        color.save(tag);
         return tag;
     }
 
     @Override
     public void decode(CompoundNBT tag)
     {
-        color = Color4b.loadRGB(tag);
+        this.color = Color.load(tag);
     }
 
     @Override
     public void decodeUpdate(CompoundNBT tag)
     {
-        color = Color4b.loadRGB(tag);
-        BlockUtils.sendBlockUpdated(level, worldPosition, getBlockState());
+        super.decodeUpdate(tag);
+        sendUpdated();
     }
 
     @Override
     public void encode(CompoundNBT tag)
     {
-        color.saveRGB(tag);
+        color.save(tag);
     }
 
     @Override
     public void encodeUpdate(CompoundNBT tag)
     {
-        color.saveRGB(tag);
+        color.save(tag);
     }
 
-    public Color4b color()
+    public Color color()
     {
         return color;
     }

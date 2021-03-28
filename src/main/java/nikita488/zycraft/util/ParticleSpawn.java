@@ -5,9 +5,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import nikita488.zycraft.particle.SparkleParticleData;
-import nikita488.zycraft.tile.ColorableTile;
 
 import java.util.Random;
 
@@ -22,9 +22,9 @@ public class ParticleSpawn
 
     public static void glowingColorableBlock(BlockState state, World world, BlockPos pos, Random rand)
     {
-        TileEntity tile = world.getBlockEntity(pos);
-        if (tile instanceof ColorableTile)
-            glowingBlock(state, world, pos, rand, Color4b.rgba(((ColorableTile)tile).rgb(), 192));
+        TileEntity tile = world.getTileEntity(pos);
+        if (tile instanceof IColorable)
+            glowingBlock(state, world, pos, rand, Color.rgba(((IColorable)tile).getColor(state, world, pos), 192));
     }
 
     public static void glowingBlock(BlockState state, World world, BlockPos pos, Random rand, int rgba)
@@ -44,15 +44,15 @@ public class ParticleSpawn
             if (rand.nextFloat() > 0.15F)
                 continue;
 
-            BlockPos adjPos = pos.relative(dir);
+            BlockPos adjPos = pos.offset(dir);
             BlockState adjState = world.getBlockState(adjPos);
-            if (state == adjState || adjState.isCollisionShapeFullBlock(world, adjPos))
+            if (state == adjState || adjState.hasOpaqueCollisionShape(world, adjPos))
                 continue;
 
             Direction.Axis axis = dir.getAxis();
-            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * dir.getStepX() : rand.nextFloat();
-            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * dir.getStepY() : rand.nextFloat();
-            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * dir.getStepZ() : rand.nextFloat();
+            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * dir.getXOffset() : rand.nextFloat();
+            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * dir.getYOffset() : rand.nextFloat();
+            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * dir.getZOffset() : rand.nextFloat();
 
             world.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0, 0, 0);
         }
@@ -70,7 +70,7 @@ public class ParticleSpawn
 
         float size = 6 / 16F;
         float height = 11 / 16F;
-        Direction dir = state.getValue(QuartzCrystalClusterBlock.FACING);
+        Direction dir = state.get(QuartzCrystalClusterBlock.FACING);
         double xOffset = getOffset(rand, dir, Direction.Axis.X, size, height);
         double yOffset = getOffset(rand, dir, Direction.Axis.Y, size, height);
         double zOffset = getOffset(rand, dir, Direction.Axis.Z, size, height);

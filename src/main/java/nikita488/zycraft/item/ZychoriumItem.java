@@ -8,12 +8,13 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import nikita488.zycraft.api.colorable.IColorChanger;
-import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.util.Color4b;
+import nikita488.zycraft.util.Color;
 
 public class ZychoriumItem extends Item implements IColorChanger
 {
@@ -26,27 +27,26 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
+    public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
     {
-        Color4b rgba = Color4b.from(color, 255);
+        int red = (rgb >> 16) & 255;
+        int green = (rgb >> 8) & 255;
+        int blue = rgb & 255;
         boolean sneaking = player.isCrouching();
 
         switch (type)
         {
             case RED:
-                return canChangeComponent(rgba.r(), sneaking);
+                return canChangeComponent(red, sneaking);
             case GREEN:
-                return canChangeComponent(rgba.g(), sneaking);
+                return canChangeComponent(green, sneaking);
             case BLUE:
-                return canChangeComponent(rgba.b(), sneaking);
+                return canChangeComponent(blue, sneaking);
             case DARK:
-                float[] hsb = new float[3];
-                Color4b.RGBtoHSB(rgba.r(), rgba.g(), rgba.b(), hsb);
-
-                float brightness = hsb[2];
-                return sneaking ? brightness > 0.0F : brightness < 1.0F;
+                float brightness = Color.rgbToHSV(red, green, blue).getZ();
+                return sneaking ? brightness > 0 : brightness < 1;
             case LIGHT:
-                return sneaking ? color != 0x080808 : color != 0xFFFFFF;
+                return sneaking ? rgb != 0x080808 : rgb != 0xFFFFFF;
         }
 
         return false;
@@ -58,58 +58,39 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
+    public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
     {
-        Color4b rgba = Color4b.from(color, 255);
+        int rgba = Color.rgba(rgb, 255);
         boolean sneaking = player.isCrouching();
 
         switch (type)
         {
             case RED:
-                if (!sneaking)
-                    rgba.add(8, 0, 0, 0);
-                else
-                    rgba.subtract(8, 0, 0, 0);
-                break;
+                return Color.rgb(sneaking ? Color.subtract(rgba, 0x08000000) : Color.add(rgba, 0x08000000));
             case GREEN:
-                if (!sneaking)
-                    rgba.add(0, 8, 0, 0);
-                else
-                    rgba.subtract(0, 8, 0, 0);
-                break;
+                return Color.rgb(sneaking ? Color.subtract(rgba, 0x00080000) : Color.add(rgba, 0x00080000));
             case BLUE:
-                if (!sneaking)
-                    rgba.add(0, 0, 8, 0);
-                else
-                    rgba.subtract(0, 0, 8, 0);
-                break;
+                return Color.rgb(sneaking ? Color.subtract(rgba, 0x00000800) : Color.add(rgba, 0x00000800));
             case DARK:
-                float[] hsb = new float[3];
-                Color4b.RGBtoHSB(rgba.r(), rgba.g(), rgba.b(), hsb);
-
-                float brightness = hsb[2];
+                Vector3f hsv = Color.rgbToHSV((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
+                float brightness = hsv.getZ();
 
                 if (!sneaking)
-                    brightness += 0.03125F;
+                    brightness += (8 / 255.0F);
                 else
-                    brightness -= 0.03125F;
+                    brightness -= (8 / 255.0F);
 
-                rgba.set(Color4b.HSBtoRGB(hsb[0], hsb[1], MathHelper.clamp(brightness, 0.0F, 1.0F)), 255);
-                break;
+                return Color.hsvToRGB(hsv.getX(), hsv.getY(), MathHelper.clamp(brightness, 0, 1));
             case LIGHT:
-                if (!sneaking)
-                    rgba.set(0xFFFFFF, 255);
-                else
-                    rgba.set(0x080808, 255);
-                break;
+                return sneaking ? 0x080808 : 0xFFFFFF;
         }
 
-        return rgba.rgb();
+        return rgb;
     }
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
     {
-        return world.getBlockState(pos).getBlock() instanceof ColorableBlock;
+        return world.getTileEntity(pos) instanceof IColorable;
     }
 }
