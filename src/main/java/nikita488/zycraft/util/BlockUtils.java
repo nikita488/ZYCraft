@@ -20,9 +20,9 @@ public class BlockUtils
         sendBlockUpdated(world, pos, state, false);
     }
 
-    public static void sendBlockUpdated(World world, BlockPos pos, BlockState state, boolean mainThread)
+    public static void sendBlockUpdated(World world, BlockPos pos, BlockState state, boolean playerChanged)
     {
-        world.sendBlockUpdated(pos, state, state, mainThread ? Constants.BlockFlags.RERENDER_MAIN_THREAD : 0);
+        world.notifyBlockUpdate(pos, state, state, playerChanged ? Constants.BlockFlags.RERENDER_MAIN_THREAD : 0);
     }
 
     private static boolean removeBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean canHarvest)
@@ -30,23 +30,23 @@ public class BlockUtils
         boolean removed = state.removedByPlayer(world, pos, player, canHarvest, world.getFluidState(pos));
 
         if (removed)
-            state.getBlock().destroy(world, pos, state);
+            state.getBlock().onPlayerDestroy(world, pos, state);
 
         return removed;
     }
 
     public static boolean tryHarvestBlock(PlayerEntity player,  BlockState state, BlockPos pos)
     {
-        return !player.level.isClientSide() && tryHarvestBlock(((ServerPlayerEntity)player).gameMode, state, pos);
+        return !player.world.isRemote() && tryHarvestBlock(((ServerPlayerEntity)player).interactionManager, state, pos);
     }
 
     public static boolean tryHarvestBlock(PlayerInteractionManager manager, BlockState state, BlockPos pos)
     {
-        ServerWorld world = manager.level;
+        ServerWorld world = manager.world;
         ServerPlayerEntity player = manager.player;
-        int experience = ForgeHooks.onBlockBreakEvent(world, manager.getGameModeForPlayer(), player, pos);
+        int experience = ForgeHooks.onBlockBreakEvent(world, manager.getGameType(), player, pos);
 
-        if (experience == -1 || player.getMainHandItem().onBlockStartBreak(pos, player) || player.blockActionRestricted(world, pos, manager.getGameModeForPlayer()))
+        if (experience == -1 || player.getHeldItemMainhand().onBlockStartBreak(pos, player) || player.blockActionRestricted(world, pos, manager.getGameType()))
             return false;
 
         if (manager.isCreative())
@@ -55,7 +55,7 @@ public class BlockUtils
             return true;
         }
 
-        ItemStack heldStack = player.getMainHandItem();
+        ItemStack heldStack = player.getHeldItemMainhand();
         ItemStack heldStackCopy = heldStack.copy();
         boolean canHarvest = state.canHarvestBlock(world, pos, player);
 
@@ -65,10 +65,10 @@ public class BlockUtils
         boolean removed = removeBlock(state, world, pos, player, canHarvest);
 
         if (removed && canHarvest)
-            state.getBlock().playerDestroy(world, player, pos, state, state.hasTileEntity() ? world.getBlockEntity(pos) : null, heldStackCopy);
+            state.getBlock().harvestBlock(world, player, pos, state, state.hasTileEntity() ? world.getTileEntity(pos) : null, heldStackCopy);
 
         if (removed && experience > 0)
-            state.getBlock().popExperience(world, pos, experience);
+            state.getBlock().dropXpOnBlockBreak(world, pos, experience);
 
         return true;
     }

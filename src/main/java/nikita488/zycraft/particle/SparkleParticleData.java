@@ -24,7 +24,7 @@ public class SparkleParticleData implements IParticleData
     public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
     {
         @Override
-        public SparkleParticleData fromCommand(ParticleType<SparkleParticleData> type, StringReader reader) throws CommandSyntaxException
+        public SparkleParticleData deserialize(ParticleType<SparkleParticleData> type, StringReader reader) throws CommandSyntaxException
         {
             reader.expect(' ');
             int color = reader.readInt();
@@ -44,7 +44,7 @@ public class SparkleParticleData implements IParticleData
         }
 
         @Override
-        public SparkleParticleData fromNetwork(ParticleType<SparkleParticleData> type, PacketBuffer buffer)
+        public SparkleParticleData read(ParticleType<SparkleParticleData> type, PacketBuffer buffer)
         {
             return new SparkleParticleData(buffer.readVarInt(), buffer.readVarInt(), buffer.readFloat(), buffer.readFloat(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
         }
@@ -75,7 +75,7 @@ public class SparkleParticleData implements IParticleData
     }
 
     @Override
-    public void writeToNetwork(PacketBuffer buffer)
+    public void write(PacketBuffer buffer)
     {
         buffer.writeVarInt(color);
         buffer.writeVarInt(ageFactor);
@@ -87,7 +87,7 @@ public class SparkleParticleData implements IParticleData
     }
 
     @Override
-    public String writeToString()
+    public String getParameters()
     {
         return getType().getRegistryName().toString();
     }

@@ -34,20 +34,20 @@ public class ImmortalViewerBlock extends ColorableBlock
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
+    public int getOpacity(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return type == ViewerType.DARK ? 15 : super.getLightBlock(state, world, pos);
+        return type == ViewerType.DARK ? 15 : super.getOpacity(state, world, pos);
     }
 
     @Override
-    public VoxelShape getVisualShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context)
+    public VoxelShape getRayTraceShape(BlockState state, IBlockReader reader, BlockPos pos, ISelectionContext context)
     {
         return VoxelShapes.empty();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
+    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
     {
         return 1.0F;
     }
@@ -60,8 +60,8 @@ public class ImmortalViewerBlock extends ColorableBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean skipRendering(BlockState state, BlockState adjacentState, Direction side)
+    public boolean isSideInvisible(BlockState state, BlockState adjacentState, Direction side)
     {
-        return adjacentState.is(this);
+        return adjacentState.matchesBlock(this);
     }
 }

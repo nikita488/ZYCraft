@@ -37,7 +37,7 @@ public class FluidUtils
 
     public static boolean canBlockContainFluid(World world, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canPlaceLiquid(world, pos, state, fluid);
+        return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canContainFluid(world, pos, state, fluid);
     }
 
     public static boolean tryPlaceFluid(FluidStack stack, @Nullable PlayerEntity player, World world, BlockPos pos, @Nullable BlockRayTraceResult rayCastResult)
@@ -54,13 +54,13 @@ public class FluidUtils
             return false;
 
         BlockState blockState = world.getBlockState(pos);
-        boolean replaceable = blockState.canBeReplaced(fluid);
+        boolean replaceable = blockState.isReplaceable(fluid);
         boolean canContainFluid = blockState.isAir() || replaceable || canBlockContainFluid(world, pos, blockState, fluid);
 
         if (!canContainFluid)
-            return rayCastResult != null && tryPlaceFluid(stack, player, world, rayCastResult.getBlockPos().relative(rayCastResult.getDirection()), null);
+            return rayCastResult != null && tryPlaceFluid(stack, player, world, rayCastResult.getPos().offset(rayCastResult.getFace()), null);
 
-        if (world.dimensionType().ultraWarm() && attributes.doesVaporize(world, pos, stack))
+        if (world.getDimensionType().isUltrawarm() && attributes.doesVaporize(world, pos, stack))
         {
             attributes.vaporize(player, world, pos, stack);
             return true;
@@ -68,15 +68,15 @@ public class FluidUtils
 
         if (canBlockContainFluid(world, pos, blockState, fluid))
         {
-            ((ILiquidContainer)blockState.getBlock()).placeLiquid(world, pos, blockState, ((FlowingFluid)fluid).getSource(false));
+            ((ILiquidContainer)blockState.getBlock()).receiveFluid(world, pos, blockState, ((FlowingFluid)fluid).getStillFluidState(false));
             world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
             return true;
         }
 
-        if (!world.isClientSide && replaceable && !blockState.getMaterial().isLiquid())
+        if (!world.isRemote() && replaceable && !blockState.getMaterial().isLiquid())
             world.destroyBlock(pos, true);
 
-        if (!world.setBlock(pos, attributes.getBlock(world, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
+        if (!world.setBlockState(pos, attributes.getBlock(world, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
             return false;
 
         world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
@@ -85,48 +85,48 @@ public class FluidUtils
 
     public static boolean voidFluid(BlockState state, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).takeLiquid(world, pos, state) != Fluids.EMPTY)
+        if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).pickupFluid(world, pos, state) != Fluids.EMPTY)
             return true;
 
         if (!(state.getBlock() instanceof FlowingFluidBlock))
         {
-            if (state.getMaterial() != Material.WATER_PLANT && state.getMaterial() != Material.REPLACEABLE_WATER_PLANT)
+            if (state.getMaterial() != Material.OCEAN_PLANT && state.getMaterial() != Material.SEA_GRASS)
                 return false;
 
-            Block.dropResources(state, world, pos, state.hasTileEntity() ? world.getBlockEntity(pos) : null);
+            Block.spawnDrops(state, world, pos, state.hasTileEntity() ? world.getTileEntity(pos) : null);
         }
 
-        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+        world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
         return true;
     }
 
     public static boolean turnLavaIntoBlock(World world, BlockPos pos, FluidState fluidState)
     {
-        if (!fluidState.is(FluidTags.LAVA))
+        if (!fluidState.isTagged(FluidTags.LAVA))
             return false;
 
         Block block = fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
-        world.setBlockAndUpdate(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, block.defaultBlockState()));
-        world.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
+        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, block.getDefaultState()));
+        world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
         return true;
     }
 
     public static boolean turnLavaIntoBasalt(World world, BlockPos pos, FluidState fluidState)
     {
-        if (!fluidState.is(FluidTags.LAVA) || !world.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
+        if (!fluidState.isTagged(FluidTags.LAVA) || !world.getBlockState(pos.down()).matchesBlock(Blocks.SOUL_SOIL))
             return false;
 
-        world.setBlockAndUpdate(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.BASALT.defaultBlockState()));
-        world.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
+        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.BASALT.getDefaultState()));
+        world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
         return true;
     }
 
     public static boolean turnWaterIntoIce(BlockState blockState, World world, BlockPos pos, FluidState fluidState)
     {
-        if (!fluidState.is(FluidTags.WATER) || !(blockState.getBlock() instanceof FlowingFluidBlock))
+        if (!fluidState.isTagged(FluidTags.WATER) || !(blockState.getBlock() instanceof FlowingFluidBlock))
             return false;
 
-        world.setBlockAndUpdate(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.ICE.defaultBlockState()));
+        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.ICE.getDefaultState()));
         return true;
     }
 }

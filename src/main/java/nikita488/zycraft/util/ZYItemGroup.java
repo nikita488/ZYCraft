@@ -21,7 +21,7 @@ public class ZYItemGroup extends ItemGroup
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ItemStack makeIcon()
+    public ItemStack createIcon()
     {
         return iconFactory.get();
     }

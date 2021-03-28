@@ -34,38 +34,38 @@ public class QuartzCrystalClusterBlock extends Block
     public QuartzCrystalClusterBlock(Properties properties)
     {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN).setValue(AMOUNT, 1));
+        setDefaultState(getDefaultState().with(FACING, Direction.DOWN).with(AMOUNT, 1));
     }
 
     @Override
-    public boolean canBeReplaced(BlockState state, BlockItemUseContext context)
+    public boolean isReplaceable(BlockState state, BlockItemUseContext context)
     {
-        return context.getItemInHand().getItem() == asItem() && state.getValue(AMOUNT) < 5 || super.canBeReplaced(state, context);
+        return context.getItem().getItem() == asItem() && state.get(AMOUNT) < 5 || super.isReplaceable(state, context);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        BlockState state = context.getLevel().getBlockState(context.getClickedPos());
-        return state.getBlock() == this ? state.setValue(AMOUNT, Math.min(state.getValue(AMOUNT) + 1, 5)) : defaultBlockState().setValue(FACING, context.getClickedFace());
+        BlockState state = context.getWorld().getBlockState(context.getPos());
+        return state.matchesBlock(this) ? state.with(AMOUNT, Math.min(state.get(AMOUNT) + 1, 5)) : getDefaultState().with(FACING, context.getFace());
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
     {
-        Direction facing = state.getValue(FACING);
-        BlockPos oppositePos = pos.relative(facing.getOpposite());
+        Direction facing = state.get(FACING);
+        BlockPos oppositePos = pos.offset(facing.getOpposite());
         BlockState oppositeState = world.getBlockState(oppositePos);
-        return (facing == Direction.UP && oppositeState.getBlock() == Blocks.HOPPER) || oppositeState.isFaceSturdy(world, oppositePos, facing);
+        return (facing == Direction.UP && oppositeState.matchesBlock(Blocks.HOPPER)) || oppositeState.isSolidSide(world, oppositePos, facing);
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updatePostPlacement(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
     {
-        if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(world, currentPos))
+        if (facing.getOpposite() != state.get(FACING) || state.isValidPosition(world, currentPos))
             return state;
 
-        return Blocks.AIR.defaultBlockState();
+        return Blocks.AIR.getDefaultState();
     }
 
     @Override
@@ -82,14 +82,14 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         if (entity instanceof ItemEntity) return;
-        entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));
+        entity.attackEntityFrom(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.get(AMOUNT));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(FACING, AMOUNT);
     }

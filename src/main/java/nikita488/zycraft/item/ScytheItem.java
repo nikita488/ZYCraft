@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class ScytheItem extends ToolItem
 {
-    private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);
+    private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANTS, Material.OCEAN_PLANT, Material.TALL_PLANTS, Material.NETHER_PLANTS, Material.SEA_GRASS, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);
 
     public ScytheItem(Properties properties)
     {
@@ -29,43 +29,43 @@ public class ScytheItem extends ToolItem
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state)
     {
-        return MATERIALS.contains(state.getMaterial()) ? speed : 1.0F;
+        return MATERIALS.contains(state.getMaterial()) ? efficiency : 1.0F;
     }
 
     @Override
-    public boolean isCorrectToolForDrops(BlockState state)
+    public boolean canHarvestBlock(BlockState state)
     {
-        return state.is(Blocks.COBWEB);
+        return state.matchesBlock(Blocks.COBWEB);
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
+    public boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
     {
         if (!MATERIALS.contains(state.getMaterial()))
         {
-            stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+            stack.damageItem(2, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
             return true;
         }
 
-        stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+        stack.damageItem(1, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 
         if (stack.isEmpty())
             return true;
 
-        PlayerInteractionManager manager = ((ServerPlayerEntity)player).gameMode;
+        PlayerInteractionManager manager = ((ServerPlayerEntity)player).interactionManager;
         int range = 1;
 
-        for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
+        for (BlockPos destroyPos : BlockPos.getAllInBoxMutable(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
         {
-            if (destroyPos.equals(pos) || !world.mayInteract(manager.player, destroyPos))
+            if (destroyPos.equals(pos) || !world.isBlockModifiable(manager.player, destroyPos))
                 continue;
 
             BlockState destroyState = world.getBlockState(destroyPos);
 
-            if (!MATERIALS.contains(destroyState.getMaterial()) || !BlockUtils.tryHarvestBlock(manager, destroyState, destroyPos.immutable()))
+            if (!MATERIALS.contains(destroyState.getMaterial()) || !BlockUtils.tryHarvestBlock(manager, destroyState, destroyPos.toImmutable()))
                 continue;
 
-            stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+            stack.damageItem(1, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
 
             if (stack.isEmpty())
                 break;

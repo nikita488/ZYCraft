@@ -10,38 +10,38 @@ public enum ScytheItemTier implements IItemTier
     INSTANCE;
 
     @Override
-    public int getUses()
+    public int getMaxUses()
     {
-        return ItemTier.STONE.getUses();
+        return ItemTier.STONE.getMaxUses();
     }
 
     @Override
-    public float getSpeed()
+    public float getEfficiency()
     {
         return 15.0F;
     }
 
     @Override
-    public float getAttackDamageBonus()
+    public float getAttackDamage()
     {
-        return ItemTier.STONE.getAttackDamageBonus();
+        return ItemTier.STONE.getAttackDamage();
     }
 
     @Override
-    public int getLevel()
+    public int getHarvestLevel()
     {
-        return ItemTier.STONE.getLevel();
+        return ItemTier.STONE.getHarvestLevel();
     }
 
     @Override
-    public int getEnchantmentValue()
+    public int getEnchantability()
     {
-        return ItemTier.STONE.getEnchantmentValue();
+        return ItemTier.STONE.getEnchantability();
     }
 
     @Override
-    public Ingredient getRepairIngredient()
+    public Ingredient getRepairMaterial()
     {
-        return Ingredient.of(ZYBlocks.QUARTZ_CRYSTAL.get());
+        return Ingredient.fromItems(ZYBlocks.QUARTZ_CRYSTAL.get());
     }
 }

@@ -12,12 +12,12 @@ import nikita488.zycraft.init.ZYItems;
 
 public enum ViewerType implements IStringSerializable
 {
-    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.strength(0.3F, 6.0F)),
+    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6.0F)),
     DIRE("dire", () -> DataIngredient.items(ZYBlocks.QUARTZ_CRYSTAL)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
-    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.strength(0.3F, 1200.0F)),
-    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightLevel(state -> 15)),
-    DARK("dark", () -> DataIngredient.items(Items.INK_SAC));//TODO: Create tag with INK_SAC and DYES_BLACK included and use here
+    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200.0F)),
+    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
+    DARK("dark", () -> DataIngredient.items(Items.INK_SAC));
 
     private final String name;
     private final NonNullSupplier<DataIngredient> ingredient;
@@ -38,7 +38,7 @@ public enum ViewerType implements IStringSerializable
     }
 
     @Override
-    public String getSerializedName()
+    public String getString()
     {
         return name;
     }

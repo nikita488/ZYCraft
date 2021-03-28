@@ -23,9 +23,9 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
+    public int getOpacity(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return type == ViewerType.DARK ? 15 : super.getLightBlock(state, world, pos);
+        return type == ViewerType.DARK ? 15 : super.getOpacity(state, world, pos);
     }
 
     @Override

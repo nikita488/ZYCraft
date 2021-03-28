@@ -25,7 +25,7 @@ public class ZYClientSetup
     {
         event.enqueueWork(() ->
         {
-            ItemModelsProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.modLoc("filled"), (stack, world, entity) ->
+            ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.modLoc("filled"), (stack, world, entity) ->
             {
                 FluidStack containedFluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
                 return containedFluid.getAmount() / 16000.0F;
@@ -42,6 +42,6 @@ public class ZYClientSetup
     @SubscribeEvent
     public static void registerFactories(ParticleFactoryRegisterEvent event)
     {
-        Minecraft.getInstance().particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
+        Minecraft.getInstance().particles.registerFactory(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
     }
 }

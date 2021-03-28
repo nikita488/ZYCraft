@@ -25,14 +25,14 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
     }
 
     @Override
-    public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
+    public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
     {
         List<Direction> possibleSides = new ArrayList<>();
         BlockPos.Mutable adjPos = new BlockPos.Mutable();
 
         for (Direction side : VALUES)
         {
-            if (!config.target.test(world.getBlockState(adjPos.setWithOffset(pos, side)), random))
+            if (!config.target.test(world.getBlockState(adjPos.setAndMove(pos, side)), random))
                 continue;
 
             possibleSides.add(side);
@@ -41,9 +41,9 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
         if (possibleSides.isEmpty())
             return false;
 
-        world.setBlock(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
-                .setValue(QuartzCrystalClusterBlock.FACING, possibleSides.get(random.nextInt(possibleSides.size())).getOpposite())
-                .setValue(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, config.size)), Constants.BlockFlags.BLOCK_UPDATE);
+        world.setBlockState(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
+                .with(QuartzCrystalClusterBlock.FACING, possibleSides.get(random.nextInt(possibleSides.size())).getOpposite())
+                .with(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, config.size)), Constants.BlockFlags.BLOCK_UPDATE);
         return true;
     }
 }

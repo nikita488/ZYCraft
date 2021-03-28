@@ -25,7 +25,7 @@ public class ZYParticles
         }
 
         @Override
-        public Codec<T> codec()
+        public Codec<T> func_230522_e_()
         {
             return codec;
         }

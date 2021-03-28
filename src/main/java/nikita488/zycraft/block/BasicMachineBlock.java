@@ -45,16 +45,16 @@ public class BasicMachineBlock extends Block
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return type == ZYType.BLUE ? Fluids.WATER.getFlowing(1, false) : Fluids.EMPTY.defaultFluidState();
+        return type == ZYType.BLUE ? Fluids.WATER.getFlowingFluidState(1, false) : Fluids.EMPTY.getDefaultState();
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         if (type != ZYType.BLUE)
             return ActionResultType.PASS;
 
-        ItemStack heldStack = player.getItemInHand(hand);
+        ItemStack heldStack = player.getHeldItem(hand);
 
         if (heldStack.isEmpty())
             return ActionResultType.PASS;
@@ -70,25 +70,25 @@ public class BasicMachineBlock extends Block
         if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
             return ActionResultType.PASS;
 
-        player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
+        player.addStat(Stats.ITEM_USED.get(heldStack.getItem()));
         player.playSound(water.getFluid().getAttributes().getFillSound(), 1.0F, 1.0F);
 
-        if (world.isClientSide())
+        if (world.isRemote())
             return ActionResultType.SUCCESS;
 
         handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
 
-        ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
+        ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
         CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
 
         if (heldStack != filledContainer)
-            player.setItemInHand(hand, filledContainer);
+            player.setHeldItem(hand, filledContainer);
 
         return ActionResultType.SUCCESS;
     }
 
     @Override
-    public boolean isRandomlyTicking(BlockState state)
+    public boolean ticksRandomly(BlockState state)
     {
         return type == ZYType.GREEN;
     }
@@ -99,22 +99,22 @@ public class BasicMachineBlock extends Block
         if (type != ZYType.GREEN)
             return;
 
-        BlockPos tickPos = pos.above();
+        BlockPos tickPos = pos.up();
         BlockState stateToTick = world.getBlockState(tickPos);
         Block blockToTick = stateToTick.getBlock();
 
-        if (!stateToTick.isRandomlyTicking())
+        if (!stateToTick.ticksRandomly())
             return;
 
-        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).isValidBonemealTarget(world, tickPos, stateToTick, false)))
+        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
         {
-            BlockPos.Mutable checkPos = new BlockPos.Mutable().set(tickPos);
+            BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
 
-            while (blockToTick == stateToTick.getBlock() && stateToTick.isRandomlyTicking())
+            while (blockToTick == stateToTick.getBlock() && stateToTick.ticksRandomly())
                 stateToTick = world.getBlockState(checkPos.move(Direction.UP));
 
             stateToTick = world.getBlockState(checkPos.move(Direction.DOWN));
-            stateToTick.randomTick(world, checkPos.immutable(), rand);
+            stateToTick.randomTick(world, checkPos.toImmutable(), rand);
         }
         else if (blockToTick == this)
         {
@@ -141,13 +141,13 @@ public class BasicMachineBlock extends Block
     }
 
     @Override
-    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         if (type == ZYType.GREEN || type == ZYType.RED)
             return;
 
         for (Direction side : VALUES)
-            modifyAdjacentState(world, pos.relative(side));
+            modifyAdjacentState(world, pos.offset(side));
     }
 
     @Override

@@ -50,7 +50,7 @@ public class ZYFluidContainerItem extends Item
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         if (world == null)
             return;
@@ -58,23 +58,23 @@ public class ZYFluidContainerItem extends Item
         FluidStack fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
 
         if (!fluid.isEmpty())
-            tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).withStyle(TextFormatting.GRAY));
+            tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).mergeStyle(TextFormatting.GRAY));
 
         if (capacity > FluidAttributes.BUCKET_VOLUME)
-            tooltip.add(new TranslationTextComponent("%s/%s mB", fluid.getAmount(), capacity).withStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("%s/%s mB", fluid.getAmount(), capacity).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
+    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items)
     {
-        super.fillItemCategory(group, items);
+        super.fillItemGroup(group, items);
 
-        if (group != ItemGroup.TAB_SEARCH && group != ZYGroups.FLUIDS)
+        if (group != ItemGroup.SEARCH && group != ZYGroups.FLUIDS)
             return;
 
         for (Fluid fluid : ForgeRegistries.FLUIDS)
         {
-            if (!fluid.isSource(fluid.defaultFluidState()))
+            if (!fluid.isSource(fluid.getDefaultState()))
                 continue;
 
             ItemStack stack = new ItemStack(this);
