@@ -7,7 +7,7 @@
   ],
   "key": {
     "I": {
-      "tag": "forge:dyes/black"
+      "item": "minecraft:ink_sac"
     },
     "#": {
       "item": "zycraft:immortal_viewer"

@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:fire_basin_from_aluminized"
+      "zycraft:fluid_void"
     ]
   },
   "criteria": {
-    "has_gunpowder": {
+    "has_bucket": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:gunpowder"
+            "item": "minecraft:bucket"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:fire_basin_from_aluminized"
+        "recipe": "zycraft:fluid_void"
       }
     }
   },
   "requirements": [
     [
-      "has_gunpowder",
+      "has_bucket",
       "has_the_recipe"
     ]
   ]

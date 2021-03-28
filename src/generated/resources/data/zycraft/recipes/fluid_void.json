@@ -1,21 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#T#",
-    "SXS",
-    "#S#"
+    "X#X",
+    "#$#",
+    "X#X"
   ],
   "key": {
-    "#": {
-      "item": "zycraft:aluminized_dark_engineering_block"
-    },
-    "T": {
-      "item": "minecraft:iron_bars"
-    },
-    "S": {
-      "item": "minecraft:iron_bars"
-    },
     "X": {
+      "tag": "zycraft:engineering_blocks/dark"
+    },
+    "#": {
+      "item": "minecraft:iron_bars"
+    },
+    "$": {
       "item": "minecraft:bucket"
     }
   },

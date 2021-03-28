@@ -1,5 +1,5 @@
 {
-  "parent": "zycraft:block/basic_machine",
+  "parent": "zycraft:block/basic_machine_top",
   "textures": {
     "side": "zycraft:block/fire_basin_side",
     "top": "zycraft:block/fire_basin_top"

@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_dyes_black": {
+    "has_ink_sac": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:dyes/black"
+            "item": "minecraft:ink_sac"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_dyes_black",
+      "has_ink_sac",
       "has_the_recipe"
     ]
   ]

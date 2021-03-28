@@ -1,21 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#T#",
-    "SXS",
-    "#S#"
+    "X#X",
+    "#$#",
+    "X#X"
   ],
   "key": {
-    "#": {
-      "item": "zycraft:aluminized_light_engineering_block"
-    },
-    "T": {
-      "item": "zycraft:zychorite"
-    },
-    "S": {
-      "item": "zycraft:zychorite"
-    },
     "X": {
+      "tag": "zycraft:engineering_blocks/light"
+    },
+    "#": {
+      "item": "zycraft:zychorite"
+    },
+    "$": {
       "item": "minecraft:snowball"
     }
   },

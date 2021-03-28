@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:zychorium_ice_from_aluminized"
+      "zycraft:zychorium_ice"
     ]
   },
   "criteria": {
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:zychorium_ice_from_aluminized"
+        "recipe": "zycraft:zychorium_ice"
       }
     }
   },

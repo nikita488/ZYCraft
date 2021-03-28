@@ -1,21 +1,18 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "#T#",
-    "SXS",
-    "#S#"
+    "X#X",
+    "#$#",
+    "X#X"
   ],
   "key": {
-    "#": {
-      "item": "zycraft:zychorized_blue_engineering_block"
-    },
-    "T": {
-      "item": "zycraft:zychorite"
-    },
-    "S": {
-      "item": "zycraft:zychorite"
-    },
     "X": {
+      "tag": "zycraft:engineering_blocks/blue"
+    },
+    "#": {
+      "item": "zycraft:zychorite"
+    },
+    "$": {
       "item": "minecraft:water_bucket"
     }
   },

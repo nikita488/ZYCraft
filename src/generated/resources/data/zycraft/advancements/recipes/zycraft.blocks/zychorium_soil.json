@@ -2,16 +2,16 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "zycraft:fluid_void_from_aluminized"
+      "zycraft:zychorium_soil"
     ]
   },
   "criteria": {
-    "has_bucket": {
+    "has_saplings": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "item": "minecraft:bucket"
+            "tag": "minecraft:saplings"
           }
         ]
       }
@@ -19,13 +19,13 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "zycraft:fluid_void_from_aluminized"
+        "recipe": "zycraft:zychorium_soil"
       }
     }
   },
   "requirements": [
     [
-      "has_bucket",
+      "has_saplings",
       "has_the_recipe"
     ]
   ]
