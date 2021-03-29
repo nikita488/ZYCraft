@@ -11,17 +11,11 @@ import nikita488.zycraft.util.Color;
 
 public class ZychoriumLampTile extends ColorableTile
 {
-    private Vector3f hsv = new Vector3f(0, 0, 1);
+    private Vector3f hsv;
 
     public ZychoriumLampTile(TileEntityType<ZychoriumLampTile> type)
     {
         super(type);
-    }
-
-    @Override
-    public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int tintIndex)
-    {
-        return Color.hsvToRGB(hsv.getX(), hsv.getY(), hsv.getZ() * brightness(state));
     }
 
     protected float brightness(BlockState state)
@@ -29,6 +23,12 @@ public class ZychoriumLampTile extends ColorableTile
         int strength = world.getRedstonePowerFromNeighbors(pos);
         boolean inverted = ((ZychoriumLampBlock)state.getBlock()).inverted();
         return 0.25F + 0.05F * (inverted ? 15 - strength : strength);
+    }
+
+    @Override
+    public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int tintIndex)
+    {
+        return hsv != null ? Color.hsvToRGB(hsv.getX(), hsv.getY(), hsv.getZ() * brightness(state)) : 0xFFFFFF;
     }
 
     @Override

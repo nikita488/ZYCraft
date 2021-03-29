@@ -1,5 +1,5 @@
 {
-  "parent": "zycraft:block/basic_machine_all",
+  "parent": "zycraft:block/zy_cube_all",
   "textures": {
     "all": "zycraft:block/fluid_void"
   }
