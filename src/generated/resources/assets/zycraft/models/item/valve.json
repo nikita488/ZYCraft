@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/multi_interface_inventory",
+  "textures": {
+    "side": "zycraft:block/valve"
+  }
+}

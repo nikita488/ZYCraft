@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X#X",
+    "#$#",
+    "X#X"
+  ],
+  "key": {
+    "X": {
+      "tag": "zycraft:engineering_blocks/blue"
+    },
+    "#": {
+      "item": "minecraft:iron_bars"
+    },
+    "$": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "zycraft:valve"
+  }
+}

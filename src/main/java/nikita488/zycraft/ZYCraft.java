@@ -13,6 +13,7 @@ import nikita488.zycraft.init.*;
 import nikita488.zycraft.init.worldgen.ZYConfiguredFeatures;
 import nikita488.zycraft.init.worldgen.ZYFeatures;
 import nikita488.zycraft.init.worldgen.ZYPlacements;
+import nikita488.zycraft.network.ZYChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,12 +26,16 @@ public class ZYCraft
 
     public ZYCraft()
     {
+        ZYChannel.init();
+
         ZYBlocks.init();
         ZYItems.init();
         ZYTiles.init();
         ZYParticles.init();
         ZYFeatures.init();
         ZYPlacements.init();
+
+        ZYContainers.init();
 
         ZYTags.init();
         ZYGroups.init();

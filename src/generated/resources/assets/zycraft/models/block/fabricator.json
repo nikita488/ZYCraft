@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/advanced_machine_top",
+  "textures": {
+    "top": "zycraft:block/fabricator"
+  }
+}

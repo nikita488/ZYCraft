@@ -33,6 +33,7 @@ minecraft {
         client {
             workingDirectory project.file("run")
             arg "-mixin.config=mixins.zycraft.json"
+            property 'mixin.env.disableRefMap', 'true'
             mods { zycraft { source sourceSets.main } }
         }
 
@@ -52,7 +53,8 @@ minecraft {
 repositories {
     mavenLocal()
     maven { url "https://maven.tterrag.com/" }
-    maven { url = "https://www.cursemaven.com" }
+    maven { url "https://www.cursemaven.com" }
+    maven { url "http://dvs1.progwml6.com/files/maven" }
 }
 
 configurations {
@@ -67,9 +69,10 @@ dependencies {
     shade registrate
 
     implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
 
     //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3183270")
-    runtimeOnly fg.deobf("curse.maven:jei-238222:3157864")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }

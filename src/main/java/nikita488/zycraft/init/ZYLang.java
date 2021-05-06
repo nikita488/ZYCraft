@@ -47,6 +47,9 @@ public class ZYLang
     public static final TranslationTextComponent FLUIDS_ITEM_GROUP =
             REGISTRATE.addLang("itemGroup", ZYCraft.modLoc("fluids"), "ZYCraft Fluids");
 
+    public static final TranslationTextComponent FABRICATOR =
+            REGISTRATE.addLang("container", ZYCraft.modLoc("fabricator"), "Fabricator");
+
     public static void init() {}
 
     public static IFormattableTextComponent getColorScannerRed(int amount)

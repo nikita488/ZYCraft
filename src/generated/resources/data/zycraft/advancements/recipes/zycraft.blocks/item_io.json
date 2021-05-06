@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:item_io"
+    ]
+  },
+  "criteria": {
+    "has_chests_wooden": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:chests/wooden"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:item_io"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_chests_wooden",
+      "has_the_recipe"
+    ]
+  ]
+}

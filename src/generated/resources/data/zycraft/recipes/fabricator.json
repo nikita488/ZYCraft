@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "#$#",
+    "XRX"
+  ],
+  "key": {
+    "X": {
+      "tag": "zycraft:engineering_blocks/blue"
+    },
+    "#": {
+      "item": "zycraft:zychorite"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "R": {
+      "tag": "forge:dusts/redstone"
+    },
+    "$": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "item": "zycraft:fabricator"
+  }
+}

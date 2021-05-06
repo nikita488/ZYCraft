@@ -1,0 +1,11 @@
+{
+    "parent": "zycraft:block/zy_cube",
+    "textures": {
+        "overlay_down": "zycraft:block/advanced_machine",
+        "overlay_up": "#top",
+        "overlay_north": "zycraft:block/advanced_machine",
+        "overlay_east": "zycraft:block/advanced_machine",
+        "overlay_south": "zycraft:block/advanced_machine",
+        "overlay_west": "zycraft:block/advanced_machine"
+    }
+}
