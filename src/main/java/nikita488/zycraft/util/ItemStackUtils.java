@@ -5,14 +5,11 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.ListNBT;
 import net.minecraftforge.common.util.Constants;
 
-import javax.annotation.Nonnull;
-
 public class ItemStackUtils
 {
-    @Nonnull
-    public static ItemStack copy(@Nonnull ItemStack stack, int size)
+    public static ItemStack copy(ItemStack stack, int size)
     {
-        if (size == 0)
+        if (stack.isEmpty() || size <= 0)
             return ItemStack.EMPTY;
 
         ItemStack copy = stack.copy();

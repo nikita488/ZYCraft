@@ -15,9 +15,9 @@ public class CloudSprite extends TextureAtlasSprite
 {
     public static final ResourceLocation NAME = ZYCraft.modLoc("cloud");
     public static final ResourceLocation NAME2 = ZYCraft.modLoc("cloud2");
+    private static final int[] OFFSETS = new int[] {0, -1, 0, 1};
     private static final Random RANDOM = new Random();
     private final float[] pixels, baseLayer, adjustmentLayer;
-    private final int[] offsets = new int[] {0, -1, 0, 1};
 
     public CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevels, int atlasWidth, int atlasHeight, int x, int y, NativeImage image)
     {
@@ -40,16 +40,16 @@ public class CloudSprite extends TextureAtlasSprite
 
         for (int i = x - 1; i <= x + 1; i++)
             for (int j = y - 1; j <= y + 1; j++)
-                pixelsSum += pixel(pixels, i + offsets[y & 3], j + offsets[x & 3]);
+                pixelsSum += pixel(pixels, i + OFFSETS[y & 3], j + OFFSETS[x & 3]);
 
-        pixels[pixelIndex] = pixelsSum * 0.1F + average(x, y) * 0.8F;
-        baseLayer[pixelIndex] += adjustmentLayer[pixelIndex] * 0.01F;
-        baseLayer[pixelIndex] = Math.max(0, baseLayer[pixelIndex]);
+        this.pixels[pixelIndex] = pixelsSum * 0.1F + average(x, y) * 0.8F;
+        this.baseLayer[pixelIndex] += adjustmentLayer[pixelIndex] * 0.01F;
+        this.baseLayer[pixelIndex] = Math.max(0, baseLayer[pixelIndex]);
 
-        adjustmentLayer[pixelIndex] -= 0.062F;
+        this.adjustmentLayer[pixelIndex] -= 0.062F;
 
         if (RANDOM.nextFloat() < 0.0062F)
-            adjustmentLayer[pixelIndex] = 1.33F;
+            this.adjustmentLayer[pixelIndex] = 1.33F;
     }
 
     private float average(int x, int y)

@@ -2,8 +2,13 @@ package nikita488.zycraft.block.shape;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.shapes.VoxelShape;
 import nikita488.zycraft.block.QuartzCrystalClusterBlock;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class ClusterShapes
 {
@@ -55,34 +60,20 @@ public class ClusterShapes
             Block.makeCuboidShape(0, 2, 2, 10, 14, 14)
     };
 
+    private static final Map<Direction, VoxelShape[]> SHAPES = Util.make(new EnumMap<>(Direction.class), shapes ->
+    {
+        shapes.put(Direction.DOWN, DOWN);
+        shapes.put(Direction.UP, UP);
+        shapes.put(Direction.NORTH, NORTH);
+        shapes.put(Direction.SOUTH, SOUTH);
+        shapes.put(Direction.WEST, WEST);
+        shapes.put(Direction.EAST, EAST);
+    });
+
     public static VoxelShape get(BlockState state)
     {
-        VoxelShape[] shapes;
-
-        switch (state.get(QuartzCrystalClusterBlock.FACING))
-        {
-            case DOWN:
-                shapes = DOWN;
-                break;
-            case UP:
-                shapes = UP;
-                break;
-            case NORTH:
-                shapes = NORTH;
-                break;
-            case SOUTH:
-                shapes = SOUTH;
-                break;
-            case WEST:
-                shapes = WEST;
-                break;
-            case EAST:
-                shapes = EAST;
-                break;
-            default:
-                shapes = new VoxelShape[0];
-        }
-
-        return shapes[state.get(QuartzCrystalClusterBlock.AMOUNT) - 1];
+        Direction facing = state.get(QuartzCrystalClusterBlock.FACING);
+        int amount = state.get(QuartzCrystalClusterBlock.AMOUNT);
+        return SHAPES.get(facing)[amount - 1];
     }
 }

@@ -7,7 +7,7 @@ import java.util.Random;
 
 public enum ZYType implements IStringSerializable
 {
-    BLUE("blue", 0x0064FF, 0x001940, MaterialColor.BLUE),
+    BLUE("blue", 0x0064FF, 0x00193F, MaterialColor.BLUE),
     GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
     RED("red", 0xFF0000, 0x200000, MaterialColor.RED),
     DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.BLACK),

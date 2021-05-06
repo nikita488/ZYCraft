@@ -24,7 +24,7 @@ public class ZYItems
     private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.ITEMS, "ZYCraft Items");
 
     public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyBase("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
-            .color(() -> () -> (stack, tintIndex) -> type.rgb())
+            .color(() -> () -> ZYColors.zychoriumItemColor(type))
             .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("item/zychorium")))
             .tag(ZYTags.Items.ZYCHORIUM)
             .register());
