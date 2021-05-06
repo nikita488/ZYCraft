@@ -1,7 +1,11 @@
 {
   "variants": {
-    "": {
+    "flipped=false": {
       "model": "zycraft:block/zychorium_soil"
+    },
+    "flipped=true": {
+      "model": "zycraft:block/zychorium_soil",
+      "x": 180
     }
   }
 }

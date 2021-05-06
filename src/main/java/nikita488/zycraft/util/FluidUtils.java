@@ -100,23 +100,12 @@ public class FluidUtils
         return true;
     }
 
-    public static boolean turnLavaIntoBlock(World world, BlockPos pos, FluidState fluidState)
+    public static boolean turnLavaIntoBlock(World world, BlockPos pos, FluidState fluidState, BlockState newState)
     {
         if (!fluidState.isTagged(FluidTags.LAVA))
             return false;
 
-        Block block = fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
-        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, block.getDefaultState()));
-        world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
-        return true;
-    }
-
-    public static boolean turnLavaIntoBasalt(World world, BlockPos pos, FluidState fluidState)
-    {
-        if (!fluidState.isTagged(FluidTags.LAVA) || !world.getBlockState(pos.down()).matchesBlock(Blocks.SOUL_SOIL))
-            return false;
-
-        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.BASALT.getDefaultState()));
+        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, newState));
         world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
         return true;
     }
