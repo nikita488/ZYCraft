@@ -62,21 +62,20 @@ public class FabricatorLogic
     public boolean updatePendingItems()
     {
         if (pendingItems.isEmpty())
-            return true;
+            return false;
 
-        //TODO: Check if we should iterate through all sides or only sides that has pending stacks
         for (Direction side : SIDES)
         {
             if (isInventoryChecked(side))
                 continue;
 
-            setInventoryChecked(side);
-            ZYCraft.LOGGER.info("Checked {} inventory for inserting pending stacks", side);
-
             ObjectList<ItemStack> items = pendingItems.get(side);
 
             if (items == null)
                 continue;
+
+            setInventoryChecked(side);
+            ZYCraft.LOGGER.info("Checked {} inventory for inserting pending stacks", side);
 
             IItemHandler inventory = fabricator.inventory();
 
@@ -103,10 +102,10 @@ public class FabricatorLogic
                 pendingItems.remove(side);
 
             if (pendingItems.isEmpty())
-                return true;
+                return false;
         }
 
-        return false;
+        return true;
     }
 
     private void tryInsertItem(IItemHandler inventory, ItemStack stack)

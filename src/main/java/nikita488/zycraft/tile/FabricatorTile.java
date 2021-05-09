@@ -28,8 +28,8 @@ import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.FabricatorBlock;
+import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.inventory.container.FabricatorContainer;
 import nikita488.zycraft.inventory.container.ZYContainer;
@@ -51,7 +51,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         @Override
         public boolean canUseRecipe(World world, ServerPlayerEntity player, IRecipe<?> recipe)
         {
-            return recipe.getType() == IRecipeType.CRAFTING && !recipe.isDynamic() && !recipe.getIngredients().isEmpty() && !recipe.getRecipeOutput().isEmpty() && recipe.canFit(3, 3);
+            return recipe.getType() == IRecipeType.CRAFTING && !recipe.isDynamic() && recipe.canFit(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getRecipeOutput().isEmpty();
         }
     };
     private final ItemStackHandler inventory = new ItemStackHandler(9)
@@ -64,9 +64,11 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         }
     };
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> inventory);
+    private int reloadCount = DataPackReloadCounter.INSTANCE.count();
+    @Nullable
+    private ResourceLocation pendingRecipe;
     private FakePlayer player;
     private boolean lastPowered;
-    private int reloadCount = DataPackReloadCounter.INSTANCE.count();
 
     public FabricatorTile(TileEntityType<?> type)
     {
@@ -76,29 +78,55 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     @Override
     public void tick()
     {
-        if (world.isRemote())
+        if (world == null || world.isRemote())
             return;
 
         if (reloadCount != DataPackReloadCounter.INSTANCE.count())
         {
-            if (recipeResult.getRecipeUsed() != null)
+            IRecipe<?> recipe = recipeResult.getRecipeUsed();
+
+            if (recipe != null)
             {
-                System.out.println(recipeResult.getRecipeUsed());
-                System.out.println(world.getRecipeManager().getRecipe(recipeResult.getRecipeUsed().getId()).orElse(null));
+                this.pendingRecipe = recipe.getId();
+
+                setRecipe(null);
+                recipeResult.clear();
             }
-            ZYCraft.LOGGER.info("Reloaded recipe for {}", pos);
+
             this.reloadCount = DataPackReloadCounter.INSTANCE.count();
         }
 
-        if (!logic.updatePendingItems())
+        if (pendingRecipe != null)
+        {
+            Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(pendingRecipe)
+                    .filter(recipe -> recipeResult.canUseRecipe(world, getPlayer(), recipe))
+                    .flatMap(recipe -> IRecipeType.CRAFTING.matches((ICraftingRecipe)recipe, world, recipePattern));
+
+            if (!craftingRecipe.isPresent())
+                craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
+                        .filter(recipe -> recipeResult.canUseRecipe(world, getPlayer(), recipe));
+
+            ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
+
+            setRecipe(!craftingResult.isEmpty() ? craftingRecipe.orElse(null) : null);
+            setCraftingResult(craftingResult);
+            this.pendingRecipe = null;
+        }
+
+        if (logic.updatePendingItems())
             return;
 
         boolean powered = world.isBlockPowered(pos);
 
-        if (powered && !lastPowered)
+        if (canCraft(powered))
             logic.tick();
 
         this.lastPowered = powered;
+    }
+
+    private boolean canCraft(boolean powered)
+    {
+        return getBlockState().get(FabricatorBlock.MODE).сanCraft(lastPowered, powered);
     }
 
     public int getColor(BlockState state)
@@ -117,29 +145,12 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     {
         super.read(state, tag);
 
-        ZYCraft.LOGGER.info("World {} Pos {}", world, pos);
+        this.lastPowered = tag.getBoolean("LastPowered");
+
+        if (tag.contains("Recipe", Constants.NBT.TAG_STRING))
+            this.pendingRecipe = new ResourceLocation(tag.getString("Recipe"));
+
         InventoryUtils.read(recipePattern, tag.getCompound("RecipePattern"));
-
-        //TODO: World is null when loading
-        if (false && tag.contains("Recipe", Constants.NBT.TAG_STRING))
-        {
-            Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(new ResourceLocation(tag.getString("Recipe")))
-                    .filter(recipe -> recipeResult.canUseRecipe(world, getPlayer(), recipe))
-                    .map(recipe -> (ICraftingRecipe)recipe)
-                    .filter(recipe -> recipe.matches(recipePattern, world));
-
-            if (!craftingRecipe.isPresent())
-                craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world);
-
-            ItemStack recipeResult = craftingRecipe
-                    .map(recipe -> recipe.getCraftingResult(recipePattern))
-                    .orElse(ItemStack.EMPTY);
-            //TODO: If recipe was not found, find first that matches recipe pattern
-
-            setRecipe(craftingRecipe.orElse(null));
-            setCraftingResult(recipeResult);
-        }
-
         inventory.deserializeNBT(tag.getCompound("Inventory"));
         logic.load(tag);
     }
@@ -151,12 +162,12 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
         IRecipe<?> recipe = recipeResult.getRecipeUsed();
 
-        tag.put("RecipePattern", InventoryUtils.write(recipePattern));
-
         if (recipe != null)
             tag.putString("Recipe", recipe.getId().toString());
 
+        tag.put("RecipePattern", InventoryUtils.write(recipePattern));
         tag.put("Inventory", inventory.serializeNBT());
+        tag.putBoolean("LastPowered", lastPowered);
         logic.save(tag);
 
         return tag;
@@ -239,5 +250,15 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         if (player == null)
             this.player = FakePlayerFactory.get((ServerWorld)world, PROFILE);
         return player;
+    }
+
+    public FabricatorMode mode()
+    {
+        return getBlockState().get(FabricatorBlock.MODE);
+    }
+
+    public void setMode(FabricatorMode mode)
+    {
+        world.setBlockState(pos, getBlockState().with(FabricatorBlock.MODE, mode), Constants.BlockFlags.BLOCK_UPDATE);
     }
 }
