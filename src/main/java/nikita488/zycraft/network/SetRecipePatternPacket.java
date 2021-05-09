@@ -46,8 +46,8 @@ public class SetRecipePatternPacket
         this.windowID = buf.readVarInt();
         this.recipeID = buf.readResourceLocation();
 
-        for (int i = 0; i < 9; i++)
-            recipePattern.set(i, buf.readItemStack());
+        for (int slot = 0; slot < 9; slot++)
+            recipePattern.set(slot, buf.readItemStack());
 
         this.recipeResult = buf.readItemStack();
     }
@@ -62,8 +62,8 @@ public class SetRecipePatternPacket
         buf.writeVarInt(msg.windowID());
         buf.writeResourceLocation(msg.recipeID());
 
-        for (int i = 0; i < 9; i++)
-            buf.writeItemStack(msg.recipePattern().get(i));
+        for (int slot = 0; slot < 9; slot++)
+            buf.writeItemStack(msg.recipePattern().get(slot));
 
         buf.writeItemStack(msg.recipeResult());
     }
@@ -89,11 +89,14 @@ public class SetRecipePatternPacket
             if (fabricator == null)
                 return;
 
-            for (int i = 0; i < 9; i++)
-                fabricator.recipePattern().setInventorySlotContents(i, msg.recipePattern().get(i));
+            for (int slot = 0; slot < 9; slot++)
+                fabricator.recipePattern().setInventorySlotContents(slot, msg.recipePattern().get(slot));
 
-            fabricator.setRecipe((ICraftingRecipe)player.getServerWorld().getRecipeManager().getRecipe(msg.recipeID()).orElse(null));
-            fabricator.setCraftingResult(msg.recipeResult());
+            ICraftingRecipe recipe = (ICraftingRecipe)player.getServerWorld().getRecipeManager().getRecipe(msg.recipeID()).orElse(null);
+            ItemStack result = msg.recipeResult();
+
+            fabricator.setRecipe(!result.isEmpty() ? recipe : null);
+            fabricator.setCraftingResult(result);
         });
 
         return true;

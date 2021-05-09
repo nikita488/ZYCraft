@@ -16,12 +16,12 @@ import nikita488.zycraft.init.ZYBlocks;
 @JeiPlugin
 public class ZYJEIPlugin implements IModPlugin
 {
-    public static final ResourceLocation NAME = ZYCraft.modLoc("jei_compatibility");
+    public static final ResourceLocation NAME = ZYCraft.modLoc("jei_plugin");
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)
     {
-        registration.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(), VanillaRecipeCategoryUid.CRAFTING);
+        registration.addRecipeTransferHandler(new FabricatorRecipeTransferHandler(registration.getTransferHelper()), VanillaRecipeCategoryUid.CRAFTING);
     }
 
     @Override

@@ -7,13 +7,15 @@ import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.network.NetworkRegistry;
+import net.minecraftforge.fml.network.simple.SimpleChannel;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.dispenser.ZYBucketDispenseItemBehavior;
 import nikita488.zycraft.init.*;
 import nikita488.zycraft.init.worldgen.ZYConfiguredFeatures;
 import nikita488.zycraft.init.worldgen.ZYFeatures;
 import nikita488.zycraft.init.worldgen.ZYPlacements;
-import nikita488.zycraft.network.ZYChannel;
+import nikita488.zycraft.network.ZYPackets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,24 +25,28 @@ public class ZYCraft
     public static final String MOD_ID = "zycraft";
     public static final Logger LOGGER = LogManager.getLogger();
     private static final NonNullLazy<Registrate> REGISTRATE = NonNullLazy.of(() -> Registrate.create(MOD_ID));
+    private static final String PROTOCOL_VERSION = "1";
+    public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder.named(ZYCraft.modLoc("main"))
+            .networkProtocolVersion(() -> PROTOCOL_VERSION)
+            .clientAcceptedVersions(version -> version.equals(PROTOCOL_VERSION))
+            .serverAcceptedVersions(version -> version.equals(PROTOCOL_VERSION))
+            .simpleChannel();
 
     public ZYCraft()
     {
-        ZYChannel.init();
-
         ZYBlocks.init();
         ZYItems.init();
         ZYTiles.init();
         ZYParticles.init();
         ZYFeatures.init();
         ZYPlacements.init();
-
         ZYContainers.init();
 
         ZYTags.init();
         ZYGroups.init();
         ZYLang.init();
         ZYConfig.register();
+        ZYPackets.init();
 
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::commonSetup);
     }
