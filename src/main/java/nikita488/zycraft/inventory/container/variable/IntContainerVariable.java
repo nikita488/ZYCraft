@@ -2,11 +2,13 @@ package nikita488.zycraft.inventory.container.variable;
 
 import net.minecraft.network.PacketBuffer;
 
+import javax.annotation.Nullable;
 import java.util.function.IntSupplier;
 
 public class IntContainerVariable implements IContainerVariable
 {
     private int value;
+    @Nullable
     private IntSupplier supplier;
 
     public IntContainerVariable() {}
@@ -19,7 +21,7 @@ public class IntContainerVariable implements IContainerVariable
     @Override
     public boolean needsUpdating()
     {
-        return value != supplier.getAsInt();
+        return supplier != null && value != supplier.getAsInt();
     }
 
     @Override

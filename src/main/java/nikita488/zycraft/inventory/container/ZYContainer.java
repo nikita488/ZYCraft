@@ -13,9 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
+import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.inventory.container.variable.IContainerVariable;
 import nikita488.zycraft.network.UpdateContainerVariablePacket;
-import nikita488.zycraft.network.ZYChannel;
 
 import javax.annotation.Nullable;
 
@@ -29,7 +29,7 @@ public abstract class ZYContainer extends Container
             return false;
         }
     };
-    private final ObjectList<IContainerVariable> variables = new ObjectArrayList<>();
+    protected final ObjectList<IContainerVariable> variables = new ObjectArrayList<>();
 
     public ZYContainer(@Nullable ContainerType<?> type, int id)
     {
@@ -82,6 +82,9 @@ public abstract class ZYContainer extends Container
     {
         super.detectAndSendChanges();
 
+        if (listeners.isEmpty())
+            return;
+
         for (int i = 0; i < variables.size(); i++)
         {
             IContainerVariable variable = variables.get(i);
@@ -91,7 +94,7 @@ public abstract class ZYContainer extends Container
 
             for (IContainerListener listener : listeners)
                 if (listener instanceof ServerPlayerEntity)
-                    ZYChannel.INSTANCE.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity)listener)), new UpdateContainerVariablePacket(windowId, i, variable));
+                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity)listener)), new UpdateContainerVariablePacket(windowId, i, variable));
         }
     }
 

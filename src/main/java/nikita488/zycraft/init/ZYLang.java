@@ -49,6 +49,14 @@ public class ZYLang
 
     public static final TranslationTextComponent FABRICATOR =
             REGISTRATE.addLang("container", ZYCraft.modLoc("fabricator"), "Fabricator");
+    public static final TranslationTextComponent AUTO_LOW =
+            REGISTRATE.addLang("mode", ZYCraft.modLoc("fabricator.auto_low"), "Auto: Low");
+    public static final TranslationTextComponent AUTO_HIGH =
+            REGISTRATE.addLang("mode", ZYCraft.modLoc("fabricator.auto_high"), "Auto: High");
+    public static final TranslationTextComponent PULSE =
+            REGISTRATE.addLang("mode", ZYCraft.modLoc("fabricator.pulse"), "Pulse");
+    public static final TranslationTextComponent RECIPE_INCOMPATIBLE =
+            REGISTRATE.addLang("jei", ZYCraft.modLoc("fabricator.recipe.incompatible"), "Recipe incompatible with Fabricator");
 
     public static void init() {}
 

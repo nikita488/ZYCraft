@@ -17,8 +17,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
+import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.init.ZYContainers;
 import nikita488.zycraft.inventory.container.slot.RecipePatternSlot;
+import nikita488.zycraft.inventory.container.variable.IntContainerVariable;
 import nikita488.zycraft.tile.FabricatorTile;
 import nikita488.zycraft.util.ItemStackUtils;
 
@@ -29,23 +31,31 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
 {
     private final PlayerEntity player;
     private final World world;
+    private final IntContainerVariable mode;
 
     public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory)
     {
-        this(type, windowID, playerInventory, null, new Inventory(9), new Inventory(1), new ItemStackHandler(9));
+        this(type, windowID, playerInventory, null, new Inventory(9), new Inventory(1), new ItemStackHandler(9), new IntContainerVariable());
     }
 
     public FabricatorContainer(int windowID, PlayerInventory playerInventory, FabricatorTile fabricator)
     {
-        this(ZYContainers.FABRICATOR.get(), windowID, playerInventory, fabricator, fabricator.recipePattern(), fabricator.recipeResult(), fabricator.inventory());
+        this(ZYContainers.FABRICATOR.get(), windowID, playerInventory, fabricator, fabricator.recipePattern(), fabricator.recipeResult(), fabricator.inventory(), new IntContainerVariable(() -> fabricator.mode().ordinal()));
     }
 
-    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable FabricatorTile fabricator, IInventory recipePattern, IInventory recipeResult, IItemHandler inventory)
+    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable FabricatorTile fabricator, IInventory recipePattern, IInventory recipeResult, IItemHandler inventory, IntContainerVariable mode)
     {
         super(type, windowID, fabricator);
 
         this.player = playerInventory.player;
         this.world = player.world;
+        this.mode = mode;
+
+        addVariable(mode);
+        assertInventorySize(recipePattern, 9);
+        assertInventorySize(recipeResult, 1);
+        assertInventorySize(inventory, 9);
+        assertVariableCount(variables, 1);
 
         for (int i = 0; i < 3; i++)
             for (int j = 0; j < 3; j++)
@@ -89,16 +99,16 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
 
             if (button == 0)
             {
-                System.out.println("Request craft");
+                tile.logic().tick();
             }
             else if (button == 1)
             {
                 tile.setRecipe(null);
                 tile.recipePattern().clear();
                 tile.recipeResult().clear();
-                detectAndSendChanges();
             }
 
+            detectAndSendChanges();
             return ItemStack.EMPTY;
         }
 
@@ -108,7 +118,6 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     @Override
     public void onCraftMatrixChanged(IInventory inventory)
     {
-        //TODO: Reset checked inventories when craft result is changed
         if (tile == null)
             return;
 
@@ -119,19 +128,31 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
             return;
 
         ServerPlayerEntity player = (ServerPlayerEntity)this.player;
-        Optional<ICraftingRecipe> recipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
-                .filter(craftingRecipe -> tile.recipeResult().canUseRecipe(world, player, craftingRecipe));
-        ItemStack result = recipe.map(craftingRecipe -> craftingRecipe.getCraftingResult(recipePattern))
-                .orElse(ItemStack.EMPTY);
+        Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
+                .filter(recipe -> tile.recipeResult().canUseRecipe(world, player, recipe));
+        ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
 
-        tile.setRecipe(recipe.orElse(null));
-        tile.setCraftingResult(result);
-        player.connection.sendPacket(new SSetSlotPacket(windowId, 9, result));
+        tile.setRecipe(!craftingResult.isEmpty() ? craftingRecipe.orElse(null) : null);
+        tile.setCraftingResult(craftingResult);
+        player.connection.sendPacket(new SSetSlotPacket(windowId, 9, craftingResult));
     }
 
     @Override
     public boolean tryTransferStackToSlot(ItemStack stack, int slotIndex)
     {
         return slotIndex >= 10 && slotIndex < 19 ? mergeItemStack(stack, 19, 55, false) : mergeItemStack(stack, 10, 19, false);
+    }
+
+    @Override
+    public boolean enchantItem(PlayerEntity player, int index)
+    {
+        if (tile != null)
+            tile.setMode(FabricatorMode.VALUES[index]);
+        return mode.value() != index;
+    }
+
+    public IntContainerVariable mode()
+    {
+        return mode;
     }
 }

@@ -13,6 +13,6 @@ public class MinecraftMixin
     @Inject(method = "close", at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Lnet/minecraft/client/renderer/texture/PaintingSpriteUploader;close()V", ordinal = 0))
     private void closeWidgetTextureManager(CallbackInfo callback)
     {
-        ZYClientSetup.widgetTextures().close();
+        ZYClientSetup.spriteTextures().close();
     }
 }

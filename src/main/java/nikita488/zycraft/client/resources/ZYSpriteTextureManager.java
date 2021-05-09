@@ -9,23 +9,23 @@ import nikita488.zycraft.ZYCraft;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class ZYWidgetTextureManager extends SpriteUploader
+public class ZYSpriteTextureManager extends SpriteUploader
 {
-    public static final ResourceLocation NAME = ZYCraft.modLoc("textures/atlas/widgets.png");
+    public static final ResourceLocation NAME = ZYCraft.modLoc("textures/atlas/sprites.png");
 
-    public ZYWidgetTextureManager(TextureManager manager)
+    public ZYSpriteTextureManager(TextureManager manager)
     {
-        super(manager, NAME, "gui/widget");
+        super(manager, NAME, "gui/sprite");
     }
 
-    public TextureAtlasSprite get(ZYWidget widget)
+    public TextureAtlasSprite get(ZYSpriteType type)
     {
-        return getSprite(widget.textureName());
+        return getSprite(type.spriteName());
     }
 
     @Override
     protected Stream<ResourceLocation> getResourceLocations()
     {
-        return Arrays.stream(ZYWidget.VALUES).map(ZYWidget::textureName);
+        return Arrays.stream(ZYSpriteType.VALUES).map(ZYSpriteType::spriteName);
     }
 }

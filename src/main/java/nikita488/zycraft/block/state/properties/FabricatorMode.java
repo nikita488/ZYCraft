@@ -7,19 +7,25 @@ import java.util.Locale;
 
 public enum FabricatorMode implements IStringSerializable
 {
-    OFF,
-    ON,
+    AUTO_LOW,
+    AUTO_HIGH,
     PULSE;
 
     public static final FabricatorMode[] VALUES = values();
+    private final String name;
+
+    FabricatorMode()
+    {
+        this.name = name().toLowerCase(Locale.ROOT);
+    }
 
     public boolean сanCraft(boolean lastPowered, boolean powered)
     {
         switch (this)
         {
-            case OFF:
+            case AUTO_LOW:
                 return !powered;
-            case ON:
+            case AUTO_HIGH:
                 return powered;
             case PULSE:
                 return !lastPowered && powered;
@@ -30,7 +36,7 @@ public enum FabricatorMode implements IStringSerializable
 
     public int rgb(boolean powered)
     {
-        if (this == OFF)
+        if (this == AUTO_LOW)
             return powered ? 0x00193F : ZYType.BLUE.rgb();
         return powered ? ZYType.BLUE.rgb() : 0x00193F;
     }
@@ -38,6 +44,6 @@ public enum FabricatorMode implements IStringSerializable
     @Override
     public String getString()
     {
-        return name().toLowerCase(Locale.ROOT);
+        return name;
     }
 }

@@ -30,7 +30,7 @@ public class FabricatorBlock extends Block
     public FabricatorBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(MODE, FabricatorMode.OFF));
+        setDefaultState(getDefaultState().with(MODE, FabricatorMode.AUTO_LOW));
     }
 
     @Override

@@ -5,20 +5,23 @@ import nikita488.zycraft.ZYCraft;
 
 import java.util.Locale;
 
-public enum ZYWidget
+public enum ZYSpriteType
 {
     BACKGROUND,
-    ARROW;
+    MENU_TOP,
+    MENU_MIDDLE,
+    MENU_BOTTOM,
+    MENU_ITEM;
 
     private final ResourceLocation name;
-    public static final ZYWidget[] VALUES = values();
+    public static final ZYSpriteType[] VALUES = values();
 
-    ZYWidget()
+    ZYSpriteType()
     {
         this.name = ZYCraft.modLoc(name().toLowerCase(Locale.ROOT));
     }
 
-    public ResourceLocation textureName()
+    public ResourceLocation spriteName()
     {
         return name;
     }

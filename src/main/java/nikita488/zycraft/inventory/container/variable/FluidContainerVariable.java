@@ -3,11 +3,13 @@ package nikita488.zycraft.inventory.container.variable;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fluids.FluidStack;
 
+import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
 public class FluidContainerVariable implements IContainerVariable
 {
     private FluidStack fluid = FluidStack.EMPTY;
+    @Nullable
     private Supplier<FluidStack> supplier;
 
     public FluidContainerVariable() {}
@@ -20,7 +22,7 @@ public class FluidContainerVariable implements IContainerVariable
     @Override
     public boolean needsUpdating()
     {
-        return !fluid.isFluidStackIdentical(supplier.get());
+        return supplier != null && !fluid.isFluidStackIdentical(supplier.get());
     }
 
     @Override
