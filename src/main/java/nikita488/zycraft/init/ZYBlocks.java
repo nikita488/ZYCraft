@@ -427,11 +427,10 @@ public class ZYBlocks
                         .key('X', DataIngredient.tag(ZYTags.Items.ENGINEERING_BLOCKS.get(ZYType.BLUE)))
                         .key('#', DataIngredient.items(ZYCHORITE))
                         .key('I', DataIngredient.tag(Tags.Items.INGOTS_IRON))
-                        .key('R', DataIngredient.tag(Tags.Items.DUSTS_REDSTONE))
                         .key('$', source)
                         .patternLine("XIX")
                         .patternLine("#$#")
-                        .patternLine("XRX")
+                        .patternLine("X#X")
                         .addCriterion("has_" + provider.safeName(source), source.getCritereon(provider))
                         .build(provider, provider.safeId(ctx.getEntry()));
             })
