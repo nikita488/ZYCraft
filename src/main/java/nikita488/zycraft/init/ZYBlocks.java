@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
+import net.minecraft.item.Rarity;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.loot.*;
 import net.minecraft.loot.conditions.BlockStateProperty;
@@ -417,6 +418,7 @@ public class ZYBlocks
                     .singleTexture(ctx.getName(), provider.modLoc("block/advanced_machine_top"), "top", provider.blockTexture(ctx.getEntry()))))
             .simpleTileEntity(FabricatorTile::new)
             .item()
+                .properties(properties -> properties.rarity(Rarity.UNCOMMON))
                 .color(() -> ZYColors::fabricatorItemColor)
                 .build()
             .recipe((ctx, provider) ->
