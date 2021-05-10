@@ -6,12 +6,12 @@
     ]
   },
   "criteria": {
-    "has_gunpowder": {
+    "has_flint_and_steel": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
-            "tag": "forge:gunpowder"
+            "item": "minecraft:flint_and_steel"
           }
         ]
       }
@@ -25,7 +25,7 @@
   },
   "requirements": [
     [
-      "has_gunpowder",
+      "has_flint_and_steel",
       "has_the_recipe"
     ]
   ]

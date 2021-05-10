@@ -13,7 +13,7 @@
       "item": "zycraft:zychorite"
     },
     "$": {
-      "tag": "forge:gunpowder"
+      "item": "minecraft:flint_and_steel"
     },
     "%": {
       "item": "minecraft:iron_bars"

@@ -389,7 +389,7 @@ public class ZYBlocks
                     .withExistingParent(ctx.getName(), provider.modLoc("block/basic_machine_top"))
                     .texture("side", provider.modLoc("block/" + ctx.getName() + "_side"))
                     .texture("top", provider.modLoc("block/" + ctx.getName() + "_top"))))
-            .recipe((ctx, provider) -> basicMachine(ZYType.RED, provider, DataIngredient.tag(Tags.Items.GUNPOWDER), ctx::getEntry))
+            .recipe((ctx, provider) -> basicMachine(ZYType.RED, provider, DataIngredient.items(Items.FLINT_AND_STEEL), ctx::getEntry))
             .register();
 
     public static final BlockEntry<FluidVoidBlock> FLUID_VOID = REGISTRATE.block("fluid_void", FluidVoidBlock::new)
