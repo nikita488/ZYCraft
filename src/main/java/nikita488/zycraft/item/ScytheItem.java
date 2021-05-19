@@ -11,6 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolItem;
 import net.minecraft.server.management.PlayerInteractionManager;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import nikita488.zycraft.util.BlockUtils;
 
@@ -24,6 +27,12 @@ public class ScytheItem extends ToolItem
     public ScytheItem(Properties properties)
     {
         super(0.0F, 0.0F, ScytheItemTier.INSTANCE, Collections.emptySet(), properties);
+    }
+
+    @Override
+    public ITextComponent getDisplayName(ItemStack stack)
+    {
+        return new TranslationTextComponent(getTranslationKey(stack)).mergeStyle(TextFormatting.BLUE);
     }
 
     @Override

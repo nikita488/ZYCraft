@@ -61,7 +61,7 @@ public class ZYFluidContainerItem extends Item
             tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).mergeStyle(TextFormatting.GRAY));
 
         if (capacity > FluidAttributes.BUCKET_VOLUME)
-            tooltip.add(new TranslationTextComponent("%s/%s mB", fluid.getAmount(), capacity).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(new TranslationTextComponent("%d/%d mB", fluid.getAmount(), capacity).mergeStyle(TextFormatting.GRAY));
     }
 
     @Override

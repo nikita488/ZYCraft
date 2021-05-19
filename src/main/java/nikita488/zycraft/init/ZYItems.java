@@ -7,7 +7,6 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.item.Item;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import nikita488.zycraft.ZYCraft;
@@ -54,7 +53,6 @@ public class ZYItems
             .register();
 
     public static final ItemEntry<ScytheItem> SCYTHE = REGISTRATE.item("scythe", ScytheItem::new)
-            .lang(TextFormatting.BLUE + "Scythe")
             .model((ctx, provider) -> provider.handheld(ctx::getEntry, ZYCraft.modLoc("item/scythe")))
             .recipe((ctx, provider) -> ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
                     .key('#', Tags.Items.RODS_WOODEN)
