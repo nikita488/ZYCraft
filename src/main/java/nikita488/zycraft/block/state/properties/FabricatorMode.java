@@ -37,8 +37,8 @@ public enum FabricatorMode implements IStringSerializable
     public int rgb(boolean powered)
     {
         if (this == AUTO_LOW)
-            return powered ? 0x00193F : ZYType.BLUE.rgb();
-        return powered ? ZYType.BLUE.rgb() : 0x00193F;
+            return powered ? 0x002142 : ZYType.BLUE.rgb();
+        return powered ? ZYType.BLUE.rgb() : 0x002142;
     }
 
     @Override
