@@ -21,6 +21,7 @@ import nikita488.zycraft.client.ZYSpriteType;
 import nikita488.zycraft.client.ZYSpriteTextureManager;
 import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.inventory.container.variable.IntContainerVariable;
+import nikita488.zycraft.util.Color;
 import org.lwjgl.opengl.GL11;
 
 public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
@@ -69,16 +70,11 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
 
     public void renderBackground(MatrixStack stack, int x, int y, float width, float height, int argb)
     {
-        int r = (argb >> 16) & 0xFF;
-        int g = (argb >> 8) & 0xFF;
-        int b = argb & 0xFF;
-        int a = (argb >> 24) & 0xFF;
-
-        RenderSystem.color4f(r / 255.0F, g / 255.0F, b / 255.0F, a / 255.0F);
+        setColor(argb);
         renderTileableSprite(stack, x, y, width, height, getSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, CloudSprite.NAME), 32);
-        RenderSystem.color4f(67 / 255.0F, 67 / 255.0F, 67 / 255.0F, 1);
+        setColor(0xFF434343);
         renderTileableSprite(stack, x, y, width, height, ZYClientSetup.sprites().get(ZYSpriteType.BACKGROUND), 32);
-        RenderSystem.color4f(1, 1, 1, 1);
+        resetColor();
     }
 
     public void renderSprite(MatrixStack stack, int x, int y, int width, int height, ZYSpriteType type)
@@ -99,6 +95,21 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
     public TextureAtlasSprite getSprite(ResourceLocation atlasName, ResourceLocation spriteName)
     {
         return minecraft.getAtlasSpriteGetter(atlasName).apply(spriteName);
+    }
+
+    public static void resetColor()
+    {
+        RenderSystem.color4f(1, 1, 1, 1);
+    }
+
+    public static void setColor(int rgb, int a)
+    {
+        setColor(Color.argb(rgb, a));
+    }
+
+    public static void setColor(int argb)
+    {
+        RenderSystem.color4f(((argb >> 16) & 0xFF) / 255.0F, ((argb >> 8) & 0xFF) / 255.0F, (argb & 0xFF) / 255.0F, ((argb >> 24) & 0xFF) / 255.0F);
     }
 
     public static void renderSprite(MatrixStack stack, int x, int y, int blitOffset, int width, int height, ZYSpriteType type)
@@ -171,7 +182,7 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
 
         public void render(MatrixStack stack)
         {
-            RenderSystem.color4f(1, 1, 1, 1);
+            resetColor();
             minecraft.getTextureManager().bindTexture(ZYSpriteTextureManager.NAME);
             renderSprite(stack, x, y, 34, 5, ZYSpriteType.MENU_TOP);
 
@@ -215,12 +226,12 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
 
                 if (index == selectedItem.value())
                 {
-                    RenderSystem.color4f((selectedColor >> 16 & 0xFF) / 255.0F, (selectedColor >> 8 & 0xFF) / 255.0F, (selectedColor & 0xFF) / 255.0F, 1);
+                    setColor(selectedColor, 255);
                     manager.bindTexture(blockAtlas);
                     renderSprite(stack, x, y, 22, 22, getSprite(blockAtlas, CloudSprite.NAME));
                 }
 
-                RenderSystem.color4f(1, 1, 1, 1);
+                resetColor();
                 manager.bindTexture(ZYSpriteTextureManager.NAME);
                 renderSprite(stack, x, y, 22, 22, ZYSpriteType.MENU_ITEM);
 
