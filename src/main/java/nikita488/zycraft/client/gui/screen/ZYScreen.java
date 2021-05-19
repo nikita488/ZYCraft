@@ -17,8 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.client.ZYClientSetup;
-import nikita488.zycraft.client.resources.ZYSpriteType;
-import nikita488.zycraft.client.resources.ZYSpriteTextureManager;
+import nikita488.zycraft.client.ZYSpriteType;
+import nikita488.zycraft.client.ZYSpriteTextureManager;
 import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.inventory.container.variable.IntContainerVariable;
 import org.lwjgl.opengl.GL11;
@@ -77,7 +77,7 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
         RenderSystem.color4f(r / 255.0F, g / 255.0F, b / 255.0F, a / 255.0F);
         renderTileableSprite(stack, x, y, width, height, getSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, CloudSprite.NAME), 32);
         RenderSystem.color4f(67 / 255.0F, 67 / 255.0F, 67 / 255.0F, 1);
-        renderTileableSprite(stack, x, y, width, height, ZYClientSetup.spriteTextures().get(ZYSpriteType.BACKGROUND), 32);
+        renderTileableSprite(stack, x, y, width, height, ZYClientSetup.sprites().get(ZYSpriteType.BACKGROUND), 32);
         RenderSystem.color4f(1, 1, 1, 1);
     }
 
@@ -103,7 +103,7 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
 
     public static void renderSprite(MatrixStack stack, int x, int y, int blitOffset, int width, int height, ZYSpriteType type)
     {
-        blit(stack, x, y, blitOffset, width, height, ZYClientSetup.spriteTextures().get(type));
+        blit(stack, x, y, blitOffset, width, height, ZYClientSetup.sprites().get(type));
     }
 
     public static void renderTileableSprite(MatrixStack stack, int x, int y, int blitOffset, float width, float height, TextureAtlasSprite sprite, float resolution)
@@ -151,7 +151,7 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
     public class Menu
     {
         private final int x, y, selectedColor;
-        private IntContainerVariable selectedItem;
+        private final IntContainerVariable selectedItem;
         private int itemCount;
 
         public Menu(int x, int y, int selectedColor, IntContainerVariable selectedItem)

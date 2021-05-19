@@ -51,10 +51,8 @@ public class FabricatorBlock extends Block
     {
         Direction side = Direction.getFacingFromVector(adjPos.getX() - pos.getX(), adjPos.getY() - pos.getY(), adjPos.getZ() - pos.getZ());
 
-        //System.out.println(side);
-
         if (side != Direction.UP)
-            ZYTiles.FABRICATOR.get(world, pos).ifPresent(fabricator -> fabricator.logic().setInventoryChanged(side));
+            ZYTiles.FABRICATOR.get(world, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
     }
 
     @Override
@@ -75,10 +73,22 @@ public class FabricatorBlock extends Block
     }
 
     @Override
+    public boolean hasComparatorInputOverride(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    {
+        return ZYTiles.FABRICATOR.get(world, pos).map(FabricatorTile::getComparatorInputOverride).orElse(0);
+    }
+
+    @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         if (!world.isRemote())
-            NetworkHooks.openGui((ServerPlayerEntity)player, (FabricatorTile)world.getTileEntity(pos));
+            NetworkHooks.openGui((ServerPlayerEntity)player, ZYTiles.FABRICATOR.getNullable(world, pos));
         return ActionResultType.SUCCESS;
     }
 

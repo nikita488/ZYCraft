@@ -9,7 +9,7 @@ import net.minecraft.item.crafting.ICraftingRecipe;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.inventory.container.FabricatorContainer;
-import nikita488.zycraft.network.SetRecipePatternPacket;
+import nikita488.zycraft.network.SetFabricatorRecipePacket;
 
 import javax.annotation.Nullable;
 
@@ -35,7 +35,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
             return helper.createUserErrorWithTooltip(ZYLang.RECIPE_INCOMPATIBLE);
 
         if (doTransfer)
-            ZYCraft.CHANNEL.sendToServer(new SetRecipePatternPacket(container.windowId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
+            ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.windowId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
         return null;
     }
 

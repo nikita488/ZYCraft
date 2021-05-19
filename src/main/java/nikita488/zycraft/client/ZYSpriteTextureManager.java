@@ -1,4 +1,4 @@
-package nikita488.zycraft.client.resources;
+package nikita488.zycraft.client;
 
 import net.minecraft.client.renderer.texture.SpriteUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

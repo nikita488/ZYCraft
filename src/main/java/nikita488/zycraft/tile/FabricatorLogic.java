@@ -26,7 +26,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.EmptyHandler;
-import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.inventory.container.ZYContainer;
 import nikita488.zycraft.util.ItemStackUtils;
 
@@ -37,18 +36,18 @@ public class FabricatorLogic
 {
     private static final Direction[] SIDES = Direction.values();
     private final FabricatorTile fabricator;
-    private int foundIngredientCount;
-    private final EnumSet<Direction> checkedInventories = EnumSet.noneOf(Direction.class);
-    private final EnumSet<Direction> pendingInventories = EnumSet.noneOf(Direction.class);
+    private final EnumSet<Direction> checkedSides = EnumSet.noneOf(Direction.class);
+    private final EnumSet<Direction> pendingSides = EnumSet.noneOf(Direction.class);
     private final EnumMap<Direction, ObjectList<ItemStack>> pendingItems = new EnumMap<>(Direction.class);
     private final CraftingInventory craftingInventory = new CraftingInventory(ZYContainer.EMPTY_CONTAINER, 3, 3);
+    private int foundIngredientCount;
 
     public FabricatorLogic(FabricatorTile fabricator)
     {
         this.fabricator = fabricator;
     }
 
-    private LazyOptional<IItemHandler> getAdjacentCapability(IBlockReader world, BlockPos pos, Direction side)
+    private LazyOptional<IItemHandler> getAdjacentInventory(IBlockReader world, BlockPos pos, Direction side)
     {
         TileEntity tile = world.getTileEntity(pos.offset(side));
         return tile != null ? tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite()) : LazyOptional.empty();
@@ -66,7 +65,7 @@ public class FabricatorLogic
 
         for (Direction side : SIDES)
         {
-            if (isInventoryChecked(side))
+            if (isSideChecked(side))
                 continue;
 
             ObjectList<ItemStack> items = pendingItems.get(side);
@@ -74,14 +73,13 @@ public class FabricatorLogic
             if (items == null)
                 continue;
 
-            setInventoryChecked(side);
-            ZYCraft.LOGGER.info("Checked {} inventory for inserting pending stacks", side);
+            setSideChecked(side);
 
             IItemHandler inventory = fabricator.inventory();
 
             if (side != Direction.UP)
             {
-                LazyOptional<IItemHandler> capability = getAdjacentCapability(fabricator.getWorld(), fabricator.getPos(), side);
+                LazyOptional<IItemHandler> capability = getAdjacentInventory(fabricator.getWorld(), fabricator.getPos(), side);
 
                 if (!capability.isPresent())
                     continue;
@@ -128,7 +126,7 @@ public class FabricatorLogic
         ICraftingRecipe recipe = fabricator.recipe();
         ItemStack recipeResult = fabricator.craftingResult();
 
-        if (recipe == null || recipeResult.isEmpty() || isAllInventoriesChecked())
+        if (recipe == null || recipeResult.isEmpty() || isAllSidesChecked())
             return;
 
         RecipeIngredient[] ingredients = getIngredients(recipe.getIngredients());
@@ -136,12 +134,10 @@ public class FabricatorLogic
         if (ingredients == null)
             return;
 
-        ZYCraft.LOGGER.info("Craft");
-
         for (int slot = 0; slot < ingredients.length; slot++)
             craftingInventory.setInventorySlotContents(slot, ingredients[slot].stack());
 
-        FakePlayer player = fabricator.getPlayer();
+        FakePlayer player = fabricator.player();
 
         player.setRawPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         recipeResult.onCrafting(world, player, recipeResult.getCount());
@@ -178,7 +174,7 @@ public class FabricatorLogic
         }
 
         playerInventory.clear();
-        pendingInventories.clear();
+        pendingSides.clear();
         craftingInventory.clear();
     }
 
@@ -196,33 +192,25 @@ public class FabricatorLogic
             this.foundIngredientCount++;
         }
 
-        if (!isInventoryChecked(Direction.UP))
+        if (!isSideChecked(Direction.UP))
         {
-            setInventoryChecked(Direction.UP);
-            ZYCraft.LOGGER.info("Checked fabricator inventory");
+            setSideChecked(Direction.UP);
 
             if (tryFindIngredients(fabricator.inventory(), recipeIngredients, Direction.UP, foundIngredients))
-            {
-                ZYCraft.LOGGER.info("Found ingredients in fabricator inventory");
                 return foundIngredients;
-            }
         }
 
         for (Direction side : SIDES)
         {
-            if (side == Direction.UP || isInventoryChecked(side))
+            if (side == Direction.UP || isSideChecked(side))
                 continue;
 
-            setInventoryChecked(side);
-            ZYCraft.LOGGER.info("Checked {} inventory", side);
+            setSideChecked(side);
 
-            LazyOptional<IItemHandler> capability = getAdjacentCapability(fabricator.getWorld(), fabricator.getPos(), side);
+            LazyOptional<IItemHandler> capability = getAdjacentInventory(fabricator.getWorld(), fabricator.getPos(), side);
 
             if (capability.isPresent() && tryFindIngredients(capability.orElse(EmptyHandler.INSTANCE), recipeIngredients, side, foundIngredients))
-            {
-                ZYCraft.LOGGER.info("Found ingredients in {} inventory", side);
                 return foundIngredients;
-            }
         }
 
         return null;
@@ -246,7 +234,7 @@ public class FabricatorLogic
 
                 foundIngredients[i] = new RecipeIngredient(side, inventory, slot);
                 this.foundIngredientCount++;
-                pendingInventories.add(side);
+                pendingSides.add(side);
 
                 stack.shrink(1);
 
@@ -305,32 +293,32 @@ public class FabricatorLogic
             tag.put("PendingItems", pendingItemTags);
     }
 
-    private void setInventoryChecked(Direction side)
+    private void setSideChecked(Direction side)
     {
-        checkedInventories.add(side);
+        checkedSides.add(side);
     }
 
-    public void setInventoryChanged(Direction side)
+    public void setSideChanged(Direction side)
     {
-        checkedInventories.remove(side);
-        checkedInventories.removeAll(pendingInventories);
-        pendingInventories.clear();
+        checkedSides.remove(side);
+        checkedSides.removeAll(pendingSides);
+        pendingSides.clear();
     }
 
-    private boolean isInventoryChecked(Direction side)
+    private boolean isSideChecked(Direction side)
     {
-        return checkedInventories.contains(side);
+        return checkedSides.contains(side);
     }
 
-    private boolean isAllInventoriesChecked()
+    private boolean isAllSidesChecked()
     {
-        return checkedInventories.size() == SIDES.length;
+        return checkedSides.size() == SIDES.length;
     }
 
-    public void recheckInventories()
+    public void recheckSides()
     {
-        checkedInventories.clear();
-        pendingInventories.clear();
+        checkedSides.clear();
+        pendingSides.clear();
     }
 
     private void addPendingItem(Direction side, ItemStack stack)

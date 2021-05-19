@@ -17,15 +17,15 @@ public class ZYPackets
                 .encoder(UpdateContainerVariablePacket::encode)
                 .consumer(UpdateContainerVariablePacket::handle)
                 .add();
-        channel.messageBuilder(SetRecipePatternPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(SetRecipePatternPacket::decode)
-                .encoder(SetRecipePatternPacket::encode)
-                .consumer(SetRecipePatternPacket::handle)
+        channel.messageBuilder(SetFabricatorRecipePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SetFabricatorRecipePacket::decode)
+                .encoder(SetFabricatorRecipePacket::encode)
+                .consumer(SetFabricatorRecipePacket::handle)
                 .add();
-        channel.messageBuilder(SetRecipePatternSlotPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(SetRecipePatternSlotPacket::decode)
-                .encoder(SetRecipePatternSlotPacket::encode)
-                .consumer(SetRecipePatternSlotPacket::handle)
+        channel.messageBuilder(SetSlotStackPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SetSlotStackPacket::decode)
+                .encoder(SetSlotStackPacket::encode)
+                .consumer(SetSlotStackPacket::handle)
                 .add();
     }
 }

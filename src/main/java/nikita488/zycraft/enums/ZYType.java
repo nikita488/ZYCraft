@@ -2,6 +2,7 @@ package nikita488.zycraft.enums;
 
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.Util;
 
 import java.util.Random;
 
@@ -26,9 +27,9 @@ public enum ZYType implements IStringSerializable
         this.mtlColor = mtlColor;
     }
 
-    public static ZYType random(Random random)
+    public static ZYType randomType(Random random)
     {
-        return VALUES[random.nextInt(VALUES.length)];
+        return Util.getRandomObject(VALUES, random);
     }
 
     @Override

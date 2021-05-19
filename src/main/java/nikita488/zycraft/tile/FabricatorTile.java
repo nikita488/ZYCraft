@@ -27,6 +27,7 @@ import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import nikita488.zycraft.block.FabricatorBlock;
 import nikita488.zycraft.block.state.properties.FabricatorMode;
@@ -60,7 +61,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         protected void onContentsChanged(int slot)
         {
             markDirty();
-            logic.setInventoryChanged(Direction.UP);
+            logic.setSideChanged(Direction.UP);
         }
     };
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> inventory);
@@ -99,12 +100,12 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         if (pendingRecipe != null)
         {
             Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(pendingRecipe)
-                    .filter(recipe -> recipeResult.canUseRecipe(world, getPlayer(), recipe))
+                    .filter(recipe -> recipeResult.canUseRecipe(world, player(), recipe))
                     .flatMap(recipe -> IRecipeType.CRAFTING.matches((ICraftingRecipe)recipe, world, recipePattern));
 
             if (!craftingRecipe.isPresent())
                 craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
-                        .filter(recipe -> recipeResult.canUseRecipe(world, getPlayer(), recipe));
+                        .filter(recipe -> recipeResult.canUseRecipe(world, player(), recipe));
 
             ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
 
@@ -126,7 +127,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
     private boolean canCraft(boolean powered)
     {
-        return getBlockState().get(FabricatorBlock.MODE).сanCraft(lastPowered, powered);
+        return mode().сanCraft(lastPowered, powered);
     }
 
     public int getColor(BlockState state)
@@ -138,6 +139,11 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     {
         InventoryUtils.dropInventoryItems(world, pos, inventory);
         logic.dropPendingItems();
+    }
+
+    public int getComparatorInputOverride()
+    {
+        return ItemHandlerHelper.calcRedstoneFromInventory(inventory);
     }
 
     @Override
@@ -232,7 +238,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     public void setRecipe(@Nullable ICraftingRecipe recipe)
     {
         recipeResult.setRecipeUsed(recipe);
-        logic.recheckInventories();
+        logic.recheckSides();
     }
 
     public ItemStack craftingResult()
@@ -245,7 +251,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         recipeResult.setInventorySlotContents(0, stack);
     }
 
-    public FakePlayer getPlayer()
+    public FakePlayer player()
     {
         if (player == null)
             this.player = FakePlayerFactory.get((ServerWorld)world, PROFILE);

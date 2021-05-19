@@ -1,24 +1,23 @@
-package nikita488.zycraft.client.resources;
+package nikita488.zycraft.client;
 
 import net.minecraft.util.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 
-import java.util.Locale;
-
 public enum ZYSpriteType
 {
-    BACKGROUND,
-    MENU_TOP,
-    MENU_MIDDLE,
-    MENU_BOTTOM,
-    MENU_ITEM;
+    BACKGROUND("background"),
+    MENU_TOP("menu_top"),
+    MENU_MIDDLE("menu_middle"),
+    MENU_BOTTOM("menu_bottom"),
+    MENU_ITEM("menu_item"),
+    RIGHT_ARROW("right_arrow");
 
     private final ResourceLocation name;
     public static final ZYSpriteType[] VALUES = values();
 
-    ZYSpriteType()
+    ZYSpriteType(String name)
     {
-        this.name = ZYCraft.modLoc(name().toLowerCase(Locale.ROOT));
+        this.name = ZYCraft.modLoc(name);
     }
 
     public ResourceLocation spriteName()

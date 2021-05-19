@@ -54,7 +54,7 @@ public class ZychoriumItem extends Item implements IColorChanger
 
     private boolean canChangeComponent(int value, boolean sneaking)
     {
-        return sneaking ? value != 0 : value != 255;
+        return value != (sneaking ? 0 : 255);
     }
 
     @Override

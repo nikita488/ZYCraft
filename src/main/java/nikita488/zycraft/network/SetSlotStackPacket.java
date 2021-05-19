@@ -8,38 +8,38 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
-public class SetRecipePatternSlotPacket
+public class SetSlotStackPacket
 {
     private final int windowID, slotIndex;
     private final ItemStack stack;
 
-    public SetRecipePatternSlotPacket(int windowID, int slotIndex, ItemStack stack)
+    public SetSlotStackPacket(int windowID, int slotIndex, ItemStack stack)
     {
         this.windowID = windowID;
         this.slotIndex = slotIndex;
         this.stack = stack;
     }
 
-    public SetRecipePatternSlotPacket(PacketBuffer buf)
+    public SetSlotStackPacket(PacketBuffer buf)
     {
         this.windowID = buf.readVarInt();
         this.slotIndex = buf.readVarInt();
         this.stack = buf.readItemStack();
     }
 
-    public static SetRecipePatternSlotPacket decode(PacketBuffer buf)
+    public static SetSlotStackPacket decode(PacketBuffer buf)
     {
-        return new SetRecipePatternSlotPacket(buf);
+        return new SetSlotStackPacket(buf);
     }
 
-    public static void encode(SetRecipePatternSlotPacket msg, PacketBuffer buf)
+    public static void encode(SetSlotStackPacket msg, PacketBuffer buf)
     {
         buf.writeVarInt(msg.windowID());
         buf.writeVarInt(msg.slotIndex());
         buf.writeItemStack(msg.stack());
     }
 
-    public static boolean handle(SetRecipePatternSlotPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(SetSlotStackPacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {

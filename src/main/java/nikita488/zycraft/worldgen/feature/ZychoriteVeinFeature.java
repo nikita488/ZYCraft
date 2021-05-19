@@ -124,7 +124,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
                                                 Block block = ZYBlocks.ZYCHORITE.get();
 
                                                 if (random.nextFloat() < config.orePercentage)
-                                                    block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.random(random)).get();
+                                                    block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.randomType(random)).get();
 
                                                 world.setBlockState(blockpos$mutable, block.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
                                                 ++i;

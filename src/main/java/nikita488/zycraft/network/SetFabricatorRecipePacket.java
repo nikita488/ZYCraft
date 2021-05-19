@@ -15,14 +15,14 @@ import nikita488.zycraft.tile.FabricatorTile;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class SetRecipePatternPacket
+public class SetFabricatorRecipePacket
 {
     private final int windowID;
     private final ResourceLocation recipeID;
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
     private ItemStack recipeResult = ItemStack.EMPTY;
 
-    public SetRecipePatternPacket(int windowID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
+    public SetFabricatorRecipePacket(int windowID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
     {
         this.windowID = windowID;
         this.recipeID = recipe.getId();
@@ -41,7 +41,7 @@ public class SetRecipePatternPacket
         });
     }
 
-    public SetRecipePatternPacket(PacketBuffer buf)
+    public SetFabricatorRecipePacket(PacketBuffer buf)
     {
         this.windowID = buf.readVarInt();
         this.recipeID = buf.readResourceLocation();
@@ -52,12 +52,12 @@ public class SetRecipePatternPacket
         this.recipeResult = buf.readItemStack();
     }
 
-    public static SetRecipePatternPacket decode(PacketBuffer buf)
+    public static SetFabricatorRecipePacket decode(PacketBuffer buf)
     {
-        return new SetRecipePatternPacket(buf);
+        return new SetFabricatorRecipePacket(buf);
     }
 
-    public static void encode(SetRecipePatternPacket msg, PacketBuffer buf)
+    public static void encode(SetFabricatorRecipePacket msg, PacketBuffer buf)
     {
         buf.writeVarInt(msg.windowID());
         buf.writeResourceLocation(msg.recipeID());
@@ -68,7 +68,7 @@ public class SetRecipePatternPacket
         buf.writeItemStack(msg.recipeResult());
     }
 
-    public static boolean handle(SetRecipePatternPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(SetFabricatorRecipePacket msg, Supplier<NetworkEvent.Context> ctx)
     {
         ctx.get().enqueueWork(() ->
         {

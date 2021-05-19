@@ -9,7 +9,7 @@ import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
-import nikita488.zycraft.network.SetRecipePatternSlotPacket;
+import nikita488.zycraft.network.SetSlotStackPacket;
 
 import java.util.Collections;
 import java.util.List;
@@ -41,7 +41,7 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
                 public void accept(I ingredient)
                 {
                     if (ingredient instanceof ItemStack)
-                        ZYCraft.CHANNEL.sendToServer(new SetRecipePatternSlotPacket(container.windowId, slot.getSlotIndex(), (ItemStack)ingredient));
+                        ZYCraft.CHANNEL.sendToServer(new SetSlotStackPacket(container.windowId, slot.getSlotIndex(), (ItemStack)ingredient));
                 }
             });
         }

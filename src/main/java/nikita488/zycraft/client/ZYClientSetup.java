@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.client.resources.ZYSpriteTextureManager;
 import nikita488.zycraft.client.model.FluidContainerModel;
 import nikita488.zycraft.client.particle.SparkleParticle;
 import nikita488.zycraft.init.ZYItems;
@@ -22,7 +21,7 @@ import nikita488.zycraft.init.ZYParticles;
 @Mod.EventBusSubscriber(modid = ZYCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ZYClientSetup
 {
-    private static ZYSpriteTextureManager spriteTextures;
+    private static ZYSpriteTextureManager sprites;
 
     @SubscribeEvent
     public static void setup(FMLClientSetupEvent event)
@@ -50,12 +49,12 @@ public class ZYClientSetup
 
         mc.particles.registerFactory(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
 
-        spriteTextures = new ZYSpriteTextureManager(mc.getTextureManager());
-        ((IReloadableResourceManager)mc.getResourceManager()).addReloadListener(spriteTextures);
+        sprites = new ZYSpriteTextureManager(mc.getTextureManager());
+        ((IReloadableResourceManager)mc.getResourceManager()).addReloadListener(sprites);
     }
 
-    public static ZYSpriteTextureManager spriteTextures()
+    public static ZYSpriteTextureManager sprites()
     {
-        return spriteTextures;
+        return sprites;
     }
 }
