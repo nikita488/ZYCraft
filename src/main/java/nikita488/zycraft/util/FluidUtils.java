@@ -8,25 +8,23 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class FluidUtils
 {
-    public static Optional<IFluidHandlerItem> getItemFluidHandler(@Nonnull ItemStack stack)
+    public static Optional<IFluidHandlerItem> getItemFluidHandler(ItemStack stack)
     {
         if (stack.isEmpty())
             return Optional.empty();
@@ -83,39 +81,27 @@ public class FluidUtils
         return true;
     }
 
-    public static boolean voidFluid(BlockState state, World world, BlockPos pos)
+    public static boolean voidFluid(World world, BlockPos pos, Predicate<FluidState> predicate)
     {
+        if (!predicate.test(world.getFluidState(pos)))
+            return false;
+
+        BlockState state = world.getBlockState(pos);
+
         if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).pickupFluid(world, pos, state) != Fluids.EMPTY)
             return true;
 
         if (!(state.getBlock() instanceof FlowingFluidBlock))
         {
-            if (state.getMaterial() != Material.OCEAN_PLANT && state.getMaterial() != Material.SEA_GRASS)
+            Material material = state.getMaterial();
+
+            if (material != Material.OCEAN_PLANT && material != Material.SEA_GRASS)
                 return false;
 
             Block.spawnDrops(state, world, pos, state.hasTileEntity() ? world.getTileEntity(pos) : null);
         }
 
         world.setBlockState(pos, Blocks.AIR.getDefaultState(), Constants.BlockFlags.DEFAULT);
-        return true;
-    }
-
-    public static boolean turnLavaIntoBlock(World world, BlockPos pos, FluidState fluidState, BlockState newState)
-    {
-        if (!fluidState.isTagged(FluidTags.LAVA))
-            return false;
-
-        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, newState));
-        world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, pos, -1);
-        return true;
-    }
-
-    public static boolean turnWaterIntoIce(BlockState blockState, World world, BlockPos pos, FluidState fluidState)
-    {
-        if (!fluidState.isTagged(FluidTags.WATER) || !(blockState.getBlock() instanceof FlowingFluidBlock))
-            return false;
-
-        world.setBlockState(pos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, pos, pos, Blocks.ICE.getDefaultState()));
         return true;
     }
 }

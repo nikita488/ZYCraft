@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 
 import javax.annotation.Nullable;
@@ -19,7 +20,7 @@ import java.util.Random;
 
 public class ZychoriumSoilBlock extends Block
 {
-    public final static BooleanProperty FLIPPED = ZYBlockStateProperties.FLIPPED;
+    public final static BooleanProperty FLIPPED = ZYBlockStateProperties.ZYCHORIUM_SOIL_FLIPPED;
 
     public ZychoriumSoilBlock(Properties properties)
     {
@@ -77,7 +78,7 @@ public class ZychoriumSoilBlock extends Block
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjacentPos, boolean isMoving)
     {
         if (state.get(FLIPPED) != world.isBlockPowered(pos))
-            world.setBlockState(pos, state.cycleValue(FLIPPED));
+            world.setBlockState(pos, state.cycleValue(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
