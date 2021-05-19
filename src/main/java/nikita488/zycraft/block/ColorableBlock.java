@@ -5,7 +5,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -17,9 +16,7 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.api.colorable.IColorable;
-import nikita488.zycraft.enums.ZYDyeColor;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYTiles;
 
@@ -68,36 +65,6 @@ public class ColorableBlock extends Block
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
-
-        if (stack.isEmpty())
-            return ActionResultType.PASS;
-
-        Item item = stack.getItem();
-        TileEntity tile = world.getTileEntity(pos);
-
-        if (!(tile instanceof IColorable))
-            return ActionResultType.CONSUME;
-
-        IColorable colorable = (IColorable)tile;
-        int rgb = colorable.getColor(state, world, pos);
-        ZYDyeColor dyeColor;
-
-        if (item instanceof IColorChanger && ((IColorChanger)item).canChangeColor(state, world, pos, player, hand, hit, rgb))
-        {
-            if (!world.isRemote())
-                colorable.setColor(state, world, pos, ((IColorChanger)item).changeColor(state, world, pos, player, hand, hit, rgb));
-            return ActionResultType.SUCCESS;
-        }
-        else if ((dyeColor = ZYDyeColor.byDyeColor(stack)) != null && rgb != dyeColor.rgb())
-        {
-            if (world.isRemote())
-                return ActionResultType.SUCCESS;
-
-            colorable.setColor(state, world, pos, dyeColor.rgb());
-            return ActionResultType.SUCCESS;
-        }
-
-        return ActionResultType.PASS;
+        return IColorable.interact(state, world, pos, player, hand, hit);
     }
 }

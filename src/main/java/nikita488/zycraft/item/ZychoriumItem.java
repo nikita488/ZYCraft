@@ -46,7 +46,7 @@ public class ZychoriumItem extends Item implements IColorChanger
                 float brightness = Color.rgbToHSV(red, green, blue).getZ();
                 return sneaking ? brightness > 0 : brightness < 1;
             case LIGHT:
-                return sneaking ? rgb != 0x080808 : rgb != 0xFFFFFF;
+                return sneaking ? rgb != 0x080808 : rgb != -1;
         }
 
         return false;
