@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = "https://files.minecraftforge.net/maven" }
+        maven { url = "https://maven.minecraftforge.net" }
         maven { url = "https://repo.spongepowered.org/maven" }
         jcenter()
         mavenCentral()
@@ -64,7 +64,7 @@ configurations {
 dependencies {
     minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
 
-    def registrate = "com.tterrag.registrate:Registrate:MC1.16.2-${registrate_version}"
+    def registrate = "com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}"
     implementation fg.deobf(registrate)
     shade registrate
 
@@ -104,6 +104,7 @@ sourceSets.main.resources {
 
 processResources { task ->
     exclude ".cache"
+    exclude "**/*.psd"
 
     from(sourceSets.main.resources.srcDirs) { spec ->
         spec.include 'META-INF/mods.toml'
