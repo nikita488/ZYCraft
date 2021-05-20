@@ -65,11 +65,23 @@ public class ZYLang
     public static final TranslationTextComponent PULSE = REGISTRATE.addLang("mode", ZYCraft.modLoc("fabricator.pulse"), "Pulse");
     public static final TranslationTextComponent RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.modLoc("fabricator.recipe.incompatible"), "Recipe incompatible with Fabricator");
 
+    public static final IFormattableTextComponent INTERFACE = REGISTRATE.addLang("tooltip", ZYCraft.modLoc("interface"), "Interface")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
+    public static final IFormattableTextComponent VALVE_INFO = REGISTRATE.addLang("tooltip", ZYCraft.modLoc("valve"), "info", "Allows for fluids to pass through")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+    public static final IFormattableTextComponent VALVE_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.modLoc("valve"), "feature", "Fluids balance between valves")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+    public static final IFormattableTextComponent ITEM_IO_INFO = REGISTRATE.addLang("tooltip", ZYCraft.modLoc("item_io"), "info", "Allows for items to pass through")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+    public static final IFormattableTextComponent ITEM_IO_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.modLoc("item_io"), "feature", "Increases control over flow of items")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+
+
     public static void init()
     {
+        REGISTRATE.addLang("itemGroup", ZYCraft.modLoc("fluids"), "ZYCraft Fluids");
         REGISTRATE.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "%1$s was slowly poked by Quartz Crystal");
         REGISTRATE.addLang("death.attack", ZYCraft.modLoc("quartz_crystal"), "player", "%1$s was slowly poked by Quartz Crystal because of %2$s");
-        REGISTRATE.addLang("itemGroup", ZYCraft.modLoc("fluids"), "ZYCraft Fluids");
     }
 
     public static TranslationTextComponent addLangWithArgs(String type, ResourceLocation id, String localizedName, Object... args)

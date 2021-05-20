@@ -151,7 +151,12 @@
   "tooltip.zycraft.colorable.reset": "%s - to reset color",
   "tooltip.zycraft.colorable.rgb": "%s, %s or %s - to adjust each individual RGB",
   "tooltip.zycraft.hint": "Press %s for info",
+  "tooltip.zycraft.interface": "Interface",
+  "tooltip.zycraft.item_io.feature": "Increases control over flow of items",
+  "tooltip.zycraft.item_io.info": "Allows for items to pass through",
   "tooltip.zycraft.shortcut.right_click": "Right click",
   "tooltip.zycraft.shortcut.shift": "Shift",
-  "tooltip.zycraft.shortcut.shift_right_click": "Shift + Right click"
+  "tooltip.zycraft.shortcut.shift_right_click": "Shift + Right click",
+  "tooltip.zycraft.valve.feature": "Fluids balance between valves",
+  "tooltip.zycraft.valve.info": "Allows for fluids to pass through"
 }
