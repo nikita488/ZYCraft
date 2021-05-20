@@ -34,6 +34,8 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
     {
         renderGUI(stack, TEXTURE, 0xFF0064FF);
+        renderRightArrow(stack, guiLeft + 86, guiTop + 29, 0x7F00FFFF, 0.25F);
+        renderRightArrow(stack, guiLeft + 86, guiTop + 65, 0x7F00FFFF, 0.25F);
         menu.render(stack);
     }
 }

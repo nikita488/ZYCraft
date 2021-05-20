@@ -77,6 +77,13 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
         resetColor();
     }
 
+    public void renderRightArrow(MatrixStack stack, int x, int y, int argb, float resolution)
+    {
+        setColor(argb);
+        renderSprite(stack, x, y, (int)(80 * resolution), (int)(32 * resolution), ZYSpriteType.RIGHT_ARROW);
+        resetColor();
+    }
+
     public void renderSprite(MatrixStack stack, int x, int y, int width, int height, ZYSpriteType type)
     {
         renderSprite(stack, x, y, getBlitOffset(), width, height, type);
