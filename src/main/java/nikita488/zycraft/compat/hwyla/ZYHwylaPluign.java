@@ -12,7 +12,7 @@ public class ZYHwylaPluign implements IWailaPlugin
     @Override
     public void register(IRegistrar registrar)
     {
-        registrar.addConfig(FabricatorModeProvider.ID, true);
+        registrar.addConfig(FabricatorModeProvider.KEY, true);
         registrar.registerComponentProvider(FabricatorModeProvider.INSTANCE, TooltipPosition.BODY, FabricatorBlock.class);
     }
 }

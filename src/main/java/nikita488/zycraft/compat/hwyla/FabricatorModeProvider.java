@@ -14,12 +14,12 @@ import java.util.List;
 public class FabricatorModeProvider implements IComponentProvider
 {
     public static final FabricatorModeProvider INSTANCE = new FabricatorModeProvider();
-    public static final ResourceLocation ID = ZYCraft.id("mode");
+    public static final ResourceLocation KEY = ZYCraft.id("mode");
 
     @Override
     public void appendBody(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config)
     {
-        if (config.get(ID))
+        if (config.get(KEY))
             tooltip.add(new StringTextComponent("Mode: " + accessor.getBlockState().get(FabricatorBlock.MODE).displayName()));
     }
 }
