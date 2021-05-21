@@ -52,9 +52,10 @@ minecraft {
 
 repositories {
     mavenLocal()
-    maven { url "https://maven.tterrag.com/" }
+    maven { url "https://maven.tterrag.com" }
     maven { url "https://www.cursemaven.com" }
     maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven { url "https://maven.tehnut.info" }
 }
 
 configurations {
@@ -73,6 +74,8 @@ dependencies {
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
+    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}:api")
+    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
 
     //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3183270")
     runtimeOnly fg.deobf("curse.maven:storage-drawers-223852:3180569")
