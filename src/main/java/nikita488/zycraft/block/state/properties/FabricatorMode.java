@@ -19,7 +19,7 @@ public enum FabricatorMode implements IStringSerializable
         this.name = name().toLowerCase(Locale.ROOT);
     }
 
-    public boolean сanCraft(boolean lastPowered, boolean powered)
+    public boolean canCraft(boolean lastPowered, boolean powered)
     {
         switch (this)
         {

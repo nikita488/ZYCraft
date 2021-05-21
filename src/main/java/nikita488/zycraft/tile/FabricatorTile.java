@@ -26,6 +26,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.FakePlayerFactory;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
@@ -127,7 +128,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
     private boolean canCraft(boolean powered)
     {
-        return mode().сanCraft(lastPowered, powered);
+        return mode().canCraft(lastPowered, powered);
     }
 
     public int getColor(BlockState state)
@@ -196,7 +197,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        if (side != Direction.UP)
+        if (type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != Direction.UP)
             return capability.cast();
         return super.getCapability(type, side);
     }
