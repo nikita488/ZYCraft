@@ -21,7 +21,7 @@ import java.util.List;
 @JeiPlugin
 public class ZYJEIPlugin implements IModPlugin
 {
-    public static final ResourceLocation NAME = ZYCraft.modLoc("jei_plugin");
+    public static final ResourceLocation NAME = ZYCraft.id("jei_plugin");
 
     @Override
     public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration)

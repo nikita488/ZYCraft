@@ -28,7 +28,7 @@ public class ZYClientSetup
     {
         event.enqueueWork(() ->
         {
-            ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.modLoc("filled"), (stack, world, entity) ->
+            ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
             {
                 FluidStack containedFluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
                 return containedFluid.getAmount() / 16000.0F;
@@ -39,7 +39,7 @@ public class ZYClientSetup
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event)
     {
-        ModelLoaderRegistry.registerLoader(ZYCraft.modLoc("fluid_container"), FluidContainerModel.Loader.INSTANCE);
+        ModelLoaderRegistry.registerLoader(ZYCraft.id("fluid_container"), FluidContainerModel.Loader.INSTANCE);
     }
 
     @SubscribeEvent

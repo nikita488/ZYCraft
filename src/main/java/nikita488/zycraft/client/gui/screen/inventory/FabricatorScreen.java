@@ -13,7 +13,7 @@ import nikita488.zycraft.inventory.container.FabricatorContainer;
 
 public class FabricatorScreen extends ZYScreen<FabricatorContainer>
 {
-    public static final ResourceLocation TEXTURE = ZYCraft.modLoc("textures/gui/container/fabricator.png");
+    public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/fabricator.png");
     private Menu menu;
 
     public FabricatorScreen(FabricatorContainer container, PlayerInventory inventory, ITextComponent title)

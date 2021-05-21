@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class ZYSpriteTextureManager extends SpriteUploader
 {
-    public static final ResourceLocation NAME = ZYCraft.modLoc("textures/atlas/sprites.png");
+    public static final ResourceLocation NAME = ZYCraft.id("textures/atlas/sprites.png");
 
     public ZYSpriteTextureManager(TextureManager manager)
     {

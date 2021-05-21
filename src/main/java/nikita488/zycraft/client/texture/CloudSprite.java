@@ -13,8 +13,8 @@ import java.util.Random;
 
 public class CloudSprite extends TextureAtlasSprite
 {
-    public static final ResourceLocation NAME = ZYCraft.modLoc("cloud");
-    public static final ResourceLocation NAME2 = ZYCraft.modLoc("cloud2");
+    public static final ResourceLocation NAME = ZYCraft.id("cloud");
+    public static final ResourceLocation NAME2 = ZYCraft.id("cloud2");
     private static final int[] OFFSETS = new int[] {0, -1, 0, 1};
     private static final Random RANDOM = new Random();
     private final float[] pixels, baseLayer, adjustmentLayer;

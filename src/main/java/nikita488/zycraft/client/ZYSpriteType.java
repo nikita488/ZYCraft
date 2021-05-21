@@ -17,7 +17,7 @@ public enum ZYSpriteType
 
     ZYSpriteType(String name)
     {
-        this.name = ZYCraft.modLoc(name);
+        this.name = ZYCraft.id(name);
     }
 
     public ResourceLocation spriteName()

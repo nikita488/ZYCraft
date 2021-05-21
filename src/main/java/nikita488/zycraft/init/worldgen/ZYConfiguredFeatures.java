@@ -32,8 +32,8 @@ public class ZYConfiguredFeatures
     {
         Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;
 
-        Registry.register(registry, ZYCraft.modLoc("zychorite_vein"), ZYCHORITE_VEIN);
-        Registry.register(registry, ZYCraft.modLoc("ore_aluminium"), ORE_ALUMINIUM);
-        Registry.register(registry, ZYCraft.modLoc("quartz_crystal_cluster"), QUARTZ_CRYSTAL_CLUSTER);
+        Registry.register(registry, ZYCraft.id("zychorite_vein"), ZYCHORITE_VEIN);
+        Registry.register(registry, ZYCraft.id("ore_aluminium"), ORE_ALUMINIUM);
+        Registry.register(registry, ZYCraft.id("quartz_crystal_cluster"), QUARTZ_CRYSTAL_CLUSTER);
     }
 }

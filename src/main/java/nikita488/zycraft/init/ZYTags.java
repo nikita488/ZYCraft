@@ -66,7 +66,7 @@ public class ZYTags
 
         private static IOptionalNamedTag<Block> tag(String name)
         {
-            return BlockTags.createOptional(ZYCraft.modLoc(name));
+            return BlockTags.createOptional(ZYCraft.id(name));
         }
 
         private static IOptionalNamedTag<Block> forgeTag(String name)
@@ -129,7 +129,7 @@ public class ZYTags
 
         private static IOptionalNamedTag<Item> tag(String name)
         {
-            return ItemTags.createOptional(ZYCraft.modLoc(name));
+            return ItemTags.createOptional(ZYCraft.id(name));
         }
 
         private static IOptionalNamedTag<Item> forgeTag(String name)
