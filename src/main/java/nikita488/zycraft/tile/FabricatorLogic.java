@@ -111,12 +111,20 @@ public class FabricatorLogic
         tryInsertItem(Direction.UP, inventory, stack);
     }
 
+    private void tryInsertItem(RecipeIngredient ingredient, ItemStack stack)
+    {
+        tryInsertItem(ingredient.side(), ingredient.inventory(), stack);
+    }
+
     private void tryInsertItem(Direction side, IItemHandler inventory, ItemStack stack)
     {
         ItemStack remainder = insertItem(inventory, stack);
 
-        if (!remainder.isEmpty())
-            addPendingItem(side, remainder);
+        if (remainder.isEmpty())
+            return;
+
+        addPendingItem(side, remainder);
+        checkedSides.removeAll(pendingSides);
     }
 
     public void tick()
@@ -166,11 +174,8 @@ public class FabricatorLogic
         {
             ItemStack stack = remainingItems.get(slot);
 
-            if (stack.isEmpty())
-                continue;
-
-            RecipeIngredient ingredient = ingredients[slot];
-            tryInsertItem(ingredient.side(), ingredient.inventory(), stack);
+            if (!stack.isEmpty())
+                tryInsertItem(ingredients[slot], stack);
         }
 
         playerInventory.clear();
