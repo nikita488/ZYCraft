@@ -49,6 +49,9 @@ public class FabricatorBlock extends Block
     @Override
     public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos adjPos)
     {
+        if (world.isRemote())
+            return;
+
         Direction side = Direction.getFacingFromVector(adjPos.getX() - pos.getX(), adjPos.getY() - pos.getY(), adjPos.getZ() - pos.getZ());
 
         if (side != Direction.UP)
@@ -58,7 +61,7 @@ public class FabricatorBlock extends Block
     @Override
     public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        if (state.matchesBlock(newState.getBlock()))
+        if (world.isRemote() || state.matchesBlock(newState.getBlock()))
             return;
 
         FabricatorTile fabricator = ZYTiles.FABRICATOR.getNullable(world, pos);
