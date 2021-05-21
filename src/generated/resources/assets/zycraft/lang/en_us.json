@@ -132,6 +132,7 @@
   "mode.zycraft.fabricator.auto_high": "Auto: High",
   "mode.zycraft.fabricator.auto_low": "Auto: Low",
   "mode.zycraft.fabricator.pulse": "Pulse",
+  "tooltip.zycraft.aluminium_foil.filled": "%d/%d mB",
   "tooltip.zycraft.color_scanner.apply": "%s on %s block to apply color",
   "tooltip.zycraft.color_scanner.blue": "Blue:   %d",
   "tooltip.zycraft.color_scanner.copy": "%s on %s block to copy color",

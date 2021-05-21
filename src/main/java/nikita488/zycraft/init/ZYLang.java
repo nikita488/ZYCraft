@@ -76,6 +76,8 @@ public class ZYLang
     public static final IFormattableTextComponent ITEM_IO_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.id("item_io"), "feature", "Increases control over flow of items")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
+    public static final TranslationTextComponent ALUMINIUM_FOIL_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("aluminium_foil"), "filled", "%d/%d mB")
+            .mergeStyle(TextFormatting.GRAY);
 
     public static void init()
     {
@@ -107,5 +109,10 @@ public class ZYLang
     public static IFormattableTextComponent getColorScannerBlue(int amount)
     {
         return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount).setStyle(COLOR_SCANNER_BLUE.getStyle());
+    }
+
+    public static IFormattableTextComponent getAluminiumFoilFilled(int filled, int capacity)
+    {
+        return new TranslationTextComponent(ALUMINIUM_FOIL_FILLED.getKey(), filled, capacity).setStyle(ALUMINIUM_FOIL_FILLED.getStyle());
     }
 }

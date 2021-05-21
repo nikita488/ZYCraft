@@ -10,7 +10,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -24,6 +23,7 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.init.ZYGroups;
+import nikita488.zycraft.init.ZYLang;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -61,7 +61,7 @@ public class ZYFluidContainerItem extends Item
             tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).mergeStyle(TextFormatting.GRAY));
 
         if (capacity > FluidAttributes.BUCKET_VOLUME)
-            tooltip.add(new TranslationTextComponent("%d/%d mB", fluid.getAmount(), capacity).mergeStyle(TextFormatting.GRAY));
+            tooltip.add(ZYLang.getAluminiumFoilFilled(fluid.getAmount(), capacity));
     }
 
     @Override
