@@ -71,8 +71,11 @@ dependencies {
     implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
     compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
+    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
 
     //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3183270")
+    runtimeOnly fg.deobf("curse.maven:storage-drawers-223852:3180569")
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }

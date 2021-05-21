@@ -41,6 +41,20 @@ public enum FabricatorMode implements IStringSerializable
         return powered ? ZYType.BLUE.rgb() : 0x002142;
     }
 
+    public String displayName()
+    {
+        switch (this)
+        {
+            case AUTO_HIGH:
+            default:
+                return "Auto: High";
+            case AUTO_LOW:
+                return "Auto: Low";
+            case PULSE:
+                return "Pulse";
+        }
+    }
+
     @Override
     public String getString()
     {

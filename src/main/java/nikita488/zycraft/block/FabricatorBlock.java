@@ -1,9 +1,12 @@
 package nikita488.zycraft.block;
 
+import mcjty.theoneprobe.api.*;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +26,7 @@ import nikita488.zycraft.tile.FabricatorTile;
 
 import javax.annotation.Nullable;
 
-public class FabricatorBlock extends Block
+public class FabricatorBlock extends Block implements IProbeInfoAccessor
 {
     public static final EnumProperty<FabricatorMode> MODE = ZYBlockStateProperties.FABRICATOR_MODE;
 
@@ -99,5 +102,13 @@ public class FabricatorBlock extends Block
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(MODE);
+    }
+
+    @Override
+    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player, World world, BlockState state, IProbeHitData data)
+    {
+        info.horizontal()
+                .item(new ItemStack(Items.REDSTONE), info.defaultItemStyle().width(14).height(14))
+                .text(CompoundText.createLabelInfo("Mode: ", state.get(MODE).displayName()));
     }
 }
