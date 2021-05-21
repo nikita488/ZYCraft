@@ -2,14 +2,12 @@ package nikita488.zycraft.client.gui.screen;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
@@ -17,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.client.ZYClientSetup;
-import nikita488.zycraft.client.ZYSpriteType;
 import nikita488.zycraft.client.ZYSpriteTextureManager;
+import nikita488.zycraft.client.ZYSpriteType;
 import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.inventory.container.variable.IntContainerVariable;
 import nikita488.zycraft.util.Color;
@@ -64,15 +62,18 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
     public void renderGUI(MatrixStack stack, ResourceLocation texture, int argb)
     {
         renderBackground(stack, guiLeft + 8, guiTop + ySize - 8, xSize - 16, ySize - 16, argb);
-        minecraft.getTextureManager().bindTexture(texture);
+        bindTexture(texture);
         blit(stack, guiLeft, guiTop, 0, 0, xSize, ySize);
     }
 
     public void renderBackground(MatrixStack stack, int x, int y, float width, float height, int argb)
     {
         setColor(argb);
+        bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
         renderTileableSprite(stack, x, y, width, height, getSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, CloudSprite.NAME), 32);
+
         setColor(0xFF434343);
+        bindTexture(ZYSpriteTextureManager.NAME);
         renderTileableSprite(stack, x, y, width, height, ZYClientSetup.sprites().get(ZYSpriteType.BACKGROUND), 32);
         resetColor();
     }
@@ -82,6 +83,11 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
         setColor(argb);
         renderSprite(stack, x, y, (int)(80 * resolution), (int)(32 * resolution), ZYSpriteType.RIGHT_ARROW);
         resetColor();
+    }
+
+    public void renderSprite(MatrixStack stack, int x, int y, int width, int height, TextureAtlasSprite sprite)
+    {
+        blit(stack, x, y, getBlitOffset(), width, height, sprite);
     }
 
     public void renderSprite(MatrixStack stack, int x, int y, int width, int height, ZYSpriteType type)
@@ -94,14 +100,14 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
         renderTileableSprite(stack, x, y, getBlitOffset(), width, height, sprite, resolution);
     }
 
-    public void renderSprite(MatrixStack stack, int x, int y, int width, int height, TextureAtlasSprite sprite)
+    public TextureAtlasSprite getSprite(ResourceLocation atlasID, ResourceLocation spriteID)
     {
-        blit(stack, x, y, getBlitOffset(), width, height, sprite);
+        return minecraft.getAtlasSpriteGetter(atlasID).apply(spriteID);
     }
 
-    public TextureAtlasSprite getSprite(ResourceLocation atlasName, ResourceLocation spriteName)
+    public void bindTexture(ResourceLocation textureID)
     {
-        return minecraft.getAtlasSpriteGetter(atlasName).apply(spriteName);
+        minecraft.getTextureManager().bindTexture(textureID);
     }
 
     public static void resetColor()
@@ -132,8 +138,6 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
 
         stack.push();
         stack.translate(x, y, blitOffset);
-
-        Minecraft.getInstance().getTextureManager().bindTexture(sprite.getAtlasTexture().getTextureLocation());
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 
         Matrix4f matrix = stack.getLast().getMatrix();
@@ -190,7 +194,6 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
         public void render(MatrixStack stack)
         {
             resetColor();
-            minecraft.getTextureManager().bindTexture(ZYSpriteTextureManager.NAME);
             renderSprite(stack, x, y, 34, 5, ZYSpriteType.MENU_TOP);
 
             for (int item = 0; item < itemCount; item++)
@@ -228,21 +231,20 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
             @Override
             public void renderWidget(MatrixStack stack, int mouseX, int mouseY, float partialTicks)
             {
-                TextureManager manager = minecraft.getTextureManager();
                 ResourceLocation blockAtlas = AtlasTexture.LOCATION_BLOCKS_TEXTURE;
 
                 if (index == selectedItem.value())
                 {
                     setColor(selectedColor, 255);
-                    manager.bindTexture(blockAtlas);
+                    bindTexture(blockAtlas);
                     renderSprite(stack, x, y, 22, 22, getSprite(blockAtlas, CloudSprite.NAME));
                 }
 
                 resetColor();
-                manager.bindTexture(ZYSpriteTextureManager.NAME);
+                bindTexture(ZYSpriteTextureManager.NAME);
                 renderSprite(stack, x, y, 22, 22, ZYSpriteType.MENU_ITEM);
 
-                manager.bindTexture(blockAtlas);
+                bindTexture(blockAtlas);
                 renderSprite(stack, x + 3, y + 3, 16, 16, getSprite(blockAtlas, iconName));
 
                 if (isHovered())
