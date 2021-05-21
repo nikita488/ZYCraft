@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
+import nikita488.zycraft.multiblock.child.IMultiChildMatcher;
 import nikita488.zycraft.util.Cuboid6i;
 
 public class MultiPattern

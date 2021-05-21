@@ -1,4 +1,4 @@
-package nikita488.zycraft.compat.jei.transfer;
+package nikita488.zycraft.compat.jei;
 
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;

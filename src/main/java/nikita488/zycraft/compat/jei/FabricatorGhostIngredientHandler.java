@@ -1,4 +1,4 @@
-package nikita488.zycraft.compat.jei.gui.handlers;
+package nikita488.zycraft.compat.jei;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;

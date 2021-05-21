@@ -1,4 +1,4 @@
-package nikita488.zycraft.multiblock.former;
+package nikita488.zycraft.multiblock.child;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;

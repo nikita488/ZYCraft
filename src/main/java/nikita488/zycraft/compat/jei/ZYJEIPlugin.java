@@ -11,8 +11,6 @@ import net.minecraft.client.renderer.Rectangle2d;
 import net.minecraft.util.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
-import nikita488.zycraft.compat.jei.gui.handlers.FabricatorGhostIngredientHandler;
-import nikita488.zycraft.compat.jei.transfer.FabricatorRecipeTransferHandler;
 import nikita488.zycraft.init.ZYBlocks;
 
 import java.util.Collections;
