@@ -10,6 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import nikita488.zycraft.enums.ZYDyeColor;
 
@@ -23,6 +24,11 @@ public interface IColorable
     int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos);
 
     void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb);
+
+    static boolean isColorable(IBlockReader world, BlockPos pos)
+    {
+        return world.getTileEntity(pos) instanceof IColorable;
+    }
 
     static ActionResultType interact(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {

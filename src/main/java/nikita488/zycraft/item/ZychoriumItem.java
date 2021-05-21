@@ -91,6 +91,6 @@ public class ZychoriumItem extends Item implements IColorChanger
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
     {
-        return world.getTileEntity(pos) instanceof IColorable;
+        return IColorable.isColorable(world, pos);
     }
 }
