@@ -22,10 +22,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.common.util.FakePlayerFactory;
-import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.common.util.*;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -66,10 +63,10 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         }
     };
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> inventory);
+    private final Lazy<FakePlayer> player = Lazy.of(() -> FakePlayerFactory.get((ServerWorld)world, PROFILE));
     private int reloadCount = DataPackReloadCounter.INSTANCE.count();
     @Nullable
     private ResourceLocation pendingRecipe;
-    private FakePlayer player;
     private boolean lastPowered;
 
     public FabricatorTile(TileEntityType<?> type)
@@ -101,12 +98,12 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         if (pendingRecipe != null)
         {
             Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(pendingRecipe)
-                    .filter(recipe -> recipeResult.canUseRecipe(world, player(), recipe))
+                    .filter(recipe -> recipeResult.canUseRecipe(world, player.get(), recipe))
                     .flatMap(recipe -> IRecipeType.CRAFTING.matches((ICraftingRecipe)recipe, world, recipePattern));
 
             if (!craftingRecipe.isPresent())
                 craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
-                        .filter(recipe -> recipeResult.canUseRecipe(world, player(), recipe));
+                        .filter(recipe -> recipeResult.canUseRecipe(world, player.get(), recipe));
 
             ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
 
@@ -254,9 +251,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
     public FakePlayer player()
     {
-        if (player == null)
-            this.player = FakePlayerFactory.get((ServerWorld)world, PROFILE);
-        return player;
+        return player.get();
     }
 
     public FabricatorMode mode()
