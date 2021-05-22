@@ -5,11 +5,15 @@ import net.minecraft.block.DispenserBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.InterModComms;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
+import nikita488.zycraft.compat.theoneprobe.ZYProbeInfoProvider;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.dispenser.ZYBucketDispenseItemBehavior;
 import nikita488.zycraft.init.*;
@@ -52,6 +56,7 @@ public class ZYCraft
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         eventBus.addListener(this::commonSetup);
+        eventBus.addListener(this::enqueueIMC);
     }
 
     private void commonSetup(FMLCommonSetupEvent event)
@@ -61,6 +66,12 @@ public class ZYCraft
             ZYConfiguredFeatures.init();
             DispenserBlock.registerDispenseBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
+    }
+
+    private void enqueueIMC(InterModEnqueueEvent event)
+    {
+        if (ModList.get().isLoaded("theoneprobe"))
+            InterModComms.sendTo("theoneprobe", "getTheOneProbe", ZYProbeInfoProvider::new);
     }
 
     public static Registrate registrate()
