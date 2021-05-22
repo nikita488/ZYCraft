@@ -157,11 +157,13 @@ curseforge {
         changelogType = "markdown"
         releaseType = project.hasProperty("release_type") ? project.release_type : "beta"
         mainArtifact(shadowJar) {
-            displayName = "ZYCraft ${mod_version}"
+            displayName = "ZYCraft ${mc_version}-${mod_version}"
         }
         addArtifact apiJar
         relations {
             requiredDependency "ctm"
+            optionalDependency "the-one-probe"
+            optionalDependency "hwyla"
         }
     }
 }
