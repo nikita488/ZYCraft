@@ -162,6 +162,7 @@ curseforge {
         addArtifact apiJar
         relations {
             requiredDependency "ctm"
+            optionalDependency "jei"
             optionalDependency "the-one-probe"
             optionalDependency "hwyla"
         }
