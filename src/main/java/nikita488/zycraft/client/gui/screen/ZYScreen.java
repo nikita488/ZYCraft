@@ -15,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.client.ZYClientSetup;
-import nikita488.zycraft.client.ZYSpriteTextureManager;
-import nikita488.zycraft.client.ZYSpriteType;
+import nikita488.zycraft.client.texture.ZYSpriteTextureManager;
+import nikita488.zycraft.client.texture.ZYSpriteType;
 import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.inventory.container.variable.IntContainerVariable;
 import nikita488.zycraft.util.Color;
@@ -70,10 +70,10 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
     {
         setColor(argb);
         bindTexture(AtlasTexture.LOCATION_BLOCKS_TEXTURE);
-        renderTileableSprite(stack, x, y, width, height, getSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, CloudSprite.NAME), 32);
+        renderTileableSprite(stack, x, y, width, height, getSprite(AtlasTexture.LOCATION_BLOCKS_TEXTURE, CloudSprite.ID), 32);
 
         setColor(0xFF434343);
-        bindTexture(ZYSpriteTextureManager.NAME);
+        bindTexture(ZYSpriteTextureManager.ATLAS_ID);
         renderTileableSprite(stack, x, y, width, height, ZYClientSetup.sprites().get(ZYSpriteType.BACKGROUND), 32);
         resetColor();
     }
@@ -237,11 +237,11 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
                 {
                     setColor(selectedColor, 255);
                     bindTexture(blockAtlas);
-                    renderSprite(stack, x, y, 22, 22, getSprite(blockAtlas, CloudSprite.NAME));
+                    renderSprite(stack, x, y, 22, 22, getSprite(blockAtlas, CloudSprite.ID));
                 }
 
                 resetColor();
-                bindTexture(ZYSpriteTextureManager.NAME);
+                bindTexture(ZYSpriteTextureManager.ATLAS_ID);
                 renderSprite(stack, x, y, 22, 22, ZYSpriteType.MENU_ITEM);
 
                 bindTexture(blockAtlas);

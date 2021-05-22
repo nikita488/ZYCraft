@@ -1,4 +1,4 @@
-package nikita488.zycraft.client;
+package nikita488.zycraft.client.texture;
 
 import net.minecraft.util.ResourceLocation;
 import nikita488.zycraft.ZYCraft;

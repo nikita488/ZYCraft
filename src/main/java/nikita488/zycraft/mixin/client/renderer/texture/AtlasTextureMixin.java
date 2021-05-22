@@ -21,7 +21,7 @@ public abstract class AtlasTextureMixin
     @Inject(method = "loadSprite(Lnet/minecraft/resources/IResourceManager;Lnet/minecraft/client/renderer/texture/TextureAtlasSprite$Info;IIIII)Lnet/minecraft/client/renderer/texture/TextureAtlasSprite;", at = @At("HEAD"), cancellable = true)
     private void stitchCloudSprite(IResourceManager manager, TextureAtlasSprite.Info info, int atlasWidth, int atlasHeight, int mipMapLevel, int originX, int originY, CallbackInfoReturnable<TextureAtlasSprite> callback)
     {
-        if (!getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE) || (!info.getSpriteLocation().equals(CloudSprite.NAME) && !info.getSpriteLocation().equals(CloudSprite.NAME2)))
+        if (!getTextureLocation().equals(AtlasTexture.LOCATION_BLOCKS_TEXTURE) || (!info.getSpriteLocation().equals(CloudSprite.ID) && !info.getSpriteLocation().equals(CloudSprite.ID2)))
             return;
 
         NativeImage image = new NativeImage(info.getSpriteWidth(), info.getSpriteHeight(), false);

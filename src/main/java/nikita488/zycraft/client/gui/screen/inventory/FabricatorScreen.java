@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.client.ZYSpriteTextureManager;
+import nikita488.zycraft.client.texture.ZYSpriteTextureManager;
 import nikita488.zycraft.client.gui.screen.ZYScreen;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.init.ZYLang;
@@ -35,7 +35,7 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
     {
         renderGUI(stack, TEXTURE, 0xFF0064FF);
-        bindTexture(ZYSpriteTextureManager.NAME);
+        bindTexture(ZYSpriteTextureManager.ATLAS_ID);
         renderRightArrow(stack, guiLeft + 86, guiTop + 29, 0x7F00FFFF, 0.25F);
         renderRightArrow(stack, guiLeft + 86, guiTop + 65, 0x7F00FFFF, 0.25F);
         menu.render(stack);
