@@ -1,3 +1,17 @@
+### 3.0.0 (2021-05-22)
+
+* Update to 1.16.5, ForgeGradle 4.1 ([e697e8f](https://github.com/nikita488/ZYCraft/commit/e697e8f545eb993fe203e5b05016d47e8ba0aeb7))
+* Reworked code of Colorable blocks. Added IColorable ([74bc524](https://github.com/nikita488/ZYCraft/commit/74bc52401610e44bbab0d38a4a8772424bdc4bd3))
+* Added tags for each color of Engineering Block, changed Basic Machines recipes to use this tags ([2b20414](https://github.com/nikita488/ZYCraft/commit/2b204149e0e6a3eb102402c6dcf08a7e6239bf89))
+* Color Scanner now has a max stack size of 1 ([917a05f](https://github.com/nikita488/ZYCraft/commit/917a05f2582e8799a546336080e39acde48d8532))
+* Added Fabricator, Valve (WIP), Item IO (WIP) ([e4b3049](https://github.com/nikita488/ZYCraft/commit/e4b3049f6bd6c7c0bc7d115de1ee70f5ed336cb8))
+* Allow Zychorium Lamp connecting to on/off states ([76584b7](https://github.com/nikita488/ZYCraft/commit/76584b708c7dbecfb9032fd6c2d526d7382598c1))
+* Changed recipe of Fire Basin ([f516f27](https://github.com/nikita488/ZYCraft/commit/f516f27b168269ed9c5551df8999f6d7813418ff))
+* Reworked tooltips ([75ae6d5](https://github.com/nikita488/ZYCraft/commit/75ae6d5f8ad396712c3c071f390babff02ca7916))
+* Moved Colorable blocks interaction to IColorable static helper method ([76f01ae](https://github.com/nikita488/ZYCraft/commit/76f01aecf0e80da807d2752a0410a6f05164cc2e))
+* Rework of Aluminium Foil tooltip ([0f41f80](https://github.com/nikita488/ZYCraft/commit/0f41f80656357ca87eb5d34bf6302db79f81d236))
+* Added isColorable static helper method to IColorable interface ([aa92f20](https://github.com/nikita488/ZYCraft/commit/aa92f20e03183847030a4b3e660ab228595b6fdd))
+
 ### 2.0.2 (2021-01-30)
 
 * Fixed all bricks recipes had 1 output instead of 4 ([a281beb](https://github.com/nikita488/ZYCraft/commit/a281beb432c2504388c9191dcbeec094c178a26b))
