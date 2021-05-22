@@ -127,7 +127,7 @@ public class FabricatorLogic
         checkedSides.removeAll(pendingSides);
     }
 
-    public void tick()
+    public void tryCraft()
     {
         World world = fabricator.getWorld();
         BlockPos pos = fabricator.getPos();

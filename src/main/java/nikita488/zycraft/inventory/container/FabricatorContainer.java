@@ -99,7 +99,8 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
 
             if (button == 0)
             {
-                tile.logic().tick();
+                tile.logic().recheckSides();
+                tile.logic().tryCraft();
             }
             else if (button == 1)
             {

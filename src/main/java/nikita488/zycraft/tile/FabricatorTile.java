@@ -118,7 +118,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         boolean powered = world.isBlockPowered(pos);
 
         if (canCraft(powered))
-            logic.tick();
+            logic.tryCraft();
 
         this.lastPowered = powered;
     }
