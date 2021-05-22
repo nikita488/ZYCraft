@@ -225,12 +225,10 @@ public class FabricatorLogic
     {
         for (int slot = 0; slot < inventory.getSlots(); slot++)
         {
-            ItemStack stack = inventory.getStackInSlot(slot);
+            ItemStack stack = inventory.extractItem(slot, Integer.MAX_VALUE, true);
 
             if (stack.isEmpty())
                 continue;
-
-            stack = stack.copy();
 
             for (int i = 0; i < foundIngredients.length; i++)
             {
