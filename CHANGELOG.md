@@ -1,3 +1,8 @@
+### 3.0.1 (2021-05-22)
+
+* Fixed crash that happens when "The One Probe" is not installed ([7287114](https://github.com/nikita488/ZYCraft/commit/72871148f71bc8abea20173097a55d39180bdceb))
+* Enabled blending for Fabricator GUI ([85ef65b](https://github.com/nikita488/ZYCraft/commit/85ef65b9ebc02716489200dc37df861a18d96cce))
+
 ### 3.0.0 (2021-05-22)
 
 * Update to 1.16.5, ForgeGradle 4.1 ([e697e8f](https://github.com/nikita488/ZYCraft/commit/e697e8f545eb993fe203e5b05016d47e8ba0aeb7))
