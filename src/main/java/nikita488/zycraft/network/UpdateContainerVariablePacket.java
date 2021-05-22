@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
-import nikita488.zycraft.inventory.container.variable.IContainerVariable;
 import nikita488.zycraft.inventory.container.ZYContainer;
+import nikita488.zycraft.inventory.container.variable.IContainerVariable;
 
 import java.util.function.Supplier;
 
