@@ -1,6 +1,7 @@
 package nikita488.zycraft.client.gui.screen.inventory;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -34,10 +35,15 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     @Override
     protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
     {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         renderGUI(stack, TEXTURE, 0xFF0064FF);
         bindTexture(ZYSpriteTextureManager.ATLAS_ID);
         renderRightArrow(stack, guiLeft + 86, guiTop + 29, 0x7F00FFFF, 0.25F);
         renderRightArrow(stack, guiLeft + 86, guiTop + 65, 0x7F00FFFF, 0.25F);
         menu.render(stack);
+
+        RenderSystem.disableBlend();
     }
 }
