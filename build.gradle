@@ -33,6 +33,7 @@ minecraft {
         client {
             workingDirectory project.file("run")
             arg "-mixin.config=mixins.zycraft.json"
+            arg "--username=Dev###"
             property 'mixin.env.disableRefMap', 'true'
             mods { zycraft { source sourceSets.main } }
         }
