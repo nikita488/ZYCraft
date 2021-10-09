@@ -1,21 +1,39 @@
 package nikita488.zycraft.network;
 
+import net.minecraft.network.IPacket;
+import net.minecraft.world.server.ServerChunkProvider;
 import net.minecraftforge.fml.network.NetworkDirection;
+import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.multiblock.MultiBlock;
+
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class ZYPackets
 {
+    public static final PacketDistributor<MultiBlock> TRACKING_MULTI_BLOCK = new PacketDistributor<>(ZYPackets::trackingMultiBlock, NetworkDirection.PLAY_TO_CLIENT);
     private static int id;
+
+    private static Consumer<IPacket<?>> trackingMultiBlock(PacketDistributor<MultiBlock> distributor, Supplier<MultiBlock> multiSupplier)
+    {
+        return packet ->
+        {
+            MultiBlock multiBlock = multiSupplier.get();
+            ((ServerChunkProvider)multiBlock.world().getChunkProvider()).chunkManager.getTrackingPlayers(multiBlock.mainChunk(), false)
+                    .forEach(player -> player.connection.sendPacket(packet));
+        };
+    }
 
     public static void init()
     {
         SimpleChannel channel = ZYCraft.CHANNEL;
 
-        channel.messageBuilder(UpdateContainerVariablePacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
-                .decoder(UpdateContainerVariablePacket::decode)
-                .encoder(UpdateContainerVariablePacket::encode)
-                .consumer(UpdateContainerVariablePacket::handle)
+        channel.messageBuilder(UpdateMenuDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(UpdateMenuDataPacket::decode)
+                .encoder(UpdateMenuDataPacket::encode)
+                .consumer(UpdateMenuDataPacket::handle)
                 .add();
         channel.messageBuilder(SetFabricatorRecipePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
                 .decoder(SetFabricatorRecipePacket::decode)
@@ -26,6 +44,21 @@ public class ZYPackets
                 .decoder(SetSlotStackPacket::decode)
                 .encoder(SetSlotStackPacket::encode)
                 .consumer(SetSlotStackPacket::handle)
+                .add();
+        channel.messageBuilder(AddMultiPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(AddMultiPacket::decode)
+                .encoder(AddMultiPacket::encode)
+                .consumer(AddMultiPacket::handle)
+                .add();
+        channel.messageBuilder(RemoveMultiPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(RemoveMultiPacket::decode)
+                .encoder(RemoveMultiPacket::encode)
+                .consumer(RemoveMultiPacket::handle)
+                .add();
+        channel.messageBuilder(UpdateMultiPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(UpdateMultiPacket::decode)
+                .encoder(UpdateMultiPacket::encode)
+                .consumer(UpdateMultiPacket::handle)
                 .add();
     }
 }

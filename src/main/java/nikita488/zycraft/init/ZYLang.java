@@ -21,6 +21,9 @@ public class ZYLang
     public static final IFormattableTextComponent TOOLTIP_HINT = addLangWithArgs("tooltip", ZYCraft.id("hint"), "Press %s for info", SHIFT)
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
+    public static final IFormattableTextComponent CREATIVE_ONLY = REGISTRATE.addLang("tooltip", ZYCraft.id("creative_only"), "Creative-only")
+            .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
+
     public static final IFormattableTextComponent COLORABLE = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "Colorable")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
     public static final IFormattableTextComponent COLORABLE_RED = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "red", "Red")
@@ -52,18 +55,14 @@ public class ZYLang
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLOR_SCANNER_CURRENT_COLOR = REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "current_color", "Current color:")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
-    private static final TranslationTextComponent COLOR_SCANNER_RED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "red", "Red:    %d")
+    public static final TranslationTextComponent COLOR_SCANNER_RED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "red", "Red:    %d")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
-    private static final TranslationTextComponent COLOR_SCANNER_GREEN = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "green", "Green: %d")
+    public static final TranslationTextComponent COLOR_SCANNER_GREEN = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "green", "Green: %d")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
-    private static final TranslationTextComponent COLOR_SCANNER_BLUE = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "blue", "Blue:   %d")
+    public static final TranslationTextComponent COLOR_SCANNER_BLUE = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "blue", "Blue:   %d")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
 
-    public static final TranslationTextComponent FABRICATOR = REGISTRATE.addLang("container", ZYCraft.id("fabricator"), "Fabricator");
-    public static final TranslationTextComponent AUTO_LOW = REGISTRATE.addLang("mode", ZYCraft.id("fabricator.auto_low"), "Auto: Low");
-    public static final TranslationTextComponent AUTO_HIGH = REGISTRATE.addLang("mode", ZYCraft.id("fabricator.auto_high"), "Auto: High");
-    public static final TranslationTextComponent PULSE = REGISTRATE.addLang("mode", ZYCraft.id("fabricator.pulse"), "Pulse");
-    public static final TranslationTextComponent RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.id("fabricator.recipe.incompatible"), "Recipe incompatible with Fabricator");
+    public static final TranslationTextComponent SCYTHE_DURABILITY = REGISTRATE.addLang("tooltip", ZYCraft.id("scythe"), "durability", "Durability: %.2f%%");
 
     public static final IFormattableTextComponent INTERFACE = REGISTRATE.addLang("tooltip", ZYCraft.id("interface"), "Interface")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
@@ -76,8 +75,35 @@ public class ZYLang
     public static final IFormattableTextComponent ITEM_IO_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.id("item_io"), "feature", "Increases control over flow of items")
             .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
-    public static final TranslationTextComponent ALUMINIUM_FOIL_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("aluminium_foil"), "filled", "%d/%d mB")
+    public static final TranslationTextComponent FLUID_TANK_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("fluid_tank"), "filled", "%d/%d mB")
             .mergeStyle(TextFormatting.GRAY);
+
+    public static final TranslationTextComponent FABRICATOR = REGISTRATE.addLang("container", ZYCraft.id("fabricator"), "Fabricator");
+    public static final TranslationTextComponent TANK = REGISTRATE.addLang("container", ZYCraft.id("tank"), "Multi-Tank");
+
+    public static final TranslationTextComponent NARRATE_GAUGE = REGISTRATE.addLang("gui", ZYCraft.id("narrate"), "gauge", "%s gauge: filled %d of %d");
+
+    public static final TranslationTextComponent FABRICATOR_AUTO_LOW = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_low", "Auto: Low");
+    public static final TranslationTextComponent FABRICATOR_AUTO_HIGH = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_high", "Auto: High");
+    public static final TranslationTextComponent FABRICATOR_PULSE = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "pulse", "Pulse");
+    public static final TranslationTextComponent VALVE_IN = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "in", "Input");
+    public static final TranslationTextComponent VALVE_OUT = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "out", "Output");
+    public static final TranslationTextComponent ITEM_IO_ANY = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "any", "Input/Output");
+    public static final TranslationTextComponent ITEM_IO_ALL_IN = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_in", "Input");
+    public static final TranslationTextComponent ITEM_IO_ALL_OUT = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_out", "Output");
+    public static final TranslationTextComponent ITEM_IO_IN1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in1", "Input1");
+    public static final TranslationTextComponent ITEM_IO_OUT1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out1", "Output1");
+    public static final TranslationTextComponent ITEM_IO_IN2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in2", "Input2");
+    public static final TranslationTextComponent ITEM_IO_OUT2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out2", "Output2");
+
+    public static final TranslationTextComponent MODE_LABEL = REGISTRATE.addLang("label", ZYCraft.id("mode"), "Mode: ");
+    public static final TranslationTextComponent SOURCE_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("source_fluid"), "Source fluid: ");
+    public static final TranslationTextComponent VOID_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("void_fluid"), "Void fluid: ");
+    public static final TranslationTextComponent STORED_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("stored_fluid"), "Stored fluid: ");
+
+    public static final TranslationTextComponent FLUID_INFO = REGISTRATE.addLang("info", ZYCraft.id("fluid"), "%s %d mB");
+
+    public static final TranslationTextComponent FABRICATOR_RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.id("fabricator"), "recipe_incompatible", "Recipe incompatible with Fabricator");
 
     public static void init()
     {
@@ -96,23 +122,8 @@ public class ZYLang
         return new TranslationTextComponent(REGISTRATE.addLang(type, id, suffix, localizedName).getKey(), args);
     }
 
-    public static IFormattableTextComponent getColorScannerRed(int amount)
+    public static IFormattableTextComponent copy(TranslationTextComponent component, Object... args)
     {
-        return new TranslationTextComponent(COLOR_SCANNER_RED.getKey(), amount).setStyle(COLOR_SCANNER_RED.getStyle());
-    }
-
-    public static IFormattableTextComponent getColorScannerGreen(int amount)
-    {
-        return new TranslationTextComponent(COLOR_SCANNER_GREEN.getKey(), amount).setStyle(COLOR_SCANNER_GREEN.getStyle());
-    }
-
-    public static IFormattableTextComponent getColorScannerBlue(int amount)
-    {
-        return new TranslationTextComponent(COLOR_SCANNER_BLUE.getKey(), amount).setStyle(COLOR_SCANNER_BLUE.getStyle());
-    }
-
-    public static IFormattableTextComponent getAluminiumFoilFilled(int filled, int capacity)
-    {
-        return new TranslationTextComponent(ALUMINIUM_FOIL_FILLED.getKey(), filled, capacity).setStyle(ALUMINIUM_FOIL_FILLED.getStyle());
+        return new TranslationTextComponent(component.getKey(), args).setStyle(component.getStyle());
     }
 }

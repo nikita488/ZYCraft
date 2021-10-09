@@ -4,5 +4,8 @@
 		"extra": {
 		    "light": 15
 		}
+	},
+	"forge": {
+	    "loader": "zycraft:cloud"
 	}
 }

@@ -1,11 +1,17 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "nikita488.zycraft.mixin",
-  "refmap": "mixins.zycraft.refmap.json",
+  "package": "${project.group}.mixin",
   "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.${mod_id}.refmap.json",
+  "mixins": [
+    "world.server.ServerWorldMixin",
+    "world.server.ChunkManagerMixin",
+    "world.chunk.storage.ChunkSerializerMixin"
+  ],
   "client": [
-    "client.renderer.texture.AtlasTextureMixin",
-    "client.MinecraftMixin"
-  ]
+    "client.MinecraftMixin",
+    "client.world.ClientWorldMixin"
+  ],
+  "server": [],
+  "minVersion": "0.8"
 }

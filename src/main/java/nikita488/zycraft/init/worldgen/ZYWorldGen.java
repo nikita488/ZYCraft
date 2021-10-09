@@ -1,6 +1,7 @@
 package nikita488.zycraft.init.worldgen;
 
 import net.minecraft.util.RegistryKey;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.GenerationStage;
@@ -18,7 +19,12 @@ public class ZYWorldGen
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void addFeatures(BiomeLoadingEvent event)
     {
-        RegistryKey<Biome> biome = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, event.getName());
+        ResourceLocation name = event.getName();
+
+        if (name == null)
+            return;
+
+        RegistryKey<Biome> biome = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, name);
 
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) ||
                 BiomeDictionary.hasType(biome, BiomeDictionary.Type.END) ||

@@ -3,7 +3,6 @@ package nikita488.zycraft.util;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -64,7 +63,7 @@ public class Color
 
     public Color multiplyRGB(float amount)
     {
-        return multiply(amount, amount, amount, 1);
+        return multiply(amount, amount, amount, 1F);
     }
 
     public Color multiply(float amount)
@@ -181,7 +180,7 @@ public class Color
 
     public static int rgb(int rgba)
     {
-        return rgba >> 8;
+        return (rgba & 0xFFFFFF00) >> 8;
     }
 
     public static int rgb(int r, int g, int b)
@@ -191,12 +190,12 @@ public class Color
 
     public static int rgba(int rgb, int a)
     {
-        return rgb << 8 | wrap(a);
+        return (rgb & 0xFFFFFF) << 8 | wrap(a);
     }
 
     public static int rgba(int argb)
     {
-        return rgba(argb, argb >> 24);
+        return rgba(argb & 0xFFFFFF, argb >> 24);
     }
 
     public static int rgba(int r, int g, int b, int a)
@@ -211,7 +210,7 @@ public class Color
 
     public static int argb(int rgb, int a)
     {
-        return wrap(a) << 24 | rgb;
+        return wrap(a) << 24 | (rgb & 0xFFFFFF);
     }
 
     public static int argb(int r, int g, int b, int a)
@@ -219,17 +218,17 @@ public class Color
         return wrap(a) << 24 | rgb(r, g, b);
     }
 
-    public static Vector3f rgbToHSV(int r, int g, int b)
+    public static float[] rgbToHSV(int r, int g, int b)
     {
         int min = Math.min(b, Math.min(r, g));
         int max = Math.max(b, Math.max(r, g));
         float diff = max - min;
 
         float h = 0;
-        float s = max != 0 ? diff / max : 0;
-        float v = max / 255.0F;
+        float s = max != 0 ? diff / max : 0F;
+        float v = max / 255F;
 
-        if (s > 0)
+        if (s > 0F)
         {
             float red = (max - r) / diff;
             float green = (max - g) / diff;
@@ -242,13 +241,13 @@ public class Color
             else
                 h = 4 + green - red;
 
-            h /= 6;
+            h /= 6F;
 
-            if (h < 0)
-                h += 1;
+            if (h < 0F)
+                h += 1F;
         }
 
-        return new Vector3f(h, s, v);
+        return new float[] {h, s, v};
     }
 
     public static int hsvToRGB(float h, float s, float v)

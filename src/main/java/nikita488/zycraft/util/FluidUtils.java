@@ -16,6 +16,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 
 import javax.annotation.Nullable;
@@ -24,6 +25,31 @@ import java.util.function.Predicate;
 
 public class FluidUtils
 {
+    public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount)
+    {
+        transferFromTo(from, to, amount, FluidAttributes.BUCKET_VOLUME);
+    }
+
+    public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount, int maxDrain)
+    {
+        if (amount > 0)
+            tryTransfer(from, to, amount, maxDrain);
+        else if (amount < 0)
+            tryTransfer(to, from, -amount, maxDrain);
+    }
+
+    private static void tryTransfer(IFluidHandler from, IFluidHandler to, int amount, int maxDrain)
+    {
+        FluidStack drained = from.drain(Math.min(amount, maxDrain), IFluidHandler.FluidAction.SIMULATE);
+        int filled = to.fill(drained, IFluidHandler.FluidAction.SIMULATE);
+
+        if (filled <= 0)
+            return;
+
+        drained = from.drain(filled, IFluidHandler.FluidAction.EXECUTE);
+        to.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+    }
+
     public static Optional<IFluidHandlerItem> getItemFluidHandler(ItemStack stack)
     {
         if (stack.isEmpty())
@@ -67,7 +93,7 @@ public class FluidUtils
         if (canBlockContainFluid(world, pos, blockState, fluid))
         {
             ((ILiquidContainer)blockState.getBlock()).receiveFluid(world, pos, blockState, ((FlowingFluid)fluid).getStillFluidState(false));
-            world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+            world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
             return true;
         }
 
@@ -77,7 +103,7 @@ public class FluidUtils
         if (!world.setBlockState(pos, attributes.getBlock(world, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
             return false;
 
-        world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
         return true;
     }
 

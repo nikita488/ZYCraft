@@ -2,7 +2,6 @@ package nikita488.zycraft.api.colorable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResultType;
@@ -12,7 +11,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.world.IBlockDisplayReader;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
-import nikita488.zycraft.enums.ZYDyeColor;
+import nikita488.zycraft.api.util.ZYDyeColor;
 
 public interface IColorable
 {
@@ -39,32 +38,33 @@ public interface IColorable
 
         TileEntity tile = world.getTileEntity(pos);
 
-        if (!(tile instanceof IColorable))
-            return ActionResultType.CONSUME;
-
-        Item item = stack.getItem();
-        IColorable colorable = (IColorable)tile;
-        int rgb = colorable.getColor(state, world, pos);
-
-        if (item instanceof IColorChanger)
+        if (tile instanceof IColorable)
         {
-            IColorChanger changer = (IColorChanger)item;
+            IColorable colorable = (IColorable)tile;
+            int rgb = colorable.getColor(state, world, pos);
 
-            if (!changer.canChangeColor(state, world, pos, player, hand, hit, rgb))
+            if (stack.getItem() instanceof IColorChanger)
+            {
+                IColorChanger changer = (IColorChanger)stack.getItem();
+
+                if (!changer.canChangeColor(state, world, pos, player, hand, hit, rgb))
+                    return ActionResultType.PASS;
+
+                if (!world.isRemote())
+                    colorable.setColor(state, world, pos, changer.changeColor(state, world, pos, player, hand, hit, rgb));
+                return ActionResultType.func_233537_a_(world.isRemote());
+            }
+
+            ZYDyeColor dyeColor = ZYDyeColor.byDyeColor(stack);
+
+            if (dyeColor == null || rgb == dyeColor.rgb())
                 return ActionResultType.PASS;
 
             if (!world.isRemote())
-                colorable.setColor(state, world, pos, changer.changeColor(state, world, pos, player, hand, hit, rgb));
-            return ActionResultType.SUCCESS;
+                colorable.setColor(state, world, pos, dyeColor.rgb());
+            return ActionResultType.func_233537_a_(world.isRemote());
         }
 
-        ZYDyeColor dyeColor = ZYDyeColor.byDyeColor(stack);
-
-        if (dyeColor == null || rgb == dyeColor.rgb())
-            return ActionResultType.PASS;
-
-        if (!world.isRemote())
-            colorable.setColor(state, world, pos, dyeColor.rgb());
-        return ActionResultType.SUCCESS;
+        return ActionResultType.CONSUME;
     }
 }

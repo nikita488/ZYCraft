@@ -92,7 +92,7 @@ public class FabricatorBlock extends Block
     {
         if (!world.isRemote())
             NetworkHooks.openGui((ServerPlayerEntity)player, ZYTiles.FABRICATOR.getNullable(world, pos));
-        return ActionResultType.SUCCESS;
+        return ActionResultType.func_233537_a_(world.isRemote());
     }
 
     @Override

@@ -14,8 +14,6 @@ import nikita488.zycraft.enums.ZYType;
 
 import java.util.Map;
 
-import static nikita488.zycraft.util.EnumUtils.zyBase;
-
 public class ZYTags
 {
     private static final Registrate REGISTRATE = ZYCraft.registrate();
@@ -76,7 +74,7 @@ public class ZYTags
 
         private static Map<ZYType, IOptionalNamedTag<Block>> zyTag(String pattern)
         {
-            return zyBase(pattern, (type, name) -> tag(name));
+            return ZYType.buildMap(pattern, (type, name) -> tag(name));
         }
     }
 
@@ -139,7 +137,7 @@ public class ZYTags
 
         private static Map<ZYType, IOptionalNamedTag<Item>> zyTag(String pattern)
         {
-            return zyBase(pattern, (type, name) -> tag(name));
+            return ZYType.buildMap(pattern, (type, name) -> tag(name));
         }
     }
 

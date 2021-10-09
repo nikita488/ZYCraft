@@ -47,13 +47,14 @@ public class ColorableBlock extends Block
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
+        tooltip.add(ZYLang.COLORABLE);
+
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
             tooltip.add(ZYLang.TOOLTIP_HINT);
         }
         else
         {
-            tooltip.add(ZYLang.COLORABLE);
             tooltip.add(ZYLang.COLORABLE_INFO);
             tooltip.add(ZYLang.COLORABLE_RGB);
             tooltip.add(ZYLang.COLORABLE_BRIGHTNESS);

@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "zycraft:block/converted_multi_child"
+    }
+  }
+}

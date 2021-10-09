@@ -1,14 +1,10 @@
 package nikita488.zycraft.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import nikita488.zycraft.ZYCraft;
 import org.apache.commons.lang3.tuple.Pair;
 
-@Mod.EventBusSubscriber(modid = ZYCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ZYConfig
 {
     private static final Pair<ZYClientConfig, ForgeConfigSpec> CLIENT = new ForgeConfigSpec.Builder().configure(ZYClientConfig::new);
@@ -34,7 +30,6 @@ public class ZYConfig
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON.getValue());
     }
 
-    @SubscribeEvent
     public static void init(ModConfig.ModConfigEvent event)
     {
         ModConfig config = event.getConfig();

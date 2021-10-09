@@ -8,8 +8,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.crafting.ICraftingRecipe;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.inventory.container.FabricatorContainer;
+import nikita488.zycraft.menu.FabricatorContainer;
 import nikita488.zycraft.network.SetFabricatorRecipePacket;
+import nikita488.zycraft.tile.FabricatorTile;
 
 import javax.annotation.Nullable;
 
@@ -26,17 +27,20 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
     @Override
     public IRecipeTransferError transferRecipe(FabricatorContainer container, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer)
     {
-        if (!(recipe instanceof ICraftingRecipe))
-            return helper.createInternalError();
+        if (recipe instanceof ICraftingRecipe)
+        {
+            ICraftingRecipe craftingRecipe = (ICraftingRecipe)recipe;
 
-        ICraftingRecipe craftingRecipe = (ICraftingRecipe)recipe;
+            if (!FabricatorTile.isRecipeCompatible(craftingRecipe))
+                return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
 
-        if (craftingRecipe.isDynamic() || !craftingRecipe.canFit(3, 3) || craftingRecipe.getIngredients().isEmpty() || craftingRecipe.getRecipeOutput().isEmpty())
-            return helper.createUserErrorWithTooltip(ZYLang.RECIPE_INCOMPATIBLE);
+            if (doTransfer)
+                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.windowId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
 
-        if (doTransfer)
-            ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.windowId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
-        return null;
+            return null;
+        }
+
+        return helper.createInternalError();
     }
 
     @Override

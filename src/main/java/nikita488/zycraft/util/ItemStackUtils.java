@@ -12,9 +12,9 @@ public class ItemStackUtils
         if (stack.isEmpty() || size <= 0)
             return ItemStack.EMPTY;
 
-        ItemStack copy = stack.copy();
-        copy.setCount(size);
-        return copy;
+        stack = stack.copy();
+        stack.setCount(size);
+        return stack;
     }
 
     public static byte getByte(ItemStack stack, String key, byte defaultValue)

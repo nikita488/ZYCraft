@@ -104,7 +104,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
         player.addStat(Stats.ITEM_USED.get(this));
-        player.playSound(fluid.getAttributes().getFillSound(), 1.0F, 1.0F);
+        player.playSound(fluid.getAttributes().getFillSound(), 1F, 1F);
 
         ItemStack filledContainer = DrinkHelper.fill(heldStack, player, handler.getContainer(), false);
 

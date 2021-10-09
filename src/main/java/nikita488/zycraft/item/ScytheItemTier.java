@@ -18,7 +18,7 @@ public enum ScytheItemTier implements IItemTier
     @Override
     public float getEfficiency()
     {
-        return 15.0F;
+        return ItemTier.STONE.getEfficiency();
     }
 
     @Override

@@ -1,62 +1,17 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "zycraft:block/multi_interface"
-      }
+  "variants": {
+    "axis=all": {
+      "model": "zycraft:block/valve"
     },
-    {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side",
-        "x": 90
-      }
+    "axis=x": {
+      "model": "zycraft:block/valve_horizontal",
+      "y": 90
     },
-    {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side",
-        "x": 270
-      }
+    "axis=y": {
+      "model": "zycraft:block/valve_vertical"
     },
-    {
-      "when": {
-        "north": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side"
-      }
-    },
-    {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "zycraft:block/valve_side",
-        "y": 90
-      }
+    "axis=z": {
+      "model": "zycraft:block/valve_horizontal"
     }
-  ]
+  }
 }

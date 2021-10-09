@@ -1,21 +1,24 @@
 package nikita488.zycraft.enums;
 
+import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.util.DataIngredient;
+import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import net.minecraft.block.Block;
 import net.minecraft.item.Items;
-import net.minecraft.util.IStringSerializable;
 import net.minecraftforge.common.Tags;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYItems;
 
-public enum ViewerType implements IStringSerializable
+import java.util.Map;
+
+public enum ViewerType
 {
-    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6)),
+    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6F)),
     DIRE("dire", () -> DataIngredient.items(ZYBlocks.QUARTZ_CRYSTAL)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
-    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200)),
+    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200F)),
     GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
     DARK("dark", () -> DataIngredient.items(Items.INK_SAC));
 
@@ -37,10 +40,19 @@ public enum ViewerType implements IStringSerializable
         this.properties = properties;
     }
 
-    @Override
-    public String getString()
+    public static <T> Map<ViewerType, T> buildMap(String pattern, boolean immortal, NonNullBiFunction<ViewerType, String, T> factory)
     {
-        return name;
+        ImmutableMap.Builder<ViewerType, T> map = ImmutableMap.builder();
+        ViewerType[] values = immortal ? IMMORTAL_VALUES : VALUES;
+
+        for (ViewerType type : values)
+        {
+            String target = immortal && type == BASIC ? "{type}_" : "{type}";
+            String replacement = immortal && type == BASIC ? "" : type.toString();
+            map.put(type, factory.apply(type, pattern.replace(target, replacement)));
+        }
+
+        return map.build();
     }
 
     public DataIngredient ingredient()
@@ -51,5 +63,11 @@ public enum ViewerType implements IStringSerializable
     public NonNullUnaryOperator<Block.Properties> properties()
     {
         return properties;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

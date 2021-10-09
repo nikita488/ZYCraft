@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MinecraftMixin
 {
     @Inject(method = "close", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/Util;shutdown()V"))
-    private void closeSpriteTextureManager(CallbackInfo callback)
+    private void close(CallbackInfo callback)
     {
-        ZYClientSetup.sprites().close();
+        ZYClientSetup.guiComponentManager().close();
     }
 }

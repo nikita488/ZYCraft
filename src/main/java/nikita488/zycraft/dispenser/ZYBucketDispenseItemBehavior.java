@@ -49,30 +49,32 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (!(block instanceof IBucketPickupHandler))
-            return super.dispenseStack(source, stack);
+        if (block instanceof IBucketPickupHandler)
+        {
+            Fluid fluid = ((IBucketPickupHandler)block).pickupFluid(world, pos, state);
 
-        Fluid fluid = ((IBucketPickupHandler)block).pickupFluid(world, pos, state);
+            if (!(fluid instanceof FlowingFluid))
+                return super.dispenseStack(source, stack);
 
-        if (!(fluid instanceof FlowingFluid))
-            return super.dispenseStack(source, stack);
+            FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
-        FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
+            if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
+                return super.dispenseStack(source, stack);
 
-        if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-            return super.dispenseStack(source, stack);
+            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+            stack.shrink(1);
 
-        handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-        stack.shrink(1);
+            ItemStack filledContainer = handler.getContainer();
 
-        ItemStack filledContainer = handler.getContainer();
+            if (stack.isEmpty())
+                return filledContainer;
 
-        if (stack.isEmpty())
-            return filledContainer;
+            if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(filledContainer) < 0)
+                defaultBehaviour.dispense(source, filledContainer);
 
-        if (source.<DispenserTileEntity>getBlockTileEntity().addItemStack(filledContainer) < 0)
-            defaultBehaviour.dispense(source, filledContainer);
+            return stack;
+        }
 
-        return stack;
+        return super.dispenseStack(source, stack);
     }
 }

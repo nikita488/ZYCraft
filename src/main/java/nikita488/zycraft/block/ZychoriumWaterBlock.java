@@ -24,14 +24,15 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import nikita488.zycraft.api.fluid.IFluidSource;
 import nikita488.zycraft.util.FluidUtils;
+import nikita488.zycraft.util.ZYConstants;
 
+import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class ZychoriumWaterBlock extends Block
+public class ZychoriumWaterBlock extends Block implements IFluidSource
 {
-    private static final Direction[] VALUES = Direction.values();
-
     public ZychoriumWaterBlock(Properties properties)
     {
         super(properties);
@@ -46,7 +47,7 @@ public class ZychoriumWaterBlock extends Block
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        for (Direction side : VALUES)
+        for (Direction side : ZYConstants.DIRECTIONS)
             transform(world, pos, pos.offset(side));
     }
 
@@ -71,10 +72,6 @@ public class ZychoriumWaterBlock extends Block
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         ItemStack heldStack = player.getHeldItem(hand);
-
-        if (heldStack.isEmpty())
-            return ActionResultType.PASS;
-
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
 
         if (!capability.isPresent())
@@ -87,7 +84,7 @@ public class ZychoriumWaterBlock extends Block
             return ActionResultType.PASS;
 
         player.addStat(Stats.ITEM_USED.get(heldStack.getItem()));
-        player.playSound(water.getFluid().getAttributes().getFillSound(), 1, 1);
+        player.playSound(water.getFluid().getAttributes().getFillSound(), 1F, 1F);
 
         if (world.isRemote())
             return ActionResultType.SUCCESS;
@@ -100,6 +97,12 @@ public class ZychoriumWaterBlock extends Block
         if (heldStack != filledContainer)
             player.setHeldItem(hand, filledContainer);
 
-        return ActionResultType.SUCCESS;
+        return ActionResultType.CONSUME;
+    }
+
+    @Override
+    public FluidStack getFluid(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    {
+        return new FluidStack(Fluids.WATER, 50);
     }
 }

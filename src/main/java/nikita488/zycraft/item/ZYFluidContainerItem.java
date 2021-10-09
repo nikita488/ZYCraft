@@ -61,7 +61,7 @@ public class ZYFluidContainerItem extends Item
             tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).mergeStyle(TextFormatting.GRAY));
 
         if (capacity > FluidAttributes.BUCKET_VOLUME)
-            tooltip.add(ZYLang.getAluminiumFoilFilled(fluid.getAmount(), capacity));
+            tooltip.add(ZYLang.copy(ZYLang.FLUID_TANK_FILLED, fluid.getAmount(), capacity));
     }
 
     @Override

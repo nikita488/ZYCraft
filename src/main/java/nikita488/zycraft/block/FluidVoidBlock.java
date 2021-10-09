@@ -5,12 +5,14 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import nikita488.zycraft.api.fluid.IFluidVoid;
 import nikita488.zycraft.util.FluidUtils;
+import nikita488.zycraft.util.ZYConstants;
 
-public class FluidVoidBlock extends Block
+import javax.annotation.Nullable;
+
+public class FluidVoidBlock extends Block implements IFluidVoid
 {
-    private final static Direction[] VALUES = Direction.values();
-
     public FluidVoidBlock(Properties properties)
     {
         super(properties);
@@ -19,7 +21,7 @@ public class FluidVoidBlock extends Block
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        for (Direction side : VALUES)
+        for (Direction side : ZYConstants.DIRECTIONS)
             voidFluid(world, pos.offset(side));
     }
 
@@ -32,5 +34,11 @@ public class FluidVoidBlock extends Block
     private void voidFluid(World world, BlockPos pos)
     {
         FluidUtils.voidFluid(world, pos, fluidState -> !fluidState.isEmpty());
+    }
+
+    @Override
+    public int getDrainAmount(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    {
+        return 50;
     }
 }

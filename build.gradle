@@ -1,62 +1,83 @@
 buildscript {
     repositories {
-        maven { url = "https://maven.minecraftforge.net" }
-        maven { url = "https://repo.spongepowered.org/maven" }
-        jcenter()
+        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
         mavenCentral()
     }
     dependencies {
-        classpath group: "net.minecraftforge.gradle", name: "ForgeGradle", version: "4.1.+", changing: true
-        classpath group: "org.spongepowered", name: "mixingradle", version: "0.7-SNAPSHOT"
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
 
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.2.0"
-    id "com.matthewprenger.cursegradle" version "1.4.0"
+    id 'com.github.johnrengelman.shadow' version '7.0.+'
+    id 'com.matthewprenger.cursegradle' version '1.4.+'
 }
 
-apply plugin: "net.minecraftforge.gradle"
-apply plugin: "org.spongepowered.mixin"
+apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
-version = "${mc_version}-${mod_version}"
-group = "nikita488.zycraft"
-archivesBaseName = "ZYCraft"
+version = "${minecraft_version}-${mod_version}"
+group = "${mod_base_package}.${mod_id}"
+archivesBaseName = mod_name
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 
+println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
 minecraft {
-    mappings channel: "snapshot", version: "20210309-1.16.5"
-    accessTransformer = file("src/main/resources/META-INF/accesstransformer.cfg")
+    mappings channel: mappings_channel, version: mappings_version
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     runs {
         client {
-            workingDirectory project.file("run")
-            arg "-mixin.config=mixins.zycraft.json"
-            arg "--username=Dev###"
-            property 'mixin.env.disableRefMap', 'true'
-            mods { zycraft { source sourceSets.main } }
+            workingDirectory project.file('run')
+
+            args '--username', 'Dev###'
+
+            mods { "${mod_id}" { source sourceSets.main } }
         }
 
         server {
-            workingDirectory project.file("run")
-            mods { zycraft { source sourceSets.main } }
+            workingDirectory project.file('run')
+
+            mods { "${mod_id}" { source sourceSets.main } }
         }
 
         data {
-            workingDirectory project.file("run")
-            args "--mod", "zycraft", "--all", "--output", file("src/generated/resources/"), "--existing", file("src/main/resources/")
-            mods { zycraft { source sourceSets.main } }
+            workingDirectory project.file('run')
+
+            args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+
+            mods { "${mod_id}" { source sourceSets.main } }
         }
     }
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    add sourceSets.main, "mixins.${mod_id}.refmap.json"
+    config "mixins.${mod_id}.json"
+
+    debug.verbose = true
+    debug.export = true
+}
+
 repositories {
     mavenLocal()
-    maven { url "https://maven.tterrag.com" }
-    maven { url "https://www.cursemaven.com" }
-    maven { url "http://dvs1.progwml6.com/files/maven" }
-    maven { url "https://maven.tehnut.info" }
+    maven { url 'https://maven.tterrag.com' }
+    maven {
+        url 'https://www.cursemaven.com'
+        content {
+            includeGroup 'curse.maven'
+        }
+    }
+    maven { url 'https://dvs1.progwml6.com/files/maven' }
+    maven { url 'https://squiddev.cc/maven' }
 }
 
 configurations {
@@ -64,70 +85,85 @@ configurations {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${mc_version}-${forge_version}"
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    def registrate = "com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}"
+    if (!Boolean.getBoolean("idea.sync.active"))
+        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+
+    def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
     implementation fg.deobf(registrate)
     shade registrate
 
     implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
     compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
     runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
-    compileOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}:api")
-    runtimeOnly fg.deobf("mcp.mobius.waila:Hwyla:${hwyla_version}")
+    compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}:api")
+    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    //implementation fg.deobf("org.squiddev:cc-tweaked-${minecraft_version}:${cct_version}")
 
-    //runtimeOnly fg.deobf("curse.maven:mekanism-268560:3183270")
-    runtimeOnly fg.deobf("curse.maven:storage-drawers-223852:3180569")
-
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
+    //runtimeOnly fg.deobf('curse.maven:storage-drawers-223852:3180569')
+    runtimeOnly fg.deobf('curse.maven:mantle-74924:3389377')
+    runtimeOnly fg.deobf('curse.maven:tinkers-construct-74072:3389395')
+    //runtimeOnly fg.deobf('curse.maven:chisel-235279:3376782')
 }
 
-jar {
-    archiveClassifier.set("slim")
+// This block of code expands all the gradle properties in the specified resource targets.
+// It copies them into the targets and expands all the defined properties.
+def resourceTargets = ['META-INF/mods.toml', 'pack.mcmeta', "mixins.${mod_id}.json".toString()]
+def intoTargets = ["$rootDir/out/production/resources/", "$rootDir/out/production/${project.name}.main/", "$rootDir/bin/main/"]
+def replaceProperties = [mod_id: mod_id, mod_name: mod_name, mod_version: mod_version,
+        mod_authors: mod_authors, mod_description: mod_description,
+        mod_display_url: mod_display_url, mod_issue_tracker_url: mod_issue_tracker_url, mod_license: mod_license,
+        minecraft_version_range: minecraft_version_range, forge_version_range: forge_version_range,
+        loader_version_range: loader_version_range]
 
-    manifest {
-        attributes([
-                "Specification-Title": "zycraft",
-                "Specification-Vendor": "nikita488",
-                "Specification-Version": "1.0",
-                "Implementation-Title": "ZYCraft",
-                "Implementation-Version": "${mod_version}",
-                "Implementation-Vendor": "nikita488",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConnector": "nikita488.zycraft.mixin.ZYMixinConnector"
-        ])
+processResources {
+    exclude '.cache'
+    exclude '**/*.psd'
+    inputs.properties replaceProperties
+    replaceProperties.put 'project', project
+
+    filesMatching(resourceTargets) {
+        expand replaceProperties
     }
-}
 
-sourceSets.main {
-    ext.refMap = "mixins.zycraft.refmap.json"
-}
-
-sourceSets.main.resources {
-    srcDir "src/generated/resources"
-}
-
-processResources { task ->
-    exclude ".cache"
-    exclude "**/*.psd"
-
-    from(sourceSets.main.resources.srcDirs) { spec ->
-        spec.include 'META-INF/mods.toml'
-        task.doFirst {
-            spec.expand 'version': mod_version,
-                    'mc_version': mc_version,
-                    'forge_version': min_forge_version,
-                    'loader_version': loader_version
+    intoTargets.each { target ->
+        if (file(target).exists()) {
+            copy {
+                from(sourceSets.main.resources) {
+                    include resourceTargets
+                    expand replaceProperties
+                }
+                into target
+            }
         }
     }
 }
 
+jar {
+    classifier 'slim'
+
+    manifest {
+        attributes([
+                'Specification-Title': mod_id,
+                'Specification-Vendor': mod_authors,
+                'Specification-Version': '1',
+                'Implementation-Title': project.name,
+                'Implementation-Version': mod_version,
+                'Implementation-Vendor': mod_authors,
+                'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
+}
+
 shadowJar {
-    archiveClassifier.set("")
+    classifier ''
     configurations = [project.configurations.shade]
-    relocate "com.tterrag.registrate", "nikita488.zycraft.repack.registrate"
+    relocate 'com.tterrag.registrate', "${project.group}.repack.registrate"
+    finalizedBy 'reobfShadowJar'
 }
 
 reobf {
@@ -135,16 +171,33 @@ reobf {
 }
 
 task apiJar(type: Jar) {
-    archiveClassifier.set("api")
+    classifier 'api'
     from sourceSets.main.allSource
     from sourceSets.main.output
-    include "nikita488/zycraft/api/**"
+    include "${mod_base_package}/${mod_id}/api/**"
 }
 
-build.dependsOn shadowJar
-build.dependsOn reobfShadowJar
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allJava
+}
 
-tasks.curseforge.enabled = project.hasProperty("api_key")
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact shadowJar
+            artifact apiJar
+            artifact sourcesJar
+        }
+    }
+    repositories {
+        maven {
+            url "file://${project.projectDir}/mcmodsrepo"
+        }
+    }
+}
+
+tasks.curseforge.enabled = project.hasProperty('api_key')
 
 curseforge {
     if (project.hasProperty("api_key")) {
@@ -153,18 +206,19 @@ curseforge {
 
     project {
         id = "${project_id}"
-        changelog = file("CHANGELOG.md")
-        changelogType = "markdown"
-        releaseType = project.hasProperty("release_type") ? project.release_type : "beta"
+        changelog = file('CHANGELOG.md')
+        changelogType = 'markdown'
+        releaseType = project.hasProperty('release_type') ? project.release_type : 'beta'
         mainArtifact(shadowJar) {
-            displayName = "ZYCraft ${mc_version}-${mod_version}"
+            displayName = "${mod_name} ${minecraft_version}-${mod_version}"
         }
         addArtifact apiJar
+        addArtifact sourcesJar
         relations {
-            requiredDependency "ctm"
-            optionalDependency "jei"
-            optionalDependency "the-one-probe"
-            optionalDependency "hwyla"
+            requiredDependency 'ctm'
+            optionalDependency 'jei'
+            optionalDependency 'the-one-probe'
+            optionalDependency 'jade'
         }
     }
 }

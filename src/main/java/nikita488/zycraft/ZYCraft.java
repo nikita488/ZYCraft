@@ -20,6 +20,7 @@ import nikita488.zycraft.init.*;
 import nikita488.zycraft.init.worldgen.ZYConfiguredFeatures;
 import nikita488.zycraft.init.worldgen.ZYFeatures;
 import nikita488.zycraft.init.worldgen.ZYPlacements;
+import nikita488.zycraft.multiblock.MultiManager;
 import nikita488.zycraft.network.ZYPackets;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -42,10 +43,13 @@ public class ZYCraft
         ZYBlocks.init();
         ZYItems.init();
         ZYTiles.init();
+        ZYEntities.init();
         ZYParticles.init();
         ZYFeatures.init();
         ZYPlacements.init();
         ZYContainers.init();
+        ZYRegistries.init();
+        ZYMultiTypes.init();
 
         ZYTags.init();
         ZYGroups.init();
@@ -55,6 +59,7 @@ public class ZYCraft
 
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        eventBus.addListener(ZYConfig::init);
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::enqueueIMC);
     }
@@ -66,6 +71,7 @@ public class ZYCraft
             ZYConfiguredFeatures.init();
             DispenserBlock.registerDispenseBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
+        MultiManager.commonSetup();
     }
 
     private void enqueueIMC(InterModEnqueueEvent event)
@@ -82,5 +88,10 @@ public class ZYCraft
     public static ResourceLocation id(String name)
     {
         return new ResourceLocation(MOD_ID, name);
+    }
+
+    public static String string(String name)
+    {
+        return MOD_ID + ":" + name;
     }
 }

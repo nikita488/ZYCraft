@@ -3,12 +3,18 @@ package nikita488.zycraft.multiblock.former;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBiomeReader;
 import net.minecraft.world.IBlockReader;
+import nikita488.zycraft.multiblock.MultiBlock;
+import nikita488.zycraft.multiblock.child.IMultiChild;
 import nikita488.zycraft.multiblock.child.IMultiChildMatcher;
+import nikita488.zycraft.multiblock.child.MultiChildType;
 import nikita488.zycraft.util.Cuboid6i;
 
 public class MultiPattern
 {
+    public static final int NULL = -2;
+    public static final int ALWAYS_MATCHES = -1;
     private final int[][][] pattern;
     private final IMultiChildMatcher[] matchers;
 
@@ -23,25 +29,37 @@ public class MultiPattern
         return new Builder(width, height, depth);
     }
 
-    public boolean matches(IBlockReader world, BlockPos basePos)
+    public boolean process(BlockPos basePos, MultiChildProcessor processor)
     {
-        BlockPos.Mutable matchingPos = basePos.toMutable();
+        BlockPos.Mutable processingPos = basePos.toMutable();
 
-        for (int i = 0; i < width(); i++)
-        {
-            for (int j = 0; j < height(); j++)
-            {
-                for (int k = 0; k < depth(); k++)
-                {
-                    int matcherIndex = pattern[i][j][k];
-
-                    if (matcherIndex >= 0 && !matchers[matcherIndex].matches(world, matchingPos.setAndOffset(basePos, i, j, k)))
+        for (int x = 0; x < width(); x++)
+            for (int y = 0; y < height(); y++)
+                for (int z = 0; z < depth(); z++)
+                    if (!processor.test(pattern[x][y][z], processingPos.setAndOffset(basePos, x, y, z)))
                         return false;
-                }
-            }
-        }
 
         return true;
+    }
+
+    public void convert(IBiomeReader world, BlockPos basePos, MultiBlock multiBlock)
+    {
+        process(basePos, (matcherIndex, pos) ->
+        {
+            if (matcherIndex < ALWAYS_MATCHES)
+                return true;
+
+            if (!(world.getTileEntity(pos) instanceof IMultiChild))
+                MultiChildType.convert(world, pos);
+
+            multiBlock.addChildBlock(pos);
+            return true;
+        });
+    }
+
+    public boolean matches(IBlockReader world, BlockPos basePos)
+    {
+        return process(basePos, (matcherIndex, pos) -> matcherIndex < 0 || matchers[matcherIndex].matches(world, pos));
     }
 
     public int width()
@@ -59,10 +77,14 @@ public class MultiPattern
         return pattern[0][0].length;
     }
 
+    @FunctionalInterface
+    public interface MultiChildProcessor
+    {
+        boolean test(int matcherIndex, BlockPos pos);
+    }
+
     public static final class Builder
     {
-        private static final int NULL = -2;
-        private static final int ALWAYS_MATCHES = -1;
         private final int[][][] pattern;
         private final ObjectList<IMultiChildMatcher> matchers = new ObjectArrayList<>();
 
@@ -73,10 +95,10 @@ public class MultiPattern
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
                     for (int z = 0; z < depth; z++)
-                        this.pattern[x][y][z] = NULL;
+                        block(x, y, z, NULL);
         }
 
-        private int indexOf(IMultiChildMatcher matcher)
+        public int indexOf(IMultiChildMatcher matcher)
         {
             if (matcher == IMultiChildMatcher.ALWAYS_MATCHES)
                 return ALWAYS_MATCHES;
@@ -88,6 +110,12 @@ public class MultiPattern
 
             matchers.add(matcher);
             return matchers.size() - 1;
+        }
+
+        public Builder block(int x, int y, int z, int matcherIndex)
+        {
+            this.pattern[x][y][z] = matcherIndex;
+            return this;
         }
 
         public Builder cuboid(IMultiChildMatcher matcher)
@@ -107,7 +135,7 @@ public class MultiPattern
             for (int x = x1; x <= x2; x++)
                 for (int y = y1; y <= y2; y++)
                     for (int z = z1; z <= z2; z++)
-                        this.pattern[x][y][z] = matcherIndex;
+                        block(x, y, z, matcherIndex);
             return this;
         }
 
@@ -124,14 +152,15 @@ public class MultiPattern
         public Builder corners(int x1, int y1, int z1, int x2, int y2, int z2, IMultiChildMatcher matcher)
         {
             int matcherIndex = indexOf(matcher);
-            this.pattern[x1][y1][z1] = matcherIndex;
-            this.pattern[x1][y1][z2] = matcherIndex;
-            this.pattern[x1][y2][z1] = matcherIndex;
-            this.pattern[x1][y2][z2] = matcherIndex;
-            this.pattern[x2][y1][z1] = matcherIndex;
-            this.pattern[x2][y1][z2] = matcherIndex;
-            this.pattern[x2][y2][z1] = matcherIndex;
-            this.pattern[x2][y2][z2] = matcherIndex;
+
+            block(x1, y1, z1, matcherIndex);
+            block(x1, y1, z2, matcherIndex);
+            block(x1, y2, z1, matcherIndex);
+            block(x1, y2, z2, matcherIndex);
+            block(x2, y1, z1, matcherIndex);
+            block(x2, y1, z2, matcherIndex);
+            block(x2, y2, z1, matcherIndex);
+            block(x2, y2, z2, matcherIndex);
             return this;
         }
 
@@ -151,26 +180,26 @@ public class MultiPattern
 
             for (int x = x1 + 1; x <= x2 - 1; x++)
             {
-                this.pattern[x][y1][z1] = matcherIndex;
-                this.pattern[x][y1][z2] = matcherIndex;
-                this.pattern[x][y2][z1] = matcherIndex;
-                this.pattern[x][y2][z2] = matcherIndex;
+                block(x, y1, z1, matcherIndex);
+                block(x, y1, z2, matcherIndex);
+                block(x, y2, z1, matcherIndex);
+                block(x, y2, z2, matcherIndex);
             }
 
             for (int y = y1 + 1; y <= y2 - 1; y++)
             {
-                this.pattern[x1][y][z1] = matcherIndex;
-                this.pattern[x1][y][z2] = matcherIndex;
-                this.pattern[x2][y][z1] = matcherIndex;
-                this.pattern[x2][y][z2] = matcherIndex;
+                block(x1, y, z1, matcherIndex);
+                block(x1, y, z2, matcherIndex);
+                block(x2, y, z1, matcherIndex);
+                block(x2, y, z2, matcherIndex);
             }
 
             for (int z = z1 + 1; z <= z2 - 1; z++)
             {
-                this.pattern[x1][y1][z] = matcherIndex;
-                this.pattern[x1][y2][z] = matcherIndex;
-                this.pattern[x2][y1][z] = matcherIndex;
-                this.pattern[x2][y2][z] = matcherIndex;
+                block(x1, y1, z, matcherIndex);
+                block(x1, y2, z, matcherIndex);
+                block(x2, y1, z, matcherIndex);
+                block(x2, y2, z, matcherIndex);
             }
 
             return this;
@@ -236,17 +265,17 @@ public class MultiPattern
             return new MultiPattern(pattern, matchers.toArray(new IMultiChildMatcher[0]));
         }
 
-        private int width()
+        public int width()
         {
             return pattern.length;
         }
 
-        private int height()
+        public int height()
         {
             return pattern[0].length;
         }
 
-        private int depth()
+        public int depth()
         {
             return pattern[0][0].length;
         }

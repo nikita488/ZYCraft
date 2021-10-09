@@ -33,6 +33,13 @@ public class ColorScannerItem extends Item implements IColorChanger
     @OnlyIn(Dist.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
+        int color = ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
+
+        tooltip.add(ZYLang.COLOR_SCANNER_CURRENT_COLOR);
+        tooltip.add(ZYLang.copy(ZYLang.COLOR_SCANNER_RED, (color >> 16) & 255));
+        tooltip.add(ZYLang.copy(ZYLang.COLOR_SCANNER_GREEN, (color >> 8) & 255));
+        tooltip.add(ZYLang.copy(ZYLang.COLOR_SCANNER_BLUE, color & 255));
+
         if (!Screen.hasShiftDown() && !flag.isAdvanced())
         {
             tooltip.add(ZYLang.TOOLTIP_HINT);
@@ -42,13 +49,6 @@ public class ColorScannerItem extends Item implements IColorChanger
             tooltip.add(ZYLang.COLOR_SCANNER_APPLY);
             tooltip.add(ZYLang.COLOR_SCANNER_COPY);
         }
-
-        int color = ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
-
-        tooltip.add(ZYLang.COLOR_SCANNER_CURRENT_COLOR);
-        tooltip.add(ZYLang.getColorScannerRed((color >> 16) & 0xFF));
-        tooltip.add(ZYLang.getColorScannerGreen((color >> 8) & 0xFF));
-        tooltip.add(ZYLang.getColorScannerBlue(color & 0xFF));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ColorScannerItem extends Item implements IColorChanger
     {
         ItemStack stack = player.getHeldItem(hand);
 
-        if (!player.isCrouching())
+        if (!player.isSneaking())
             return ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
         else
             stack.getOrCreateTag().putInt("Color", color);

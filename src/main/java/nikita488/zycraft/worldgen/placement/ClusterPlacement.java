@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 
 public class ClusterPlacement extends Placement<ClusterPlacementConfig>
 {
+    public static final BlockPos.Mutable POS = new BlockPos.Mutable();
+
     public ClusterPlacement(Codec<ClusterPlacementConfig> codec)
     {
         super(codec);
@@ -22,7 +24,6 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
     public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random random, ClusterPlacementConfig config, BlockPos pos)
     {
         ObjectArrayList<BlockPos> clusters = new ObjectArrayList<>();
-        BlockPos.Mutable clusterPos = new BlockPos.Mutable();
 
         for (int i = 0; i < config.generationAttempts; i++)
         {
@@ -36,10 +37,10 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
             if (surfaceHeight <= 0)
                 continue;
 
-            clusterPos.setPos(x, random.nextInt(surfaceHeight), z);
+            POS.setPos(x, random.nextInt(surfaceHeight), z);
 
-            if (helper.func_242894_a(clusterPos).getBlock() == Blocks.CAVE_AIR)
-                clusters.add(clusterPos.toImmutable());
+            if (helper.func_242894_a(POS).getBlock() == Blocks.CAVE_AIR)
+                clusters.add(POS.toImmutable());
         }
 
         return clusters.stream();

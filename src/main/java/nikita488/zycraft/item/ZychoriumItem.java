@@ -8,7 +8,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import nikita488.zycraft.api.colorable.IColorChanger;
@@ -32,7 +31,7 @@ public class ZychoriumItem extends Item implements IColorChanger
         int red = (rgb >> 16) & 255;
         int green = (rgb >> 8) & 255;
         int blue = rgb & 255;
-        boolean sneaking = player.isCrouching();
+        boolean sneaking = player.isSneaking();
 
         switch (type)
         {
@@ -43,8 +42,8 @@ public class ZychoriumItem extends Item implements IColorChanger
             case BLUE:
                 return canChangeComponent(blue, sneaking);
             case DARK:
-                float brightness = Color.rgbToHSV(red, green, blue).getZ();
-                return sneaking ? brightness > 0 : brightness < 1;
+                float brightness = Color.rgbToHSV(red, green, blue)[2];
+                return sneaking ? brightness > 0F : brightness < 1F;
             case LIGHT:
                 return sneaking ? rgb != 0x080808 : rgb != -1;
         }
@@ -61,7 +60,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
     {
         int rgba = Color.rgba(rgb, 255);
-        boolean sneaking = player.isCrouching();
+        boolean sneaking = player.isSneaking();
 
         switch (type)
         {
@@ -72,15 +71,15 @@ public class ZychoriumItem extends Item implements IColorChanger
             case BLUE:
                 return Color.rgb(sneaking ? Color.subtract(rgba, 0x00000800) : Color.add(rgba, 0x00000800));
             case DARK:
-                Vector3f hsv = Color.rgbToHSV((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
-                float brightness = hsv.getZ();
+                float[] hsv = Color.rgbToHSV((rgb >> 16) & 255, (rgb >> 8) & 255, rgb & 255);
+                float brightness = hsv[2];
 
                 if (!sneaking)
-                    brightness += (8 / 255.0F);
+                    brightness += (8 / 255F);
                 else
-                    brightness -= (8 / 255.0F);
+                    brightness -= (8 / 255F);
 
-                return Color.hsvToRGB(hsv.getX(), hsv.getY(), MathHelper.clamp(brightness, 0, 1));
+                return Color.hsvToRGB(hsv[0], hsv[1], MathHelper.clamp(brightness, 0F, 1F));
             case LIGHT:
                 return sneaking ? 0x080808 : 0xFFFFFF;
         }

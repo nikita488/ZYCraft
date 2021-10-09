@@ -1,12 +1,14 @@
 package nikita488.zycraft.enums;
 
+import com.google.common.collect.ImmutableMap;
+import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.Util;
 
+import java.util.Map;
 import java.util.Random;
 
-public enum ZYType implements IStringSerializable
+public enum ZYType
 {
     BLUE("blue", 0x0064FF, 0x00193F, MaterialColor.BLUE),
     GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
@@ -32,10 +34,14 @@ public enum ZYType implements IStringSerializable
         return Util.getRandomObject(VALUES, random);
     }
 
-    @Override
-    public String getString()
+    public static <T> Map<ZYType, T> buildMap(String pattern, NonNullBiFunction<ZYType, String, T> factory)
     {
-        return name;
+        ImmutableMap.Builder<ZYType, T> map = ImmutableMap.builder();
+
+        for (ZYType type : VALUES)
+            map.put(type, factory.apply(type, pattern.replace("{type}", type.toString())));
+
+        return map.build();
     }
 
     public int rgb()
@@ -51,5 +57,11 @@ public enum ZYType implements IStringSerializable
     public MaterialColor mtlColor()
     {
         return mtlColor;
+    }
+
+    @Override
+    public String toString()
+    {
+        return name;
     }
 }

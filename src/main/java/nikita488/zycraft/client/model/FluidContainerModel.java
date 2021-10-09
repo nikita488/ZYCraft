@@ -3,6 +3,7 @@ package nikita488.zycraft.client.model;
 import com.google.gson.*;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
+import it.unimi.dsi.fastutil.objects.*;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.world.ClientWorld;
@@ -24,16 +25,16 @@ import java.util.function.Function;
 public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 {
     private final BlockModel model;
-    private final List<String> fluidTextures;
+    private final ObjectList<String> fluidTextures;
     @Nullable
     private final ResourceLocation replacementTexture;
 
-    public FluidContainerModel(BlockModel model, List<String> fluidTextures)
+    public FluidContainerModel(BlockModel model, ObjectList<String> fluidTextures)
     {
         this(model, fluidTextures, null);
     }
 
-    public FluidContainerModel(BlockModel model, List<String> fluidTextures, @Nullable ResourceLocation replacementTexture)
+    public FluidContainerModel(BlockModel model, ObjectList<String> fluidTextures, @Nullable ResourceLocation replacementTexture)
     {
         this.model = model;
         this.fluidTextures = fluidTextures;
@@ -102,7 +103,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
             if (array.size() == 0)
                 throw new JsonParseException("Expected at least 1 fluid texture, got 0");
 
-            List<String> fluidTextures = new ArrayList<>();
+            ObjectList<String> fluidTextures = new ObjectArrayList<>();
 
             for (JsonElement element : array)
                 fluidTextures.add(JSONUtils.getString(element, "texture"));
@@ -117,7 +118,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
         private final ModelBakery bakery;
         private final IUnbakedModel emptyModel;
         private final ItemOverride[] overrides;
-        private final Map<ResourceLocation, IBakedModel[]> overrideModels = new HashMap<>();
+        private final Object2ObjectMap<ResourceLocation, IBakedModel[]> overrideModels = new Object2ObjectOpenHashMap<>();
 
         public ItemOverrides(FluidContainerModel parent, ModelBakery bakery, IUnbakedModel emptyModel, List<ItemOverride> overrides)
         {
@@ -137,53 +138,38 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
             if (overrides.length == 0)
                 return emptyModel;
 
-            FluidStack containedFluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
+            FluidStack fluidStack = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
+            ResourceLocation id = fluidStack.getFluid().getRegistryName();
 
-            if (containedFluid.isEmpty())
+            if (fluidStack.isEmpty() || id == null)
                 return emptyModel;
 
-            ResourceLocation fluidName = containedFluid.getFluid().getRegistryName();
-            FluidAttributes attributes = containedFluid.getFluid().getAttributes();
-            ResourceLocation stillTexture = attributes.getStillTexture(containedFluid);
-
-            if (fluidName == null || stillTexture == null)
-                return emptyModel;
-
-            if (!overrideModels.containsKey(fluidName))
+            FluidAttributes attributes = fluidStack.getFluid().getAttributes();
+            ResourceLocation texture = attributes.getStillTexture(fluidStack);
+            IBakedModel[] models = overrideModels.computeIfAbsent(id, key ->
             {
                 IBakedModel[] wrappedModels = new IBakedModel[overrides.length];
+                ModelRotation rotation = attributes.isLighterThanAir() ? ModelRotation.X180_Y0 : ModelRotation.X0_Y0;
 
                 for (int i = 0; i < overrides.length; i++)
                 {
                     ItemOverride override = overrides[i];
-                    IUnbakedModel overrideModel = bakery.getUnbakedModel(override.getLocation());
+                    IUnbakedModel model = bakery.getUnbakedModel(override.getLocation());
 
-                    if (Objects.equals(overrideModel, this.emptyModel) || !(overrideModel instanceof BlockModel))
-                        continue;
-
-                    FluidContainerModel wrappedModel = parent.wrapModel((BlockModel)overrideModel, stillTexture);
-                    ModelRotation transform = ModelRotation.X0_Y0;
-
-                    if (attributes.isGaseous(containedFluid) || attributes.isLighterThanAir())
-                        transform = ModelRotation.X180_Y0;
-
-                    wrappedModels[i] = wrappedModel.bake(null, bakery, ModelLoader.defaultTextureGetter(), transform, this, override.getLocation());
+                    if (!Objects.equals(model, this.emptyModel) && model instanceof BlockModel)
+                        wrappedModels[i] = parent.wrapModel((BlockModel)model, texture)
+                                .bake(null, bakery, ModelLoader.defaultTextureGetter(), rotation, this, override.getLocation());
                 }
 
-                overrideModels.put(fluidName, wrappedModels);
-            }
+                return wrappedModels;
+            });
 
             for (int i = 0; i < overrides.length; i++)
             {
                 if (!overrides[i].matchesOverride(stack, world, entity))
                     continue;
 
-                IBakedModel[] wrappedModels = overrideModels.get(fluidName);
-
-                if (wrappedModels == null)
-                    break;
-
-                IBakedModel model = wrappedModels[i];
+                IBakedModel model = models[i];
                 return model != null ? model : emptyModel;
             }
 

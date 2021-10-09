@@ -15,7 +15,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.util.ParticleSpawn;
+import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -37,6 +37,14 @@ public class ZychoriumLampBlock extends ColorableBlock
     public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
         return ZYTiles.ZYCHORIUM_LAMP.create();
+    }
+
+    @Override
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    {
+        if (state.get(LIT))
+            ParticleUtils.glowingColorableBlock(state, world, pos, rand);
     }
 
     @Nullable
@@ -77,14 +85,6 @@ public class ZychoriumLampBlock extends ColorableBlock
     protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(LIT);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
-    {
-        if (state.get(LIT))
-            ParticleSpawn.glowingColorableBlock(state, world, pos, rand);
     }
 
     public boolean inverted()

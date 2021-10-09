@@ -12,12 +12,12 @@ public class ColorableTile extends ZYTile implements IColorable
 {
     protected Color color;
 
-    public ColorableTile(TileEntityType<? extends ColorableTile> type)
+    public ColorableTile(TileEntityType<?> type)
     {
         this(type, 0xFFFFFF);
     }
 
-    public ColorableTile(TileEntityType<? extends ColorableTile> type, int defaultColor)
+    public ColorableTile(TileEntityType<?> type, int defaultColor)
     {
         super(type);
         this.color = Color.fromRGB(defaultColor);
@@ -33,6 +33,7 @@ public class ColorableTile extends ZYTile implements IColorable
     public void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb)
     {
         this.color = Color.fromRGB(rgb);
+        markDirty();
         sendUpdated();
     }
 
@@ -61,17 +62,11 @@ public class ColorableTile extends ZYTile implements IColorable
     public void decodeUpdate(CompoundNBT tag)
     {
         super.decodeUpdate(tag);
-        sendUpdated();
+        blockChanged();
     }
 
     @Override
     public void encode(CompoundNBT tag)
-    {
-        color.save(tag);
-    }
-
-    @Override
-    public void encodeUpdate(CompoundNBT tag)
     {
         color.save(tag);
     }

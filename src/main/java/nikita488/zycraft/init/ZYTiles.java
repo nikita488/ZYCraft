@@ -5,8 +5,13 @@ import com.tterrag.registrate.util.entry.TileEntityEntry;
 import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.enums.ViewerType;
+import nikita488.zycraft.multiblock.child.tile.ConvertedMultiChildTile;
+import nikita488.zycraft.multiblock.child.tile.ItemIOTile;
+import nikita488.zycraft.multiblock.child.tile.MultiAirTile;
+import nikita488.zycraft.multiblock.child.tile.ValveTile;
 import nikita488.zycraft.tile.ColorableTile;
 import nikita488.zycraft.tile.FabricatorTile;
+import nikita488.zycraft.tile.FluidSelectorTile;
 import nikita488.zycraft.tile.ZychoriumLampTile;
 
 public class ZYTiles
@@ -30,6 +35,14 @@ public class ZYTiles
             .register();
 
     public static final TileEntityEntry<FabricatorTile> FABRICATOR = TileEntityEntry.cast(ZYBlocks.FABRICATOR.getSibling(ForgeRegistries.TILE_ENTITIES));
+
+    public static final TileEntityEntry<MultiAirTile> MULTI_AIR = TileEntityEntry.cast(ZYBlocks.MULTI_AIR.getSibling(ForgeRegistries.TILE_ENTITIES));
+    public static final TileEntityEntry<ConvertedMultiChildTile> CONVERTED_MULTI_CHILD = REGISTRATE.tileEntity("converted_multi_child", ConvertedMultiChildTile::new)
+            .validBlocks(ZYBlocks.FLAMMABLE_BLOCK, ZYBlocks.HARD_BLOCK, ZYBlocks.GLASS_BLOCK)
+            .register();
+    public static final TileEntityEntry<ValveTile> VALVE = TileEntityEntry.cast(ZYBlocks.VALVE.getSibling(ForgeRegistries.TILE_ENTITIES));
+    public static final TileEntityEntry<ItemIOTile> ITEM_IO = TileEntityEntry.cast(ZYBlocks.ITEM_IO.getSibling(ForgeRegistries.TILE_ENTITIES));
+    public static final TileEntityEntry<FluidSelectorTile> FLUID_SELECTOR = TileEntityEntry.cast(ZYBlocks.FLUID_SELECTOR.getSibling(ForgeRegistries.TILE_ENTITIES));
 
     public static void init() {}
 }

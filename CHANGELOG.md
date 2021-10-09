@@ -1,3 +1,15 @@
+### 3.1.0 (2021-10-09)
+
+* Added **Multi-Tank**. Can be built in **any rectangular shape** with a maximum size **12x12x12**. The **frame** of the tank must consist of **any hard opaque blocks**, **faces** of the tank must consist of **any hard or glass-like blocks**. Each **air** block inside the tank is equaled to **16000 mb of capacity**. When **broken** the stored **fluid** will be **divided equally among all tank Valves**.
+* Added **Valve (MultiBlock Interface)**. The **fluid** can only be **drained** if it's a **level greater than or equal to the level of the Valve**. Has **Input/Output mode** (**Right click** on the block to change mode). In **Input mode**, it will **accept** fluid from the **adjacent fluid handler**. In **Output mode**, it will automatically **eject** fluid to the **adjacent fluid handler**. **Valve** placed on the **shared side** of 2 Multi-Tanks will **balance** the fluids between 2 tanks. Has **Redstone Comparator** support.
+* Added **Item IO (MultiBlock Interface)**. Has **7 modes** (**Right click** on the block to change mode). In **Input/Output (Any)** items can be inserted/extracted in/from **any** slot **(in other modes only in slots that supports appropriate mode)**. In **any Output mode**, it will automatically **eject** items from output slots to **adjacent item handler**. Has **Redstone Comparator** support.
+* Added **Fluid Selector (Creative-only block)**. **Right click** on it with any fluid container in hand to select a fluid. It will provide **0..150 mb** of selected fluid to adjacent **Valves (configurable using the strength of the redstone signal)**.
+* **Zychorium Water** and **Water source block** will **provide 50 mb of Water** to adjacent **Valves (when the Valve is in Input mode)**.
+* **Fluid Void** will **drain and void 50 mb of any fluid** from adjacent **Valves (when the Valve is in Output mode)**.
+* Changed the textures of **Solid Red Zychorium Bricks** and **Small Solid Red Zychorium Bricks**.
+* Changed range of the **Scythe** from **3x3** to **5x5**. The range harvest is **disabled** when the player holding **Shift**.
+* Reduced efficiency, attack speed and attack damage of **Scythe** a bit. Added **durability percentage** to the tooltip.
+
 ### 3.0.1 (2021-05-22)
 
 * Fixed crash that happens when "The One Probe" is not installed ([7287114](https://github.com/nikita488/ZYCraft/commit/72871148f71bc8abea20173097a55d39180bdceb))

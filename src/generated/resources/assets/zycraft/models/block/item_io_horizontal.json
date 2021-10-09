@@ -1,0 +1,6 @@
+{
+  "parent": "zycraft:block/multi_interface_horizontal",
+  "textures": {
+    "side": "zycraft:block/item_io"
+  }
+}

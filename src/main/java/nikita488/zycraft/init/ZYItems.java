@@ -10,20 +10,18 @@ import net.minecraft.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.client.ZYColors;
+import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.item.*;
 
 import java.util.Map;
 
-import static nikita488.zycraft.util.EnumUtils.zyBase;
-
 public class ZYItems
 {
     private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.ITEMS, "ZYCraft Items");
 
-    public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = zyBase("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
-            .color(() -> () -> ZYColors.zychoriumItemColor(type))
+    public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = ZYType.buildMap("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
+            .color(() -> () -> ZYItemColors.getZYItemColor(type))
             .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("item/zychorium")))
             .tag(ZYTags.Items.ZYCHORIUM)
             .register());
@@ -32,7 +30,7 @@ public class ZYItems
 
     public static final ItemEntry<ColorScannerItem> COLOR_SCANNER = REGISTRATE.item("color_scanner", ColorScannerItem::new)
             .properties(properties -> properties.maxStackSize(1))
-            .color(() -> ZYColors::colorScannerColor)
+            .color(() -> ZYItemColors.COLOR_SCANNER)
             .model((ctx, provider) -> NonNullBiConsumer.noop())
             .recipe((ctx, provider) ->
             {
@@ -65,7 +63,7 @@ public class ZYItems
             .register();
 
     public static final ItemEntry<AluminiumFoilItem> ALUMINIUM_FOIL = REGISTRATE.item("aluminium_foil", AluminiumFoilItem::new)
-            .color(() -> ZYColors::aluminiumFoilColor)
+            .color(() -> ZYItemColors.ALUMINIUM_FOIL)
             .model((ctx, provider) -> NonNullBiConsumer.noop())
             .recipe((ctx, provider) -> ShapedRecipeBuilder.shapedRecipe(ctx.getEntry())
                     .key('#', ALUMINIUM.get())

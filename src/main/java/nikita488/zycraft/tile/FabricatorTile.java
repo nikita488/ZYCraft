@@ -4,8 +4,6 @@ import com.mojang.authlib.GameProfile;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftResultInventory;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
@@ -19,7 +17,6 @@ import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.*;
@@ -30,29 +27,33 @@ import net.minecraftforge.items.ItemStackHandler;
 import nikita488.zycraft.block.FabricatorBlock;
 import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.inventory.container.FabricatorContainer;
-import nikita488.zycraft.inventory.container.ZYContainer;
+import nikita488.zycraft.menu.FabricatorContainer;
+import nikita488.zycraft.menu.ZYContainer;
 import nikita488.zycraft.util.DataPackReloadCounter;
 import nikita488.zycraft.util.InventoryUtils;
+import nikita488.zycraft.util.SerializableCraftingInventory;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Supplier;
 
 public class FabricatorTile extends ZYTile implements ITickableTileEntity, INamedContainerProvider
 {
     private static final GameProfile PROFILE = new GameProfile(UUID.randomUUID(), "[Fabricator]");
     private final FabricatorLogic logic = new FabricatorLogic(this);
-    private final CraftingInventory recipePattern = new CraftingInventory(ZYContainer.EMPTY_CONTAINER, 3, 3);
-    private final CraftResultInventory recipeResult = new CraftResultInventory()
+    private final SerializableCraftingInventory recipePattern = new SerializableCraftingInventory(ZYContainer.EMPTY_CONTAINER, 3, 3)
     {
         @Override
-        public boolean canUseRecipe(World world, ServerPlayerEntity player, IRecipe<?> recipe)
+        public void markDirty()
         {
-            return recipe.getType() == IRecipeType.CRAFTING && !recipe.isDynamic() && recipe.canFit(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getRecipeOutput().isEmpty();
+            FabricatorTile.this.markDirty();
         }
     };
+    @Nullable
+    private ICraftingRecipe craftingRecipe;
+    private final ItemStackHandler craftingResult = new ItemStackHandler();
     private final ItemStackHandler inventory = new ItemStackHandler(9)
     {
         @Override
@@ -63,7 +64,8 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         }
     };
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> inventory);
-    private final Lazy<FakePlayer> player = Lazy.of(() -> FakePlayerFactory.get((ServerWorld)world, PROFILE));
+    private final NonNullLazy<FakePlayer> player = NonNullLazy.of(() -> FakePlayerFactory.get((ServerWorld)world, PROFILE));
+    private final Supplier<FabricatorMode> mode = () -> getBlockState().get(FabricatorBlock.MODE);
     private int reloadCount = DataPackReloadCounter.INSTANCE.count();
     @Nullable
     private ResourceLocation pendingRecipe;
@@ -74,6 +76,11 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         super(type);
     }
 
+    public static boolean isRecipeCompatible(IRecipe<?> recipe)
+    {
+        return recipe.getType() == IRecipeType.CRAFTING && !recipe.isDynamic() && recipe.canFit(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getRecipeOutput().isEmpty();
+    }
+
     @Override
     public void tick()
     {
@@ -82,14 +89,10 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
         if (reloadCount != DataPackReloadCounter.INSTANCE.count())
         {
-            IRecipe<?> recipe = recipeResult.getRecipeUsed();
-
-            if (recipe != null)
+            if (craftingRecipe != null)
             {
-                this.pendingRecipe = recipe.getId();
-
-                setRecipe(null);
-                recipeResult.clear();
+                this.pendingRecipe = craftingRecipe.getId();
+                setCraftingRecipeAndResult(null, ItemStack.EMPTY);
             }
 
             this.reloadCount = DataPackReloadCounter.INSTANCE.count();
@@ -98,17 +101,16 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         if (pendingRecipe != null)
         {
             Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(pendingRecipe)
-                    .filter(recipe -> recipeResult.canUseRecipe(world, player.get(), recipe))
+                    .filter(FabricatorTile::isRecipeCompatible)
                     .flatMap(recipe -> IRecipeType.CRAFTING.matches((ICraftingRecipe)recipe, world, recipePattern));
 
             if (!craftingRecipe.isPresent())
                 craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
-                        .filter(recipe -> recipeResult.canUseRecipe(world, player.get(), recipe));
+                        .filter(FabricatorTile::isRecipeCompatible);
 
             ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
 
-            setRecipe(!craftingResult.isEmpty() ? craftingRecipe.orElse(null) : null);
-            setCraftingResult(craftingResult);
+            setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
             this.pendingRecipe = null;
         }
 
@@ -117,15 +119,14 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
         boolean powered = world.isBlockPowered(pos);
 
-        if (canCraft(powered))
+        if (mode.get().canCraft(lastPowered, powered))
             logic.tryCraft();
 
-        this.lastPowered = powered;
-    }
-
-    private boolean canCraft(boolean powered)
-    {
-        return mode().canCraft(lastPowered, powered);
+        if (powered != lastPowered)
+        {
+            this.lastPowered = powered;
+            markDirty();
+        }
     }
 
     public int getColor(BlockState state)
@@ -154,7 +155,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         if (tag.contains("Recipe", Constants.NBT.TAG_STRING))
             this.pendingRecipe = new ResourceLocation(tag.getString("Recipe"));
 
-        InventoryUtils.read(recipePattern, tag.getCompound("RecipePattern"));
+        recipePattern.load(tag.getCompound("RecipePattern"));
         inventory.deserializeNBT(tag.getCompound("Inventory"));
         logic.load(tag);
     }
@@ -164,12 +165,10 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     {
         super.write(tag);
 
-        IRecipe<?> recipe = recipeResult.getRecipeUsed();
+        if (craftingRecipe != null)
+            tag.putString("Recipe", craftingRecipe.getId().toString());
 
-        if (recipe != null)
-            tag.putString("Recipe", recipe.getId().toString());
-
-        tag.put("RecipePattern", InventoryUtils.write(recipePattern));
+        tag.put("RecipePattern", recipePattern.save(new CompoundNBT()));
         tag.put("Inventory", inventory.serializeNBT());
         tag.putBoolean("LastPowered", lastPowered);
         logic.save(tag);
@@ -194,13 +193,11 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        if (type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY && side != Direction.UP)
-            return capability.cast();
-        return super.getCapability(type, side);
+        return !removed && side != Direction.UP && type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? capability.cast() : super.getCapability(type, side);
     }
 
     @Override
-    protected void invalidateCaps()
+    public void invalidateCaps()
     {
         super.invalidateCaps();
         capability.invalidate();
@@ -216,37 +213,33 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         return recipePattern;
     }
 
-    public CraftResultInventory recipeResult()
+    @Nullable
+    public ICraftingRecipe craftingRecipe()
     {
-        return recipeResult;
+        return craftingRecipe;
+    }
+
+    public void setCraftingRecipeAndResult(@Nullable ICraftingRecipe recipe, ItemStack result)
+    {
+        this.craftingRecipe = recipe != null && result.isEmpty() ? null : recipe;
+        craftingResult.setStackInSlot(0, result);
+        logic.recheckSides();
+        markDirty();
+    }
+
+    public ItemStackHandler craftingResult()
+    {
+        return craftingResult;
+    }
+
+    public ItemStack craftingResultStack()
+    {
+        return craftingResult.getStackInSlot(0).copy();
     }
 
     public ItemStackHandler inventory()
     {
         return inventory;
-    }
-
-    @Nullable
-    public ICraftingRecipe recipe()
-    {
-        IRecipe<?> recipe = recipeResult.getRecipeUsed();
-        return recipe instanceof ICraftingRecipe ? (ICraftingRecipe)recipe : null;
-    }
-
-    public void setRecipe(@Nullable ICraftingRecipe recipe)
-    {
-        recipeResult.setRecipeUsed(recipe);
-        logic.recheckSides();
-    }
-
-    public ItemStack craftingResult()
-    {
-        return recipeResult.getStackInSlot(0).copy();
-    }
-
-    public void setCraftingResult(ItemStack stack)
-    {
-        recipeResult.setInventorySlotContents(0, stack);
     }
 
     public FakePlayer player()
@@ -256,7 +249,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
     public FabricatorMode mode()
     {
-        return getBlockState().get(FabricatorBlock.MODE);
+        return mode.get();
     }
 
     public void setMode(FabricatorMode mode)

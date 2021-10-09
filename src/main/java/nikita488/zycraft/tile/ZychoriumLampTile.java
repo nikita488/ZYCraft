@@ -4,31 +4,32 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.world.IBlockDisplayReader;
 import nikita488.zycraft.block.ZychoriumLampBlock;
 import nikita488.zycraft.util.Color;
 
 public class ZychoriumLampTile extends ColorableTile
 {
-    private Vector3f hsv;
+    private float[] hsv;
 
     public ZychoriumLampTile(TileEntityType<ZychoriumLampTile> type)
     {
         super(type);
     }
 
-    protected float brightness(BlockState state)
+    protected float brightness(boolean inverted)
     {
         int strength = world.getRedstonePowerFromNeighbors(pos);
-        boolean inverted = ((ZychoriumLampBlock)state.getBlock()).inverted();
         return 0.25F + 0.05F * (inverted ? 15 - strength : strength);
     }
 
     @Override
     public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int tintIndex)
     {
-        return hsv != null ? Color.hsvToRGB(hsv.getX(), hsv.getY(), hsv.getZ() * brightness(state)) : 0xFFFFFF;
+        boolean inverted = ((ZychoriumLampBlock)state.getBlock()).inverted();
+        int defaultColor = inverted ? 0xFFFFFF : 0x3F3F3F;
+
+        return hsv != null ? Color.hsvToRGB(hsv[0], hsv[1], hsv[2] * brightness(inverted)) : defaultColor;
     }
 
     @Override

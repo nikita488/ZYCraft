@@ -2,29 +2,27 @@ package nikita488.zycraft.multiblock.child.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.EnumProperty;
 import net.minecraft.state.StateContainer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.IBlockReader;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.init.ZYLang;
+import nikita488.zycraft.init.ZYTiles;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemIOBlock extends SidedInterfaceBlock
+public class ItemIOBlock extends MultiInterfaceBlock
 {
     public static final EnumProperty<ItemIOMode> IO_MODE = ZYBlockStateProperties.ITEM_IO_MODE;
 
     public ItemIOBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(IO_MODE, ItemIOMode.ALL));
+        setDefaultState(getDefaultState().with(IO_MODE, ItemIOMode.ANY));
     }
 
     @Override
@@ -34,12 +32,17 @@ public class ItemIOBlock extends SidedInterfaceBlock
         tooltip.add(ZYLang.ITEM_IO_FEATURE);
     }
 
+    @Nullable
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public TileEntity createTileEntity(BlockState state, IBlockReader world)
     {
-        if (!world.isRemote())
-            world.setBlockState(pos, state.cycleValue(IO_MODE));
-        return ActionResultType.SUCCESS;
+        return ZYTiles.ITEM_IO.create();
+    }
+
+    @Override
+    public boolean hasComparatorInputOverride(BlockState state)
+    {
+        return true;
     }
 
     @Override

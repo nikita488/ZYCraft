@@ -2,7 +2,6 @@ package nikita488.zycraft.init;
 
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.providers.RegistrateItemModelProvider;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
 import com.tterrag.registrate.util.DataIngredient;
@@ -18,6 +17,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.data.ShapedRecipeBuilder;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.item.Items;
@@ -32,28 +32,30 @@ import net.minecraft.loot.functions.SetCount;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.Direction;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.client.model.generators.MultiPartBlockStateBuilder;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.*;
-import nikita488.zycraft.client.ZYColors;
+import nikita488.zycraft.block.state.properties.InterfaceAxis;
+import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
+import nikita488.zycraft.client.ZYBlockColors;
+import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.multiblock.child.block.ItemIOBlock;
-import nikita488.zycraft.multiblock.child.block.SidedInterfaceBlock;
-import nikita488.zycraft.multiblock.child.block.ValveBlock;
+import nikita488.zycraft.multiblock.child.block.*;
+import nikita488.zycraft.multiblock.child.tile.ItemIOTile;
+import nikita488.zycraft.multiblock.child.tile.MultiAirTile;
+import nikita488.zycraft.multiblock.child.tile.ValveTile;
 import nikita488.zycraft.tile.FabricatorTile;
+import nikita488.zycraft.tile.FluidSelectorTile;
 
 import java.util.Map;
 import java.util.function.Supplier;
-
-import static nikita488.zycraft.util.EnumUtils.viewerBase;
-import static nikita488.zycraft.util.EnumUtils.zyBase;
 
 public class ZYBlocks
 {
@@ -63,7 +65,7 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.BLACK)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(1.5F, 6))
+                    .hardnessAndResistance(1.5F, 6F))
             .tag(Tags.Blocks.STONE)
             .item()
                 .tag(Tags.Items.STONE, ItemTags.STONE_TOOL_MATERIALS, ItemTags.STONE_CRAFTING_MATERIALS)
@@ -94,7 +96,7 @@ public class ZYBlocks
     public static final BlockEntry<Block> ALUMINIUM_ORE = REGISTRATE.block("aluminium_ore", Block::new)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(3, 3))
+                    .hardnessAndResistance(3F))
             .tag(ZYTags.Blocks.ORES_ALUMINIUM, ZYTags.Blocks.ORES_ALUMINUM)
             .simpleItem()
             .recipe((ctx, provider) -> provider.smeltingAndBlasting(DataIngredient.items(ctx.getEntry()), ZYItems.ALUMINIUM, 0.1F))
@@ -104,7 +106,7 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.QUARTZ)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(1.5F, 6))
+                    .hardnessAndResistance(1.5F, 6F))
             .tag(Tags.Blocks.STORAGE_BLOCKS)
             .item()
                 .tag(Tags.Items.STORAGE_BLOCKS)
@@ -187,7 +189,7 @@ public class ZYBlocks
             .register();
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_ORE = zyBlock("{type}_zychorium_ore", (type, block) -> block
-            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3, 3))
+            .properties(properties -> properties.setRequiresTool().hardnessAndResistance(3F))
             .tag(ZYTags.Blocks.ORES_ZYCHORIUM)
             .loot((tables, ore) -> tables.registerLootTable(ore, RegistrateBlockLootTables.droppingWithSilkTouch(ore,
                     ItemLootEntry.builder(ZYItems.ZYCHORIUM.get(type).get())
@@ -232,12 +234,12 @@ public class ZYBlocks
             .recipe((ctx, provider) -> bricks(provider, ALUMINIZED_ZYCHORIUM_BRICKS.get(type), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_PLATE = zyBlock("{type}_zychorium_plate", (type, block) -> block
-            .properties(properties -> properties.hardnessAndResistance(1.5F, 12))
+            .properties(properties -> properties.hardnessAndResistance(1.5F, 12F))
             .tag(ZYTags.Blocks.ZYCHORIUM_PLATE)
             .recipe((ctx, provider) -> infused(provider, DataIngredient.tag(Tags.Items.INGOTS_IRON), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_SHIELD = zyBlock("{type}_zychorium_shield", (type, block) -> block
-            .properties(properties -> properties.hardnessAndResistance(1.5F, 1200))
+            .properties(properties -> properties.hardnessAndResistance(1.5F, 1200F))
             .tag(ZYTags.Blocks.ZYCHORIUM_SHIELD)
             .recipe((ctx, provider) -> infused(provider, DataIngredient.tag(Tags.Items.OBSIDIAN), DataIngredient.items(ZYCHORIUM_BRICKS.get(type)), ctx::getEntry)));
 
@@ -246,7 +248,7 @@ public class ZYBlocks
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .singleTexture(ctx.getName(), provider.modLoc("block/zy_cube_all"), "all", provider.blockTexture(ctx.getEntry()))))
             .item()
-                .color(() -> () -> ZYColors.zychoriumLampItemColor(false))
+                .color(() -> ZYItemColors.ZYCHORIUM_LAMP)
                 .build()
             .recipe((ctx, provider) -> lamp(provider, ctx::getEntry, false))
             .register();
@@ -256,7 +258,6 @@ public class ZYBlocks
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(ZYCHORIUM_LAMP.getId())))
             .item()
                 .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("block/" + provider.name(ZYCHORIUM_LAMP))))
-                .color(() -> () -> ZYColors.zychoriumLampItemColor(true))
                 .build()
             .recipe((ctx, provider) -> lamp(provider, ctx::getEntry, true))
             .register();
@@ -265,10 +266,10 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.SNOW)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(1.5F, 6)
+                    .hardnessAndResistance(1.5F, 6F)
                     .setAllowsSpawn((state, level, pos, entity) -> false))
             .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::colorableBlockColor)
+            .color(() -> ZYBlockColors.COLORABLE)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .singleTexture(ctx.getName(), provider.modLoc("block/zy_cube_all"), "all", provider.modLoc("block/zychorium_block"))))
             .tag(ZYTags.Blocks.COLORABLE)
@@ -280,9 +281,9 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.SNOW)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(1.5F, 6))
+                    .hardnessAndResistance(1.5F, 6F))
             .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::colorableBlockColor)
+            .color(() -> ZYBlockColors.COLORABLE)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .withExistingParent(ctx.getName(), provider.modLoc("block/colorable_cube_all"))
                     .texture("base", provider.blockTexture(ctx.getEntry()))
@@ -410,16 +411,16 @@ public class ZYBlocks
             .initialProperties(Material.ROCK, MaterialColor.BLUE)
             .properties(properties -> properties
                     .setRequiresTool()
-                    .hardnessAndResistance(1.5F, 6)
+                    .hardnessAndResistance(1.5F, 6F)
                     .setAllowsSpawn((state, level, pos, entity) -> false))
             .addLayer(() -> RenderType::getCutout)
-            .color(() -> ZYColors::fabricatorBlockColor)
+            .color(() -> ZYBlockColors.FABRICATOR)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .singleTexture(ctx.getName(), provider.modLoc("block/advanced_machine_top"), "top", provider.blockTexture(ctx.getEntry()))))
             .simpleTileEntity(FabricatorTile::new)
             .item()
                 .properties(properties -> properties.rarity(Rarity.UNCOMMON))
-                .color(() -> ZYColors::fabricatorItemColor)
+                .color(() -> ZYItemColors.FABRICATOR)
                 .build()
             .recipe((ctx, provider) ->
             {
@@ -438,12 +439,33 @@ public class ZYBlocks
             })
             .register();
 
+    public static final BlockEntry<MultiAirBlock> MULTI_AIR = REGISTRATE.block("multi_air", Material.AIR, MultiAirBlock::new)
+            .properties(properties -> properties.hardnessAndResistance(-1F, 3600000.8F).noDrops().notSolid())
+            .lang("MultiBlock Air")
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.mcLoc("block/air"))))
+            .simpleTileEntity(MultiAirTile::new)
+            .register();
+
+    public static final BlockEntry<ConvertedMultiChildBlock> FLAMMABLE_BLOCK = REGISTRATE.block("flammable_block", Material.WOOD, ConvertedMultiChildBlock::new)
+            .transform(ZYBlocks::convertedMultiChild)
+            .register();
+
+    public static final BlockEntry<ConvertedMultiChildBlock> HARD_BLOCK = REGISTRATE.block("hard_block", Material.ROCK, ConvertedMultiChildBlock::new)
+            .transform(ZYBlocks::convertedMultiChild)
+            .properties(properties -> properties.setRequiresTool())
+            .register();
+
+    public static final BlockEntry<ConvertedMultiChildBlock> GLASS_BLOCK = REGISTRATE.block("glass_block", Material.GLASS, ConvertedMultiChildBlock::new)
+            .transform(ZYBlocks::convertedMultiChild)
+            .properties(properties -> properties.notSolid())
+            .register();
+
     public static final BlockEntry<ValveBlock> VALVE = REGISTRATE.block("valve", ValveBlock::new)
             .transform(ZYBlocks::multiInterface)
-            .color(() -> ZYColors::valveBlockColor)
+            .color(() -> ZYBlockColors.VALVE)
+            .simpleTileEntity(ValveTile::new)
             .item()
-                .color(() -> ZYColors::valveItemColor)
-                .model((ctx, provider) -> multiInterfaceItemModel(provider, ctx.getName()))
+                .color(() -> ZYItemColors.VALVE)
                 .build()
             .recipe((ctx, provider) -> multiInterface(ZYType.BLUE, provider, DataIngredient.items(Items.BUCKET), ctx::getEntry))
             .register();
@@ -451,41 +473,25 @@ public class ZYBlocks
     public static final BlockEntry<ItemIOBlock> ITEM_IO = REGISTRATE.block("item_io", ItemIOBlock::new)
             .transform(ZYBlocks::multiInterface)
             .lang("Item IO")
-            .color(() -> ZYColors::itemIOBlockColor)
+            .color(() -> ZYBlockColors.ITEM_IO)
+            .simpleTileEntity(ItemIOTile::new)
             .item()
-                .color(() -> ZYColors::itemIOItemColor)
-                .model((ctx, provider) -> multiInterfaceItemModel(provider, ctx.getName()))
+                .color(() -> ZYItemColors.ITEM_IO)
                 .build()
             .recipe((ctx, provider) -> multiInterface(ZYType.GREEN, provider, DataIngredient.tag(Tags.Items.CHESTS_WOODEN), ctx::getEntry))
             .register();
 
-    private static <T extends SidedInterfaceBlock> BlockBuilder<T, Registrate> multiInterface(BlockBuilder<T, Registrate> block)
-    {
-        return block.initialProperties(ZYCHORITE)
-                .addLayer(() -> RenderType::getCutout)
-                .blockstate((ctx, provider) ->
-                {
-                    ModelFile baseModel = provider.models().getExistingFile(provider.modLoc("block/multi_interface"));
-                    ModelFile sideModel = provider.models()
-                            .singleTexture(ctx.getName() + "_side", provider.modLoc("block/multi_interface_side"), "side", provider.blockTexture(ctx.getEntry()));
-
-                    MultiPartBlockStateBuilder builder = provider.getMultipartBuilder(ctx.getEntry())
-                            .part().modelFile(baseModel).addModel().end();
-
-                    SidedInterfaceBlock.SIDES.forEach((side, property) ->
-                            builder.part()
-                                    .modelFile(sideModel)
-                                    .rotationX(side == Direction.DOWN ? 90 : side == Direction.UP ? 270 : 0)
-                                    .rotationY(side.getAxis().isVertical() ? 0 : (((int)side.getHorizontalAngle()) + 180) % 360)
-                                    .addModel()
-                                    .condition(property, true));
-                });
-    }
-
-    private static void multiInterfaceItemModel(RegistrateItemModelProvider provider, String name)
-    {
-        provider.singleTexture(name, provider.modLoc("block/multi_interface_inventory"), "side", provider.modLoc("block/" + name));
-    }
+    public static final BlockEntry<FluidSelectorBlock> FLUID_SELECTOR = REGISTRATE.block("fluid_selector", FluidSelectorBlock::new)
+            .initialProperties(Material.ROCK, MaterialColor.SNOW)
+            .properties(properties -> properties.hardnessAndResistance(-1F, 3600000.8F).noDrops().setAllowsSpawn((state, level, pos, entity) -> false))
+            .addLayer(() -> RenderType::getCutout)
+            .color(() -> ZYBlockColors.FLUID_SELECTOR)
+            .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
+                    .withExistingParent(ctx.getName(), provider.modLoc("block/zy_cube_all"))
+                    .texture("all", provider.blockTexture(ctx.getEntry()))))
+            .simpleTileEntity(FluidSelectorTile::new)
+            .simpleItem()
+            .register();
 
     private static Map<ZYType, BlockEntry<Block>> zyBlock(String pattern, NonNullBiFunction<ZYType, BlockBuilder<Block, Registrate>, BlockBuilder<Block, Registrate>> transform)
     {
@@ -500,19 +506,19 @@ public class ZYBlocks
     private static Map<ZYType, BlockEntry<Block>> zyBlock(String pattern, boolean coloredOverlay, NonNullBiFunction<ZYType, BlockBuilder<Block, Registrate>, BlockBuilder<Block, Registrate>> transform)
     {
         String name = pattern.replace("{type}_", "");
-        return zyBase(pattern, (type, registryName) -> REGISTRATE.block(registryName, Block::new)
+        return ZYType.buildMap(pattern, (type, registryName) -> REGISTRATE.block(registryName, Block::new)
                 .initialProperties(Material.ROCK, type.mtlColor())
                 .properties(properties -> properties
                         .setRequiresTool()
-                        .hardnessAndResistance(1.5F, 6)
+                        .hardnessAndResistance(1.5F, 6F)
                         .setAllowsSpawn((state, level, pos, entity) -> false))
                 .addLayer(() -> RenderType::getCutout)
-                .color(() -> () -> ZYColors.zyBlockColor(type, coloredOverlay))
+                .color(() -> () -> ZYBlockColors.getZYBlockColor(type, coloredOverlay))
                 .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                         .singleTexture(name, provider.modLoc("block/" + (coloredOverlay ? "zy_bricks" : "zy_cube_all")), "all", provider.modLoc("block/" + name))))
                 .item()
                     .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("block/" + name)))
-                    .color(() -> () -> ZYColors.zyItemColor(type, coloredOverlay))
+                    .color(() -> () -> ZYItemColors.getZYItemColor(type, coloredOverlay))
                     .build()
                 .transform(builder -> transform.apply(type, builder))
                 .register());
@@ -520,11 +526,11 @@ public class ZYBlocks
 
     private static Map<ZYType, BlockEntry<Block>> solidZyBricks(String pattern, NonNullBiFunction<ZYType, BlockBuilder<Block, Registrate>, BlockBuilder<Block, Registrate>> transform)
     {
-        return zyBase(pattern, (type, registryName) -> REGISTRATE.block(registryName, Block::new)
+        return ZYType.buildMap(pattern, (type, registryName) -> REGISTRATE.block(registryName, Block::new)
                 .initialProperties(Material.ROCK, type.mtlColor())
                 .properties(properties -> properties
                         .setRequiresTool()
-                        .hardnessAndResistance(1.5F, 6))
+                        .hardnessAndResistance(1.5F, 6F))
                 .simpleItem()
                 .transform(builder -> transform.apply(type, builder))
                 .register());
@@ -533,12 +539,12 @@ public class ZYBlocks
     private static BlockBuilder<ZychoriumLampBlock, Registrate> zychoriumLamp(BlockBuilder<ZychoriumLampBlock, Registrate> block)
     {
         return block.initialProperties(Material.ROCK, MaterialColor.SNOW)
-                .properties(properties -> properties.hardnessAndResistance(0.3F, 6)
+                .properties(properties -> properties.hardnessAndResistance(0.3F, 6F)
                         .setLightLevel(state -> state.get(BlockStateProperties.LIT) ? 15 : 0)
                         .sound(SoundType.GLASS)
                         .setAllowsSpawn((state, level, pos, entity) -> false))
                 .addLayer(() -> RenderType::getCutout)
-                .color(() -> ZYColors::colorableBlockColor)
+                .color(() -> ZYBlockColors.COLORABLE)
                 .tag(ZYTags.Blocks.ZYCHORIUM_LAMPS);
     }
 
@@ -555,7 +561,7 @@ public class ZYBlocks
     {
         return viewerBlock(pattern, true, ImmortalViewerBlock::new, (type, block) -> transform.apply(type, block
                 .addLayer(() -> RenderType::getTranslucent)
-                .color(() -> ZYColors::colorableBlockColor)
+                .color(() -> ZYBlockColors.COLORABLE)
                 .item()
                     .model((ctx, provider) -> provider.withExistingParent(ctx.getName(), provider.modLoc("block/" + provider.name(basicImmortalViewer()))))
                     .build()));
@@ -563,7 +569,7 @@ public class ZYBlocks
 
     private static <T extends Block> Map<ViewerType, BlockEntry<T>> viewerBlock(String pattern, boolean immortal, NonNullBiFunction<ViewerType, Block.Properties, T> blockFactory, NonNullBiFunction<ViewerType, BlockBuilder<T, Registrate>, BlockBuilder<T, Registrate>> transform)
     {
-        return viewerBase(pattern, immortal, (type, registryName) -> REGISTRATE.block(registryName, properties -> blockFactory.apply(type, properties))
+        return ViewerType.buildMap(pattern, immortal, (type, registryName) -> REGISTRATE.block(registryName, properties -> blockFactory.apply(type, properties))
                 .initialProperties(() -> Blocks.GLASS)
                 .properties(type.properties())
                 .transform(builder -> transform.apply(type, builder))
@@ -575,14 +581,54 @@ public class ZYBlocks
         return block.initialProperties(Material.ROCK, type.mtlColor())
                 .properties(properties -> properties
                         .setRequiresTool()
-                        .hardnessAndResistance(1.5F, 6)
+                        .hardnessAndResistance(1.5F, 6F)
                         .setAllowsSpawn((state, level, pos, entity) -> false))
                 .addLayer(() -> RenderType::getCutout)
-                .color(() -> () -> ZYColors.zyBlockColor(type, false))
+                .color(() -> () -> ZYBlockColors.getZYBlockColor(type))
                 .tag(ZYTags.Blocks.BASIC_MACHINES)
                 .item()
-                    .color(() -> () -> ZYColors.zyItemColor(type, false))
+                    .color(() -> () -> ZYItemColors.getZYItemColor(type))
                     .build();
+    }
+
+    private static <T extends ConvertedMultiChildBlock> BlockBuilder<T, Registrate> convertedMultiChild(BlockBuilder<T, Registrate> block)
+    {
+        return block.properties(properties -> properties
+                .noDrops()
+                .variableOpacity()
+                .setAllowsSpawn(ConvertedMultiChildBlock::isValidSpawn)
+                .setOpaque(ConvertedMultiChildBlock::isRedstoneConductor)
+                .setSuffocates(ConvertedMultiChildBlock::isSuffocating)
+                .setBlocksVision(ConvertedMultiChildBlock::isViewBlocking)
+                .setEmmisiveRendering(ConvertedMultiChildBlock::emissiveRendering))
+                .color(() -> ZYBlockColors.CONVERTED_MULTI_CHILD)
+                .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(ZYCraft.id("block/converted_multi_child"))))
+                .onRegister(entry -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> RenderTypeLookup.setRenderLayer(entry, layer -> true)));
+    }
+
+    private static <T extends MultiInterfaceBlock> BlockBuilder<T, Registrate> multiInterface(BlockBuilder<T, Registrate> block)
+    {
+        return block.initialProperties(ZYCHORITE)
+                .addLayer(() -> RenderType::getCutout)
+                .blockstate((ctx, provider) ->
+                {
+                    ModelFile allModel = provider.models()
+                            .singleTexture(ctx.getName(), provider.modLoc("block/multi_interface"), "side", provider.blockTexture(ctx.getEntry()));
+                    ModelFile horizontalModel = provider.models()
+                            .singleTexture(ctx.getName() + "_horizontal", provider.modLoc("block/multi_interface_horizontal"), "side", provider.blockTexture(ctx.getEntry()));
+                    ModelFile verticalModel = provider.models()
+                            .singleTexture(ctx.getName() + "_vertical", provider.modLoc("block/multi_interface_vertical"), "side", provider.blockTexture(ctx.getEntry()));
+
+                    provider.getVariantBuilder(ctx.getEntry())
+                            .partialState().with(ZYBlockStateProperties.INTERFACE_AXIS, InterfaceAxis.ALL)
+                            .modelForState().modelFile(allModel).addModel()
+                            .partialState().with(ZYBlockStateProperties.INTERFACE_AXIS, InterfaceAxis.X)
+                            .modelForState().modelFile(horizontalModel).rotationY(90).addModel()
+                            .partialState().with(ZYBlockStateProperties.INTERFACE_AXIS, InterfaceAxis.Y)
+                            .modelForState().modelFile(verticalModel).addModel()
+                            .partialState().with(ZYBlockStateProperties.INTERFACE_AXIS, InterfaceAxis.Z)
+                            .modelForState().modelFile(horizontalModel).addModel();
+                });
     }
 
     private static <T extends IItemProvider & IForgeRegistryEntry<?>> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)

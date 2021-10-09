@@ -22,7 +22,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.block.shape.ClusterShapes;
 import nikita488.zycraft.init.ZYDamageSources;
-import nikita488.zycraft.util.ParticleSpawn;
+import nikita488.zycraft.util.ParticleUtils;
 
 import java.util.Random;
 
@@ -72,7 +72,7 @@ public class QuartzCrystalClusterBlock extends Block
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
-        ParticleSpawn.quartzCrystalCluster(state, world, pos, rand);
+        ParticleUtils.quartzCrystalCluster(state, world, pos, rand);
     }
 
     @Override
@@ -84,8 +84,8 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
-        if (entity instanceof ItemEntity) return;
-        entity.attackEntityFrom(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.get(AMOUNT));
+        if (!(entity instanceof ItemEntity))
+            entity.attackEntityFrom(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.get(AMOUNT));
     }
 
     @Override

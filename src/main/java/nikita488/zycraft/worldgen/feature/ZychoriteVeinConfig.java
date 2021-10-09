@@ -7,10 +7,10 @@ import net.minecraft.world.gen.feature.template.RuleTest;
 
 public class ZychoriteVeinConfig implements IFeatureConfig
 {
-    public static final Codec<ZychoriteVeinConfig> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            RuleTest.CODEC.fieldOf("target").forGetter(config -> config.target),
-            Codec.intRange(0, 64).fieldOf("size").forGetter(config -> config.size),
-            Codec.floatRange(0.0F, 1.0F).fieldOf("ore_percentage").forGetter(config -> config.orePercentage))
+    public static final Codec<ZychoriteVeinConfig> CODEC = RecordCodecBuilder.create(instance -> instance
+            .group(RuleTest.CODEC.fieldOf("target").forGetter(config -> config.target),
+                    Codec.intRange(0, 64).fieldOf("size").forGetter(config -> config.size),
+                    Codec.floatRange(0F, 1F).fieldOf("ore_percentage").forGetter(config -> config.orePercentage))
             .apply(instance, ZychoriteVeinConfig::new));
 
     public final RuleTest target;

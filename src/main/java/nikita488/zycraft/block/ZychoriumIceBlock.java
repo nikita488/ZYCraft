@@ -11,11 +11,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
+import nikita488.zycraft.util.ZYConstants;
 
 public class ZychoriumIceBlock extends Block
 {
-    private final static Direction[] VALUES = Direction.values();
-
     public ZychoriumIceBlock(Properties properties)
     {
         super(properties);
@@ -24,7 +23,7 @@ public class ZychoriumIceBlock extends Block
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        for (Direction side : VALUES)
+        for (Direction side : ZYConstants.DIRECTIONS)
             transform(world, pos, pos.offset(side));
     }
 

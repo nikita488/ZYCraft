@@ -17,12 +17,14 @@ public class BlockUtils
 {
     public static void sendBlockUpdated(World world, BlockPos pos, BlockState state)
     {
-        sendBlockUpdated(world, pos, state, false);
+        if (!world.isRemote())
+            world.notifyBlockUpdate(pos, state, state, 0);
     }
 
-    public static void sendBlockUpdated(World world, BlockPos pos, BlockState state, boolean playerChanged)
+    public static void blockChanged(World world, BlockPos pos, BlockState state, boolean immediate)
     {
-        world.notifyBlockUpdate(pos, state, state, playerChanged ? Constants.BlockFlags.RERENDER_MAIN_THREAD : 0);
+        if (world.isRemote())
+            world.notifyBlockUpdate(pos, state, state, immediate ? Constants.BlockFlags.RERENDER_MAIN_THREAD : 0);
     }
 
     private static boolean removeBlock(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean canHarvest)

@@ -9,7 +9,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkEvent;
-import nikita488.zycraft.inventory.container.FabricatorContainer;
+import nikita488.zycraft.menu.FabricatorContainer;
 import nikita488.zycraft.tile.FabricatorTile;
 
 import java.util.Map;
@@ -20,7 +20,7 @@ public class SetFabricatorRecipePacket
     private final int windowID;
     private final ResourceLocation recipeID;
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
-    private ItemStack recipeResult = ItemStack.EMPTY;
+    private ItemStack craftingResult = ItemStack.EMPTY;
 
     public SetFabricatorRecipePacket(int windowID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
     {
@@ -37,7 +37,7 @@ public class SetFabricatorRecipePacket
             if (ingredient.isInput())
                 recipePattern.set(index - 1, stack);
             else
-                this.recipeResult = stack;
+                this.craftingResult = stack;
         });
     }
 
@@ -49,7 +49,7 @@ public class SetFabricatorRecipePacket
         for (int slot = 0; slot < 9; slot++)
             recipePattern.set(slot, buf.readItemStack());
 
-        this.recipeResult = buf.readItemStack();
+        this.craftingResult = buf.readItemStack();
     }
 
     public static SetFabricatorRecipePacket decode(PacketBuffer buf)
@@ -65,7 +65,7 @@ public class SetFabricatorRecipePacket
         for (int slot = 0; slot < 9; slot++)
             buf.writeItemStack(msg.recipePattern().get(slot));
 
-        buf.writeItemStack(msg.recipeResult());
+        buf.writeItemStack(msg.craftingResult());
     }
 
     public static boolean handle(SetFabricatorRecipePacket msg, Supplier<NetworkEvent.Context> ctx)
@@ -81,22 +81,20 @@ public class SetFabricatorRecipePacket
 
             Container container = player.openContainer;
 
-            if (container.windowId != msg.windowID() || !container.getCanCraft(player) || !(container instanceof FabricatorContainer) || player.isSpectator())
-                return;
+            if (container.windowId == msg.windowID() && container.getCanCraft(player) && container instanceof FabricatorContainer && !player.isSpectator())
+            {
+                FabricatorTile fabricator = ((FabricatorContainer)container).tile();
 
-            FabricatorTile fabricator = ((FabricatorContainer)container).tile();
+                if (fabricator == null)
+                    return;
 
-            if (fabricator == null)
-                return;
+                for (int slot = 0; slot < 9; slot++)
+                    fabricator.recipePattern().setInventorySlotContents(slot, msg.recipePattern().get(slot));
 
-            for (int slot = 0; slot < 9; slot++)
-                fabricator.recipePattern().setInventorySlotContents(slot, msg.recipePattern().get(slot));
+                ICraftingRecipe recipe = (ICraftingRecipe)player.getServerWorld().getRecipeManager().getRecipe(msg.recipeID()).orElse(null);
 
-            ICraftingRecipe recipe = (ICraftingRecipe)player.getServerWorld().getRecipeManager().getRecipe(msg.recipeID()).orElse(null);
-            ItemStack result = msg.recipeResult();
-
-            fabricator.setRecipe(!result.isEmpty() ? recipe : null);
-            fabricator.setCraftingResult(result);
+                fabricator.setCraftingRecipeAndResult(recipe, msg.craftingResult());
+            }
         });
 
         return true;
@@ -117,8 +115,8 @@ public class SetFabricatorRecipePacket
         return recipePattern;
     }
 
-    public ItemStack recipeResult()
+    public ItemStack craftingResult()
     {
-        return recipeResult;
+        return craftingResult;
     }
 }

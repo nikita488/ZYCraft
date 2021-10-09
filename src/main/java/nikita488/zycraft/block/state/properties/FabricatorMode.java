@@ -1,22 +1,22 @@
 package nikita488.zycraft.block.state.properties;
 
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.text.TranslationTextComponent;
 import nikita488.zycraft.enums.ZYType;
-
-import java.util.Locale;
+import nikita488.zycraft.init.ZYLang;
 
 public enum FabricatorMode implements IStringSerializable
 {
-    AUTO_LOW,
-    AUTO_HIGH,
-    PULSE;
+    AUTO_LOW("auto_low"),
+    AUTO_HIGH("auto_high"),
+    PULSE("pulse");
 
     public static final FabricatorMode[] VALUES = values();
     private final String name;
 
-    FabricatorMode()
+    FabricatorMode(String name)
     {
-        this.name = name().toLowerCase(Locale.ROOT);
+        this.name = name;
     }
 
     public boolean canCraft(boolean lastPowered, boolean powered)
@@ -41,22 +41,28 @@ public enum FabricatorMode implements IStringSerializable
         return powered ? ZYType.BLUE.rgb() : 0x002142;
     }
 
-    public String displayName()
+    public TranslationTextComponent displayName()
     {
         switch (this)
         {
             case AUTO_HIGH:
             default:
-                return "Auto: High";
+                return ZYLang.FABRICATOR_AUTO_HIGH;
             case AUTO_LOW:
-                return "Auto: Low";
+                return ZYLang.FABRICATOR_AUTO_LOW;
             case PULSE:
-                return "Pulse";
+                return ZYLang.FABRICATOR_PULSE;
         }
     }
 
     @Override
     public String getString()
+    {
+        return name;
+    }
+
+    @Override
+    public String toString()
     {
         return name;
     }
