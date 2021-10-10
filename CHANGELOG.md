@@ -1,3 +1,7 @@
+### 3.1.1 (2021-10-10)
+
+* Fix player inventory slots offset inside Multi-Tank GUI
+
 ### 3.1.0 (2021-10-09)
 
 * Added **Multi-Tank**. Can be built in **any rectangular shape** with a maximum size **12x12x12**. The **frame** of the tank must consist of **any hard opaque blocks**, **faces** of the tank must consist of **any hard or glass-like blocks**. Each **air** block inside the tank is equaled to **16000 mb of capacity**. When **broken** the stored **fluid** will be **divided equally among all tank Valves**.
