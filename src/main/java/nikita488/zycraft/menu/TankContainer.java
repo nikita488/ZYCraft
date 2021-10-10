@@ -57,7 +57,7 @@ public class TankContainer extends ZYMultiContainer<TankMultiBlock>
                 return false;
             }
         });
-        addPlayerInventorySlots(playerInventory, 15, 98);
+        addPlayerInventorySlots(playerInventory, 16, 98);
     }
 
     @Override
