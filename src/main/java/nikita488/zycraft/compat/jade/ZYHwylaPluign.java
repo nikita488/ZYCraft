@@ -1,4 +1,4 @@
-package nikita488.zycraft.compat.hwyla;
+package nikita488.zycraft.compat.jade;
 
 import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
