@@ -31,12 +31,12 @@ public class MultiPattern
 
     public boolean process(BlockPos basePos, MultiChildProcessor processor)
     {
-        BlockPos.Mutable processingPos = basePos.toMutable();
+        BlockPos.Mutable processingPos = basePos.mutable();
 
         for (int x = 0; x < width(); x++)
             for (int y = 0; y < height(); y++)
                 for (int z = 0; z < depth(); z++)
-                    if (!processor.test(pattern[x][y][z], processingPos.setAndOffset(basePos, x, y, z)))
+                    if (!processor.test(pattern[x][y][z], processingPos.setWithOffset(basePos, x, y, z)))
                         return false;
 
         return true;
@@ -49,7 +49,7 @@ public class MultiPattern
             if (matcherIndex < ALWAYS_MATCHES)
                 return true;
 
-            if (!(world.getTileEntity(pos) instanceof IMultiChild))
+            if (!(world.getBlockEntity(pos) instanceof IMultiChild))
                 MultiChildType.convert(world, pos);
 
             multiBlock.addChildBlock(pos);

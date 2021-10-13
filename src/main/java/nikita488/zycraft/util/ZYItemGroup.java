@@ -2,7 +2,6 @@ package nikita488.zycraft.util;
 
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.ZYCraft;
@@ -21,7 +20,7 @@ public class ZYItemGroup extends ItemGroup
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public ItemStack createIcon()
+    public ItemStack makeIcon()
     {
         return iconFactory.get();
     }

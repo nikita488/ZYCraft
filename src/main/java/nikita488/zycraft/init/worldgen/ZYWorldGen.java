@@ -24,7 +24,7 @@ public class ZYWorldGen
         if (name == null)
             return;
 
-        RegistryKey<Biome> biome = RegistryKey.getOrCreateKey(Registry.BIOME_KEY, name);
+        RegistryKey<Biome> biome = RegistryKey.create(Registry.BIOME_REGISTRY, name);
 
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) ||
                 BiomeDictionary.hasType(biome, BiomeDictionary.Type.END) ||
@@ -33,8 +33,8 @@ public class ZYWorldGen
 
         BiomeGenerationSettingsBuilder builder = event.getGeneration();
 
-        builder.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ZYCHORITE_VEIN);
-        builder.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ORE_ALUMINIUM);
-        builder.withFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.QUARTZ_CRYSTAL_CLUSTER);
+        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ZYCHORITE_VEIN);
+        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ORE_ALUMINIUM);
+        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.QUARTZ_CRYSTAL_CLUSTER);
     }
 }

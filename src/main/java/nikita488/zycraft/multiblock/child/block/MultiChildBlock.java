@@ -32,23 +32,23 @@ public abstract class MultiChildBlock extends Block
     public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         return tile instanceof IMultiChild ? ((IMultiChild)tile).onBlockActivated(state, world, pos, player, hand, hit) : ActionResultType.CONSUME;
     }
 
     @Override
     public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
     {
-        TileEntity tile = world.getTileEntity(pos);
-        return tile instanceof IMultiChild ? ((IMultiChild)tile).getLightValue(state, world, pos) : state.getLightValue();
+        TileEntity tile = world.getBlockEntity(pos);
+        return tile instanceof IMultiChild ? ((IMultiChild)tile).getLightValue(state, world, pos) : state.getLightEmission();
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
     {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         return tile instanceof IMultiChild ? ((IMultiChild)tile).getComparatorInputOverride(state, world, pos) : 0;
     }
 }

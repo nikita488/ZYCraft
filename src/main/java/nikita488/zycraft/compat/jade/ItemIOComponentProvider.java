@@ -20,6 +20,6 @@ public class ItemIOComponentProvider implements IComponentProvider
     public void appendBody(List<ITextComponent> tooltip, IDataAccessor accessor, IPluginConfig config)
     {
         if (config.get(KEY))
-            tooltip.add(ZYLang.MODE_LABEL.copyRaw().appendSibling(accessor.getBlockState().get(ItemIOBlock.IO_MODE).displayName()));
+            tooltip.add(ZYLang.MODE_LABEL.plainCopy().append(accessor.getBlockState().getValue(ItemIOBlock.IO_MODE).displayName()));
     }
 }

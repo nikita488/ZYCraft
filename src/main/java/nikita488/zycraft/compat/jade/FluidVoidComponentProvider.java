@@ -27,11 +27,11 @@ public class FluidVoidComponentProvider implements IComponentProvider
             int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(accessor.getBlockState(), accessor.getWorld(), accessor.getPosition(), accessor.getSide()) : 0;
 
             if (!fluidToDrain.isEmpty())
-                tooltip.add(ZYLang.VOID_FLUID_LABEL.copyRaw()
-                        .appendSibling(ZYLang.copy(ZYLang.FLUID_INFO, fluidToDrain.getDisplayName(), fluidToDrain.getAmount())));
+                tooltip.add(ZYLang.VOID_FLUID_LABEL.plainCopy()
+                        .append(ZYLang.copy(ZYLang.FLUID_INFO, fluidToDrain.getDisplayName(), fluidToDrain.getAmount())));
             else if (drainAmount > 0)
-                tooltip.add(ZYLang.VOID_FLUID_LABEL.copyRaw()
-                        .appendSibling(ZYLang.copy(ZYLang.FLUID_INFO, "Any", drainAmount)));
+                tooltip.add(ZYLang.VOID_FLUID_LABEL.plainCopy()
+                        .append(ZYLang.copy(ZYLang.FLUID_INFO, "Any", drainAmount)));
         }
     }
 }

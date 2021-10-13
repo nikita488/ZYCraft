@@ -11,7 +11,7 @@ public class PostLoadChunkEvent extends WorldEvent
 
     public PostLoadChunkEvent(Chunk chunk, CompoundNBT tag)
     {
-        super(chunk.getWorld());
+        super(chunk.getLevel());
         this.chunk = chunk;
         this.tag = tag;
     }

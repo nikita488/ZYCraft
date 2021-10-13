@@ -30,7 +30,7 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
         if (!config.get(KEY))
             return;
 
-        tooltip.add(ZYLang.MODE_LABEL.copyRaw().appendSibling(accessor.getBlockState().get(ValveBlock.IO_MODE).displayName()));
+        tooltip.add(ZYLang.MODE_LABEL.plainCopy().append(accessor.getBlockState().getValue(ValveBlock.IO_MODE).displayName()));
 
         CompoundNBT data = accessor.getServerData();
 
@@ -40,8 +40,8 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
         FluidStack storedFluid = FluidStack.loadFluidStackFromNBT(data.getCompound("StoredFluid"));
 
         if (!storedFluid.isEmpty())
-            tooltip.add(ZYLang.STORED_FLUID_LABEL.copyRaw()
-                    .appendSibling(ZYLang.copy(ZYLang.FLUID_INFO, storedFluid.getDisplayName(), storedFluid.getAmount())));
+            tooltip.add(ZYLang.STORED_FLUID_LABEL.plainCopy()
+                    .append(ZYLang.copy(ZYLang.FLUID_INFO, storedFluid.getDisplayName(), storedFluid.getAmount())));
     }
 
     @Override

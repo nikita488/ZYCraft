@@ -34,7 +34,7 @@ public class TankFormer
                 .faces(faceMatcher)
                 .cuboid(1, 1, 1, builder.width() - 2, builder.height() - 2, builder.depth() - 2, IMultiChildMatcher.ALWAYS_MATCHES)
                 .build();
-        BlockPos basePos = innerArea.min().add(-1, -1, -1);
+        BlockPos basePos = innerArea.min().offset(-1, -1, -1);
 
         if (!pattern.matches(world, basePos) || !faceMatcher.hasValves())
             return false;
@@ -58,7 +58,7 @@ public class TankFormer
             if (type == MultiChildType.HARD || type == MultiChildType.GLASS)
                 return true;
 
-            TileEntity tile = world.getTileEntity(pos);
+            TileEntity tile = world.getBlockEntity(pos);
 
             if (tile == null)
                 return false;

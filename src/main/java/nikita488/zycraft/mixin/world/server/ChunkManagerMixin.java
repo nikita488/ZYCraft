@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChunkManager.class)
 public class ChunkManagerMixin
 {
-    @Inject(method = "sendChunkData", at = @At(value = "TAIL"))
-    private void sendChunkData(ServerPlayerEntity player, IPacket<?>[] packets, Chunk chunk, CallbackInfo callback)
+    @Inject(method = "playerLoadedChunk", at = @At(value = "TAIL"))
+    private void playerLoadedChunk(ServerPlayerEntity player, IPacket<?>[] packets, Chunk chunk, CallbackInfo callback)
     {
         MinecraftForge.EVENT_BUS.post(new PlayerLoadedChunkEvent(player, chunk));
     }

@@ -22,7 +22,7 @@ public class ItemIOBlock extends MultiInterfaceBlock
     public ItemIOBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(IO_MODE, ItemIOMode.ANY));
+        registerDefaultState(defaultBlockState().setValue(IO_MODE, ItemIOMode.ANY));
     }
 
     @Override
@@ -40,15 +40,15 @@ public class ItemIOBlock extends MultiInterfaceBlock
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state)
+    public boolean hasAnalogOutputSignal(BlockState state)
     {
         return true;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(IO_MODE);
     }
 }

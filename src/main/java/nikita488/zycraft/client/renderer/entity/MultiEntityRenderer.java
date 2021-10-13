@@ -28,7 +28,7 @@ public class MultiEntityRenderer extends EntityRenderer<MultiEntity>
     }
 
     @Override
-    public ResourceLocation getEntityTexture(MultiEntity entity)
+    public ResourceLocation getTextureLocation(MultiEntity entity)
     {
         return TEXTURE;
     }

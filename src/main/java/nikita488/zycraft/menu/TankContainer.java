@@ -11,8 +11,8 @@ import nikita488.zycraft.menu.data.FluidMenuData;
 import nikita488.zycraft.menu.data.IOMenuData;
 import nikita488.zycraft.menu.slot.FluidHandlerSlot;
 import nikita488.zycraft.menu.slot.SlotIOMode;
-import nikita488.zycraft.multiblock.TankMultiBlock;
 import nikita488.zycraft.menu.slot.ZYSlot;
+import nikita488.zycraft.multiblock.TankMultiBlock;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -52,7 +52,7 @@ public class TankContainer extends ZYMultiContainer<TankMultiBlock>
         addIOSlot(SlotIOMode.OUT1, new ZYSlot(inventory, OUTPUT_SLOT, 151, 53)
         {
             @Override
-            public boolean isItemValid(@Nonnull ItemStack stack)
+            public boolean mayPlace(@Nonnull ItemStack stack)
             {
                 return false;
             }
@@ -63,7 +63,7 @@ public class TankContainer extends ZYMultiContainer<TankMultiBlock>
     @Override
     public boolean tryTransferStackToSlot(ItemStack stack, int slotIndex)
     {
-        return slotIndex <= 1 ? mergeItemStack(stack, 2, 38, false) : mergeItemStack(stack, INPUT_SLOT, OUTPUT_SLOT, true);
+        return slotIndex <= 1 ? moveItemStackTo(stack, 2, 38, false) : moveItemStackTo(stack, INPUT_SLOT, OUTPUT_SLOT, true);
     }
 
     public FluidMenuData fluidData()

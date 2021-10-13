@@ -29,7 +29,7 @@ public class ZychoriumLampBlock extends ColorableBlock
     {
         super(properties);
         this.inverted = inverted;
-        setDefaultState(getDefaultState().with(LIT, inverted));
+        registerDefaultState(defaultBlockState().setValue(LIT, inverted));
     }
 
     @Nullable
@@ -43,7 +43,7 @@ public class ZychoriumLampBlock extends ColorableBlock
     @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
     {
-        if (state.get(LIT))
+        if (state.getValue(LIT))
             ParticleUtils.glowingColorableBlock(state, world, pos, rand);
     }
 
@@ -51,38 +51,38 @@ public class ZychoriumLampBlock extends ColorableBlock
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return getDefaultState().with(LIT, inverted != context.getWorld().isBlockPowered(context.getPos()));
+        return defaultBlockState().setValue(LIT, inverted != context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
-        if (world.isRemote())
+        if (world.isClientSide())
             return;
 
         boolean lit = isLit(state);
 
-        if (lit != world.isBlockPowered(pos))
+        if (lit != world.hasNeighborSignal(pos))
             if (lit)
-                world.getPendingBlockTicks().scheduleTick(pos, this, 4);
+                world.getBlockTicks().scheduleTick(pos, this, 4);
             else
-                world.setBlockState(pos, state.cycleValue(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+                world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
     public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (isLit(state) && !world.isBlockPowered(pos))
-            world.setBlockState(pos, state.cycleValue(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+        if (isLit(state) && !world.hasNeighborSignal(pos))
+            world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     private boolean isLit(BlockState state)
     {
-        return inverted != state.get(LIT);
+        return inverted != state.getValue(LIT);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(LIT);
     }

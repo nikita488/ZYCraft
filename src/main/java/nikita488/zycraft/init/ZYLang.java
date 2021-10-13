@@ -12,71 +12,71 @@ public class ZYLang
     private static final Registrate REGISTRATE = ZYCraft.registrate();
 
     public static final IFormattableTextComponent SHIFT = REGISTRATE.addLang("tooltip", ZYCraft.id("shortcut"), "shift", "Shift")
-            .mergeStyle(TextFormatting.GREEN);
+            .withStyle(TextFormatting.GREEN);
     public static final IFormattableTextComponent RIGHT_CLICK = REGISTRATE.addLang("tooltip", ZYCraft.id("shortcut"), "right_click", "Right click")
-            .mergeStyle(TextFormatting.GREEN);
+            .withStyle(TextFormatting.GREEN);
     public static final IFormattableTextComponent SHIFT_RIGHT_CLICK = REGISTRATE.addLang("tooltip", ZYCraft.id("shortcut"), "shift_right_click", "Shift + Right click")
-            .mergeStyle(TextFormatting.GREEN);
+            .withStyle(TextFormatting.GREEN);
 
     public static final IFormattableTextComponent TOOLTIP_HINT = addLangWithArgs("tooltip", ZYCraft.id("hint"), "Press %s for info", SHIFT)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
     public static final IFormattableTextComponent CREATIVE_ONLY = REGISTRATE.addLang("tooltip", ZYCraft.id("creative_only"), "Creative-only")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
 
     public static final IFormattableTextComponent COLORABLE = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "Colorable")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
     public static final IFormattableTextComponent COLORABLE_RED = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "red", "Red")
-            .mergeStyle(TextFormatting.RED);
+            .withStyle(TextFormatting.RED);
     public static final IFormattableTextComponent COLORABLE_GREEN = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "green", "Green")
-            .mergeStyle(TextFormatting.GREEN);
+            .withStyle(TextFormatting.GREEN);
     public static final IFormattableTextComponent COLORABLE_BLUE = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "blue", "Blue Zychorium")
-            .mergeStyle(TextFormatting.BLUE);
+            .withStyle(TextFormatting.BLUE);
     public static final IFormattableTextComponent COLORABLE_DARK = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "dark", "Dark Zychorium")
-            .mergeStyle(TextFormatting.DARK_GRAY);
+            .withStyle(TextFormatting.DARK_GRAY);
     public static final IFormattableTextComponent COLORABLE_LIGHT = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "light", "Light Zychorium")
-            .mergeStyle(TextFormatting.WHITE);
+            .withStyle(TextFormatting.WHITE);
     public static final IFormattableTextComponent COLORABLE_ANY_DYE = REGISTRATE.addLang("tooltip", ZYCraft.id("colorable"), "any_dye", "Any Dye")
-            .mergeStyle(TextFormatting.YELLOW);
+            .withStyle(TextFormatting.YELLOW);
     public static final IFormattableTextComponent COLORABLE_INFO = addLangWithArgs("tooltip", ZYCraft.id("colorable"), "info", "%s or %s on this block with one of the following:", RIGHT_CLICK, SHIFT_RIGHT_CLICK)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLORABLE_RGB = addLangWithArgs("tooltip", ZYCraft.id("colorable"), "rgb", "%s, %s or %s - to adjust each individual RGB", COLORABLE_RED, COLORABLE_GREEN, COLORABLE_BLUE)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLORABLE_BRIGHTNESS = addLangWithArgs("tooltip", ZYCraft.id("colorable"), "brightness", "%s - to adjust color brightness", COLORABLE_DARK)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLORABLE_RESET = addLangWithArgs("tooltip", ZYCraft.id("colorable"), "reset", "%s - to reset color", COLORABLE_LIGHT)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLORABLE_DYE = addLangWithArgs("tooltip", ZYCraft.id("colorable"), "dye", "%s - to apply color of the dye", COLORABLE_ANY_DYE)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
     public static final IFormattableTextComponent COLOR_SCANNER_APPLY = addLangWithArgs("tooltip", ZYCraft.id("color_scanner"), "apply", "%s on %s block to apply color", RIGHT_CLICK, COLORABLE)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLOR_SCANNER_COPY = addLangWithArgs("tooltip", ZYCraft.id("color_scanner"), "copy", "%s on %s block to copy color", SHIFT_RIGHT_CLICK, COLORABLE)
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLOR_SCANNER_CURRENT_COLOR = REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "current_color", "Current color:")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final TranslationTextComponent COLOR_SCANNER_RED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "red", "Red:    %d")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.RED);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.RED);
     public static final TranslationTextComponent COLOR_SCANNER_GREEN = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "green", "Green: %d")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
     public static final TranslationTextComponent COLOR_SCANNER_BLUE = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "blue", "Blue:   %d")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
 
     public static final TranslationTextComponent SCYTHE_DURABILITY = REGISTRATE.addLang("tooltip", ZYCraft.id("scythe"), "durability", "Durability: %.2f%%");
 
     public static final IFormattableTextComponent INTERFACE = REGISTRATE.addLang("tooltip", ZYCraft.id("interface"), "Interface")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
     public static final IFormattableTextComponent VALVE_INFO = REGISTRATE.addLang("tooltip", ZYCraft.id("valve"), "info", "Allows for fluids to pass through")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent VALVE_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.id("valve"), "feature", "Fluids balance between valves")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent ITEM_IO_INFO = REGISTRATE.addLang("tooltip", ZYCraft.id("item_io"), "info", "Allows for items to pass through")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent ITEM_IO_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.id("item_io"), "feature", "Increases control over flow of items")
-            .mergeStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
+            .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
     public static final TranslationTextComponent FLUID_TANK_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("fluid_tank"), "filled", "%d/%d mB")
-            .mergeStyle(TextFormatting.GRAY);
+            .withStyle(TextFormatting.GRAY);
 
     public static final TranslationTextComponent FABRICATOR = REGISTRATE.addLang("container", ZYCraft.id("fabricator"), "Fabricator");
     public static final TranslationTextComponent TANK = REGISTRATE.addLang("container", ZYCraft.id("tank"), "Multi-Tank");

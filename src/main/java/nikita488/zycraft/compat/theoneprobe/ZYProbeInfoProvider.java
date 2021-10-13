@@ -53,14 +53,14 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
 
     private void addFabricatorProbeInfo(IProbeInfo info, BlockState state)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.get(FabricatorBlock.MODE).displayName()));
+        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(FabricatorBlock.MODE).displayName()));
     }
 
     private void addValveProbeInfo(IProbeInfo info, World world, BlockState state, BlockPos pos)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.get(ValveBlock.IO_MODE).displayName()));
+        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ValveBlock.IO_MODE).displayName()));
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile instanceof ValveTile)
         {
@@ -71,14 +71,14 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                         .text(CompoundText.create().label(ZYLang.STORED_FLUID_LABEL))
                         .tankSimple(storedFluid.getAmount(), storedFluid,
                                 info.defaultProgressStyle()
-                                        .prefix(storedFluid.getDisplayName().deepCopy().appendString(" "))
+                                        .prefix(storedFluid.getDisplayName().copy().append(" "))
                                         .suffix(new StringTextComponent(" mB")));
         }
     }
 
     private void addItemIOProbeInfo(IProbeInfo info, BlockState state)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.get(ItemIOBlock.IO_MODE).displayName()));
+        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ItemIOBlock.IO_MODE).displayName()));
     }
 
     private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, World world, BlockState state, BlockPos pos, Direction side)
@@ -90,7 +90,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .text(CompoundText.create().label(ZYLang.SOURCE_FLUID_LABEL))
                     .tankSimple(fluid.getAmount(), fluid,
                             info.defaultProgressStyle()
-                                    .prefix(fluid.getDisplayName().deepCopy().appendString(" "))
+                                    .prefix(fluid.getDisplayName().copy().append(" "))
                                     .suffix(new StringTextComponent(" mB")));
     }
 
@@ -104,7 +104,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .text(CompoundText.create().label(ZYLang.VOID_FLUID_LABEL))
                     .tankSimple(fluidToDrain.getAmount(), fluidToDrain,
                             info.defaultProgressStyle()
-                                    .prefix(fluidToDrain.getDisplayName().deepCopy().appendString(" "))
+                                    .prefix(fluidToDrain.getDisplayName().copy().append(" "))
                                     .suffix(new StringTextComponent(" mB")));
         else if (drainAmount > 0)
             info.horizontal().text(CompoundText.create()

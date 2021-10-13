@@ -23,6 +23,6 @@ public class AirMultiArea implements IMultiArea
     @Override
     public boolean matches(World world, BlockPos pos)
     {
-        return world.isAirBlock(pos);
+        return world.isEmptyBlock(pos);
     }
 }

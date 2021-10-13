@@ -19,9 +19,9 @@ import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.init.ZYContainers;
 import nikita488.zycraft.menu.data.IntMenuData;
 import nikita488.zycraft.menu.slot.RecipePatternSlot;
+import nikita488.zycraft.menu.slot.ZYSlot;
 import nikita488.zycraft.tile.FabricatorTile;
 import nikita488.zycraft.util.ItemStackUtils;
-import nikita488.zycraft.menu.slot.ZYSlot;
 
 import javax.annotation.Nullable;
 import java.util.Optional;
@@ -47,11 +47,11 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
         super(type, windowID, fabricator);
 
         this.player = playerInventory.player;
-        this.world = player.world;
+        this.world = player.level;
         this.modeData = modeData;
 
         addVariable(modeData);
-        assertInventorySize(recipePattern, 9);
+        checkContainerSize(recipePattern, 9);
         assertInventorySize(craftingResult, 1);
         assertInventorySize(inventory, 9);
         assertDataSize(data, 1);
@@ -63,13 +63,13 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
         addSlot(new ZYSlot(craftingResult, 0, 88, 43)
         {
             @Override
-            public boolean canTakeStack(PlayerEntity player)
+            public boolean mayPickup(PlayerEntity player)
             {
                 return false;
             }
 
             @Override
-            public boolean isItemValid(ItemStack stack)
+            public boolean mayPlace(ItemStack stack)
             {
                 return false;
             }
@@ -83,12 +83,12 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     }
 
     @Override
-    protected ItemStack func_241440_b_(int slotIndex, int button, ClickType type, PlayerEntity player)
+    protected ItemStack doClick(int slotIndex, int button, ClickType type, PlayerEntity player)
     {
         if (slotIndex >= 0 && slotIndex < 9)
         {
             if (type == ClickType.PICKUP || type == ClickType.QUICK_CRAFT)
-                getSlot(slotIndex).putStack(ItemStackUtils.copy(player.inventory.getItemStack(), 1));
+                getSlot(slotIndex).set(ItemStackUtils.copy(player.inventory.getCarried(), 1));
             return ItemStack.EMPTY;
         }
         else if (slotIndex == 9)
@@ -103,19 +103,19 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
             }
             else if (button == 1)
             {
-                tile.recipePattern().clear();
+                tile.recipePattern().clearContent();
                 tile.setCraftingRecipeAndResult(null, ItemStack.EMPTY);
             }
 
-            detectAndSendChanges();
+            broadcastChanges();
             return ItemStack.EMPTY;
         }
 
-        return super.func_241440_b_(slotIndex, button, type, player);
+        return super.doClick(slotIndex, button, type, player);
     }
 
     @Override
-    public void onCraftMatrixChanged(IInventory inventory)
+    public void slotsChanged(IInventory inventory)
     {
         if (tile == null)
             return;
@@ -127,22 +127,22 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
             return;
 
         ServerPlayerEntity player = (ServerPlayerEntity)this.player;
-        Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipe(IRecipeType.CRAFTING, recipePattern, world)
+        Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, recipePattern, world)
                 .filter(FabricatorTile::isRecipeCompatible);
-        ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.getCraftingResult(recipePattern)).orElse(ItemStack.EMPTY);
+        ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(recipePattern)).orElse(ItemStack.EMPTY);
 
         tile.setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
-        player.connection.sendPacket(new SSetSlotPacket(windowId, 9, craftingResult));
+        player.connection.send(new SSetSlotPacket(containerId, 9, craftingResult));
     }
 
     @Override
     public boolean tryTransferStackToSlot(ItemStack stack, int slotIndex)
     {
-        return slotIndex >= 10 && slotIndex < 19 ? mergeItemStack(stack, 19, 55, false) : mergeItemStack(stack, 10, 19, false);
+        return slotIndex >= 10 && slotIndex < 19 ? moveItemStackTo(stack, 19, 55, false) : moveItemStackTo(stack, 10, 19, false);
     }
 
     @Override
-    public boolean enchantItem(PlayerEntity player, int index)
+    public boolean clickMenuButton(PlayerEntity player, int index)
     {
         if (tile != null)
             tile.setMode(FabricatorMode.VALUES[index]);

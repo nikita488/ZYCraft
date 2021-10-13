@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ChunkSerializer.class)
 public class ChunkSerializerMixin
 {
-    @Inject(method = "readEntities", at = @At(value = "TAIL"))
-    private static void readEntities(CompoundNBT tag, Chunk chunk, CallbackInfo callback)
+    @Inject(method = "postLoadChunk", at = @At(value = "TAIL"))
+    private static void postLoadChunk(CompoundNBT tag, Chunk chunk, CallbackInfo callback)
     {
         MinecraftForge.EVENT_BUS.post(new PostLoadChunkEvent(chunk, tag));
     }

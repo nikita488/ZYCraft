@@ -15,53 +15,53 @@ public class SerializableCraftingInventory extends CraftingInventory
     }
 
     @Override
-    public ItemStack removeStackFromSlot(int slot)
+    public ItemStack removeItemNoUpdate(int slot)
     {
-        ItemStack stack = super.removeStackFromSlot(slot);
+        ItemStack stack = super.removeItemNoUpdate(slot);
 
         if (!stack.isEmpty())
-            markDirty();
+            setChanged();
 
         return stack;
     }
 
     @Override
-    public ItemStack decrStackSize(int slot, int amount)
+    public ItemStack removeItem(int slot, int amount)
     {
-        ItemStack stack = super.decrStackSize(slot, amount);
+        ItemStack stack = super.removeItem(slot, amount);
 
         if (!stack.isEmpty())
-            markDirty();
+            setChanged();
 
         return stack;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack)
+    public void setItem(int slot, ItemStack stack)
     {
-        super.setInventorySlotContents(slot, stack);
-        markDirty();
+        super.setItem(slot, stack);
+        setChanged();
     }
 
     @Override
-    public void clear()
+    public void clearContent()
     {
-        super.clear();
-        markDirty();
+        super.clearContent();
+        setChanged();
     }
 
     public void load(CompoundNBT tag)
     {
-        ItemStackHelper.loadAllItems(tag, stackList);
+        ItemStackHelper.loadAllItems(tag, items);
     }
 
     public CompoundNBT save(CompoundNBT tag)
     {
-        return ItemStackHelper.saveAllItems(tag, stackList);
+        return ItemStackHelper.saveAllItems(tag, items);
     }
 
     public NonNullList<ItemStack> getItems()
     {
-        return stackList;
+        return items;
     }
 }

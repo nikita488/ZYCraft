@@ -20,11 +20,11 @@ public class MultiChildTile extends ZYTile implements IMultiChild
     }
 
     @Override
-    public void remove()
+    public void setRemoved()
     {
-        super.remove();
+        super.setRemoved();
 
-        if (!world.isRemote())
+        if (!level.isClientSide())
             for (MultiBlock multiBlock : parentMultiBlocks)
                 multiBlock.destroy();
     }
@@ -44,7 +44,7 @@ public class MultiChildTile extends ZYTile implements IMultiChild
             if (!multiBlock.isValid())
                 continue;
 
-            LazyOptional<T> capability = multiBlock.getCapability(type, pos);
+            LazyOptional<T> capability = multiBlock.getCapability(type, worldPosition);
 
             if (!capability.isPresent())
                 continue;

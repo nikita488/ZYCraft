@@ -31,7 +31,7 @@ public class ZychoriumItem extends Item implements IColorChanger
         int red = (rgb >> 16) & 255;
         int green = (rgb >> 8) & 255;
         int blue = rgb & 255;
-        boolean sneaking = player.isSneaking();
+        boolean sneaking = player.isShiftKeyDown();
 
         switch (type)
         {
@@ -60,7 +60,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
     {
         int rgba = Color.rgba(rgb, 255);
-        boolean sneaking = player.isSneaking();
+        boolean sneaking = player.isShiftKeyDown();
 
         switch (type)
         {

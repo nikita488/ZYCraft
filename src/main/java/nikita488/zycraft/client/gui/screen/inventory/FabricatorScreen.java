@@ -17,7 +17,7 @@ import nikita488.zycraft.util.Color;
 public class FabricatorScreen extends ZYScreen<FabricatorContainer>
 {
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/fabricator.png");
-    private Menu menu;
+    private Menu modeMenu;
 
     public FabricatorScreen(FabricatorContainer container, PlayerInventory inventory, ITextComponent title)
     {
@@ -28,23 +28,23 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     protected void init()
     {
         super.init();
-        this.menu = new Menu(guiLeft - 34, guiTop + 23, ZYType.BLUE.rgb(), container.modeData())
+        this.modeMenu = new Menu(leftPos - 34, topPos + 23, ZYType.BLUE.rgb(), menu.modeData())
                 .addItem(ZYLang.FABRICATOR_AUTO_LOW, new ResourceLocation("block/redstone_torch_off"))
                 .addItem(ZYLang.FABRICATOR_AUTO_HIGH, new ResourceLocation("block/redstone_torch"))
                 .addItem(ZYLang.FABRICATOR_PULSE, new ResourceLocation("item/redstone"));
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
         renderGUI(stack, TEXTURE, Color.argb(ZYType.BLUE.rgb(), 255));
         bindTexture(GuiComponentManager.ATLAS_ID);
-        renderGuiComponentWithColor(stack, guiLeft + 86, guiTop + 29, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
-        renderGuiComponentWithColor(stack, guiLeft + 86, guiTop + 65, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
-        menu.render(stack, mouseX, mouseY, partialTicks);
+        renderGuiComponentWithColor(stack, leftPos + 86, topPos + 29, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
+        renderGuiComponentWithColor(stack, leftPos + 86, topPos + 65, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
+        modeMenu.render(stack, mouseX, mouseY, partialTicks);
 
         RenderSystem.disableBlend();
     }

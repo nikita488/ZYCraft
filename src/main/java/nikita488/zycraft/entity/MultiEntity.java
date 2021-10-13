@@ -36,20 +36,20 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
 
         this.multiBlock = multiBlock;
         this.multiID = multiID;
-        this.noClip = true;
-        this.preventEntitySpawning = true;
+        this.noPhysics = true;
+        this.blocksBuilding = true;
 
         BlockPos originPos = multiBlock.origin();
-        setPosition(originPos.getX(), originPos.getY(), originPos.getZ());
+        setPos(originPos.getX(), originPos.getY(), originPos.getZ());
         setBoundingBox(multiBlock.aabb());
     }
 
     private void updateMultiBlock()
     {
-        if (!world.isRemote() || multiID < 0)
+        if (!level.isClientSide() || multiID < 0)
             return;
 
-        MultiBlock multiBlock = MultiManager.getInstance(world).getMultiBlock(multiID);
+        MultiBlock multiBlock = MultiManager.getInstance(level).getMultiBlock(multiID);
 
         if (multiBlock instanceof IDynamicMultiBlock)
         {
@@ -70,13 +70,13 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
             else
                 remove();
 
-        this.firstUpdate = false;
+        this.firstTick = false;
     }
 
     @Override
-    public void setPosition(double x, double y, double z)
+    public void setPos(double x, double y, double z)
     {
-        setRawPosition(x, y, z);
+        setPosRaw(x, y, z);
     }
 
     @Override
@@ -92,31 +92,31 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     }
 
     @Override
-    protected void registerData() {}
+    protected void defineSynchedData() {}
 
     @Override
-    protected void readAdditional(CompoundNBT tag) {}
+    protected void readAdditionalSaveData(CompoundNBT tag) {}
 
     @Override
-    protected void writeAdditional(CompoundNBT tag) {}
+    protected void addAdditionalSaveData(CompoundNBT tag) {}
 
     @Override
-    public IPacket<?> createSpawnPacket()
+    public IPacket<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
 
     @Override
-    public PushReaction getPushReaction()
+    public PushReaction getPistonPushReaction()
     {
         return PushReaction.IGNORE;
     }
 
     @Override
-    public void onKillCommand() {}
+    public void kill() {}
 
     @Override
-    public void causeLightningStrike(ServerWorld world, LightningBoltEntity lightning) {}
+    public void thunderHit(ServerWorld world, LightningBoltEntity lightning) {}
 
     @Nullable
     public IDynamicMultiBlock getMultiBlock()

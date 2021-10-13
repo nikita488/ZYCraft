@@ -10,10 +10,10 @@ import java.util.Random;
 
 public enum ZYType
 {
-    BLUE("blue", 0x0064FF, 0x00193F, MaterialColor.BLUE),
-    GREEN("green", 0x00FF00, 0x002000, MaterialColor.GREEN),
-    RED("red", 0xFF0000, 0x200000, MaterialColor.RED),
-    DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.BLACK),
+    BLUE("blue", 0x0064FF, 0x00193F, MaterialColor.COLOR_BLUE),
+    GREEN("green", 0x00FF00, 0x002000, MaterialColor.COLOR_GREEN),
+    RED("red", 0xFF0000, 0x200000, MaterialColor.COLOR_RED),
+    DARK("dark", 0x1E1E1E, 0x1E1E1E, MaterialColor.COLOR_BLACK),
     LIGHT("light", 0xFFFFFF, 0xFFFFFF, MaterialColor.QUARTZ);
 
     private final String name;
@@ -31,7 +31,7 @@ public enum ZYType
 
     public static ZYType randomType(Random random)
     {
-        return Util.getRandomObject(VALUES, random);
+        return Util.getRandom(VALUES, random);
     }
 
     public static <T> Map<ZYType, T> buildMap(String pattern, NonNullBiFunction<ZYType, String, T> factory)

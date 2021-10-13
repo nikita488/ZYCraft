@@ -82,7 +82,7 @@ public class MultiManager extends WorldSavedData
 
     public static MultiManager getInstance(IWorld world)
     {
-        return !world.isRemote() ? ((ServerWorld)world).getSavedData().getOrCreate(MultiManager::new, ID) : instance;
+        return !world.isClientSide() ? ((ServerWorld)world).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
     }
 
     @Nullable
@@ -94,17 +94,17 @@ public class MultiManager extends WorldSavedData
     @Nullable
     private ObjectSet<MultiBlock> getMultiFromChunk(ChunkPos pos)
     {
-        return chunkMultiBlocks.get(pos.asLong());
+        return chunkMultiBlocks.get(pos.toLong());
     }
 
     private boolean addMultiToChunk(ChunkPos chunkPos, MultiBlock multiBlock)
     {
-        return chunkMultiBlocks.computeIfAbsent(chunkPos.asLong(), key -> new ObjectOpenHashSet<>()).add(multiBlock);
+        return chunkMultiBlocks.computeIfAbsent(chunkPos.toLong(), key -> new ObjectOpenHashSet<>()).add(multiBlock);
     }
 
     private void removeMultiFromChunk(ChunkPos chunkPos, MultiBlock multiBlock)
     {
-        ObjectSet<MultiBlock> multiBlocks = chunkMultiBlocks.get(chunkPos.asLong());
+        ObjectSet<MultiBlock> multiBlocks = chunkMultiBlocks.get(chunkPos.toLong());
 
         if (multiBlocks == null)
             return;
@@ -113,7 +113,7 @@ public class MultiManager extends WorldSavedData
             multiBlock.markUnsaved();
 
         if (multiBlocks.isEmpty())
-            chunkMultiBlocks.remove(chunkPos.asLong());
+            chunkMultiBlocks.remove(chunkPos.toLong());
     }
 
     public void addMultiBlock(MultiBlock multiBlock, MultiBlock.AddingReason reason)
@@ -144,7 +144,7 @@ public class MultiManager extends WorldSavedData
             multiBlocksToSend.add(multiBlock);//Defer packet sending here because child block entities is not available on client yet
 
         if (multiBlock instanceof IDynamicMultiBlock)
-            multiBlock.world().addEntity(new MultiEntity(multiBlock.world(), (IDynamicMultiBlock)multiBlock, multiBlock.id()));
+            multiBlock.world().addFreshEntity(new MultiEntity(multiBlock.world(), (IDynamicMultiBlock)multiBlock, multiBlock.id()));
     }
 
     public void removeMultiBlock(MultiBlock multiBlock, MultiBlock.RemovalReason reason)
@@ -268,7 +268,7 @@ public class MultiManager extends WorldSavedData
 
     private static void onWorldUnload(WorldEvent.Unload event)
     {
-        if (event.getWorld().isRemote())
+        if (event.getWorld().isClientSide())
             instance = new MultiManager();
     }
 
@@ -350,7 +350,7 @@ public class MultiManager extends WorldSavedData
                 else
                     manager.addPendingMultiBlock(multiBlock);
 
-        manager.chunkMultiBlocks.remove(pos.asLong());//TODO: Needed?
+        manager.chunkMultiBlocks.remove(pos.toLong());//TODO: Needed?
     }
 
     private static void onTeleportCommand(EntityTeleportEvent.TeleportCommand event)
@@ -366,10 +366,10 @@ public class MultiManager extends WorldSavedData
     }
 
     @Override
-    public void read(CompoundNBT tag) {}
+    public void load(CompoundNBT tag) {}
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
         return tag;
     }

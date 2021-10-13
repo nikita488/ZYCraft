@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 @Immutable
 public class Cuboid6i implements Iterable<BlockPos>
 {
-    public static final Codec<Cuboid6i> CODEC = Codec.INT_STREAM.comapFlatMap(stream -> Util.validateIntStreamSize(stream, 6)
+    public static final Codec<Cuboid6i> CODEC = Codec.INT_STREAM.comapFlatMap(stream -> Util.fixedSize(stream, 6)
             .map(bounds -> new Cuboid6i(bounds[0], bounds[1], bounds[2], bounds[3], bounds[4], bounds[5])),
             cuboid -> IntStream.of(cuboid.minX(), cuboid.minY(), cuboid.minZ(), cuboid.maxX(), cuboid.maxY(), cuboid.maxZ()))
             .stable();
-    public static final Cuboid6i ZERO = new Cuboid6i(Vector3i.NULL_VECTOR);
+    public static final Cuboid6i ZERO = new Cuboid6i(Vector3i.ZERO);
     protected int x1, y1, z1, x2, y2, z2;
 
     public Cuboid6i(Vector3i bounds)
@@ -76,9 +76,9 @@ public class Cuboid6i implements Iterable<BlockPos>
         switch (side.getAxisDirection())
         {
             case NEGATIVE:
-                return new Cuboid6i(x1 + side.getXOffset() * amount, y1 + side.getYOffset() * amount, z1 + side.getZOffset() * amount, x2, y2, z2);
+                return new Cuboid6i(x1 + side.getStepX() * amount, y1 + side.getStepY() * amount, z1 + side.getStepZ() * amount, x2, y2, z2);
             case POSITIVE:
-                return new Cuboid6i(x1, y1, z1, x2 + side.getXOffset() * amount, y2 + side.getYOffset() * amount, z2 + side.getZOffset() * amount);
+                return new Cuboid6i(x1, y1, z1, x2 + side.getStepX() * amount, y2 + side.getStepY() * amount, z2 + side.getStepZ() * amount);
         }
 
         return this;
@@ -166,7 +166,7 @@ public class Cuboid6i implements Iterable<BlockPos>
 
     public int size(Direction.Axis axis)
     {
-        return axis.getCoordinate(width(), height(), depth());
+        return axis.choose(width(), height(), depth());
     }
 
     public int minX()
@@ -231,12 +231,12 @@ public class Cuboid6i implements Iterable<BlockPos>
 
     public int min(Direction.Axis axis)
     {
-        return axis.getCoordinate(x1, y1, z1);
+        return axis.choose(x1, y1, z1);
     }
 
     public int max(Direction.Axis axis)
     {
-        return axis.getCoordinate(x2, y2, z2);
+        return axis.choose(x2, y2, z2);
     }
 
     public BlockPos min()
@@ -262,12 +262,12 @@ public class Cuboid6i implements Iterable<BlockPos>
     @Override
     public Iterator<BlockPos> iterator()
     {
-        return BlockPos.getAllInBoxMutable(x1, y1, z1, x2, y2, z2).iterator();
+        return BlockPos.betweenClosed(x1, y1, z1, x2, y2, z2).iterator();
     }
 
     public Stream<BlockPos> stream()
     {
-        return BlockPos.getAllInBox(x1, y1, z1, x2, y2, z2);
+        return BlockPos.betweenClosedStream(x1, y1, z1, x2, y2, z2);
     }
 
     public Cuboid6i immutable()
@@ -371,9 +371,9 @@ public class Cuboid6i implements Iterable<BlockPos>
             switch (side.getAxisDirection())
             {
                 case NEGATIVE:
-                    return set(x1 + side.getXOffset() * amount, y1 + side.getYOffset() * amount, z1 + side.getZOffset() * amount, x2, y2, z2);
+                    return set(x1 + side.getStepX() * amount, y1 + side.getStepY() * amount, z1 + side.getStepZ() * amount, x2, y2, z2);
                 case POSITIVE:
-                    return set(x1, y1, z1, x2 + side.getXOffset() * amount, y2 + side.getYOffset() * amount, z2 + side.getZOffset() * amount);
+                    return set(x1, y1, z1, x2 + side.getStepX() * amount, y2 + side.getStepY() * amount, z2 + side.getStepZ() * amount);
             }
 
             return this;

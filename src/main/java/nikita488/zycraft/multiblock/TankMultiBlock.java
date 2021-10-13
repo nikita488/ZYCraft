@@ -127,15 +127,15 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (!world.isRemote())
+        if (!world.isClientSide())
             NetworkHooks.openGui((ServerPlayerEntity)player, this, buffer -> buffer.writeVarInt(tank.get().getCapacity()));
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
     public void tick()
     {
-        if (world.isRemote())
+        if (world.isClientSide())
         {
             tank.get().tick();
             return;

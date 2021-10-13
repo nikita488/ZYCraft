@@ -23,13 +23,13 @@ public class SparkleParticle extends SpriteTexturedParticle
     public void tick()
     {
         super.tick();
-        selectSpriteWithAge(sprites);
+        setSpriteFromAge(sprites);
     }
 
     @Override
-    public void selectSpriteWithAge(IAnimatedSprite sprites)
+    public void setSpriteFromAge(IAnimatedSprite sprites)
     {
-        setSprite(sprites.get(age, maxAge));
+        setSprite(sprites.get(age, lifetime));
     }
 
     public void selectSprite(int index)
@@ -38,9 +38,9 @@ public class SparkleParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public float getScale(float partialTicks)
+    public float getQuadSize(float partialTicks)
     {
-        return hasFixedSize ? particleScale : particleScale * (float)(maxAge - age) / (float)maxAge;
+        return hasFixedSize ? quadSize : quadSize * (float)(lifetime - age) / (float)lifetime;
     }
 
     @Override
@@ -50,14 +50,14 @@ public class SparkleParticle extends SpriteTexturedParticle
     }
 
     @Override
-    protected int getBrightnessForRender(float partialTick)
+    protected int getLightColor(float partialTick)
     {
-        return LightTexture.packLight(15, 15);
+        return LightTexture.pack(15, 15);
     }
 
     public void setGravity(float gravity)
     {
-        this.particleGravity = gravity;
+        this.gravity = gravity;
     }
 
     public static class Factory implements IParticleFactory<SparkleParticleData>
@@ -71,21 +71,21 @@ public class SparkleParticle extends SpriteTexturedParticle
 
         @Nullable
         @Override
-        public Particle makeParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
 
             particle.setColor(data.r(), data.g(), data.b());
-            particle.setAlphaF(data.a());
-            particle.setMaxAge(5 * data.lifetimeFactor());
-            particle.multiplyParticleScaleBy(data.sizeFactor());
+            particle.setAlpha(data.a());
+            particle.setLifetime(5 * data.lifetimeFactor());
+            particle.scale(data.sizeFactor());
             particle.setGravity(data.gravity());
-            particle.canCollide = data.hasPhysics();
+            particle.hasPhysics = data.hasPhysics();
 
             if (!data.hasMotion())
-                particle.motionX = particle.motionY = particle.motionZ = 0D;
+                particle.xd = particle.yd = particle.zd = 0D;
 
-            particle.selectSpriteWithAge(sprites);
+            particle.setSpriteFromAge(sprites);
             return particle;
         }
     }

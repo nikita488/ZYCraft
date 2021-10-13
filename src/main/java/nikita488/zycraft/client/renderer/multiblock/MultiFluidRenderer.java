@@ -2,7 +2,10 @@ package nikita488.zycraft.client.renderer.multiblock;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.util.Direction;
@@ -22,7 +25,7 @@ public class MultiFluidRenderer
 {
     public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, IBlockDisplayReader world, BlockPos lightPos)
     {
-        render(pose, source, stack, bounds, resolution, density, WorldRenderer.getCombinedLight(world, lightPos));
+        render(pose, source, stack, bounds, resolution, density, WorldRenderer.getLightColor(world, lightPos));
     }
 
     public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, int lightMap)
@@ -34,7 +37,7 @@ public class MultiFluidRenderer
         Fluid fluid = stack.getFluid();
         FluidAttributes attributes = fluid.getAttributes();
         int color = attributes.getColor(stack);
-        TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(stack)).getSprite();
+        TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(stack)).sprite();
         float fluidHeight = bounds.height();
 
         if (attributes.isGaseous(stack))
@@ -42,11 +45,11 @@ public class MultiFluidRenderer
         else
             fluidHeight *= density;
 
-        lightMap = packLight(Math.max(getLightBlock(lightMap), attributes.getLuminosity(stack)), getLightSky(lightMap));
+        lightMap = pack(Math.max(block(lightMap), attributes.getLuminosity(stack)), sky(lightMap));
 
-        for (RenderType type : RenderType.getBlockRenderTypes())
+        for (RenderType type : RenderType.chunkBufferLayers())
         {
-            if (!RenderTypeLookup.canRenderInLayer(fluid.getDefaultState(), type))
+            if (!RenderTypeLookup.canRenderInLayer(fluid.defaultFluidState(), type))
                 continue;
 
             IVertexBuilder builder = source.getBuffer(type);
@@ -81,21 +84,21 @@ public class MultiFluidRenderer
 
     private static void fillFluidQuads(MatrixStack pose, IVertexBuilder consumer, Vector3f origin, Direction side, float resolution, float width, float height, int color, TextureAtlasSprite sprite, int lightMap)
     {
-        pose.push();
-        pose.translate(origin.getX(), origin.getY(), origin.getZ());
+        pose.pushPose();
+        pose.translate(origin.x(), origin.y(), origin.z());
 
-        Matrix4f matrix = pose.getLast().getMatrix();
-        Vector3f widthAxis = side.getAxis().isHorizontal() ? cross(side.toVector3f(), Vector3f.YP) : Vector3f.XP;
-        Vector3f heightAxis = side.getAxis().isVertical() ? cross(side.toVector3f(), Vector3f.XP) : Vector3f.YP;
+        Matrix4f matrix = pose.last().pose();
+        Vector3f widthAxis = side.getAxis().isHorizontal() ? cross(side.step(), Vector3f.YP) : Vector3f.XP;
+        Vector3f heightAxis = side.getAxis().isVertical() ? cross(side.step(), Vector3f.XP) : Vector3f.YP;
         int r = (color >> 16) & 255;
         int g = (color >> 8) & 255;
         int b = color & 255;
         int a = (color >> 24) & 255;
-        float u1 = sprite.getMinU();
-        float v2 = sprite.getMaxV();
-        float sideX = side.getXOffset();
-        float sideY = side.getYOffset();
-        float sideZ = side.getZOffset();
+        float u1 = sprite.getU0();
+        float v2 = sprite.getV1();
+        float sideX = side.getStepX();
+        float sideY = side.getStepY();
+        float sideZ = side.getStepZ();
 
         for (float quadX = 0; quadX < width; quadX += resolution)
         {
@@ -103,40 +106,40 @@ public class MultiFluidRenderer
             {
                 float quadWidth = Math.min(width - quadX, resolution);
                 float quadHeight = Math.min(height - quadY, resolution);
-                float u2 = u1 + (sprite.getMaxU() - u1) * quadWidth / resolution;
-                float v1 = v2 - (v2 - sprite.getMinV()) * quadHeight / resolution;
+                float u2 = u1 + (sprite.getU1() - u1) * quadWidth / resolution;
+                float v1 = v2 - (v2 - sprite.getV0()) * quadHeight / resolution;
                 Vector3f x1 = scale(widthAxis, quadX);
                 Vector3f x2 = scale(widthAxis, quadX + quadWidth);
                 Vector3f y1 = scale(heightAxis, quadY);
                 Vector3f y2 = scale(heightAxis, quadY + quadHeight);
 
-                consumer.pos(matrix, x1.getX() + y2.getX(), x1.getY() + y2.getY(), x1.getZ() + y2.getZ())
+                consumer.vertex(matrix, x1.x() + y2.x(), x1.y() + y2.y(), x1.z() + y2.z())
                         .color(r, g, b, a)
-                        .tex(u1, v1)
-                        .lightmap(lightMap)
+                        .uv(u1, v1)
+                        .uv2(lightMap)
                         .normal(sideX, sideY, sideZ)
                         .endVertex();
-                consumer.pos(matrix, x1.getX() + y1.getX(), x1.getY() + y1.getY(), x1.getZ() + y1.getZ())
+                consumer.vertex(matrix, x1.x() + y1.x(), x1.y() + y1.y(), x1.z() + y1.z())
                         .color(r, g, b, a)
-                        .tex(u1, v2)
-                        .lightmap(lightMap)
+                        .uv(u1, v2)
+                        .uv2(lightMap)
                         .normal(sideX, sideY, sideZ)
                         .endVertex();
-                consumer.pos(matrix, x2.getX() + y1.getX(), x2.getY() + y1.getY(), x2.getZ() + y1.getZ())
+                consumer.vertex(matrix, x2.x() + y1.x(), x2.y() + y1.y(), x2.z() + y1.z())
                         .color(r, g, b, a)
-                        .tex(u2, v2)
-                        .lightmap(lightMap)
+                        .uv(u2, v2)
+                        .uv2(lightMap)
                         .normal(sideX, sideY, sideZ)
                         .endVertex();
-                consumer.pos(matrix, x2.getX() + y2.getX(), x2.getY() + y2.getY(), x2.getZ() + y2.getZ())
+                consumer.vertex(matrix, x2.x() + y2.x(), x2.y() + y2.y(), x2.z() + y2.z())
                         .color(r, g, b, a)
-                        .tex(u2, v1)
-                        .lightmap(lightMap)
+                        .uv(u2, v1)
+                        .uv2(lightMap)
                         .normal(sideX, sideY, sideZ)
                         .endVertex();
             }
         }
 
-        pose.pop();
+        pose.popPose();
     }
 }

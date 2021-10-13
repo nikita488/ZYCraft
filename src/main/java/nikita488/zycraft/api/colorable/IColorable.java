@@ -26,17 +26,17 @@ public interface IColorable
 
     static boolean isColorable(IBlockReader world, BlockPos pos)
     {
-        return world.getTileEntity(pos) instanceof IColorable;
+        return world.getBlockEntity(pos) instanceof IColorable;
     }
 
     static ActionResultType interact(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        ItemStack stack = player.getHeldItem(hand);
+        ItemStack stack = player.getItemInHand(hand);
 
         if (stack.isEmpty())
             return ActionResultType.PASS;
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile instanceof IColorable)
         {
@@ -50,9 +50,9 @@ public interface IColorable
                 if (!changer.canChangeColor(state, world, pos, player, hand, hit, rgb))
                     return ActionResultType.PASS;
 
-                if (!world.isRemote())
+                if (!world.isClientSide())
                     colorable.setColor(state, world, pos, changer.changeColor(state, world, pos, player, hand, hit, rgb));
-                return ActionResultType.func_233537_a_(world.isRemote());
+                return ActionResultType.sidedSuccess(world.isClientSide());
             }
 
             ZYDyeColor dyeColor = ZYDyeColor.byDyeColor(stack);
@@ -60,9 +60,9 @@ public interface IColorable
             if (dyeColor == null || rgb == dyeColor.rgb())
                 return ActionResultType.PASS;
 
-            if (!world.isRemote())
+            if (!world.isClientSide())
                 colorable.setColor(state, world, pos, dyeColor.rgb());
-            return ActionResultType.func_233537_a_(world.isRemote());
+            return ActionResultType.sidedSuccess(world.isClientSide());
         }
 
         return ActionResultType.CONSUME;

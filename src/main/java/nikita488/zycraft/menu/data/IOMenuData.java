@@ -48,7 +48,7 @@ public class IOMenuData implements IMenuData, Supplier<EnumSet<ItemIOMode>>
         buffer.writeVarInt(activeModes.size());
 
         for (ItemIOMode mode : activeModes)
-            buffer.writeEnumValue(mode);
+            buffer.writeEnum(mode);
     }
 
     @Override
@@ -59,7 +59,7 @@ public class IOMenuData implements IMenuData, Supplier<EnumSet<ItemIOMode>>
         int activeCount = buffer.readVarInt();
 
         for (int i = 0; i < activeCount; i++)
-            activeModes.add(buffer.readEnumValue(ItemIOMode.class));
+            activeModes.add(buffer.readEnum(ItemIOMode.class));
     }
 
     @Override

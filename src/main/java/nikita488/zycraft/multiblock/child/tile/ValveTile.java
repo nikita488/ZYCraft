@@ -34,7 +34,7 @@ import java.util.function.Supplier;
 
 public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity, IFluidHandler
 {
-    private final Supplier<ValveIOMode> mode = () -> getBlockState().get(ValveBlock.IO_MODE);
+    private final Supplier<ValveIOMode> mode = () -> getBlockState().getValue(ValveBlock.IO_MODE);
     private LazyOptional<IFluidHandler> capability = LazyOptional.empty();
     private IFluidHandler mainTank = EmptyFluidHandler.INSTANCE;
     @Nullable
@@ -49,7 +49,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     @Override
     public void tick()
     {
-        if (!world.isRemote())
+        if (!level.isClientSide())
             if (capability.isPresent())
                 update();
             else if (parentCount() > 1)
@@ -59,7 +59,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     @Override
     protected void processAdjacentPos(BlockPos pos, Direction side)
     {
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
 
         if (mode.get().isOutput())
             eject(state, pos, side);
@@ -72,8 +72,8 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         if (adjState.getBlock() instanceof IFluidVoid)
         {
             IFluidVoid fluidVoid = (IFluidVoid)adjState.getBlock();
-            FluidStack fluidToDrain = fluidVoid.getFluidToDrain(adjState, world, adjPos, side.getOpposite());
-            int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(adjState, world, adjPos, side.getOpposite()) : 0;
+            FluidStack fluidToDrain = fluidVoid.getFluidToDrain(adjState, level, adjPos, side.getOpposite());
+            int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(adjState, level, adjPos, side.getOpposite()) : 0;
 
             if (!fluidToDrain.isEmpty())
                 mainTank.drain(fluidToDrain, IFluidHandler.FluidAction.EXECUTE);
@@ -82,7 +82,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         }
         else if (adjState.hasTileEntity())
         {
-            TileEntity tile = world.getTileEntity(adjPos);
+            TileEntity tile = level.getBlockEntity(adjPos);
 
             if (tile != null)
                 tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())
@@ -96,8 +96,8 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         FluidState adjFluidState = adjState.getFluidState();
 
         if (adjState.getBlock() instanceof IFluidSource)
-            fluid = ((IFluidSource)adjState.getBlock()).getFluid(adjState, world, adjPos, side.getOpposite());
-        else if (adjFluidState.getFluid() == Fluids.WATER.delegate.get())
+            fluid = ((IFluidSource)adjState.getBlock()).getFluid(adjState, level, adjPos, side.getOpposite());
+        else if (adjFluidState.getType() == Fluids.WATER.delegate.get())
             fluid = new FluidStack(Fluids.WATER, 50);
 
         if (!fluid.isEmpty())
@@ -116,7 +116,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
             return;
 
         if (fluid.isEmpty() || targetFluid.isEmpty() || fluid.isFluidEqual(targetFluid))
-            fromTank.applyPressure(toTank, pos.getY());
+            fromTank.applyPressure(toTank, worldPosition.getY());
     }
 
     private Optional<IMultiFluidHandler.Level> accessTankLevel()
@@ -128,7 +128,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     {
         return getMultiCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, tankIndex)
                 .filter(handler -> handler instanceof IMultiFluidHandler)
-                .map(handler -> ((IMultiFluidHandler)handler).level(pos.getY()));
+                .map(handler -> ((IMultiFluidHandler)handler).level(worldPosition.getY()));
     }
 
     private void cacheFluidHandlers()
@@ -157,7 +157,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
             }
         }
 
-        updateComparatorOutputLevel();
+        updateNeighbourForOutputSignal();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         super.onMultiValidation(multiBlock);
         cacheFluidHandlers();
 
-        LazyOptional<IFluidHandler> capability = multiBlock.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, pos);
+        LazyOptional<IFluidHandler> capability = multiBlock.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, worldPosition);
         IFluidHandler handler = capability.orElse(EmptyFluidHandler.INSTANCE);
 
         if (capability.isPresent() && !storedFluid.isEmpty() && handler.fill(storedFluid, FluidAction.SIMULATE) > 0)
@@ -242,18 +242,18 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundNBT tag)
     {
-        super.read(state, tag);
+        super.load(state, tag);
 
         if (tag.contains("StoredFluid", Constants.NBT.TAG_COMPOUND))
             this.storedFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("StoredFluid"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
-        super.write(tag);
+        super.save(tag);
 
         if (!storedFluid.isEmpty())
             tag.put("StoredFluid", storedFluid.writeToNBT(new CompoundNBT()));
@@ -265,7 +265,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        return !removed && capability.isPresent() && type == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? capability.cast() : super.getCapability(type, side);
+        return !remove && capability.isPresent() && type == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? capability.cast() : super.getCapability(type, side);
     }
 
     @Override
@@ -283,7 +283,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     public void setStoredFluid(FluidStack stack)
     {
         this.storedFluid = stack;
-        markDirty();
+        setChanged();
     }
 
     public boolean hasStoredFluid()

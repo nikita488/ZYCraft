@@ -8,40 +8,40 @@ import net.minecraft.item.ItemStack;
 
 public class RecipePatternSlot extends Slot
 {
-    private final Container container;
+    private final Container menu;
 
-    public RecipePatternSlot(Container container, IInventory inventory, int index, int x, int y)
+    public RecipePatternSlot(Container menu, IInventory inventory, int index, int x, int y)
     {
         super(inventory, index, x, y);
-        this.container = container;
+        this.menu = menu;
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player)
+    public boolean mayPickup(PlayerEntity player)
     {
         return false;
     }
 
     @Override
-    public int getSlotStackLimit()
+    public int getMaxStackSize()
     {
         return 1;
     }
 
     @Override
-    public void putStack(ItemStack stack)
+    public void set(ItemStack stack)
     {
-        super.putStack(stack);
-        container.onCraftMatrixChanged(inventory);
+        super.set(stack);
+        menu.slotsChanged(container);
     }
 
     @Override
-    public ItemStack decrStackSize(int amount)
+    public ItemStack remove(int amount)
     {
-        ItemStack stack = super.decrStackSize(amount);
+        ItemStack stack = super.remove(amount);
 
         if (!stack.isEmpty())
-            container.onCraftMatrixChanged(inventory);
+            menu.slotsChanged(container);
 
         return stack;
     }

@@ -15,6 +15,6 @@ public class InventoryUtils
     public static void dropInventoryItems(World world, double x, double y, double z, IItemHandler inventory)
     {
         for (int slot = 0; slot < inventory.getSlots(); slot++)
-            InventoryHelper.spawnItemStack(world, x, y, z, inventory.getStackInSlot(slot));
+            InventoryHelper.dropItemStack(world, x, y, z, inventory.getStackInSlot(slot));
     }
 }

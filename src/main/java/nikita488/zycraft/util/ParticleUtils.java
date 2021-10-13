@@ -20,7 +20,7 @@ public class ParticleUtils
 
     public static void glowingColorableBlock(BlockState state, World world, BlockPos pos, Random rand)
     {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile instanceof IColorable)
             glowingBlock(state, world, pos, rand, Color.rgba(((IColorable)tile).getColor(state, world, pos), 192));
@@ -41,15 +41,15 @@ public class ParticleUtils
             if (rand.nextFloat() > 0.15F)
                 continue;
 
-            BlockPos adjPos = pos.offset(dir);
+            BlockPos adjPos = pos.relative(dir);
             BlockState adjState = world.getBlockState(adjPos);
-            if (state == adjState || adjState.hasOpaqueCollisionShape(world, adjPos))
+            if (state == adjState || adjState.isCollisionShapeFullBlock(world, adjPos))
                 continue;
 
             Direction.Axis axis = dir.getAxis();
-            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * dir.getXOffset() : rand.nextFloat();
-            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * dir.getYOffset() : rand.nextFloat();
-            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * dir.getZOffset() : rand.nextFloat();
+            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * dir.getStepX() : rand.nextFloat();
+            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * dir.getStepY() : rand.nextFloat();
+            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * dir.getStepZ() : rand.nextFloat();
 
             world.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0D, 0D, 0D);
         }
@@ -65,7 +65,7 @@ public class ParticleUtils
 
         float size = 6 / 16F;
         float height = 11 / 16F;
-        Direction dir = state.get(QuartzCrystalClusterBlock.FACING);
+        Direction dir = state.getValue(QuartzCrystalClusterBlock.FACING);
         double xOffset = getOffset(rand, dir, Direction.Axis.X, size, height);
         double yOffset = getOffset(rand, dir, Direction.Axis.Y, size, height);
         double zOffset = getOffset(rand, dir, Direction.Axis.Z, size, height);

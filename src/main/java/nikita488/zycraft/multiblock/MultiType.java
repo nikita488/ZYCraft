@@ -47,7 +47,7 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
 
     private static Optional<MultiBlock> createUnchecked(World world, ChunkPos mainChunk, CompoundNBT tag)
     {
-        return Util.acceptOrElse(load(tag).map(type -> type.create(world, mainChunk)), multiBlock ->
+        return Util.ifElse(load(tag).map(type -> type.create(world, mainChunk)), multiBlock ->
         {
             multiBlock.load(tag);
             multiBlock.initChildBlocks();
@@ -76,7 +76,7 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
 
     public static boolean tryFormMultiBlock(BlockState interfaceState, World world, BlockPos interfacePos, @Nullable Direction formingSide)
     {
-        if (!world.isRemote())
+        if (!world.isClientSide())
             for (MultiType<?> type : ZYRegistries.MULTI_TYPES.get().getValues())
                 if (type.form(interfaceState, world, interfacePos, formingSide))
                     return true;

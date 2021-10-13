@@ -31,7 +31,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
     public static final ModelProperty<BlockState> INITIAL_STATE = new ModelProperty<>();
     public static final ModelProperty<IBlockDisplayReader> BLOCK_GETTER = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
-    private BlockState initialState = Blocks.AIR.getDefaultState();
+    private BlockState initialState = Blocks.AIR.defaultBlockState();
 
     public ConvertedMultiChildTile(TileEntityType<ConvertedMultiChildTile> type)
     {
@@ -44,7 +44,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
             return;
 
         this.initialState = state;
-        markDirty();
+        setChanged();
         sendUpdated();
     }
 
@@ -55,7 +55,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
         return new ModelDataMap.Builder()
                 .withInitial(INITIAL_STATE, initialState)
                 .withInitial(BLOCK_GETTER, new BlockGetter())
-                .withInitial(POS, pos)
+                .withInitial(POS, worldPosition)
                 .build();
     }
 
@@ -64,8 +64,8 @@ public class ConvertedMultiChildTile extends MultiChildTile
     {
         super.onMultiInvalidation(multiBlock);
 
-        if (!world.isRemote() && !hasParents())
-            world.setBlockState(pos, initialState, Constants.BlockFlags.BLOCK_UPDATE);
+        if (!level.isClientSide() && !hasParents())
+            level.setBlock(worldPosition, initialState, Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
@@ -81,16 +81,16 @@ public class ConvertedMultiChildTile extends MultiChildTile
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundNBT tag)
     {
-        super.read(state, tag);
+        super.load(state, tag);
         this.initialState = NBTUtil.readBlockState(tag.getCompound("InitialState"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
-        super.write(tag);
+        super.save(tag);
         tag.put("InitialState", NBTUtil.writeBlockState(initialState));
         return tag;
     }
@@ -98,7 +98,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
     @Override
     public void decode(CompoundNBT tag)
     {
-        this.initialState = Block.getStateById(tag.getInt("InitialState"));
+        this.initialState = Block.stateById(tag.getInt("InitialState"));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
     @Override
     public void encode(CompoundNBT tag)
     {
-        tag.putInt("InitialState", Block.getStateId(initialState));
+        tag.putInt("InitialState", Block.getId(initialState));
     }
 
     public BlockState initialState()
@@ -125,44 +125,44 @@ public class ConvertedMultiChildTile extends MultiChildTile
         @Override
         public BlockState getBlockState(BlockPos pos)
         {
-            if (pos.equals(ConvertedMultiChildTile.this.getPos()))
+            if (pos.equals(ConvertedMultiChildTile.this.getBlockPos()))
                 return initialState;
 
-            TileEntity tile = getTileEntity(pos);
-            return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : world.getBlockState(pos);
+            TileEntity tile = getBlockEntity(pos);
+            return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : level.getBlockState(pos);
         }
 
         @Override
         @OnlyIn(Dist.CLIENT)
-        public float func_230487_a_(Direction side, boolean applyDiffuseLighting)
+        public float getShade(Direction side, boolean applyDiffuseLighting)
         {
-            return world.func_230487_a_(side, applyDiffuseLighting);
+            return level.getShade(side, applyDiffuseLighting);
         }
 
         @Override
-        public WorldLightManager getLightManager()
+        public WorldLightManager getLightEngine()
         {
-            return world.getLightManager();
+            return level.getLightEngine();
         }
 
         @Override
         @OnlyIn(Dist.CLIENT)
-        public int getBlockColor(BlockPos pos, ColorResolver resolver)
+        public int getBlockTint(BlockPos pos, ColorResolver resolver)
         {
-            return world.getBlockColor(pos, resolver);
+            return level.getBlockTint(pos, resolver);
         }
 
         @Nullable
         @Override
-        public TileEntity getTileEntity(BlockPos pos)
+        public TileEntity getBlockEntity(BlockPos pos)
         {
-            return world.getTileEntity(pos);
+            return level.getBlockEntity(pos);
         }
 
         @Override
         public FluidState getFluidState(BlockPos pos)
         {
-            return world.getFluidState(pos);
+            return level.getFluidState(pos);
         }
     }
 }

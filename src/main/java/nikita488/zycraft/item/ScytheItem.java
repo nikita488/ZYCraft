@@ -28,7 +28,7 @@ import java.util.Set;
 
 public class ScytheItem extends ToolItem
 {
-    private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANTS, Material.OCEAN_PLANT, Material.TALL_PLANTS, Material.NETHER_PLANTS, Material.SEA_GRASS, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);
+    private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);
 
     public ScytheItem(Properties properties)
     {
@@ -37,9 +37,9 @@ public class ScytheItem extends ToolItem
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
-        float durability = (stack.getMaxDamage() - stack.getDamage()) / (float)stack.getMaxDamage();
+        float durability = (stack.getMaxDamage() - stack.getDamageValue()) / (float)stack.getMaxDamage();
         TextFormatting formatting = TextFormatting.RED;
 
         if (durability >= 0.6F)
@@ -47,55 +47,55 @@ public class ScytheItem extends ToolItem
         else if (durability >= 0.25F)
             formatting = TextFormatting.YELLOW;
 
-        tooltip.add(ZYLang.copy(ZYLang.SCYTHE_DURABILITY, durability * 100).mergeStyle(formatting));
+        tooltip.add(ZYLang.copy(ZYLang.SCYTHE_DURABILITY, durability * 100).withStyle(formatting));
     }
 
     @Override
-    public ITextComponent getDisplayName(ItemStack stack)
+    public ITextComponent getName(ItemStack stack)
     {
-        return new TranslationTextComponent(getTranslationKey(stack)).mergeStyle(TextFormatting.BLUE);
+        return new TranslationTextComponent(getDescriptionId(stack)).withStyle(TextFormatting.BLUE);
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state)
     {
-        return MATERIALS.contains(state.getMaterial()) ? efficiency : 1F;
+        return MATERIALS.contains(state.getMaterial()) ? speed : 1F;
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state)
+    public boolean isCorrectToolForDrops(BlockState state)
     {
-        return state.matchesBlock(Blocks.COBWEB);
+        return state.is(Blocks.COBWEB);
     }
 
     @Override
-    public boolean onBlockDestroyed(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
+    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
     {
         if (!MATERIALS.contains(state.getMaterial()))
         {
-            stack.damageItem(2, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+            stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
             return true;
         }
 
-        stack.damageItem(1, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+        stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 
-        if (stack.isEmpty() || player.isSneaking())
+        if (stack.isEmpty() || player.isShiftKeyDown())
             return true;
 
-        PlayerInteractionManager manager = ((ServerPlayerEntity)player).interactionManager;
+        PlayerInteractionManager manager = ((ServerPlayerEntity)player).gameMode;
         int range = 2;
 
-        for (BlockPos destroyPos : BlockPos.getAllInBoxMutable(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
+        for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
         {
-            if (destroyPos.equals(pos) || !world.isBlockModifiable(manager.player, destroyPos))
+            if (destroyPos.equals(pos) || !world.mayInteract(manager.player, destroyPos))
                 continue;
 
             BlockState destroyState = world.getBlockState(destroyPos);
 
-            if (!MATERIALS.contains(destroyState.getMaterial()) || !BlockUtils.tryHarvestBlock(manager, destroyState, destroyPos.toImmutable()))
+            if (!MATERIALS.contains(destroyState.getMaterial()) || !BlockUtils.tryHarvestBlock(manager, destroyState, destroyPos.immutable()))
                 continue;
 
-            stack.damageItem(1, player, entity -> entity.sendBreakAnimation(EquipmentSlotType.MAINHAND));
+            stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 
             if (stack.isEmpty())
                 break;

@@ -25,7 +25,7 @@ public class GuiComponentManager extends SpriteUploader
     }
 
     @Override
-    protected Stream<ResourceLocation> getResourceLocations()
+    protected Stream<ResourceLocation> getResourcesToLoad()
     {
         return Arrays.stream(GuiComponent.VALUES).map(GuiComponent::id);
     }

@@ -25,29 +25,29 @@ public class ZychoriumSoilBlock extends Block
     public ZychoriumSoilBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(FLIPPED, false));
+        registerDefaultState(defaultBlockState().setValue(FLIPPED, false));
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random rand)
     {
-        Direction dir = state.get(FLIPPED) ? Direction.DOWN : Direction.UP;
-        BlockPos tickPos = pos.offset(dir);
+        Direction dir = state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP;
+        BlockPos tickPos = pos.relative(dir);
         BlockState stateToTick = world.getBlockState(tickPos);
         Block blockToTick = stateToTick.getBlock();
 
-        if (!stateToTick.ticksRandomly())
+        if (!stateToTick.isRandomlyTicking())
             return;
 
-        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).canGrow(world, tickPos, stateToTick, false)))
+        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).isValidBonemealTarget(world, tickPos, stateToTick, false)))
         {
-            BlockPos.Mutable checkPos = new BlockPos.Mutable().setPos(tickPos);
+            BlockPos.Mutable checkPos = new BlockPos.Mutable().set(tickPos);
 
-            while (blockToTick == stateToTick.getBlock() && stateToTick.ticksRandomly())
+            while (blockToTick == stateToTick.getBlock() && stateToTick.isRandomlyTicking())
                 stateToTick = world.getBlockState(checkPos.move(dir));
 
             stateToTick = world.getBlockState(checkPos.move(dir.getOpposite()));
-            stateToTick.randomTick(world, checkPos.toImmutable(), rand);
+            stateToTick.randomTick(world, checkPos.immutable(), rand);
         }
         else if (blockToTick == this)
         {
@@ -59,13 +59,13 @@ public class ZychoriumSoilBlock extends Block
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return getDefaultState().with(FLIPPED, context.getWorld().isBlockPowered(context.getPos()));
+        return defaultBlockState().setValue(FLIPPED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
     @Override
     public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable)
     {
-        return facing == (state.get(FLIPPED) ? Direction.DOWN : Direction.UP);
+        return facing == (state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP);
     }
 
     @Override
@@ -77,12 +77,12 @@ public class ZychoriumSoilBlock extends Block
     @Override
     public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjacentPos, boolean isMoving)
     {
-        if (state.get(FLIPPED) != world.isBlockPowered(pos))
-            world.setBlockState(pos, state.cycleValue(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
+        if (state.getValue(FLIPPED) != world.hasNeighborSignal(pos))
+            world.setBlock(pos, state.cycle(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(FLIPPED);
     }

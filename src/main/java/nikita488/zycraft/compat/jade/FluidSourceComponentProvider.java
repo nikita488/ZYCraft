@@ -25,8 +25,8 @@ public class FluidSourceComponentProvider implements IComponentProvider
             FluidStack fluid = ((IFluidSource)accessor.getBlock()).getFluid(accessor.getBlockState(), accessor.getWorld(), accessor.getPosition(), accessor.getSide());
 
             if (!fluid.isEmpty())
-                tooltip.add(ZYLang.SOURCE_FLUID_LABEL.copyRaw()
-                        .appendSibling(ZYLang.copy(ZYLang.FLUID_INFO, fluid.getDisplayName(), fluid.getAmount())));
+                tooltip.add(ZYLang.SOURCE_FLUID_LABEL.plainCopy()
+                        .append(ZYLang.copy(ZYLang.FLUID_INFO, fluid.getDisplayName(), fluid.getAmount())));
         }
     }
 }

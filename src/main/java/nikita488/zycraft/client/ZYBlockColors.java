@@ -23,7 +23,7 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         if (world == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         return tile instanceof IColorable ? ((IColorable)tile).getColor(state, world, pos, tintIndex) : 0xFFFFFF;
     }),
     FABRICATOR((state, world, pos, tintIndex) ->
@@ -31,7 +31,7 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         if (world == null || pos == null || !state.hasTileEntity())
             return ZYType.BLUE.rgb();
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         return tile instanceof FabricatorTile ? ((FabricatorTile)tile).getColor(state) : ZYType.BLUE.rgb();
     }),
     CONVERTED_MULTI_CHILD((state, world, pos, tintIndex) ->
@@ -39,21 +39,21 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         if (world == null || pos == null)
             return 0xFFFFFF;
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile instanceof ConvertedMultiChildTile)
             return Minecraft.getInstance().getBlockColors().getColor(((ConvertedMultiChildTile)tile).initialState(), world, pos, tintIndex);
 
         return 0xFFFFFF;
     }),
-    VALVE((state, world, pos, tintIndex) -> tintIndex == 1 ? state.get(ValveBlock.IO_MODE).rgb() : ZYType.BLUE.rgb()),
-    ITEM_IO((state, world, pos, tintIndex) -> tintIndex == 1 ? state.get(ItemIOBlock.IO_MODE).rgb() : ZYType.GREEN.rgb()),
+    VALVE((state, world, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ValveBlock.IO_MODE).rgb() : ZYType.BLUE.rgb()),
+    ITEM_IO((state, world, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ItemIOBlock.IO_MODE).rgb() : ZYType.GREEN.rgb()),
     FLUID_SELECTOR((state, world, pos, tintIndex) ->
     {
         if (world == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
         return tile instanceof FluidSelectorTile ? ((FluidSelectorTile)tile).getColor() : 0xFFFFFF;
     });
 

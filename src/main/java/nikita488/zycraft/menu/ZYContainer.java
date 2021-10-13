@@ -24,7 +24,7 @@ public abstract class ZYContainer extends Container
     public static final Container EMPTY_CONTAINER = new Container(null, -1)
     {
         @Override
-        public boolean canInteractWith(PlayerEntity player)
+        public boolean stillValid(PlayerEntity player)
         {
             return false;
         }
@@ -78,11 +78,11 @@ public abstract class ZYContainer extends Container
     }
 
     @Override
-    public void detectAndSendChanges()
+    public void broadcastChanges()
     {
-        super.detectAndSendChanges();
+        super.broadcastChanges();
 
-        if (listeners.isEmpty())
+        if (containerListeners.isEmpty())
             return;
 
         for (int i = 0; i < data.size(); i++)
@@ -92,9 +92,9 @@ public abstract class ZYContainer extends Container
             if (!variable.canBeUpdated())
                 continue;
 
-            for (IContainerListener listener : listeners)
+            for (IContainerListener listener : containerListeners)
                 if (listener instanceof ServerPlayerEntity)
-                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity)listener)), new UpdateMenuDataPacket(windowId, i, variable));
+                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity)listener)), new UpdateMenuDataPacket(containerId, i, variable));
         }
     }
 
@@ -104,23 +104,23 @@ public abstract class ZYContainer extends Container
     }
 
     @Override
-    public ItemStack transferStackInSlot(PlayerEntity player, int slotIndex)
+    public ItemStack quickMoveStack(PlayerEntity player, int slotIndex)
     {
         ItemStack stack = ItemStack.EMPTY;
-        Slot slot = inventorySlots.get(slotIndex);
-        if (slot == null || !slot.getHasStack())
+        Slot slot = slots.get(slotIndex);
+        if (slot == null || !slot.hasItem())
             return stack;
 
-        ItemStack slotStack = slot.getStack();
+        ItemStack slotStack = slot.getItem();
         stack = slotStack.copy();
 
         if (!tryTransferStackToSlot(slotStack, slotIndex))
             return ItemStack.EMPTY;
 
         if (slotStack.isEmpty())
-            slot.putStack(ItemStack.EMPTY);
+            slot.set(ItemStack.EMPTY);
         else
-            slot.onSlotChanged();
+            slot.setChanged();
 
         if (slotStack.getCount() == stack.getCount())
             return ItemStack.EMPTY;

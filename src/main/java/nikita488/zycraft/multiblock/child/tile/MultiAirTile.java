@@ -16,7 +16,7 @@ public class MultiAirTile extends MultiChildTile
     {
         super.onMultiInvalidation(multiBlock);
 
-        if (!world.isRemote())
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+        if (!level.isClientSide())
+            level.setBlockAndUpdate(worldPosition, Blocks.AIR.defaultBlockState());
     }
 }

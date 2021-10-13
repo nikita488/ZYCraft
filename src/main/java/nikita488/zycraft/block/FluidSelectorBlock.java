@@ -48,15 +48,15 @@ public class FluidSelectorBlock extends Block implements IFluidSource
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.CREATIVE_ONLY);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        FluidStack containedFluid = FluidUtil.getFluidContained(player.getHeldItem(hand)).orElse(FluidStack.EMPTY);
+        FluidStack containedFluid = FluidUtil.getFluidContained(player.getItemInHand(hand)).orElse(FluidStack.EMPTY);
 
         if (containedFluid.isEmpty())
             return ActionResultType.PASS;
@@ -66,10 +66,10 @@ public class FluidSelectorBlock extends Block implements IFluidSource
         if (selector != null)
             if (selector.getSelectedFluid().isFluidEqual(containedFluid))
                 return ActionResultType.CONSUME;
-            else if (!world.isRemote())
+            else if (!world.isClientSide())
                 selector.setSelectedFluid(containedFluid);
 
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
@@ -81,7 +81,7 @@ public class FluidSelectorBlock extends Block implements IFluidSource
             return FluidStack.EMPTY;
 
         fluid = fluid.copy();
-        fluid.setAmount(150 - world.getRedstonePowerFromNeighbors(pos) * 10);
+        fluid.setAmount(150 - world.getBestNeighborSignal(pos) * 10);
         return fluid;
     }
 }

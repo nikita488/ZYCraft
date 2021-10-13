@@ -34,12 +34,12 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
     public MultiInterfaceBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(AXIS, InterfaceAxis.ALL));
+        registerDefaultState(defaultBlockState().setValue(AXIS, InterfaceAxis.ALL));
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.INTERFACE);
 
@@ -52,25 +52,25 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
     protected void addTooltip(List<ITextComponent> tooltip) {}
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (tile instanceof IMultiChild)
         {
-            if (((IMultiChild)tile).hasParents() || player.isSneaking())
-                return super.onBlockActivated(state, world, pos, player, hand, hit);
+            if (((IMultiChild)tile).hasParents() || player.isShiftKeyDown())
+                return super.use(state, world, pos, player, hand, hit);
 
-            if (!world.isRemote())
-                MultiType.tryFormMultiBlock(state, world, pos, hit.getFace());
-            return ActionResultType.func_233537_a_(world.isRemote());
+            if (!world.isClientSide())
+                MultiType.tryFormMultiBlock(state, world, pos, hit.getDirection());
+            return ActionResultType.sidedSuccess(world.isClientSide());
         }
 
         return ActionResultType.CONSUME;
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(AXIS);
     }

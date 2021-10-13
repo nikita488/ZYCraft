@@ -15,7 +15,7 @@ public class FluidHandlerSlot extends SlotItemHandler
     }
 
     @Override
-    public boolean isItemValid(@Nonnull ItemStack stack)
+    public boolean mayPlace(@Nonnull ItemStack stack)
     {
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).isPresent();
     }

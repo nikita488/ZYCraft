@@ -47,7 +47,7 @@ public class ImmortalViewerBlock extends ViewerBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.COLORABLE);
 
@@ -66,7 +66,7 @@ public class ImmortalViewerBlock extends ViewerBlock
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
         return IColorable.interact(state, world, pos, player, hand, hit);
     }

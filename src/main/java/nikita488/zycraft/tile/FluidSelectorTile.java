@@ -19,23 +19,23 @@ public class FluidSelectorTile extends ZYTile
 
     public int getColor()
     {
-        float brightness = (15 - world.getRedstonePowerFromNeighbors(pos)) / 15F;
+        float brightness = (15 - level.getBestNeighborSignal(worldPosition)) / 15F;
         return hsv != null ? Color.hsvToRGB(hsv[0], hsv[1], hsv[2] * brightness) : 0xFFFFFF;
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundNBT tag)
     {
-        super.read(state, tag);
+        super.load(state, tag);
 
         if (tag.contains("SelectedFluid", Constants.NBT.TAG_COMPOUND))
             this.selectedFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SelectedFluid"));
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
-        super.write(tag);
+        super.save(tag);
 
         if (!selectedFluid.isEmpty())
             tag.put("SelectedFluid", selectedFluid.writeToNBT(new CompoundNBT()));
@@ -81,7 +81,7 @@ public class FluidSelectorTile extends ZYTile
 
         this.selectedFluid = stack;
         selectedFluid.setAmount(150);
-        markDirty();
+        setChanged();
         sendUpdated();
     }
 }

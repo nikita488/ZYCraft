@@ -35,7 +35,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
                 return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
 
             if (doTransfer)
-                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.windowId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
+                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.containerId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
 
             return null;
         }

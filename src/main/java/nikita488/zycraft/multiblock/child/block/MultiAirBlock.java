@@ -29,7 +29,7 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public BlockRenderType getRenderType(BlockState state)
+    public BlockRenderType getRenderShape(BlockState state)
     {
         return BlockRenderType.INVISIBLE;
     }
@@ -37,7 +37,7 @@ public class MultiAirBlock extends MultiChildBlock
     @Override
     public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
     {
-        return VoxelShapes.fullCube();
+        return VoxelShapes.block();
     }
 
     @Override
@@ -47,13 +47,13 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext ctx)
+    public boolean canBeReplaced(BlockState state, BlockItemUseContext ctx)
     {
         return false;
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, Fluid fluid)
+    public boolean canBeReplaced(BlockState state, Fluid fluid)
     {
         return false;
     }
@@ -65,7 +65,7 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
     {
         return 1F;
     }

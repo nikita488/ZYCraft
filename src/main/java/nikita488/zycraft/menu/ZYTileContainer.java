@@ -18,9 +18,9 @@ public class ZYTileContainer<T extends ZYTile> extends ZYContainer
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player)
+    public boolean stillValid(PlayerEntity player)
     {
-        return tile != null && tile.isUsableByPlayer(player);
+        return tile != null && tile.stillValid(player);
     }
 
     @Nullable

@@ -52,9 +52,9 @@ public class UpdateMenuDataPacket
             if (mc.player == null)
                 return;
 
-            Container container = mc.player.openContainer;
+            Container container = mc.player.containerMenu;
 
-            if (container.windowId == msg.windowID && container instanceof ZYContainer)
+            if (container.containerId == msg.windowID && container instanceof ZYContainer)
                 ((ZYContainer)container).handleVariable(msg.id(), msg.buffer());
         });
 

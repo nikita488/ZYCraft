@@ -24,7 +24,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
     }
 
     @Override
-    public boolean generate(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
+    public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
     {
         float f = random.nextFloat() * (float)Math.PI;
         float f1 = (float)config.size / 8.0F;
@@ -119,14 +119,14 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
                                         int l2 = i2 - p_207803_16_ + (j2 - p_207803_17_) * p_207803_19_ + (k2 - p_207803_18_) * p_207803_19_ * p_207803_20_;
                                         if (!bitset.get(l2)) {
                                             bitset.set(l2);
-                                            blockpos$mutable.setPos(i2, j2, k2);
+                                            blockpos$mutable.set(i2, j2, k2);
                                             if (config.target.test(world.getBlockState(blockpos$mutable), random)) {
                                                 Block block = ZYBlocks.ZYCHORITE.get();
 
                                                 if (random.nextFloat() < config.orePercentage)
                                                     block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.randomType(random)).get();
 
-                                                world.setBlockState(blockpos$mutable, block.getDefaultState(), Constants.BlockFlags.BLOCK_UPDATE);
+                                                world.setBlock(blockpos$mutable, block.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
                                                 ++i;
                                             }
                                         }

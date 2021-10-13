@@ -15,11 +15,11 @@ import java.util.Map;
 
 public enum ViewerType
 {
-    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.hardnessAndResistance(0.3F, 6F)),
+    BASIC("glass", () -> DataIngredient.tag(Tags.Items.INGOTS_IRON), properties -> properties.strength(0.3F, 6F)),
     DIRE("dire", () -> DataIngredient.items(ZYBlocks.QUARTZ_CRYSTAL)),
     ALUMINIUM("aluminium", () -> DataIngredient.items(ZYItems.ALUMINIUM)),
-    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.hardnessAndResistance(0.3F, 1200F)),
-    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.setLightLevel(state -> 15)),
+    REINFORCED("reinforced", () -> DataIngredient.tag(Tags.Items.OBSIDIAN), properties -> properties.strength(0.3F, 1200F)),
+    GLOWING("glowing", () -> DataIngredient.tag(Tags.Items.DUSTS_GLOWSTONE), properties -> properties.lightLevel(state -> 15)),
     DARK("dark", () -> DataIngredient.items(Items.INK_SAC));
 
     private final String name;

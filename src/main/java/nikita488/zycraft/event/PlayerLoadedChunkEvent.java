@@ -11,7 +11,7 @@ public class PlayerLoadedChunkEvent extends WorldEvent
 
     public PlayerLoadedChunkEvent(ServerPlayerEntity player, Chunk chunk)
     {
-        super(player.getServerWorld());
+        super(player.getLevel());
         this.player = player;
         this.chunk = chunk;
     }

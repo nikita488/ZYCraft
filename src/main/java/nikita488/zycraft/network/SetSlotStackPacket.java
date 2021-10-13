@@ -24,7 +24,7 @@ public class SetSlotStackPacket
     {
         this.windowID = buf.readVarInt();
         this.slotIndex = buf.readVarInt();
-        this.stack = buf.readItemStack();
+        this.stack = buf.readItem();
     }
 
     public static SetSlotStackPacket decode(PacketBuffer buf)
@@ -36,7 +36,7 @@ public class SetSlotStackPacket
     {
         buf.writeVarInt(msg.windowID());
         buf.writeVarInt(msg.slotIndex());
-        buf.writeItemStack(msg.stack());
+        buf.writeItem(msg.stack());
     }
 
     public static boolean handle(SetSlotStackPacket msg, Supplier<NetworkEvent.Context> ctx)
@@ -48,12 +48,12 @@ public class SetSlotStackPacket
             if (player == null)
                 return;
 
-            player.markPlayerActive();
+            player.resetLastActionTime();
 
-            Container container = player.openContainer;
+            Container container = player.containerMenu;
 
-            if (container.windowId == msg.windowID() && container.getCanCraft(player) && !player.isSpectator())
-                container.getSlot(msg.slotIndex()).putStack(msg.stack());
+            if (container.containerId == msg.windowID() && container.isSynched(player) && !player.isSpectator())
+                container.getSlot(msg.slotIndex()).set(msg.stack());
         });
 
         return true;

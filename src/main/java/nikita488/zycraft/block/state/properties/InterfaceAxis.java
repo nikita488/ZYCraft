@@ -39,11 +39,11 @@ public enum InterfaceAxis implements IStringSerializable
 
     public static void set(BlockState state, World world, BlockPos pos, InterfaceAxis axis)
     {
-        world.setBlockState(pos, state.with(ZYBlockStateProperties.INTERFACE_AXIS, axis), Constants.BlockFlags.BLOCK_UPDATE);
+        world.setBlock(pos, state.setValue(ZYBlockStateProperties.INTERFACE_AXIS, axis), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
-    public String getString()
+    public String getSerializedName()
     {
         return name;
     }

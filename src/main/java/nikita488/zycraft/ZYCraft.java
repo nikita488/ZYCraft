@@ -69,7 +69,7 @@ public class ZYCraft
         event.enqueueWork(() ->
         {
             ZYConfiguredFeatures.init();
-            DispenserBlock.registerDispenseBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
+            DispenserBlock.registerBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
         MultiManager.commonSetup();
     }

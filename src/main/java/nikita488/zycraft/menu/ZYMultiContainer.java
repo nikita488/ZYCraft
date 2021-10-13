@@ -32,12 +32,12 @@ public class ZYMultiContainer<M extends MultiBlock> extends ZYContainer
     protected Slot addIOSlot(SlotIOMode mode, int width, int height, Slot slot)
     {
         if (multiBlock == null || multiBlock.isClientSide())
-            slotOverlays.add(new IOSlotOverlay(slot.xPos, slot.yPos, width, height, mode));
+            slotOverlays.add(new IOSlotOverlay(slot.x, slot.y, width, height, mode));
         return addSlot(slot);
     }
 
     @Override
-    public boolean canInteractWith(PlayerEntity player)
+    public boolean stillValid(PlayerEntity player)
     {
         return multiBlock != null && multiBlock.isValid();
     }

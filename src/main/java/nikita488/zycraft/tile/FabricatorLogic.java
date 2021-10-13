@@ -49,13 +49,13 @@ public class FabricatorLogic
 
     private LazyOptional<IItemHandler> getAdjacentInventory(Direction side)
     {
-        World world = fabricator.getWorld();
-        BlockPos adjacentPos = fabricator.getPos().offset(side);
+        World world = fabricator.getLevel();
+        BlockPos adjacentPos = fabricator.getBlockPos().relative(side);
 
-        if (!world.isBlockPresent(adjacentPos))
+        if (!world.isLoaded(adjacentPos))
             return LazyOptional.empty();
 
-        TileEntity adjacentTile = world.getTileEntity(adjacentPos);
+        TileEntity adjacentTile = world.getBlockEntity(adjacentPos);
         return adjacentTile != null ? adjacentTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite()) : LazyOptional.empty();
     }
 
@@ -105,7 +105,7 @@ public class FabricatorLogic
             if (items.isEmpty())
             {
                 pendingItems.remove(side);
-                fabricator.markDirty();
+                fabricator.setChanged();
             }
 
             if (pendingItems.isEmpty())
@@ -133,7 +133,7 @@ public class FabricatorLogic
             return;
 
         addPendingItem(side, remainder);
-        fabricator.markDirty();
+        fabricator.setChanged();
         checkedSides.removeAll(pendingSides);
     }
 
@@ -151,13 +151,13 @@ public class FabricatorLogic
             return;
 
         for (int slot = 0; slot < ingredients.length; slot++)
-            craftingInventory.setInventorySlotContents(slot, ingredients[slot].stack());
+            craftingInventory.setItem(slot, ingredients[slot].stack());
 
         FakePlayer player = fabricator.player();
-        BlockPos pos = fabricator.getPos();
+        BlockPos pos = fabricator.getBlockPos();
 
-        player.setRawPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
-        craftingResult.onCrafting(fabricator.getWorld(), player, craftingResult.getCount());
+        player.setPosRaw(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+        craftingResult.onCraftedBy(fabricator.getLevel(), player, craftingResult.getCount());
         BasicEventHooks.firePlayerCraftingEvent(player, craftingResult, craftingInventory);
 
         ForgeHooks.setCraftingPlayer(player);
@@ -171,9 +171,9 @@ public class FabricatorLogic
 
         PlayerInventory playerInventory = player.inventory;
 
-        for (int slot = 0; slot < playerInventory.getSizeInventory(); slot++)
+        for (int slot = 0; slot < playerInventory.getContainerSize(); slot++)
         {
-            ItemStack stack = playerInventory.getStackInSlot(slot);
+            ItemStack stack = playerInventory.getItem(slot);
 
             if (!stack.isEmpty())
                 tryInsertItem(fabricator.inventory(), stack);
@@ -187,9 +187,9 @@ public class FabricatorLogic
                 tryInsertItem(ingredients[slot], stack);
         }
 
-        playerInventory.clear();
+        playerInventory.clearContent();
         pendingSides.clear();
-        craftingInventory.clear();
+        craftingInventory.clearContent();
     }
 
     @Nullable
@@ -263,10 +263,10 @@ public class FabricatorLogic
 
     public void dropPendingItems()
     {
-        BlockPos pos = fabricator.getPos();
+        BlockPos pos = fabricator.getBlockPos();
 
         for (ObjectList<ItemStack> items : pendingItems.values())
-            items.forEach(stack -> InventoryHelper.spawnItemStack(fabricator.getWorld(), pos.getX(), pos.getY(), pos.getZ(), stack));
+            items.forEach(stack -> InventoryHelper.dropItemStack(fabricator.getLevel(), pos.getX(), pos.getY(), pos.getZ(), stack));
     }
 
     public void load(CompoundNBT tag)
@@ -281,7 +281,7 @@ public class FabricatorLogic
             CompoundNBT pendingItemTag = pendingItemTags.getCompound(i);
             Direction side = ZYConstants.DIRECTIONS[pendingItemTag.getInt("Side")];
 
-            addPendingItem(side, ItemStack.read(pendingItemTag));
+            addPendingItem(side, ItemStack.of(pendingItemTag));
         }
     }
 
@@ -295,8 +295,8 @@ public class FabricatorLogic
             {
                 CompoundNBT pendingItemTag = new CompoundNBT();
 
-                pendingItemTag.putInt("Side", side.getIndex());
-                stack.write(pendingItemTag);
+                pendingItemTag.putInt("Side", side.get3DDataValue());
+                stack.save(pendingItemTag);
                 pendingItemTags.add(pendingItemTag);
             }
         });

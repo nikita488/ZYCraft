@@ -33,21 +33,21 @@ public class ColorableTile extends ZYTile implements IColorable
     public void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb)
     {
         this.color = Color.fromRGB(rgb);
-        markDirty();
+        setChanged();
         sendUpdated();
     }
 
     @Override
-    public void read(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundNBT tag)
     {
-        super.read(state, tag);
+        super.load(state, tag);
         this.color = Color.load(tag);
     }
 
     @Override
-    public CompoundNBT write(CompoundNBT tag)
+    public CompoundNBT save(CompoundNBT tag)
     {
-        super.write(tag);
+        super.save(tag);
         color.save(tag);
         return tag;
     }

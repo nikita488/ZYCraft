@@ -19,10 +19,10 @@ public class FluidVoidBlock extends Block implements IFluidVoid
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
-            voidFluid(world, pos.offset(side));
+            voidFluid(world, pos.relative(side));
     }
 
     @Override

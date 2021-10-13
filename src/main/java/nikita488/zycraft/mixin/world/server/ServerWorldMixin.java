@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ServerWorld.class)
 public class ServerWorldMixin
 {
-    @Inject(method = "onChunkUnloading", at = @At(value = "TAIL"))
-    private void onChunkUnloading(Chunk chunk, CallbackInfo callback)
+    @Inject(method = "unload", at = @At(value = "TAIL"))
+    private void unload(Chunk chunk, CallbackInfo callback)
     {
         MinecraftForge.EVENT_BUS.post(new UnloadChunkEvent(chunk));
     }

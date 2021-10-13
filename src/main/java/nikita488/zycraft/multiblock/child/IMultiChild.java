@@ -68,7 +68,7 @@ public interface IMultiChild
 
     default int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
     {
-        int lightValue = state.getLightValue();
+        int lightValue = state.getLightEmission();
 
         for (MultiBlock multiBlock : parentMultiBlocks())
             lightValue = Math.max(lightValue, multiBlock.getLightValue(state, world, pos));

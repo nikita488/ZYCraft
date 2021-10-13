@@ -21,8 +21,8 @@ public class ZYPackets
         return packet ->
         {
             MultiBlock multiBlock = multiSupplier.get();
-            ((ServerChunkProvider)multiBlock.world().getChunkProvider()).chunkManager.getTrackingPlayers(multiBlock.mainChunk(), false)
-                    .forEach(player -> player.connection.sendPacket(packet));
+            ((ServerChunkProvider)multiBlock.world().getChunkSource()).chunkMap.getPlayers(multiBlock.mainChunk(), false)
+                    .forEach(player -> player.connection.send(packet));
         };
     }
 

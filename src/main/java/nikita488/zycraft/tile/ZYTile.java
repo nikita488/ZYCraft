@@ -19,27 +19,27 @@ public class ZYTile extends TileEntity
         super(type);
     }
 
-    public boolean isUsableByPlayer(PlayerEntity player)
+    public boolean stillValid(PlayerEntity player)
     {
-        return world.getTileEntity(pos) == this && player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64D;
+        return level.getBlockEntity(worldPosition) == this && player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) <= 64D;
     }
 
-    public void updateComparatorOutputLevel()
+    public void updateNeighbourForOutputSignal()
     {
         BlockState state = getBlockState();
 
-        if (!world.isRemote() && state.hasComparatorInputOverride())
-            world.updateComparatorOutputLevel(pos, state.getBlock());
+        if (!level.isClientSide() && state.hasAnalogOutputSignal())
+            level.updateNeighbourForOutputSignal(worldPosition, state.getBlock());
     }
 
     public void sendUpdated()
     {
-        BlockUtils.sendBlockUpdated(world, pos, getBlockState());
+        BlockUtils.sendBlockUpdated(level, worldPosition, getBlockState());
     }
 
     public void blockChanged()
     {
-        BlockUtils.blockChanged(world, pos, getBlockState(), false);
+        BlockUtils.blockChanged(level, worldPosition, getBlockState(), false);
     }
 
     public void decode(CompoundNBT tag) {}
@@ -73,12 +73,12 @@ public class ZYTile extends TileEntity
     public SUpdateTileEntityPacket getUpdatePacket()
     {
         CompoundNBT tag = Util.make(new CompoundNBT(), this::encodeUpdate);
-        return !tag.isEmpty() ? new SUpdateTileEntityPacket(pos, 0, tag) : null;
+        return !tag.isEmpty() ? new SUpdateTileEntityPacket(worldPosition, 0, tag) : null;
     }
 
     @Override
     public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet)
     {
-        decodeUpdate(packet.getNbtCompound());
+        decodeUpdate(packet.getTag());
     }
 }

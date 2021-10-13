@@ -30,7 +30,7 @@ import java.util.function.Supplier;
 
 public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntity, IItemHandlerModifiable
 {
-    private final Supplier<ItemIOMode> mode = () -> getBlockState().get(ItemIOBlock.IO_MODE);
+    private final Supplier<ItemIOMode> mode = () -> getBlockState().getValue(ItemIOBlock.IO_MODE);
     private LazyOptional<IItemHandler> capability = LazyOptional.empty();
     private IItemHandler inventory = EmptyHandler.INSTANCE;
     @Nullable
@@ -44,28 +44,28 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     @Override
     public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (!player.isSneaking())
+        if (!player.isShiftKeyDown())
             return super.onBlockActivated(state, world, pos, player, hand, hit);
 
         nextMode(state);
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     private void nextMode(BlockState state)
     {
         BlockState lastState = state;
 
-        state = state.cycleValue(ItemIOBlock.IO_MODE);
+        state = state.cycle(ItemIOBlock.IO_MODE);
 
-        while (!isSupported(state.get(ItemIOBlock.IO_MODE)))
-            state = state.cycleValue(ItemIOBlock.IO_MODE);
+        while (!isSupported(state.getValue(ItemIOBlock.IO_MODE)))
+            state = state.cycle(ItemIOBlock.IO_MODE);
 
         if (state == lastState)
             return;
 
         if (ioHandler != null)
         {
-            ItemIOMode newMode = state.get(ItemIOBlock.IO_MODE);
+            ItemIOMode newMode = state.getValue(ItemIOBlock.IO_MODE);
 
             ioHandler.setInactive(mode.get());
             ioHandler.setActive(newMode);
@@ -74,7 +74,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
             this.capability = LazyOptional.of(() -> this);
         }
 
-        world.setBlockState(pos, state);
+        level.setBlockAndUpdate(worldPosition, state);
     }
 
     private boolean isSupported(ItemIOMode mode)
@@ -90,7 +90,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     @Override
     public void tick()
     {
-        if (!world.isRemote() && capability.isPresent())
+        if (!level.isClientSide() && capability.isPresent())
             update();
     }
 
@@ -103,7 +103,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
 
     private void eject(BlockPos adjPos, Direction side)
     {
-        TileEntity adjTile = world.getTileEntity(adjPos);
+        TileEntity adjTile = level.getBlockEntity(adjPos);
 
         if (adjTile == null)
             return;
@@ -171,7 +171,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
             this.ioHandler = null;
         }
 
-        updateComparatorOutputLevel();
+        updateNeighbourForOutputSignal();
     }
 
     @Override
@@ -245,7 +245,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     @Override
     public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> type, @Nullable Direction side)
     {
-        return !removed && capability.isPresent() && type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? capability.cast() : super.getCapability(type, side);
+        return !remove && capability.isPresent() && type == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? capability.cast() : super.getCapability(type, side);
     }
 
     @Override

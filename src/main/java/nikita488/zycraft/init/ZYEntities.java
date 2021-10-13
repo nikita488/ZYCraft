@@ -12,11 +12,11 @@ public class ZYEntities
             .properties(properties -> properties
                     .setTrackingRange(10)
                     .setUpdateInterval(Integer.MAX_VALUE)
-                    .size(1F, 1F)
+                    .sized(1F, 1F)
                     .setShouldReceiveVelocityUpdates(false)
-                    .disableSerialization()
-                    .disableSummoning()
-                    .immuneToFire())
+                    .noSave()
+                    .noSummon()
+                    .fireImmune())
             .lang("")
             .renderer(() -> MultiEntityRenderer::new)
             .register();

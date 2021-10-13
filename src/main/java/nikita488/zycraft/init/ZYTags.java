@@ -145,35 +145,35 @@ public class ZYTags
     {
         REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
         {
-            tags.getOrCreateBuilder(Blocks.BASE_ZYCHORIUM_BRICKS).addTags(
+            tags.tag(Blocks.BASE_ZYCHORIUM_BRICKS).addTags(
                     Blocks.BRICKS_ZYCHORIUM,
                     Blocks.BRICKS_SOLID_ZYCHORIUM,
                     Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM,
                     Blocks.BRICKS_ALUMINIZED_ZYCHORIUM);
 
-            tags.getOrCreateBuilder(Blocks.SMALL_ZYCHORIUM_BRICKS).addTags(
+            tags.tag(Blocks.SMALL_ZYCHORIUM_BRICKS).addTags(
                     Blocks.SMALL_BRICKS_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
 
-            tags.getOrCreateBuilder(Blocks.ZYCHORIUM_BRICKS).addTags(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
-            tags.getOrCreateBuilder(Blocks.BASE_VIEWERS).addTags(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
-            tags.getOrCreateBuilder(Blocks.IMMORTAL_VIEWERS).addTags(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
-            tags.getOrCreateBuilder(Blocks.VIEWERS).addTags(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
-            tags.getOrCreateBuilder(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
+            tags.tag(Blocks.ZYCHORIUM_BRICKS).addTags(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
+            tags.tag(Blocks.BASE_VIEWERS).addTags(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
+            tags.tag(Blocks.IMMORTAL_VIEWERS).addTags(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
+            tags.tag(Blocks.VIEWERS).addTags(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
+            tags.tag(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
 
-            tags.getOrCreateBuilder(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
+            tags.tag(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
 
-            tags.getOrCreateBuilder(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
-            tags.getOrCreateBuilder(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
-            tags.getOrCreateBuilder(Tags.Blocks.GLASS_COLORLESS).addTag(Blocks.BASE_VIEWERS);
-            tags.getOrCreateBuilder(Tags.Blocks.STAINED_GLASS).addTag(Blocks.IMMORTAL_VIEWERS);
-            tags.getOrCreateBuilder(Tags.Blocks.DIRT).addItemEntry(ZYBlocks.ZYCHORIUM_SOIL.get());
+            tags.tag(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
+            tags.tag(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
+            tags.tag(Tags.Blocks.GLASS_COLORLESS).addTag(Blocks.BASE_VIEWERS);
+            tags.tag(Tags.Blocks.STAINED_GLASS).addTag(Blocks.IMMORTAL_VIEWERS);
+            tags.tag(Tags.Blocks.DIRT).add(ZYBlocks.ZYCHORIUM_SOIL.get());
 
-            tags.getOrCreateBuilder(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
-            tags.getOrCreateBuilder(BlockTags.WITHER_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
-            tags.getOrCreateBuilder(BlockTags.DRAGON_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
+            tags.tag(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
+            tags.tag(BlockTags.WITHER_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
+            tags.tag(BlockTags.DRAGON_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);
         });
 
         REGISTRATE.addDataGenerator(ProviderType.ITEM_TAGS, tags ->
@@ -220,17 +220,17 @@ public class ZYTags
 
             for (ZYType type : ZYType.VALUES)
             {
-                tags.getOrCreateBuilder(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ZYCHORIZED_ENGINEERING_BLOCK.get(type).get().asItem());
-                tags.getOrCreateBuilder(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ALUMINIZED_ENGINEERING_BLOCK.get(type).get().asItem());
+                tags.tag(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ZYCHORIZED_ENGINEERING_BLOCK.get(type).get().asItem());
+                tags.tag(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ALUMINIZED_ENGINEERING_BLOCK.get(type).get().asItem());
             }
 
             tags.copy(Blocks.BASIC_MACHINES, Items.BASIC_MACHINES);
 
-            tags.getOrCreateBuilder(Tags.Items.ORES).addTags(Items.ORES_ZYCHORIUM, Items.ORES_ALUMINIUM, Items.ORES_ALUMINUM);
-            tags.getOrCreateBuilder(Tags.Items.STORAGE_BLOCKS).addTag(Items.STORAGE_BLOCKS_ZYCHORIUM);
-            tags.getOrCreateBuilder(Tags.Items.GLASS_COLORLESS).addTag(Items.BASE_VIEWERS);
-            tags.getOrCreateBuilder(Tags.Items.STAINED_GLASS).addTag(Items.IMMORTAL_VIEWERS);
-            tags.getOrCreateBuilder(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
+            tags.tag(Tags.Items.ORES).addTags(Items.ORES_ZYCHORIUM, Items.ORES_ALUMINIUM, Items.ORES_ALUMINUM);
+            tags.tag(Tags.Items.STORAGE_BLOCKS).addTag(Items.STORAGE_BLOCKS_ZYCHORIUM);
+            tags.tag(Tags.Items.GLASS_COLORLESS).addTag(Items.BASE_VIEWERS);
+            tags.tag(Tags.Items.STAINED_GLASS).addTag(Items.IMMORTAL_VIEWERS);
+            tags.tag(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
         });
     }
 }

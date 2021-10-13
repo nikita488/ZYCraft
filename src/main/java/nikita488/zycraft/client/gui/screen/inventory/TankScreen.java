@@ -20,28 +20,28 @@ public class TankScreen extends ZYScreen<TankContainer>
     public TankScreen(TankContainer container, PlayerInventory inventory, ITextComponent title)
     {
         super(container, inventory, title);
-        this.ySize = 188;
+        this.imageHeight = 188;
     }
 
     @Override
     protected void init()
     {
         super.init();
-        addButton(new FluidGaugeWidget(guiLeft + 24, guiTop + 24, container.fluidData(), container.capacity()));
+        addButton(new FluidGaugeWidget(leftPos + 24, topPos + 24, menu.fluidData(), menu.capacity()));
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         renderGUI(stack, TEXTURE, Color.argb(ZYType.BLUE.rgb(), 255));
 
         bindTexture(GuiComponentManager.ATLAS_ID);
-        renderGuiComponentWithColor(stack, guiLeft + 122, guiTop + 57, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
-        renderGuiComponentWithColor(stack, guiLeft + 97, guiTop + 53, 0.25F, GuiComponent.DROP, 0xFF0097DD);
+        renderGuiComponentWithColor(stack, leftPos + 122, topPos + 57, 0.25F, GuiComponent.RIGHT_ARROW, 0x7F00FFFF);
+        renderGuiComponentWithColor(stack, leftPos + 97, topPos + 53, 0.25F, GuiComponent.DROP, 0xFF0097DD);
 
-        renderIOSlotOverlays(stack, guiLeft, guiTop, container.slotOverlays(), container.ioData());
+        renderIOSlotOverlays(stack, leftPos, topPos, menu.slotOverlays(), menu.ioData());
         RenderSystem.disableBlend();
     }
 }

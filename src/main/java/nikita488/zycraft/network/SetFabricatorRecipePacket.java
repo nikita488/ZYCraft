@@ -47,9 +47,9 @@ public class SetFabricatorRecipePacket
         this.recipeID = buf.readResourceLocation();
 
         for (int slot = 0; slot < 9; slot++)
-            recipePattern.set(slot, buf.readItemStack());
+            recipePattern.set(slot, buf.readItem());
 
-        this.craftingResult = buf.readItemStack();
+        this.craftingResult = buf.readItem();
     }
 
     public static SetFabricatorRecipePacket decode(PacketBuffer buf)
@@ -63,9 +63,9 @@ public class SetFabricatorRecipePacket
         buf.writeResourceLocation(msg.recipeID());
 
         for (int slot = 0; slot < 9; slot++)
-            buf.writeItemStack(msg.recipePattern().get(slot));
+            buf.writeItem(msg.recipePattern().get(slot));
 
-        buf.writeItemStack(msg.craftingResult());
+        buf.writeItem(msg.craftingResult());
     }
 
     public static boolean handle(SetFabricatorRecipePacket msg, Supplier<NetworkEvent.Context> ctx)
@@ -77,11 +77,11 @@ public class SetFabricatorRecipePacket
             if (player == null)
                 return;
 
-            player.markPlayerActive();
+            player.resetLastActionTime();
 
-            Container container = player.openContainer;
+            Container container = player.containerMenu;
 
-            if (container.windowId == msg.windowID() && container.getCanCraft(player) && container instanceof FabricatorContainer && !player.isSpectator())
+            if (container.containerId == msg.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
             {
                 FabricatorTile fabricator = ((FabricatorContainer)container).tile();
 
@@ -89,9 +89,9 @@ public class SetFabricatorRecipePacket
                     return;
 
                 for (int slot = 0; slot < 9; slot++)
-                    fabricator.recipePattern().setInventorySlotContents(slot, msg.recipePattern().get(slot));
+                    fabricator.recipePattern().setItem(slot, msg.recipePattern().get(slot));
 
-                ICraftingRecipe recipe = (ICraftingRecipe)player.getServerWorld().getRecipeManager().getRecipe(msg.recipeID()).orElse(null);
+                ICraftingRecipe recipe = (ICraftingRecipe)player.getLevel().getRecipeManager().byKey(msg.recipeID()).orElse(null);
 
                 fabricator.setCraftingRecipeAndResult(recipe, msg.craftingResult());
             }

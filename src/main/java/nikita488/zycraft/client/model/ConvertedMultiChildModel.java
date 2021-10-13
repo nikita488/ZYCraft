@@ -71,16 +71,16 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
             if (initialState == null || getter == null || pos == null || !RenderTypeLookup.canRenderInLayer(initialState, layer))
                 return Collections.emptyList();
 
-            BlockState adjacentState = getter.getBlockState(ADJACENT_POS.setAndMove(pos, side));
-            IBakedModel model = mc.getBlockRendererDispatcher().getModelForState(initialState);
+            BlockState adjacentState = getter.getBlockState(ADJACENT_POS.setWithOffset(pos, side));
+            IBakedModel model = mc.getBlockRenderer().getBlockModel(initialState);
 
-            return !initialState.isSideInvisible(adjacentState, side) ?
+            return !initialState.skipRendering(adjacentState, side) ?
                     model.getQuads(initialState, side, random, model.getModelData(getter, pos, initialState, modelData)) :
                     Collections.emptyList();
         }
 
         @Override
-        public boolean isAmbientOcclusion()
+        public boolean useAmbientOcclusion()
         {
             return true;
         }
@@ -92,19 +92,19 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
         }
 
         @Override
-        public boolean isSideLit()
+        public boolean usesBlockLight()
         {
             return false;
         }
 
         @Override
-        public boolean isBuiltInRenderer()
+        public boolean isCustomRenderer()
         {
             return false;
         }
 
         @Override
-        public TextureAtlasSprite getParticleTexture()
+        public TextureAtlasSprite getParticleIcon()
         {
             return missingSprite;
         }
@@ -119,7 +119,7 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
             if (initialState == null || getter == null || pos == null)
                 return missingSprite;
 
-            IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(initialState);
+            IBakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(initialState);
             return model.getParticleTexture(model.getModelData(getter, pos, initialState, modelData));
         }
 

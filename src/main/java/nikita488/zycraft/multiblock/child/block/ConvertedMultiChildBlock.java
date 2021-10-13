@@ -50,7 +50,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     public ConvertedMultiChildBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(USE_SHAPE_FOR_LIGHT_OCCLUSION, false).with(SIGNAL_SOURCE, false).with(HAS_ANALOG_OUTPUT_SIGNAL, false));
+        registerDefaultState(defaultBlockState().setValue(USE_SHAPE_FOR_LIGHT_OCCLUSION, false).setValue(SIGNAL_SOURCE, false).setValue(HAS_ANALOG_OUTPUT_SIGNAL, false));
     }
 
     @Nullable
@@ -62,18 +62,18 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     private static BlockState getState(IBlockReader world, BlockPos pos)
     {
-        TileEntity tile = world.getTileEntity(pos);
-        return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : Blocks.AIR.getDefaultState();
+        TileEntity tile = world.getBlockEntity(pos);
+        return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : Blocks.AIR.defaultBlockState();
     }
     //AbstractBlock.Properties methods
     public static boolean isValidSpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
     {
-        return getState(world, pos).canEntitySpawn(world, pos, type);
+        return getState(world, pos).isValidSpawn(world, pos, type);
     }
 
     public static boolean isRedstoneConductor(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).isNormalCube(world, pos);
+        return getState(world, pos).isRedstoneConductor(world, pos);
     }
 
     public static boolean isSuffocating(BlockState state, IBlockReader world, BlockPos pos)
@@ -83,12 +83,12 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     public static boolean isViewBlocking(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).shouldBlockVision(world, pos);
+        return getState(world, pos).isViewBlocking(world, pos);
     }
 
     public static boolean emissiveRendering(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).isEmissiveRendering(world, pos);
+        return getState(world, pos).emissiveRendering(world, pos);
     }
     //AbstactBlock methods
 /*    //TODO: Probably remove
@@ -132,10 +132,10 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        getState(world, pos).onReplaced(world, pos, newState, isMoving);
-        super.onReplaced(state, world, pos, newState, isMoving);
+        getState(world, pos).onRemove(world, pos, newState, isMoving);
+        super.onRemove(state, world, pos, newState, isMoving);
     }
 
 /*    //TODO: Probably remove
@@ -153,31 +153,31 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public boolean isTransparent(BlockState state)
+    public boolean useShapeForLightOcclusion(BlockState state)
     {
-        return state.get(USE_SHAPE_FOR_LIGHT_OCCLUSION);
+        return state.getValue(USE_SHAPE_FOR_LIGHT_OCCLUSION);
     }
 
     @Override
-    public boolean canProvidePower(BlockState state)
+    public boolean isSignalSource(BlockState state)
     {
-        return state.get(SIGNAL_SOURCE);
+        return state.getValue(SIGNAL_SOURCE);
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state)
+    public boolean hasAnalogOutputSignal(BlockState state)
     {
-        return state.get(HAS_ANALOG_OUTPUT_SIGNAL);
+        return state.getValue(HAS_ANALOG_OUTPUT_SIGNAL);
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, BlockItemUseContext ctx)
+    public boolean canBeReplaced(BlockState state, BlockItemUseContext ctx)
     {
         return false;
     }
 
     @Override
-    public boolean isReplaceable(BlockState state, Fluid fluid)
+    public boolean canBeReplaced(BlockState state, Fluid fluid)
     {
         return false;
     }
@@ -185,14 +185,14 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        TileEntity tile = builder.get(LootParameters.BLOCK_ENTITY);
+        TileEntity tile = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
         return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState().getDrops(builder) : super.getDrops(state, builder);
     }
 
     @Override
-    public int getOpacity(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).getOpacity(world, pos);
+        return getState(world, pos).getLightBlock(world, pos);
     }
 
 /*    //TODO: Probably remove
@@ -212,15 +212,15 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public float getAmbientOcclusionLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).getAmbientOcclusionLightValue(world, pos);
+        return getState(world, pos).getShadeBrightness(world, pos);
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
     {
-        return getState(world, pos).getComparatorInputOverride(world, pos);
+        return getState(world, pos).getAnalogOutputSignal(world, pos);
     }
 
 /*    //TODO: Probably remove
@@ -238,15 +238,15 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public float getPlayerRelativeBlockHardness(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos)
+    public float getDestroyProgress(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos)
     {
-        return getState(world, pos).getPlayerRelativeBlockHardness(player, world, pos);
+        return getState(world, pos).getDestroyProgress(player, world, pos);
     }
 
     @Override
-    public void spawnAdditionalDrops(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack)
+    public void spawnAfterBreak(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack)
     {
-        getState(world, pos).spawnAdditionalDrops(world, pos, stack);
+        getState(world, pos).spawnAfterBreak(world, pos, stack);
     }
 
 /*    //TODO: Probably remove?
@@ -257,27 +257,27 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public int getWeakPower(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getWeakPower(world, pos, side);
+        return getState(world, pos).getSignal(world, pos, side);
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+    public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
     {
-        getState(world, pos).onEntityCollision(world, pos, entity);
+        getState(world, pos).entityInside(world, pos, entity);
     }
 
     @Override
-    public int getStrongPower(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getDirectSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getStrongPower(world, pos, side);
+        return getState(world, pos).getDirectSignal(world, pos, side);
     }
 
     @Override
-    public void onProjectileCollision(World world, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile)
+    public void onProjectileHit(World world, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile)
     {
-        getState(world, hit.getPos()).onProjectileCollision(world, state, hit, projectile);
+        getState(world, hit.getBlockPos()).onProjectileHit(world, state, hit, projectile);
     }
     //Block methods
 /*    //TODO: Probably remove
@@ -301,51 +301,51 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void onPlayerDestroy(IWorld world, BlockPos pos, BlockState state) 
+    public void destroy(IWorld world, BlockPos pos, BlockState state) 
     {
-        getState(world, pos).getBlock().onPlayerDestroy(world, pos, state);
+        getState(world, pos).getBlock().destroy(world, pos, state);
     }
 
     @Override
-    public void dropXpOnBlockBreak(ServerWorld world, BlockPos pos, int amount) 
+    public void popExperience(ServerWorld world, BlockPos pos, int amount) 
     {
-        getState(world, pos).getBlock().dropXpOnBlockBreak(world, pos, amount);
+        getState(world, pos).getBlock().popExperience(world, pos, amount);
     }
 
     @Override
-    public void onExplosionDestroy(World world, BlockPos pos, Explosion explosion) 
+    public void wasExploded(World world, BlockPos pos, Explosion explosion) 
     {
-        getState(world, pos).getBlock().onExplosionDestroy(world, pos, explosion);
+        getState(world, pos).getBlock().wasExploded(world, pos, explosion);
     }
 
     @Override
-    public void onEntityWalk(World world, BlockPos pos, Entity entity) 
+    public void stepOn(World world, BlockPos pos, Entity entity) 
     {
-        getState(world, pos).getBlock().onEntityWalk(world, pos, entity);
+        getState(world, pos).getBlock().stepOn(world, pos, entity);
     }
 
     @Override
-    public void harvestBlock(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tile, ItemStack stack)
+    public void playerDestroy(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tile, ItemStack stack)
     {
-        getState(world, pos).getBlock().harvestBlock(world, player, pos, state, tile, stack);
+        getState(world, pos).getBlock().playerDestroy(world, player, pos, state, tile, stack);
     }
 
     @Override
-    public void onFallenUpon(World world, BlockPos pos, Entity entity, float fallDistance) 
+    public void fallOn(World world, BlockPos pos, Entity entity, float fallDistance) 
     {
-        getState(world, pos).getBlock().onFallenUpon(world, pos, entity, fallDistance);
+        getState(world, pos).getBlock().fallOn(world, pos, entity, fallDistance);
     }
 
     @Override
-    public void onLanded(IBlockReader world, Entity entity) 
+    public void updateEntityAfterFallOn(IBlockReader world, Entity entity) 
     {
-        getState(world, entity.getPosition()).getBlock().onLanded(world, entity);
+        getState(world, entity.blockPosition()).getBlock().updateEntityAfterFallOn(world, entity);
     }
 
     @Override
-    public void onBlockHarvested(World world, BlockPos pos, BlockState state, PlayerEntity player) 
+    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) 
     {
-        getState(world, pos).getBlock().onBlockHarvested(world, pos, state, player);
+        getState(world, pos).getBlock().playerWillDestroy(world, pos, state, player);
     }
 
 /*    //TODO: Probably remove
@@ -449,7 +449,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     @OnlyIn(Dist.CLIENT)
     public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
     {
-        return getState(world, ((BlockRayTraceResult)target).getPos()).addHitEffects(world, target, manager);
+        return getState(world, ((BlockRayTraceResult)target).getBlockPos()).addHitEffects(world, target, manager);
     }
 
     @Override
@@ -621,7 +621,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(USE_SHAPE_FOR_LIGHT_OCCLUSION, SIGNAL_SOURCE, HAS_ANALOG_OUTPUT_SIGNAL);
     }

@@ -9,7 +9,7 @@ public class UnloadChunkEvent extends WorldEvent
 
     public UnloadChunkEvent(Chunk chunk)
     {
-        super(chunk.getWorld());
+        super(chunk.getLevel());
         this.chunk = chunk;
     }
 

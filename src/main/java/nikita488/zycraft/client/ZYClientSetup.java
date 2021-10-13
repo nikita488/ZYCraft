@@ -38,7 +38,7 @@ public class ZYClientSetup
 
         event.enqueueWork(() ->
         {
-            ItemModelsProperties.registerProperty(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
+            ItemModelsProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
             {
                 FluidStack fluidStack = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
 
@@ -64,8 +64,8 @@ public class ZYClientSetup
     {
         Minecraft mc = Minecraft.getInstance();
 
-        mc.particles.registerFactory(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
-        ((IReloadableResourceManager)mc.getResourceManager()).addReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
+        mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
+        ((IReloadableResourceManager)mc.getResourceManager()).registerReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
     }
 
     public static GuiComponentManager guiComponentManager()

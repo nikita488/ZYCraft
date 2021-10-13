@@ -42,33 +42,33 @@ public class MultiHighlightRenderer
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        RayTraceResult hitResult = mc.objectMouseOver;
+        RayTraceResult hitResult = mc.hitResult;
 
         if (hitResult != null && hitResult.getType() == RayTraceResult.Type.BLOCK)
             return;
 
-        World world = mc.world;
+        World world = mc.level;
 
         if (world != null && (world.getGameTime() - lastTime) > 10)
-            LAST_POS.setPos(BlockPos.ZERO);
+            LAST_POS.set(BlockPos.ZERO);
     }
 
     private static void onWorldUnload(WorldEvent.Unload event)
     {
-        if (event.getWorld().isRemote())
-            LAST_POS.setPos(BlockPos.ZERO);
+        if (event.getWorld().isClientSide())
+            LAST_POS.set(BlockPos.ZERO);
     }
 
     private static void onDrawBlockHighlight(DrawHighlightEvent.HighlightBlock event)
     {
-        World world = event.getInfo().getRenderViewEntity().getEntityWorld();
-        BlockPos highlightPos = event.getTarget().getPos();
-        TileEntity tile = world.getTileEntity(highlightPos);
+        World world = event.getInfo().getEntity().getCommandSenderWorld();
+        BlockPos highlightPos = event.getTarget().getBlockPos();
+        TileEntity tile = world.getBlockEntity(highlightPos);
         long time = world.getGameTime();
 
         if (!LAST_POS.equals(highlightPos))
         {
-            LAST_POS.setPos(highlightPos);
+            LAST_POS.set(highlightPos);
             startTime = time;
         }
 
@@ -93,69 +93,69 @@ public class MultiHighlightRenderer
                 highlightBlocks.addAll(multiBlock.childBlocks());
 
             MatrixStack stack = event.getMatrix();
-            Vector3d cameraPos = event.getInfo().getProjectedView();
+            Vector3d cameraPos = event.getInfo().getPosition();
 
-            stack.push();
-            stack.translate(-cameraPos.getX(), -cameraPos.getY(), -cameraPos.getZ());
+            stack.pushPose();
+            stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
 
             IVertexBuilder buffer = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
 
             for (BlockPos pos : highlightBlocks)
                 for (Direction side : ZYConstants.DIRECTIONS)
-                    if (!highlightBlocks.contains(ADJACENT_POS.setAndMove(pos, side)))
+                    if (!highlightBlocks.contains(ADJACENT_POS.setWithOffset(pos, side)))
                         renderHighlightQuad(stack, buffer, pos, side, 0.3F * strength);
 
-            stack.pop();
+            stack.popPose();
         }
     }
 
     private static void renderHighlightQuad(MatrixStack stack, IVertexBuilder buffer, BlockPos pos, Direction side, float alpha)
     {
-        stack.push();
+        stack.pushPose();
         stack.translate(pos.getX(), pos.getY(), pos.getZ());
 
-        Matrix4f matrix = stack.getLast().getMatrix();
+        Matrix4f matrix = stack.last().pose();
 
         switch (side)
         {
             case DOWN:
-                buffer.pos(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
-                buffer.pos(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
                 break;
             case UP:
-                buffer.pos(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
-                buffer.pos(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
                 break;
             case NORTH:
-                buffer.pos(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
-                buffer.pos(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
                 break;
             case SOUTH:
-                buffer.pos(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
                 break;
             case WEST:
-                buffer.pos(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
-                buffer.pos(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MAX).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MAX, MIN).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MIN).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
+                buffer.vertex(matrix, MIN, MIN, MAX).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
                 break;
             case EAST:
-                buffer.pos(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).tex(1F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).tex(0F, 0F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).tex(0F, 1F).endVertex();
-                buffer.pos(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).tex(1F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MIN).color(1F, 1F, 1F, alpha).uv(1F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MAX, MAX).color(1F, 1F, 1F, alpha).uv(0F, 0F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MAX).color(1F, 1F, 1F, alpha).uv(0F, 1F).endVertex();
+                buffer.vertex(matrix, MAX, MIN, MIN).color(1F, 1F, 1F, alpha).uv(1F, 1F).endVertex();
                 break;
         }
 
-        stack.pop();
+        stack.popPose();
     }
 }

@@ -30,7 +30,7 @@ public class FabricatorBlock extends Block
     public FabricatorBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(MODE, FabricatorMode.AUTO_LOW));
+        registerDefaultState(defaultBlockState().setValue(MODE, FabricatorMode.AUTO_LOW));
     }
 
     @Override
@@ -49,19 +49,19 @@ public class FabricatorBlock extends Block
     @Override
     public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos adjPos)
     {
-        if (world.isRemote())
+        if (world.isClientSide())
             return;
 
-        Direction side = Direction.getFacingFromVector(adjPos.getX() - pos.getX(), adjPos.getY() - pos.getY(), adjPos.getZ() - pos.getZ());
+        Direction side = Direction.getNearest(adjPos.getX() - pos.getX(), adjPos.getY() - pos.getY(), adjPos.getZ() - pos.getZ());
 
         if (side != Direction.UP)
             ZYTiles.FABRICATOR.get(world, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
     }
 
     @Override
-    public void onReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        if (world.isRemote() || state.matchesBlock(newState.getBlock()))
+        if (world.isClientSide() || state.is(newState.getBlock()))
             return;
 
         FabricatorTile fabricator = ZYTiles.FABRICATOR.getNullable(world, pos);
@@ -69,34 +69,34 @@ public class FabricatorBlock extends Block
         if (fabricator != null)
         {
             fabricator.dropItems();
-            world.updateComparatorOutputLevel(pos, this);
+            world.updateNeighbourForOutputSignal(pos, this);
         }
 
-        super.onReplaced(state, world, pos, newState, isMoving);
+        super.onRemove(state, world, pos, newState, isMoving);
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state)
+    public boolean hasAnalogOutputSignal(BlockState state)
     {
         return true;
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
     {
         return ZYTiles.FABRICATOR.get(world, pos).map(FabricatorTile::getComparatorInputOverride).orElse(0);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (!world.isRemote())
+        if (!world.isClientSide())
             NetworkHooks.openGui((ServerPlayerEntity)player, ZYTiles.FABRICATOR.getNullable(world, pos));
-        return ActionResultType.func_233537_a_(world.isRemote());
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
         builder.add(MODE);
     }

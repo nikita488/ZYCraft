@@ -32,15 +32,15 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
 
             int x = pos.getX() + random.nextInt(16);
             int z = pos.getZ() + random.nextInt(16);
-            int surfaceHeight = Math.min(helper.func_242893_a(Heightmap.Type.OCEAN_FLOOR_WG, x, z), helper.func_242893_a(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z));
+            int surfaceHeight = Math.min(helper.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, x, z), helper.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z));
 
             if (surfaceHeight <= 0)
                 continue;
 
-            POS.setPos(x, random.nextInt(surfaceHeight), z);
+            POS.set(x, random.nextInt(surfaceHeight), z);
 
-            if (helper.func_242894_a(POS).getBlock() == Blocks.CAVE_AIR)
-                clusters.add(POS.toImmutable());
+            if (helper.getBlockState(POS).getBlock() == Blocks.CAVE_AIR)
+                clusters.add(POS.immutable());
         }
 
         return clusters.stream();

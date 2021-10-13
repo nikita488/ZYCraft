@@ -20,12 +20,12 @@ import java.util.Arrays;
 public enum MultiChildType implements IMultiChildMatcher
 {
     AIR(ZYBlocks.MULTI_AIR, (state, world, pos) -> state.isAir() || state.isAir(world, pos)),
-    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, world, pos) -> state.hasOpaqueCollisionShape(world, pos) && state.isOpaqueCube(world, pos) &&
+    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
             Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(world, pos, side))),
-    HARD(ZYBlocks.HARD_BLOCK, (state, world, pos) -> state.hasOpaqueCollisionShape(world, pos) && state.isOpaqueCube(world, pos) &&
-            state.getRequiresTool()),
-    GLASS(ZYBlocks.GLASS_BLOCK, (state, world, pos) -> state.hasOpaqueCollisionShape(world, pos) && !state.isOpaqueCube(world, pos) &&
-            (state.getMaterial() == Material.GLASS || state.getMaterial() == Material.REDSTONE_LIGHT));
+    HARD(ZYBlocks.HARD_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
+            state.requiresCorrectToolForDrops()),
+    GLASS(ZYBlocks.GLASS_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && !state.isSolidRender(world, pos) &&
+            (state.getMaterial() == Material.GLASS || state.getMaterial() == Material.BUILDABLE_GLASS));
 
     public static final MultiChildType[] VALUES = values();
     private final NonNullSupplier<? extends Block> blockSupplier;
@@ -61,16 +61,16 @@ public enum MultiChildType implements IMultiChildMatcher
         if (type == null)
             return false;
 
-        BlockState childState = type.block().getDefaultState();
+        BlockState childState = type.block().defaultBlockState();
 
         if (childState.getBlock() instanceof ConvertedMultiChildBlock)
-            childState = childState.with(ConvertedMultiChildBlock.USE_SHAPE_FOR_LIGHT_OCCLUSION, state.isTransparent())
-                    .with(ConvertedMultiChildBlock.HAS_ANALOG_OUTPUT_SIGNAL, state.hasComparatorInputOverride())
-                    .with(ConvertedMultiChildBlock.SIGNAL_SOURCE, state.canProvidePower());
+            childState = childState.setValue(ConvertedMultiChildBlock.USE_SHAPE_FOR_LIGHT_OCCLUSION, state.useShapeForLightOcclusion())
+                    .setValue(ConvertedMultiChildBlock.HAS_ANALOG_OUTPUT_SIGNAL, state.hasAnalogOutputSignal())
+                    .setValue(ConvertedMultiChildBlock.SIGNAL_SOURCE, state.isSignalSource());
 
-        world.setBlockState(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
+        world.setBlock(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
 
-        TileEntity tile = world.getTileEntity(pos);
+        TileEntity tile = world.getBlockEntity(pos);
 
         if (!(tile instanceof IMultiChild))
             return false;

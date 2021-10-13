@@ -252,7 +252,7 @@ public class Color
 
     public static int hsvToRGB(float h, float s, float v)
     {
-        return MathHelper.hsvToRGB(h, s, v);
+        return MathHelper.hsvToRgb(h, s, v);
     }
 
     private static int wrap(int value)

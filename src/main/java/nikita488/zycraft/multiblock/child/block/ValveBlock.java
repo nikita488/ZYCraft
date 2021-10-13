@@ -28,7 +28,7 @@ public class ValveBlock extends MultiInterfaceBlock
     public ValveBlock(Properties properties)
     {
         super(properties);
-        setDefaultState(getDefaultState().with(IO_MODE, ValveIOMode.IN));
+        registerDefaultState(defaultBlockState().setValue(IO_MODE, ValveIOMode.IN));
     }
 
     @Override
@@ -46,25 +46,25 @@ public class ValveBlock extends MultiInterfaceBlock
     }
 
     @Override
-    public boolean hasComparatorInputOverride(BlockState state)
+    public boolean hasAnalogOutputSignal(BlockState state)
     {
         return true;
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
     {
-        if (!player.isSneaking())
-            return super.onBlockActivated(state, world, pos, player, hand, hit);
+        if (!player.isShiftKeyDown())
+            return super.use(state, world, pos, player, hand, hit);
 
-        world.setBlockState(pos, state.cycleValue(IO_MODE));
-        return ActionResultType.func_233537_a_(world.isRemote());
+        world.setBlockAndUpdate(pos, state.cycle(IO_MODE));
+        return ActionResultType.sidedSuccess(world.isClientSide());
     }
 
     @Override
-    protected void fillStateContainer(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        super.fillStateContainer(builder);
+        super.createBlockStateDefinition(builder);
         builder.add(IO_MODE);
     }
 }

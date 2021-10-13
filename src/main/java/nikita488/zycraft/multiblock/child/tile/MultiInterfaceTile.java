@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 public class MultiInterfaceTile extends MultiChildTile
 {
     public static final EnumProperty<InterfaceAxis> AXIS = ZYBlockStateProperties.INTERFACE_AXIS;
-    private final Supplier<InterfaceAxis> axis = () -> getBlockState().get(AXIS);
+    private final Supplier<InterfaceAxis> axis = () -> getBlockState().getValue(AXIS);
     private boolean updateAxis;
     @Nullable
     private Direction validSide;
@@ -29,7 +29,7 @@ public class MultiInterfaceTile extends MultiChildTile
 
     protected void update()
     {
-        if (world.isRemote() || parentCount() != 1)
+        if (level.isClientSide() || parentCount() != 1)
             return;
 
         updateAxis();
@@ -39,9 +39,9 @@ public class MultiInterfaceTile extends MultiChildTile
             if (validSide != null && side != validSide)
                 continue;
 
-            BlockPos adjPos = pos.offset(side);
+            BlockPos adjPos = worldPosition.relative(side);
 
-            if (world.isBlockPresent(adjPos))
+            if (level.isLoaded(adjPos))
                 processAdjacentPos(adjPos, side);
 
             if (validSide != null)
@@ -61,12 +61,12 @@ public class MultiInterfaceTile extends MultiChildTile
 
         for (Direction side : ZYConstants.DIRECTIONS)
         {
-            BlockPos adjPos = pos.offset(side);
+            BlockPos adjPos = worldPosition.relative(side);
 
-            if (!world.isBlockPresent(adjPos))
+            if (!level.isLoaded(adjPos))
                 continue;
 
-            TileEntity adjTile = world.getTileEntity(adjPos);
+            TileEntity adjTile = level.getBlockEntity(adjPos);
 
             if (adjTile instanceof IMultiChild && ((IMultiChild)adjTile).hasParent(getParent()))
                 continue;
@@ -87,9 +87,9 @@ public class MultiInterfaceTile extends MultiChildTile
     public void onMultiValidation(MultiBlock multiBlock)
     {
         super.onMultiValidation(multiBlock);
-        multiBlock.addInterface(pos);
+        multiBlock.addInterface(worldPosition);
 
-        if (!world.isRemote() && parentCount() == 1)
+        if (!level.isClientSide() && parentCount() == 1)
             this.updateAxis = true;
     }
 
@@ -98,7 +98,7 @@ public class MultiInterfaceTile extends MultiChildTile
     {
         super.onMultiInvalidation(multiBlock);
 
-        if (!world.isRemote() && !hasParents() && hasAxis() && axis.get() != InterfaceAxis.ALL)
+        if (!level.isClientSide() && !hasParents() && hasAxis() && axis.get() != InterfaceAxis.ALL)
         {
             setAxis(InterfaceAxis.ALL);
             this.validSide = null;
@@ -112,7 +112,7 @@ public class MultiInterfaceTile extends MultiChildTile
 
     protected void setAxis(InterfaceAxis axis)
     {
-        InterfaceAxis.set(getBlockState(), world, pos, axis);
+        InterfaceAxis.set(getBlockState(), level, worldPosition, axis);
     }
 
     public boolean hasAxis()

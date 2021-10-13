@@ -21,10 +21,10 @@ public class ZychoriumIceBlock extends Block
     }
 
     @Override
-    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
-            transform(world, pos, pos.offset(side));
+            transform(world, pos, pos.relative(side));
     }
 
     @Override
@@ -37,15 +37,15 @@ public class ZychoriumIceBlock extends Block
     {
         FluidState fluidState = world.getFluidState(adjPos);
 
-        if (fluidState.isTagged(FluidTags.WATER))
+        if (fluidState.is(FluidTags.WATER))
         {
             if (world.getBlockState(adjPos).getBlock() instanceof FlowingFluidBlock)
-                world.setBlockState(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.ICE.getDefaultState()));
+                world.setBlockAndUpdate(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.ICE.defaultBlockState()));
         }
-        else if (fluidState.isTagged(FluidTags.LAVA) && world.getBlockState(pos.down()).matchesBlock(Blocks.SOUL_SOIL))
+        else if (fluidState.is(FluidTags.LAVA) && world.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
         {
-            world.setBlockState(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.BASALT.getDefaultState()));
-            world.playEvent(Constants.WorldEvents.LAVA_EXTINGUISH, adjPos, -1);
+            world.setBlockAndUpdate(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.BASALT.defaultBlockState()));
+            world.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, adjPos, -1);
         }
     }
 }

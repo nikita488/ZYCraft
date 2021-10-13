@@ -19,7 +19,7 @@ public class ZychoriumLampTile extends ColorableTile
 
     protected float brightness(boolean inverted)
     {
-        int strength = world.getRedstonePowerFromNeighbors(pos);
+        int strength = level.getBestNeighborSignal(worldPosition);
         return 0.25F + 0.05F * (inverted ? 15 - strength : strength);
     }
 
