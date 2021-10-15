@@ -55,14 +55,14 @@ public class ZYLang
             .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
     public static final IFormattableTextComponent COLOR_SCANNER_CURRENT_COLOR = REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "current_color", "Current color:")
             .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
-    public static final TranslationTextComponent COLOR_SCANNER_RED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "red", "Red:    %d")
+    public static final TranslationTextComponent COLOR_SCANNER_RED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "red", "Red:    %s")
             .withStyle(TextFormatting.ITALIC, TextFormatting.RED);
-    public static final TranslationTextComponent COLOR_SCANNER_GREEN = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "green", "Green: %d")
+    public static final TranslationTextComponent COLOR_SCANNER_GREEN = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "green", "Green: %s")
             .withStyle(TextFormatting.ITALIC, TextFormatting.GREEN);
-    public static final TranslationTextComponent COLOR_SCANNER_BLUE = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "blue", "Blue:   %d")
+    public static final TranslationTextComponent COLOR_SCANNER_BLUE = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("color_scanner"), "blue", "Blue:   %s")
             .withStyle(TextFormatting.ITALIC, TextFormatting.BLUE);
 
-    public static final TranslationTextComponent SCYTHE_DURABILITY = REGISTRATE.addLang("tooltip", ZYCraft.id("scythe"), "durability", "Durability: %.2f%%");
+    public static final TranslationTextComponent SCYTHE_DURABILITY = REGISTRATE.addLang("tooltip", ZYCraft.id("scythe"), "durability", "Durability: %s%%");
 
     public static final IFormattableTextComponent INTERFACE = REGISTRATE.addLang("tooltip", ZYCraft.id("interface"), "Interface")
             .withStyle(TextFormatting.ITALIC, TextFormatting.YELLOW);
@@ -75,13 +75,13 @@ public class ZYLang
     public static final IFormattableTextComponent ITEM_IO_FEATURE = REGISTRATE.addLang("tooltip", ZYCraft.id("item_io"), "feature", "Increases control over flow of items")
             .withStyle(TextFormatting.ITALIC, TextFormatting.GRAY);
 
-    public static final TranslationTextComponent FLUID_TANK_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("fluid_tank"), "filled", "%d/%d mB")
+    public static final TranslationTextComponent FLUID_TANK_FILLED = (TranslationTextComponent)REGISTRATE.addLang("tooltip", ZYCraft.id("fluid_tank"), "filled", "%s/%s mB")
             .withStyle(TextFormatting.GRAY);
 
     public static final TranslationTextComponent FABRICATOR = REGISTRATE.addLang("container", ZYCraft.id("fabricator"), "Fabricator");
     public static final TranslationTextComponent TANK = REGISTRATE.addLang("container", ZYCraft.id("tank"), "Multi-Tank");
 
-    public static final TranslationTextComponent NARRATE_GAUGE = REGISTRATE.addLang("gui", ZYCraft.id("narrate"), "gauge", "%s gauge: filled %d of %d");
+    public static final TranslationTextComponent NARRATE_GAUGE = REGISTRATE.addLang("gui", ZYCraft.id("narrate"), "gauge", "%s gauge: filled %s of %s");
 
     public static final TranslationTextComponent FABRICATOR_AUTO_LOW = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_low", "Auto: Low");
     public static final TranslationTextComponent FABRICATOR_AUTO_HIGH = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_high", "Auto: High");
@@ -101,7 +101,7 @@ public class ZYLang
     public static final TranslationTextComponent VOID_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("void_fluid"), "Void fluid: ");
     public static final TranslationTextComponent STORED_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("stored_fluid"), "Stored fluid: ");
 
-    public static final TranslationTextComponent FLUID_INFO = REGISTRATE.addLang("info", ZYCraft.id("fluid"), "%s %d mB");
+    public static final TranslationTextComponent FLUID_INFO = REGISTRATE.addLang("info", ZYCraft.id("fluid"), "%s %s mB");
 
     public static final TranslationTextComponent FABRICATOR_RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.id("fabricator"), "recipe_incompatible", "Recipe incompatible with Fabricator");
 

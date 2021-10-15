@@ -79,7 +79,7 @@ public class ParticleUtils
             if (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE)
                 return rand.nextFloat() * height;
             else
-                return 1F - rand.nextFloat() * height;
+                return 1D - rand.nextFloat() * height;
         else
             return 0.5D + (rand.nextFloat() - 0.5D) * size;
     }

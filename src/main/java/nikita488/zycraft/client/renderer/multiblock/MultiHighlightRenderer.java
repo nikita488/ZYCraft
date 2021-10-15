@@ -47,9 +47,9 @@ public class MultiHighlightRenderer
         if (hitResult != null && hitResult.getType() == RayTraceResult.Type.BLOCK)
             return;
 
-        World world = mc.level;
+        World level = mc.level;
 
-        if (world != null && (world.getGameTime() - lastTime) > 10)
+        if (level != null && (level.getGameTime() - lastTime) > 10)
             LAST_POS.set(BlockPos.ZERO);
     }
 
@@ -63,7 +63,7 @@ public class MultiHighlightRenderer
     {
         World world = event.getInfo().getEntity().getCommandSenderWorld();
         BlockPos highlightPos = event.getTarget().getBlockPos();
-        TileEntity tile = world.getBlockEntity(highlightPos);
+        TileEntity blockEntity = world.getBlockEntity(highlightPos);
         long time = world.getGameTime();
 
         if (!LAST_POS.equals(highlightPos))
@@ -74,9 +74,9 @@ public class MultiHighlightRenderer
 
         lastTime = time;
 
-        if (tile instanceof IMultiChild)
+        if (blockEntity instanceof IMultiChild)
         {
-            IMultiChild child = (IMultiChild)tile;
+            IMultiChild child = (IMultiChild)blockEntity;
 
             if (!child.hasParents())
                 return;

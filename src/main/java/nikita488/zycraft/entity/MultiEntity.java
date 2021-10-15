@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
 {
     @Nullable
-    private IDynamicMultiBlock multiBlock;
+    private IDynamicMultiBlock parentMultiBlock;
     private int multiID = -1;
 
     public MultiEntity(EntityType<MultiEntity> type, World world)
@@ -30,21 +30,21 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
         super(type, world);
     }
 
-    public MultiEntity(World world, IDynamicMultiBlock multiBlock, int multiID)
+    public MultiEntity(World world, IDynamicMultiBlock parentMultiBlock, int multiID)
     {
         super(ZYEntities.MULTI_BLOCK.get(), world);
 
-        this.multiBlock = multiBlock;
+        this.parentMultiBlock = parentMultiBlock;
         this.multiID = multiID;
         this.noPhysics = true;
         this.blocksBuilding = true;
 
-        BlockPos originPos = multiBlock.origin();
+        BlockPos originPos = parentMultiBlock.origin();
         setPos(originPos.getX(), originPos.getY(), originPos.getZ());
-        setBoundingBox(multiBlock.aabb());
+        setBoundingBox(parentMultiBlock.aabb());
     }
 
-    private void updateMultiBlock()
+    private void computeClientMultiBlock()
     {
         if (!level.isClientSide() || multiID < 0)
             return;
@@ -53,8 +53,8 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
 
         if (multiBlock instanceof IDynamicMultiBlock)
         {
-            this.multiBlock = (IDynamicMultiBlock)multiBlock;
-            setBoundingBox(this.multiBlock.aabb());
+            this.parentMultiBlock = (IDynamicMultiBlock)multiBlock;
+            setBoundingBox(parentMultiBlock.aabb());
             this.multiID = -1;
         }
     }
@@ -62,11 +62,11 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     @Override
     public void tick()
     {
-        updateMultiBlock();
+        computeClientMultiBlock();
 
-        if (multiBlock != null)
-            if (multiBlock.isValid())
-                multiBlock.tick();
+        if (parentMultiBlock != null)
+            if (parentMultiBlock.isValid())
+                parentMultiBlock.tick();
             else
                 remove();
 
@@ -119,8 +119,8 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     public void thunderHit(ServerWorld world, LightningBoltEntity lightning) {}
 
     @Nullable
-    public IDynamicMultiBlock getMultiBlock()
+    public IDynamicMultiBlock parentMultiBlock()
     {
-        return multiBlock;
+        return parentMultiBlock;
     }
 }

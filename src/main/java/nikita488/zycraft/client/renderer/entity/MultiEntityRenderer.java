@@ -21,7 +21,7 @@ public class MultiEntityRenderer extends EntityRenderer<MultiEntity>
     @Override
     public void render(MultiEntity entity, float rotationYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer buffer, int lightMap)
     {
-        IDynamicMultiBlock multiBlock = entity.getMultiBlock();
+        IDynamicMultiBlock multiBlock = entity.parentMultiBlock();
 
         if (multiBlock != null)
             multiBlock.render(stack, buffer, lightMap, partialTicks);
