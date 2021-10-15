@@ -51,7 +51,8 @@ public class ZYItems
             .register();
 
     public static final ItemEntry<ScytheItem> SCYTHE = REGISTRATE.item("scythe", ScytheItem::new)
-            .model((ctx, provider) -> provider.handheld(ctx::getEntry, ZYCraft.id("item/scythe")))
+            .properties(properties -> properties.durability(250))
+            .model((ctx, provider) -> provider.handheld(ctx::getEntry, provider.modLoc("item/scythe")))
             .recipe((ctx, provider) -> ShapedRecipeBuilder.shaped(ctx.getEntry())
                     .define('#', Tags.Items.RODS_WOODEN)
                     .define('X', ZYBlocks.QUARTZ_CRYSTAL.get())

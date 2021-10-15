@@ -1,6 +1,7 @@
 package nikita488.zycraft.item;
 
-import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
@@ -8,9 +9,10 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolItem;
 import net.minecraft.server.management.PlayerInteractionManager;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -18,21 +20,22 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.util.BlockUtils;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-public class ScytheItem extends ToolItem
+public class ScytheItem extends Item
 {
-    private static final Set<Material> MATERIALS = Sets.newHashSet(Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL);
+    private static final ObjectSet<Material> MATERIALS = Util.make(new ObjectOpenHashSet<>(), materials ->
+            Collections.addAll(materials, Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL));
+    private boolean mining;
 
     public ScytheItem(Properties properties)
     {
-        super(-1F, -2F, ScytheItemTier.INSTANCE, Collections.emptySet(), properties);
+        super(properties);
     }
 
     @Override
@@ -47,7 +50,7 @@ public class ScytheItem extends ToolItem
         else if (durability >= 0.25F)
             formatting = TextFormatting.YELLOW;
 
-        tooltip.add(ZYLang.copy(ZYLang.SCYTHE_DURABILITY, durability * 100).withStyle(formatting));
+        tooltip.add(ZYLang.copy(ZYLang.SCYTHE_DURABILITY, String.format("%.2f", durability * 100)).withStyle(formatting));
     }
 
     @Override
@@ -59,7 +62,7 @@ public class ScytheItem extends ToolItem
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state)
     {
-        return MATERIALS.contains(state.getMaterial()) ? speed : 1F;
+        return MATERIALS.contains(state.getMaterial()) ? 10F : 1F;
     }
 
     @Override
@@ -69,36 +72,51 @@ public class ScytheItem extends ToolItem
     }
 
     @Override
+    public int getEnchantmentValue()
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean isValidRepairItem(ItemStack stack, ItemStack repairItem)
+    {
+        return ZYBlocks.QUARTZ_CRYSTAL.isIn(repairItem);
+    }
+
+    @Override
+    public boolean hurtEnemy(ItemStack stack, LivingEntity enemy, LivingEntity player)
+    {
+        stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+        return true;
+    }
+
+    @Override
     public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
     {
-        if (!MATERIALS.contains(state.getMaterial()))
-        {
-            stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
-            return true;
-        }
+        if (world.isClientSide() || mining)
+            return false;
 
         stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 
-        if (stack.isEmpty() || player.isShiftKeyDown())
-            return true;
-
-        PlayerInteractionManager manager = ((ServerPlayerEntity)player).gameMode;
-        int range = 2;
-
-        for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
+        if (!stack.isEmpty() && !player.isShiftKeyDown() && player instanceof ServerPlayerEntity)
         {
-            if (destroyPos.equals(pos) || !world.mayInteract(manager.player, destroyPos))
-                continue;
+            PlayerInteractionManager gameMode = ((ServerPlayerEntity)player).gameMode;
+            int range = 2;
 
-            BlockState destroyState = world.getBlockState(destroyPos);
+            this.mining = true;
 
-            if (!MATERIALS.contains(destroyState.getMaterial()) || !BlockUtils.tryHarvestBlock(manager, destroyState, destroyPos.immutable()))
-                continue;
+            for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
+            {
+                if (destroyPos.equals(pos) || !world.mayInteract(gameMode.player, destroyPos) || !MATERIALS.contains(world.getBlockState(destroyPos).getMaterial()) || !gameMode.destroyBlock(destroyPos.immutable()))
+                    continue;
 
-            stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+                stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
 
-            if (stack.isEmpty())
-                break;
+                if (stack.isEmpty())
+                    break;
+            }
+
+            this.mining = false;
         }
 
         return true;
