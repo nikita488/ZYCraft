@@ -54,7 +54,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
         {
             super.onContentsChanged();
             markUnsaved();
-            updateComparatorOutputLevel();
+            updateInterfacesForOutputSignal();
         }
 
         @Override
@@ -75,7 +75,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
         protected void onContentsChanged(int slot)
         {
             markUnsaved();
-            updateComparatorOutputLevel();
+            updateInterfacesForOutputSignal();
         }
     }.input(0).output(1);
     private LazyOptional<IFluidHandler> fluidCapability = LazyOptional.empty();
@@ -204,7 +204,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     {
         super.onDestroy();
         InventoryUtils.dropInventoryItems(level, innerArea.center(), inventory);
-        updateComparatorOutputLevel();
+        updateInterfacesForOutputSignal();
     }
 
     @Override

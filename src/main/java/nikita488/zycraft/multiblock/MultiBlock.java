@@ -221,7 +221,7 @@ public abstract class MultiBlock
             level.getChunk(mainChunk.x, mainChunk.z).markUnsaved();
     }
 
-    public final void updateComparatorOutputLevel()
+    public final void updateInterfacesForOutputSignal()
     {
         if (!level.isClientSide())
             for (BlockPos pos : interfaces)
