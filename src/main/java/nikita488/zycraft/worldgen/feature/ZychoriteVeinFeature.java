@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
 import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.init.ZYBlocks;
@@ -24,21 +25,25 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
     }
 
     @Override
-    public boolean place(WorldGenLevel world, ChunkGenerator generator, Random random, BlockPos pos, ZychoriteVeinConfig config)
+    public boolean place(FeaturePlaceContext<ZychoriteVeinConfig> context)
     {
+        WorldGenLevel world = context.level();
+        Random random = context.random();
+        BlockPos origin = context.origin();
+        ZychoriteVeinConfig config = context.config();
         float f = random.nextFloat() * (float)Math.PI;
         float f1 = (float)config.size / 8.0F;
         int i = Mth.ceil(((float)config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
-        double d0 = (double)pos.getX() + Math.sin((double)f) * (double)f1;
-        double d1 = (double)pos.getX() - Math.sin((double)f) * (double)f1;
-        double d2 = (double)pos.getZ() + Math.cos((double)f) * (double)f1;
-        double d3 = (double)pos.getZ() - Math.cos((double)f) * (double)f1;
+        double d0 = (double)origin.getX() + Math.sin((double)f) * (double)f1;
+        double d1 = (double)origin.getX() - Math.sin((double)f) * (double)f1;
+        double d2 = (double)origin.getZ() + Math.cos((double)f) * (double)f1;
+        double d3 = (double)origin.getZ() - Math.cos((double)f) * (double)f1;
         int j = 2;
-        double d4 = (double)(pos.getY() + random.nextInt(3) - 2);
-        double d5 = (double)(pos.getY() + random.nextInt(3) - 2);
-        int k = pos.getX() - Mth.ceil(f1) - i;
-        int l = pos.getY() - 2 - i;
-        int i1 = pos.getZ() - Mth.ceil(f1) - i;
+        double d4 = (double)(origin.getY() + random.nextInt(3) - 2);
+        double d5 = (double)(origin.getY() + random.nextInt(3) - 2);
+        int k = origin.getX() - Mth.ceil(f1) - i;
+        int l = origin.getY() - 2 - i;
+        int i1 = origin.getZ() - Mth.ceil(f1) - i;
         int j1 = 2 * (Mth.ceil(f1) + i);
         int k1 = 2 * (2 + i);
 
