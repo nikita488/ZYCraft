@@ -1,3 +1,8 @@
+### 3.1.2 (2021-10-16)
+
+* Reworked Scythe again
+* Fixed durability percentage tooltip was too accurate on Scythe
+
 ### 3.1.1 (2021-10-10)
 
 * Fix player inventory slots offset inside Multi-Tank GUI
