@@ -1,6 +1,5 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.block.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
@@ -8,9 +7,12 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.*;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -92,16 +94,18 @@ public class FluidUtils
         {
             ((LiquidBlockContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
             level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
+            level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
             return true;
         }
 
         if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
             level.destroyBlock(pos, true);
 
-        if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
+        if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Block.UPDATE_ALL_IMMEDIATE) && !blockState.getFluidState().isSource())
             return false;
 
         level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
+        level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
         return true;
     }
 
@@ -112,7 +116,7 @@ public class FluidUtils
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof BucketPickup && ((BucketPickup)state.getBlock()).takeLiquid(level, pos, state) != Fluids.EMPTY)
+        if (state.getBlock() instanceof BucketPickup && !((BucketPickup)state.getBlock()).pickupBlock(level, pos, state).isEmpty())
             return true;
 
         if (!(state.getBlock() instanceof LiquidBlock))
@@ -122,10 +126,10 @@ public class FluidUtils
             if (material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT)
                 return false;
 
-            Block.dropResources(state, level, pos, state.hasTileEntity() ? level.getBlockEntity(pos) : null);
+            Block.dropResources(state, level, pos, state.hasBlockEntity() ? level.getBlockEntity(pos) : null);
         }
 
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         return true;
     }
 }

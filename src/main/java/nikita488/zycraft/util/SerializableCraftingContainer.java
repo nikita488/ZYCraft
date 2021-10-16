@@ -7,9 +7,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 
-public class SerializableCraftingInventory extends CraftingContainer
+public class SerializableCraftingContainer extends CraftingContainer
 {
-    public SerializableCraftingInventory(AbstractContainerMenu container, int width, int height)
+    public SerializableCraftingContainer(AbstractContainerMenu container, int width, int height)
     {
         super(container, width, height);
     }
