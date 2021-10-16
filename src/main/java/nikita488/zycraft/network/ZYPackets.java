@@ -2,9 +2,9 @@ package nikita488.zycraft.network;
 
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerChunkCache;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.multiblock.MultiBlock;
 

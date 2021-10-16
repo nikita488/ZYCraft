@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 import nikita488.zycraft.menu.FabricatorContainer;
 import nikita488.zycraft.tile.FabricatorTile;
 
@@ -81,7 +81,7 @@ public class SetFabricatorRecipePacket
 
             AbstractContainerMenu container = player.containerMenu;
 
-            if (container.containerId == packet.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
+            if (container.containerId == packet.windowID() && container instanceof FabricatorContainer && !player.isSpectator())
             {
                 FabricatorTile fabricator = ((FabricatorContainer)container).blockEntity();
 

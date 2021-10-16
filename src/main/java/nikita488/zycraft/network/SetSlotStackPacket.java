@@ -4,7 +4,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
 
 import java.util.function.Supplier;
 
@@ -52,7 +52,7 @@ public class SetSlotStackPacket
 
             AbstractContainerMenu container = player.containerMenu;
 
-            if (container.containerId == packet.windowID() && container.isSynched(player) && !player.isSpectator())
+            if (container.containerId == packet.windowID() && !player.isSpectator())
                 container.getSlot(packet.slotIndex()).set(packet.stack());
         });
 
