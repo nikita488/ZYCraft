@@ -12,9 +12,9 @@ public class ZychoriumLampTile extends ColorableTile
 {
     private float[] hsv;
 
-    public ZychoriumLampTile(BlockEntityType<ZychoriumLampTile> type)
+    public ZychoriumLampTile(BlockEntityType<ZychoriumLampTile> type, BlockPos pos, BlockState state)
     {
-        super(type);
+        super(type, pos, state);
     }
 
     protected float brightness(boolean inverted)

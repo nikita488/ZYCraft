@@ -12,14 +12,14 @@ public class ColorableTile extends ZYTile implements IColorable
 {
     protected Color color;
 
-    public ColorableTile(BlockEntityType<?> type)
+    public ColorableTile(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        this(type, 0xFFFFFF);
+        this(type, pos, state, 0xFFFFFF);
     }
 
-    public ColorableTile(BlockEntityType<?> type, int defaultColor)
+    public ColorableTile(BlockEntityType<?> type, BlockPos pos, BlockState state, int defaultColor)
     {
-        super(type);
+        super(type, pos, state);
         this.color = Color.fromRGB(defaultColor);
     }
 
@@ -38,9 +38,9 @@ public class ColorableTile extends ZYTile implements IColorable
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag)
+    public void load(CompoundTag tag)
     {
-        super.load(state, tag);
+        super.load(tag);
         this.color = Color.load(tag);
     }
 

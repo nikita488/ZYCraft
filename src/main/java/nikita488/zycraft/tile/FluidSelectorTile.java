@@ -1,5 +1,6 @@
 package nikita488.zycraft.tile;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,9 +13,9 @@ public class FluidSelectorTile extends ZYTile
     private float[] hsv;
     private FluidStack selectedFluid = FluidStack.EMPTY;
 
-    public FluidSelectorTile(BlockEntityType<?> type)
+    public FluidSelectorTile(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type);
+        super(type, pos, state);
     }
 
     public int getColor()
@@ -24,9 +25,9 @@ public class FluidSelectorTile extends ZYTile
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag)
+    public void load(CompoundTag tag)
     {
-        super.load(state, tag);
+        super.load(tag);
 
         if (tag.contains("SelectedFluid", Constants.NBT.TAG_COMPOUND))
             this.selectedFluid = FluidStack.loadFluidStackFromNBT(tag.getCompound("SelectedFluid"));

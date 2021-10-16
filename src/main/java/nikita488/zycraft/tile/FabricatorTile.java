@@ -1,6 +1,7 @@
 package nikita488.zycraft.tile;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -15,8 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraft.world.level.block.entity.TickableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.*;
@@ -31,7 +33,7 @@ import nikita488.zycraft.menu.FabricatorContainer;
 import nikita488.zycraft.menu.ZYContainer;
 import nikita488.zycraft.util.DataPackReloadCounter;
 import nikita488.zycraft.util.InventoryUtils;
-import nikita488.zycraft.util.SerializableCraftingInventory;
+import nikita488.zycraft.util.SerializableCraftingContainer;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -39,11 +41,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class FabricatorTile extends ZYTile implements TickableBlockEntity, MenuProvider
+public class FabricatorTile extends ZYTile implements MenuProvider
 {
     private static final GameProfile PROFILE = new GameProfile(UUID.randomUUID(), "[Fabricator]");
     private final FabricatorLogic logic = new FabricatorLogic(this);
-    private final SerializableCraftingInventory recipePattern = new SerializableCraftingInventory(ZYContainer.EMPTY_CONTAINER, 3, 3)
+    private final SerializableCraftingContainer recipePattern = new SerializableCraftingContainer(ZYContainer.EMPTY_CONTAINER, 3, 3)
     {
         @Override
         public void setChanged()
@@ -71,9 +73,9 @@ public class FabricatorTile extends ZYTile implements TickableBlockEntity, MenuP
     private ResourceLocation pendingRecipe;
     private boolean lastPowered;
 
-    public FabricatorTile(BlockEntityType<?> type)
+    public FabricatorTile(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type);
+        super(type, pos, state);
     }
 
     public static boolean isRecipeCompatible(Recipe<?> recipe)
@@ -81,51 +83,47 @@ public class FabricatorTile extends ZYTile implements TickableBlockEntity, MenuP
         return recipe.getType() == RecipeType.CRAFTING && !recipe.isSpecial() && recipe.canCraftInDimensions(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getResultItem().isEmpty();
     }
 
-    @Override
-    public void tick()
+    public static void serverTick(Level level, BlockPos pos, BlockState state, FabricatorTile fabricator)
     {
-        if (level == null || level.isClientSide())
-            return;
-
-        if (reloadCount != DataPackReloadCounter.INSTANCE.count())
+        if (fabricator.reloadCount != DataPackReloadCounter.INSTANCE.count())
         {
-            if (craftingRecipe != null)
+            if (fabricator.craftingRecipe != null)
             {
-                this.pendingRecipe = craftingRecipe.getId();
-                setCraftingRecipeAndResult(null, ItemStack.EMPTY);
+                fabricator.pendingRecipe = fabricator.craftingRecipe.getId();
+                fabricator.setCraftingRecipeAndResult(null, ItemStack.EMPTY);
             }
 
-            this.reloadCount = DataPackReloadCounter.INSTANCE.count();
+            fabricator.reloadCount = DataPackReloadCounter.INSTANCE.count();
         }
 
-        if (pendingRecipe != null)
+        if (fabricator.pendingRecipe != null)
         {
-            Optional<CraftingRecipe> craftingRecipe = level.getRecipeManager().byKey(pendingRecipe)
+            Optional<CraftingRecipe> craftingRecipe = level.getRecipeManager().byKey(fabricator.pendingRecipe)
                     .filter(FabricatorTile::isRecipeCompatible)
-                    .flatMap(recipe -> RecipeType.CRAFTING.tryMatch((CraftingRecipe)recipe, level, recipePattern));
+                    .flatMap(recipe -> RecipeType.CRAFTING.tryMatch((CraftingRecipe)recipe, level, fabricator.recipePattern));
 
-            if (!craftingRecipe.isPresent())
-                craftingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, recipePattern, level)
+            if (craftingRecipe.isEmpty())
+                craftingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, fabricator.recipePattern, level)
                         .filter(FabricatorTile::isRecipeCompatible);
 
-            ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(recipePattern)).orElse(ItemStack.EMPTY);
+            ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(fabricator.recipePattern)).orElse(ItemStack.EMPTY);
 
-            setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
-            this.pendingRecipe = null;
+            fabricator.setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
+            fabricator.pendingRecipe = null;
         }
 
-        if (logic.updatePendingItems())
+        if (fabricator.logic.updatePendingItems())
             return;
 
-        boolean powered = level.hasNeighborSignal(worldPosition);
+        boolean powered = level.hasNeighborSignal(pos);
 
-        if (mode.get().canCraft(lastPowered, powered))
-            logic.tryCraft();
+        if (fabricator.mode.get().canCraft(fabricator.lastPowered, powered))
+            fabricator.logic.tryCraft();
 
-        if (powered != lastPowered)
+        if (powered != fabricator.lastPowered)
         {
-            this.lastPowered = powered;
-            setChanged();
+            fabricator.lastPowered = powered;
+            fabricator.setChanged();
         }
     }
 
@@ -146,9 +144,9 @@ public class FabricatorTile extends ZYTile implements TickableBlockEntity, MenuP
     }
 
     @Override
-    public void load(BlockState state, CompoundTag tag)
+    public void load(CompoundTag tag)
     {
-        super.load(state, tag);
+        super.load(tag);
 
         this.lastPowered = tag.getBoolean("LastPowered");
 

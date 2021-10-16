@@ -20,7 +20,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fml.hooks.BasicEventHooks;
+import net.minecraftforge.fmllegacy.hooks.BasicEventHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -169,7 +169,7 @@ public class FabricatorLogic
 
         tryInsertItem(fabricator.inventory(), craftingResult);
 
-        Inventory playerInventory = player.inventory;
+        Inventory playerInventory = player.getInventory();
 
         for (int slot = 0; slot < playerInventory.getContainerSize(); slot++)
         {

@@ -1,6 +1,7 @@
 package nikita488.zycraft.tile;
 
 import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -14,9 +15,9 @@ import javax.annotation.Nullable;
 
 public class ZYTile extends BlockEntity
 {
-    public ZYTile(BlockEntityType<?> type)
+    public ZYTile(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type);
+        super(type, pos, state);
     }
 
     public boolean stillValid(Player player)
@@ -53,7 +54,7 @@ public class ZYTile extends BlockEntity
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundTag tag)
+    public void handleUpdateTag(CompoundTag tag)
     {
         decode(tag);
     }
