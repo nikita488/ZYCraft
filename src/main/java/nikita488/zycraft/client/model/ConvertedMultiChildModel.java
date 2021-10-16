@@ -3,18 +3,21 @@ package nikita488.zycraft.client.model;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.model.*;
-import net.minecraft.client.renderer.texture.MissingTextureSprite;
+import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
@@ -31,20 +34,20 @@ import java.util.function.Function;
 public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiChildModel>
 {
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform modelTransform, ItemOverrideList overrides, ResourceLocation modelLocation)
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelTransform, ItemOverrides overrides, ResourceLocation modelLocation)
     {
-        return new Baked(spriteGetter.apply(ModelLoaderRegistry.blockMaterial(MissingTextureSprite.getLocation())));
+        return new Baked(spriteGetter.apply(ModelLoaderRegistry.blockMaterial(MissingTextureAtlasSprite.getLocation())));
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
     {
         return Collections.emptyList();
     }
 
     private static class Baked implements IDynamicBakedModel
     {
-        private static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
+        private static final BlockPos.MutableBlockPos RELATIVE_POS = new BlockPos.MutableBlockPos();
         private final TextureAtlasSprite missingSprite;
 
         public Baked(TextureAtlasSprite missingSprite)
@@ -65,14 +68,14 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
                 return mc.getModelManager().getMissingModel().getQuads(state, side, random, modelData);
 
             BlockState initialState = modelData.getData(ConvertedMultiChildTile.INITIAL_STATE);
-            IBlockDisplayReader getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
+            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
             BlockPos pos = modelData.getData(ConvertedMultiChildTile.POS);
 
-            if (initialState == null || getter == null || pos == null || !RenderTypeLookup.canRenderInLayer(initialState, layer))
+            if (initialState == null || getter == null || pos == null || !ItemBlockRenderTypes.canRenderInLayer(initialState, layer))
                 return Collections.emptyList();
 
             BlockState relativeState = getter.getBlockState(RELATIVE_POS.setWithOffset(pos, side));
-            IBakedModel model = mc.getBlockRenderer().getBlockModel(initialState);
+            BakedModel model = mc.getBlockRenderer().getBlockModel(initialState);
 
             return !initialState.skipRendering(relativeState, side) ?
                     model.getQuads(initialState, side, random, model.getModelData(getter, pos, initialState, modelData)) :
@@ -113,20 +116,20 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
         public TextureAtlasSprite getParticleTexture(IModelData modelData)
         {
             BlockState initialState = modelData.getData(ConvertedMultiChildTile.INITIAL_STATE);
-            IBlockDisplayReader getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
+            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
             BlockPos pos = modelData.getData(ConvertedMultiChildTile.POS);
 
             if (initialState == null || getter == null || pos == null)
                 return missingSprite;
 
-            IBakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(initialState);
+            BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(initialState);
             return model.getParticleTexture(model.getModelData(getter, pos, initialState, modelData));
         }
 
         @Override
-        public ItemOverrideList getOverrides()
+        public ItemOverrides getOverrides()
         {
-            return ItemOverrideList.EMPTY;
+            return ItemOverrides.EMPTY;
         }
     }
 
@@ -135,7 +138,7 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
         public static final Loader INSTANCE = new Loader();
 
         @Override
-        public void onResourceManagerReload(IResourceManager manager) {}
+        public void onResourceManagerReload(ResourceManager manager) {}
 
         @Override
         public ConvertedMultiChildModel read(JsonDeserializationContext ctx, JsonObject modelContents)

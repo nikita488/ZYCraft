@@ -1,17 +1,17 @@
 package nikita488.zycraft.dispenser;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.DispenserBlock;
-import net.minecraft.block.IBucketPickupHandler;
-import net.minecraft.dispenser.DefaultDispenseItemBehavior;
-import net.minecraft.dispenser.IBlockSource;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.DispenserTileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.BlockSource;
+import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraft.world.level.block.entity.DispenserBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FlowingFluid;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -26,7 +26,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
     private final DefaultDispenseItemBehavior defaultBehaviour = new DefaultDispenseItemBehavior();
 
     @Override
-    public ItemStack execute(IBlockSource source, ItemStack stack)
+    public ItemStack execute(BlockSource source, ItemStack stack)
     {
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(stack);
 
@@ -35,7 +35,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
 
         IFluidHandlerItem handler = capability.get();
         FluidStack containedFluid = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        World level = source.getLevel();
+        Level level = source.getLevel();
         BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
 
         if (!containedFluid.isEmpty())
@@ -49,9 +49,9 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block instanceof IBucketPickupHandler)
+        if (block instanceof BucketPickup)
         {
-            Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(level, pos, state);
+            Fluid fluid = ((BucketPickup)block).takeLiquid(level, pos, state);
 
             if (!(fluid instanceof FlowingFluid))
                 return super.execute(source, stack);
@@ -69,7 +69,7 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
             if (stack.isEmpty())
                 return filledContainer;
 
-            if (source.<DispenserTileEntity>getEntity().addItem(filledContainer) < 0)
+            if (source.<DispenserBlockEntity>getEntity().addItem(filledContainer) < 0)
                 defaultBehaviour.dispense(source, filledContainer);
 
             return stack;

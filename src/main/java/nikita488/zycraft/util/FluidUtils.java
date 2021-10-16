@@ -1,17 +1,15 @@
 package nikita488.zycraft.util;
 
 import net.minecraft.block.*;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FlowingFluid;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.*;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -59,12 +57,12 @@ public class FluidUtils
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
     }
 
-    public static boolean canBlockContainFluid(World level, BlockPos pos, BlockState state, Fluid fluid)
+    public static boolean canBlockContainFluid(Level level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canPlaceLiquid(level, pos, state, fluid);
+        return state.getBlock() instanceof LiquidBlockContainer && ((LiquidBlockContainer)state.getBlock()).canPlaceLiquid(level, pos, state, fluid);
     }
 
-    public static boolean tryPlaceFluid(FluidStack stack, @Nullable PlayerEntity player, World level, BlockPos pos, @Nullable BlockRayTraceResult hitResult)
+    public static boolean tryPlaceFluid(FluidStack stack, @Nullable Player player, Level level, BlockPos pos, @Nullable BlockHitResult hitResult)
     {
         Fluid fluid = stack.getFluid();
 
@@ -92,8 +90,8 @@ public class FluidUtils
 
         if (canBlockContainFluid(level, pos, blockState, fluid))
         {
-            ((ILiquidContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
-            level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
+            ((LiquidBlockContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
+            level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
             return true;
         }
 
@@ -103,21 +101,21 @@ public class FluidUtils
         if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
             return false;
 
-        level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
+        level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
         return true;
     }
 
-    public static boolean voidFluid(World level, BlockPos pos, Predicate<FluidState> predicate)
+    public static boolean voidFluid(Level level, BlockPos pos, Predicate<FluidState> predicate)
     {
         if (!predicate.test(level.getFluidState(pos)))
             return false;
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).takeLiquid(level, pos, state) != Fluids.EMPTY)
+        if (state.getBlock() instanceof BucketPickup && ((BucketPickup)state.getBlock()).takeLiquid(level, pos, state) != Fluids.EMPTY)
             return true;
 
-        if (!(state.getBlock() instanceof FlowingFluidBlock))
+        if (!(state.getBlock() instanceof LiquidBlock))
         {
             Material material = state.getMaterial();
 

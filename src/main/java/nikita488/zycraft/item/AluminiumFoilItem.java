@@ -1,7 +1,8 @@
 package nikita488.zycraft.item;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.Item.Properties;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -24,7 +25,7 @@ public class AluminiumFoilItem extends ZYFluidContainerItem
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT tag)
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag tag)
     {
         return new FluidHandlerItemStack(stack, capacity);
     }

@@ -1,27 +1,27 @@
 package nikita488.zycraft.event;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraftforge.event.world.WorldEvent;
 
 public class PostLoadChunkEvent extends WorldEvent
 {
-    private final Chunk chunk;
-    private final CompoundNBT tag;
+    private final LevelChunk chunk;
+    private final CompoundTag tag;
 
-    public PostLoadChunkEvent(Chunk chunk, CompoundNBT tag)
+    public PostLoadChunkEvent(LevelChunk chunk, CompoundTag tag)
     {
         super(chunk.getLevel());
         this.chunk = chunk;
         this.tag = tag;
     }
 
-    public Chunk getChunk()
+    public LevelChunk getChunk()
     {
         return chunk;
     }
 
-    public CompoundNBT getChunkTag()
+    public CompoundTag getChunkTag()
     {
         return tag;
     }

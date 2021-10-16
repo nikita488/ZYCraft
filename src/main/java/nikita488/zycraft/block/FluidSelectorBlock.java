@@ -1,19 +1,19 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,39 +41,39 @@ public class FluidSelectorBlock extends Block implements IFluidSource
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
+    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
     {
         return ZYTiles.FLUID_SELECTOR.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader getter, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.CREATIVE_ONLY);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         FluidStack containedFluid = FluidUtil.getFluidContained(player.getItemInHand(hand)).orElse(FluidStack.EMPTY);
 
         if (containedFluid.isEmpty())
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
 
         FluidSelectorTile selector = ZYTiles.FLUID_SELECTOR.getNullable(level, pos);
 
         if (selector != null)
             if (selector.getSelectedFluid().isFluidEqual(containedFluid))
-                return ActionResultType.CONSUME;
+                return InteractionResult.CONSUME;
             else if (!level.isClientSide())
                 selector.setSelectedFluid(containedFluid);
 
-        return ActionResultType.sidedSuccess(level.isClientSide());
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override
-    public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
+    public FluidStack getFluid(BlockState state, Level level, BlockPos pos, @Nullable Direction side)
     {
         FluidStack fluid = ZYTiles.FLUID_SELECTOR.get(level, pos).map(FluidSelectorTile::getSelectedFluid).orElse(FluidStack.EMPTY);
 

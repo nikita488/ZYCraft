@@ -1,8 +1,8 @@
 package nikita488.zycraft.multiblock.area;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import nikita488.zycraft.util.Cuboid6i;
 import nikita488.zycraft.util.ZYConstants;
 
@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 public interface IMultiArea
 {
     @Nullable
-    default Cuboid6i getArea(World level, BlockPos basePos, Direction formingSide)
+    default Cuboid6i getArea(Level level, BlockPos basePos, Direction formingSide)
     {
         BlockPos innerPos = basePos.relative(formingSide.getOpposite());
 
@@ -35,7 +35,7 @@ public interface IMultiArea
 
     int maxSize(Direction side);
 
-    default boolean matches(World level, Cuboid6i cuboid)
+    default boolean matches(Level level, Cuboid6i cuboid)
     {
         for (BlockPos pos : cuboid)
             if (!matches(level, pos))
@@ -43,5 +43,5 @@ public interface IMultiArea
         return true;
     }
 
-    boolean matches(World level, BlockPos pos);
+    boolean matches(Level level, BlockPos pos);
 }

@@ -1,13 +1,13 @@
 package nikita488.zycraft.multiblock;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYRegistries;
@@ -27,12 +27,12 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         this.former = former;
     }
 
-    public static Optional<MultiType<?>> load(CompoundNBT tag)
+    public static Optional<MultiType<?>> load(CompoundTag tag)
     {
         return Optional.ofNullable(ZYRegistries.MULTI_TYPES.get().getValue(new ResourceLocation(tag.getString("ID"))));
     }
 
-    public static Optional<MultiBlock> create(World level, ChunkPos mainChunk, CompoundNBT tag)
+    public static Optional<MultiBlock> create(Level level, ChunkPos mainChunk, CompoundTag tag)
     {
         try
         {
@@ -45,7 +45,7 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         }
     }
 
-    private static Optional<MultiBlock> createUnchecked(World level, ChunkPos mainChunk, CompoundNBT tag)
+    private static Optional<MultiBlock> createUnchecked(Level level, ChunkPos mainChunk, CompoundTag tag)
     {
         return Util.ifElse(load(tag).map(type -> type.create(level, mainChunk)), multiBlock ->
         {
@@ -54,17 +54,17 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         }, () -> ZYCraft.LOGGER.warn("Skipping MultiBlock {}", tag.getString("ID")));
     }
 
-    public T create(World level, ChunkPos pos)
+    public T create(Level level, ChunkPos pos)
     {
         return factory.create(level, pos);
     }
 
-    public boolean form(BlockState interfaceState, World level, BlockPos interfacePos)
+    public boolean form(BlockState interfaceState, Level level, BlockPos interfacePos)
     {
         return form(interfaceState, level, interfacePos, null);
     }
 
-    public boolean form(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
+    public boolean form(BlockState interfaceState, Level level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
         return former.form(interfaceState, level, interfacePos, formingSide);
     }
@@ -74,7 +74,7 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         return multiBlock != null && multiBlock.type() == this;
     }
 
-    public static boolean tryFormMultiBlock(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
+    public static boolean tryFormMultiBlock(BlockState interfaceState, Level level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
         if (!level.isClientSide())
             for (MultiType<?> type : ZYRegistries.MULTI_TYPES.get().getValues())
@@ -86,6 +86,6 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
     @FunctionalInterface
     public interface MultiSupplier<T extends MultiBlock>
     {
-        T create(World level, ChunkPos pos);
+        T create(Level level, ChunkPos pos);
     }
 }

@@ -1,12 +1,12 @@
 package nikita488.zycraft.util;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Vector3i;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.Iterator;
@@ -20,15 +20,15 @@ public class Cuboid6i implements Iterable<BlockPos>
             .map(bounds -> new Cuboid6i(bounds[0], bounds[1], bounds[2], bounds[3], bounds[4], bounds[5])),
             cuboid -> IntStream.of(cuboid.minX(), cuboid.minY(), cuboid.minZ(), cuboid.maxX(), cuboid.maxY(), cuboid.maxZ()))
             .stable();
-    public static final Cuboid6i ZERO = new Cuboid6i(Vector3i.ZERO);
+    public static final Cuboid6i ZERO = new Cuboid6i(Vec3i.ZERO);
     protected int x1, y1, z1, x2, y2, z2;
 
-    public Cuboid6i(Vector3i bounds)
+    public Cuboid6i(Vec3i bounds)
     {
         this(bounds, bounds);
     }
 
-    public Cuboid6i(Vector3i min, Vector3i max)
+    public Cuboid6i(Vec3i min, Vec3i max)
     {
         this(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
     }
@@ -107,7 +107,7 @@ public class Cuboid6i implements Iterable<BlockPos>
         return this;
     }
 
-    public boolean contains(Vector3i pos)
+    public boolean contains(Vec3i pos)
     {
         return contains(pos.getX(), pos.getY(), pos.getZ());
     }
@@ -117,12 +117,12 @@ public class Cuboid6i implements Iterable<BlockPos>
         return x >= x1 && x <= x2 && y >= y1 && y <= y2 && z >= z1 && z <= z2;
     }
 
-    public static Cuboid6i load(CompoundNBT tag)
+    public static Cuboid6i load(CompoundTag tag)
     {
         return new Cuboid6i(tag.getInt("MinX"), tag.getInt("MinY"), tag.getInt("MinZ"), tag.getInt("MaxX"), tag.getInt("MaxY"), tag.getInt("MaxZ"));
     }
 
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         tag.putInt("MinX", x1);
         tag.putInt("MinY", y1);
@@ -134,12 +134,12 @@ public class Cuboid6i implements Iterable<BlockPos>
         return tag;
     }
 
-    public static Cuboid6i decode(PacketBuffer buffer)
+    public static Cuboid6i decode(FriendlyByteBuf buffer)
     {
         return new Cuboid6i(buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt(), buffer.readVarInt());
     }
 
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(x1);
         buffer.writeVarInt(y1);
@@ -292,12 +292,12 @@ public class Cuboid6i implements Iterable<BlockPos>
             super(ZERO);
         }
 
-        public Mutable(Vector3i bounds)
+        public Mutable(Vec3i bounds)
         {
             super(bounds);
         }
 
-        public Mutable(Vector3i min, Vector3i max)
+        public Mutable(Vec3i min, Vec3i max)
         {
             super(min, max);
         }
@@ -312,12 +312,12 @@ public class Cuboid6i implements Iterable<BlockPos>
             super(x1, y1, z1, x2, y2, z2);
         }
 
-        public Mutable set(Vector3i bounds)
+        public Mutable set(Vec3i bounds)
         {
             return set(bounds, bounds);
         }
 
-        public Mutable set(Vector3i min, Vector3i max)
+        public Mutable set(Vec3i min, Vec3i max)
         {
             return set(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
         }

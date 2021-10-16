@@ -1,9 +1,9 @@
 package nikita488.zycraft.menu;
 
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import nikita488.zycraft.init.ZYContainers;
@@ -25,17 +25,17 @@ public class TankContainer extends ZYMultiContainer<TankMultiBlock>
     private final int capacity;
     private final IOMenuData ioData;
 
-    public TankContainer(ContainerType<?> type, int windowID, PlayerInventory playerInventory, PacketBuffer buffer)
+    public TankContainer(MenuType<?> type, int windowID, Inventory playerInventory, FriendlyByteBuf buffer)
     {
         this(type, windowID, playerInventory, null, new ItemStackHandler(2), new FluidMenuData(), buffer.readVarInt(), new IOMenuData());
     }
 
-    public TankContainer(int windowID, PlayerInventory playerInventory, TankMultiBlock tank)
+    public TankContainer(int windowID, Inventory playerInventory, TankMultiBlock tank)
     {
         this(ZYContainers.TANK.get(), windowID, playerInventory, tank, tank.inventory(), new FluidMenuData(() -> tank.fluidTank().getFluid()), tank.fluidTank().getCapacity(), new IOMenuData(tank::inventory));
     }
 
-    public TankContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
+    public TankContainer(@Nullable MenuType<?> type, int windowID, Inventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
     {
         super(type, windowID, multiBlock);
 

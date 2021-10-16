@@ -1,7 +1,7 @@
 package nikita488.zycraft.block.state.properties;
 
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.EnumProperty;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public class ZYBlockStateProperties
 {

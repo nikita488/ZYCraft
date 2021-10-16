@@ -7,7 +7,7 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeTransferRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
 import nikita488.zycraft.init.ZYBlocks;

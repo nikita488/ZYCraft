@@ -1,23 +1,23 @@
 package nikita488.zycraft.tile;
 
 import com.mojang.authlib.GameProfile;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.*;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -39,7 +39,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-public class FabricatorTile extends ZYTile implements ITickableTileEntity, INamedContainerProvider
+public class FabricatorTile extends ZYTile implements TickableBlockEntity, MenuProvider
 {
     private static final GameProfile PROFILE = new GameProfile(UUID.randomUUID(), "[Fabricator]");
     private final FabricatorLogic logic = new FabricatorLogic(this);
@@ -52,7 +52,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         }
     };
     @Nullable
-    private ICraftingRecipe craftingRecipe;
+    private CraftingRecipe craftingRecipe;
     private final ItemStackHandler craftingResult = new ItemStackHandler();
     private final ItemStackHandler inventory = new ItemStackHandler(9)
     {
@@ -64,21 +64,21 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         }
     };
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(() -> inventory);
-    private final NonNullLazy<FakePlayer> player = NonNullLazy.of(() -> FakePlayerFactory.get((ServerWorld)level, PROFILE));
+    private final NonNullLazy<FakePlayer> player = NonNullLazy.of(() -> FakePlayerFactory.get((ServerLevel)level, PROFILE));
     private final Supplier<FabricatorMode> mode = () -> getBlockState().getValue(FabricatorBlock.MODE);
     private int reloadCount = DataPackReloadCounter.INSTANCE.count();
     @Nullable
     private ResourceLocation pendingRecipe;
     private boolean lastPowered;
 
-    public FabricatorTile(TileEntityType<?> type)
+    public FabricatorTile(BlockEntityType<?> type)
     {
         super(type);
     }
 
-    public static boolean isRecipeCompatible(IRecipe<?> recipe)
+    public static boolean isRecipeCompatible(Recipe<?> recipe)
     {
-        return recipe.getType() == IRecipeType.CRAFTING && !recipe.isSpecial() && recipe.canCraftInDimensions(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getResultItem().isEmpty();
+        return recipe.getType() == RecipeType.CRAFTING && !recipe.isSpecial() && recipe.canCraftInDimensions(3, 3) && !recipe.getIngredients().isEmpty() && !recipe.getResultItem().isEmpty();
     }
 
     @Override
@@ -100,12 +100,12 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
         if (pendingRecipe != null)
         {
-            Optional<ICraftingRecipe> craftingRecipe = level.getRecipeManager().byKey(pendingRecipe)
+            Optional<CraftingRecipe> craftingRecipe = level.getRecipeManager().byKey(pendingRecipe)
                     .filter(FabricatorTile::isRecipeCompatible)
-                    .flatMap(recipe -> IRecipeType.CRAFTING.tryMatch((ICraftingRecipe)recipe, level, recipePattern));
+                    .flatMap(recipe -> RecipeType.CRAFTING.tryMatch((CraftingRecipe)recipe, level, recipePattern));
 
             if (!craftingRecipe.isPresent())
-                craftingRecipe = level.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, recipePattern, level)
+                craftingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, recipePattern, level)
                         .filter(FabricatorTile::isRecipeCompatible);
 
             ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(recipePattern)).orElse(ItemStack.EMPTY);
@@ -146,7 +146,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundTag tag)
     {
         super.load(state, tag);
 
@@ -161,14 +161,14 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         super.save(tag);
 
         if (craftingRecipe != null)
             tag.putString("Recipe", craftingRecipe.getId().toString());
 
-        tag.put("RecipePattern", recipePattern.save(new CompoundNBT()));
+        tag.put("RecipePattern", recipePattern.save(new CompoundTag()));
         tag.put("Inventory", inventory.serializeNBT());
         tag.putBoolean("LastPowered", lastPowered);
         logic.save(tag);
@@ -177,14 +177,14 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
         return ZYLang.FABRICATOR;
     }
 
     @Nullable
     @Override
-    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player)
+    public AbstractContainerMenu createMenu(int windowID, Inventory playerInventory, Player player)
     {
         return new FabricatorContainer(windowID, playerInventory, this);
     }
@@ -208,18 +208,18 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         return logic;
     }
 
-    public CraftingInventory recipePattern()
+    public CraftingContainer recipePattern()
     {
         return recipePattern;
     }
 
     @Nullable
-    public ICraftingRecipe craftingRecipe()
+    public CraftingRecipe craftingRecipe()
     {
         return craftingRecipe;
     }
 
-    public void setCraftingRecipeAndResult(@Nullable ICraftingRecipe recipe, ItemStack result)
+    public void setCraftingRecipeAndResult(@Nullable CraftingRecipe recipe, ItemStack result)
     {
         this.craftingRecipe = recipe != null && result.isEmpty() ? null : recipe;
         craftingResult.setStackInSlot(0, result);

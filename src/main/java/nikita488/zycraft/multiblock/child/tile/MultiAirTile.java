@@ -1,12 +1,12 @@
 package nikita488.zycraft.multiblock.child.tile;
 
-import net.minecraft.block.Blocks;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import nikita488.zycraft.multiblock.MultiBlock;
 
 public class MultiAirTile extends MultiChildTile
 {
-    public MultiAirTile(TileEntityType<?> type)
+    public MultiAirTile(BlockEntityType<?> type)
     {
         super(type);
     }

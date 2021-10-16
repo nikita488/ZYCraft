@@ -1,6 +1,6 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.util.DamageSource;
+import net.minecraft.world.damagesource.DamageSource;
 import nikita488.zycraft.ZYCraft;
 
 public class ZYDamageSource extends DamageSource

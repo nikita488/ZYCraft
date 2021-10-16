@@ -1,23 +1,23 @@
 package nikita488.zycraft.menu.slot;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 
 public class RecipePatternSlot extends Slot
 {
-    private final Container menu;
+    private final AbstractContainerMenu menu;
 
-    public RecipePatternSlot(Container menu, IInventory inventory, int index, int x, int y)
+    public RecipePatternSlot(AbstractContainerMenu menu, Container inventory, int index, int x, int y)
     {
         super(inventory, index, x, y);
         this.menu = menu;
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player)
+    public boolean mayPickup(Player player)
     {
         return false;
     }

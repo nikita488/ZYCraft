@@ -1,10 +1,10 @@
 package nikita488.zycraft.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import nikita488.zycraft.block.ZychoriumLampBlock;
 import nikita488.zycraft.util.Color;
 
@@ -12,7 +12,7 @@ public class ZychoriumLampTile extends ColorableTile
 {
     private float[] hsv;
 
-    public ZychoriumLampTile(TileEntityType<ZychoriumLampTile> type)
+    public ZychoriumLampTile(BlockEntityType<ZychoriumLampTile> type)
     {
         super(type);
     }
@@ -24,7 +24,7 @@ public class ZychoriumLampTile extends ColorableTile
     }
 
     @Override
-    public int getColor(BlockState state, IBlockDisplayReader getter, BlockPos pos, int tintIndex)
+    public int getColor(BlockState state, BlockAndTintGetter getter, BlockPos pos, int tintIndex)
     {
         boolean inverted = ((ZychoriumLampBlock)state.getBlock()).inverted();
         int defaultColor = inverted ? 0xFFFFFF : 0x3F3F3F;
@@ -33,7 +33,7 @@ public class ZychoriumLampTile extends ColorableTile
     }
 
     @Override
-    public void decode(CompoundNBT tag)
+    public void decode(CompoundTag tag)
     {
         super.decode(tag);
         this.hsv = Color.rgbToHSV(color.red(), color.green(), color.blue());

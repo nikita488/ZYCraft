@@ -1,23 +1,23 @@
 package nikita488.zycraft.block;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.DrinkHelper;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.World;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemUtils;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -45,19 +45,19 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     }
 
     @Override
-    public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
             transform(level, pos, pos.relative(side));
     }
 
     @Override
-    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
         transform(level, pos, relativePos);
     }
 
-    private void transform(World level, BlockPos pos, BlockPos relativePos)
+    private void transform(Level level, BlockPos pos, BlockPos relativePos)
     {
         FluidState fluidState = level.getFluidState(relativePos);
 
@@ -69,39 +69,39 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     }
 
     @Override
-    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         ItemStack heldStack = player.getItemInHand(hand);
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
 
         if (!capability.isPresent())
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
 
         IFluidHandlerItem handler = capability.get();
         FluidStack water = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
 
         if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
-            return ActionResultType.PASS;
+            return InteractionResult.PASS;
 
         player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
         player.playSound(water.getFluid().getAttributes().getFillSound(), 1F, 1F);
 
         if (level.isClientSide())
-            return ActionResultType.SUCCESS;
+            return InteractionResult.SUCCESS;
 
         handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
 
-        ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
-        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
+        ItemStack filledContainer = ItemUtils.createFilledResult(heldStack, player, handler.getContainer(), false);
+        CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayer)player, filledContainer);
 
         if (heldStack != filledContainer)
             player.setItemInHand(hand, filledContainer);
 
-        return ActionResultType.CONSUME;
+        return InteractionResult.CONSUME;
     }
 
     @Override
-    public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
+    public FluidStack getFluid(BlockState state, Level level, BlockPos pos, @Nullable Direction side)
     {
         return new FluidStack(Fluids.WATER, 50);
     }

@@ -1,7 +1,7 @@
 package nikita488.zycraft.network;
 
-import net.minecraft.network.IPacket;
-import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraftforge.fml.network.NetworkDirection;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -16,12 +16,12 @@ public class ZYPackets
     public static final PacketDistributor<MultiBlock> TRACKING_MULTI_BLOCK = new PacketDistributor<>(ZYPackets::trackingMultiBlock, NetworkDirection.PLAY_TO_CLIENT);
     private static int id;
 
-    private static Consumer<IPacket<?>> trackingMultiBlock(PacketDistributor<MultiBlock> distributor, Supplier<MultiBlock> supplier)
+    private static Consumer<Packet<?>> trackingMultiBlock(PacketDistributor<MultiBlock> distributor, Supplier<MultiBlock> supplier)
     {
         return packet ->
         {
             MultiBlock multiBlock = supplier.get();
-            ((ServerChunkProvider)multiBlock.level().getChunkSource()).chunkMap.getPlayers(multiBlock.mainChunk(), false)
+            ((ServerChunkCache)multiBlock.level().getChunkSource()).chunkMap.getPlayers(multiBlock.mainChunk(), false)
                     .forEach(player -> player.connection.send(packet));
         };
     }

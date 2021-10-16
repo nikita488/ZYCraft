@@ -1,16 +1,16 @@
 package nikita488.zycraft.item;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -50,7 +50,7 @@ public class ZYFluidContainerItem extends Item
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
     {
         if (level == null)
             return;
@@ -58,18 +58,18 @@ public class ZYFluidContainerItem extends Item
         FluidStack fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
 
         if (!fluid.isEmpty())
-            tooltip.add(((IFormattableTextComponent)fluid.getDisplayName()).withStyle(TextFormatting.GRAY));
+            tooltip.add(((MutableComponent)fluid.getDisplayName()).withStyle(ChatFormatting.GRAY));
 
         if (capacity > FluidAttributes.BUCKET_VOLUME)
             tooltip.add(ZYLang.copy(ZYLang.FLUID_TANK_FILLED, fluid.getAmount(), capacity));
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items)
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items)
     {
         super.fillItemCategory(group, items);
 
-        if (group != ItemGroup.TAB_SEARCH && group != ZYGroups.FLUIDS)
+        if (group != CreativeModeTab.TAB_SEARCH && group != ZYGroups.FLUIDS)
             return;
 
         for (Fluid fluid : ForgeRegistries.FLUIDS)
@@ -93,7 +93,7 @@ public class ZYFluidContainerItem extends Item
 
     @Nullable
     @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT tag)
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag tag)
     {
         return new FluidHandlerItemStackSimple(stack, capacity);
     }

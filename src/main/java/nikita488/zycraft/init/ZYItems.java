@@ -5,14 +5,15 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.item.Item;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fluids.FluidAttributes;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.item.*;
+import nikita488.zycraft.item.AluminiumFoilItem;
+import nikita488.zycraft.item.ZYBucketItem;
 
 import java.util.Map;
 

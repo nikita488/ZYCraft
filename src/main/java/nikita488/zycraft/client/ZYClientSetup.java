@@ -1,8 +1,8 @@
 package nikita488.zycraft.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemModelsProperties;
-import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -38,7 +38,7 @@ public class ZYClientSetup
 
         event.enqueueWork(() ->
         {
-            ItemModelsProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
+            ItemProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
             {
                 FluidStack fluidStack = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
 
@@ -65,7 +65,7 @@ public class ZYClientSetup
         Minecraft mc = Minecraft.getInstance();
 
         mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
-        ((IReloadableResourceManager)mc.getResourceManager()).registerReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
+        ((ReloadableResourceManager)mc.getResourceManager()).registerReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
     }
 
     public static GuiComponentManager guiComponentManager()

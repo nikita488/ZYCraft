@@ -1,10 +1,10 @@
 package nikita488.zycraft.init.worldgen;
 
-import net.minecraft.util.RegistryKey;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.GenerationStage;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.levelgen.GenerationStep;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.world.BiomeGenerationSettingsBuilder;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
@@ -24,7 +24,7 @@ public class ZYWorldGen
         if (name == null)
             return;
 
-        RegistryKey<Biome> biome = RegistryKey.create(Registry.BIOME_REGISTRY, name);
+        ResourceKey<Biome> biome = ResourceKey.create(Registry.BIOME_REGISTRY, name);
 
         if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.NETHER) ||
                 BiomeDictionary.hasType(biome, BiomeDictionary.Type.END) ||
@@ -33,8 +33,8 @@ public class ZYWorldGen
 
         BiomeGenerationSettingsBuilder builder = event.getGeneration();
 
-        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ZYCHORITE_VEIN);
-        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ORE_ALUMINIUM);
-        builder.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.QUARTZ_CRYSTAL_CLUSTER);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ZYCHORITE_VEIN);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.ORE_ALUMINIUM);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYConfiguredFeatures.QUARTZ_CRYSTAL_CLUSTER);
     }
 }

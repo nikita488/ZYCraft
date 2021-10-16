@@ -2,22 +2,22 @@ package nikita488.zycraft.item;
 
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.management.PlayerInteractionManager;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.ChatFormatting;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerPlayerGameMode;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.init.ZYBlocks;
@@ -40,23 +40,23 @@ public class ScytheItem extends Item
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
     {
         float durability = (stack.getMaxDamage() - stack.getDamageValue()) / (float)stack.getMaxDamage();
-        TextFormatting formatting = TextFormatting.RED;
+        ChatFormatting formatting = ChatFormatting.RED;
 
         if (durability >= 0.6F)
-            formatting = TextFormatting.GREEN;
+            formatting = ChatFormatting.GREEN;
         else if (durability >= 0.25F)
-            formatting = TextFormatting.YELLOW;
+            formatting = ChatFormatting.YELLOW;
 
         tooltip.add(ZYLang.copy(ZYLang.SCYTHE_DURABILITY, String.format("%.2f", durability * 100)).withStyle(formatting));
     }
 
     @Override
-    public ITextComponent getName(ItemStack stack)
+    public Component getName(ItemStack stack)
     {
-        return new TranslationTextComponent(getDescriptionId(stack)).withStyle(TextFormatting.BLUE);
+        return new TranslatableComponent(getDescriptionId(stack)).withStyle(ChatFormatting.BLUE);
     }
 
     @Override
@@ -86,21 +86,21 @@ public class ScytheItem extends Item
     @Override
     public boolean hurtEnemy(ItemStack stack, LivingEntity enemy, LivingEntity player)
     {
-        stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+        stack.hurtAndBreak(2, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
         return true;
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World level, BlockState state, BlockPos pos, LivingEntity player)
+    public boolean mineBlock(ItemStack stack, Level level, BlockState state, BlockPos pos, LivingEntity player)
     {
         if (level.isClientSide() || mining)
             return false;
 
-        stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+        stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 
-        if (!stack.isEmpty() && !player.isShiftKeyDown() && player instanceof ServerPlayerEntity)
+        if (!stack.isEmpty() && !player.isShiftKeyDown() && player instanceof ServerPlayer)
         {
-            PlayerInteractionManager gameMode = ((ServerPlayerEntity)player).gameMode;
+            ServerPlayerGameMode gameMode = ((ServerPlayer)player).gameMode;
             int range = 2;
 
             this.mining = true;
@@ -110,7 +110,7 @@ public class ScytheItem extends Item
                 if (destroyPos.equals(pos) || !level.mayInteract(gameMode.player, destroyPos) || !MATERIALS.contains(level.getBlockState(destroyPos).getMaterial()) || !gameMode.destroyBlock(destroyPos.immutable()))
                     continue;
 
-                stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
+                stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 
                 if (stack.isEmpty())
                     break;

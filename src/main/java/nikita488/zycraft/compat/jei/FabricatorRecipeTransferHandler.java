@@ -4,8 +4,8 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.crafting.ICraftingRecipe;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.menu.FabricatorContainer;
@@ -25,11 +25,11 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(FabricatorContainer container, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer)
+    public IRecipeTransferError transferRecipe(FabricatorContainer container, Object recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer)
     {
-        if (recipe instanceof ICraftingRecipe)
+        if (recipe instanceof CraftingRecipe)
         {
-            ICraftingRecipe craftingRecipe = (ICraftingRecipe)recipe;
+            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
 
             if (!FabricatorTile.isRecipeCompatible(craftingRecipe))
                 return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);

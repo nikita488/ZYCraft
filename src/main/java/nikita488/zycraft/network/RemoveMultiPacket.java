@@ -1,6 +1,6 @@
 package nikita488.zycraft.network;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fml.network.NetworkEvent;
 import nikita488.zycraft.multiblock.MultiBlock;
 import nikita488.zycraft.multiblock.MultiManager;
@@ -16,17 +16,17 @@ public class RemoveMultiPacket
         this.id = multiBlock.id();
     }
 
-    public RemoveMultiPacket(PacketBuffer buffer)
+    public RemoveMultiPacket(FriendlyByteBuf buffer)
     {
         this.id = buffer.readVarInt();
     }
 
-    public static RemoveMultiPacket decode(PacketBuffer buffer)
+    public static RemoveMultiPacket decode(FriendlyByteBuf buffer)
     {
         return new RemoveMultiPacket(buffer);
     }
 
-    public static void encode(RemoveMultiPacket packet, PacketBuffer buffer)
+    public static void encode(RemoveMultiPacket packet, FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(packet.id());
     }

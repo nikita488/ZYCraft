@@ -2,8 +2,8 @@ package nikita488.zycraft.enums;
 
 import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
-import net.minecraft.block.material.MaterialColor;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.world.level.material.MaterialColor;
 
 import java.util.Map;
 import java.util.Random;

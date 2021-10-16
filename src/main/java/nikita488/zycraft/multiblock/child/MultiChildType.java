@@ -1,13 +1,13 @@
 package nikita488.zycraft.multiblock.child;
 
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.material.Material;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBiomeReader;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.CommonLevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.multiblock.child.block.ConvertedMultiChildBlock;
@@ -38,13 +38,13 @@ public enum MultiChildType implements IMultiChildMatcher
     }
 
     @Nullable
-    public static MultiChildType get(IBlockReader getter, BlockPos pos)
+    public static MultiChildType get(BlockGetter getter, BlockPos pos)
     {
         return get(getter.getBlockState(pos), getter, pos);
     }
 
     @Nullable
-    public static MultiChildType get(BlockState state, IBlockReader getter, BlockPos pos)
+    public static MultiChildType get(BlockState state, BlockGetter getter, BlockPos pos)
     {
         for (MultiChildType type : VALUES)
             if (type.matches(state, getter, pos))
@@ -53,7 +53,7 @@ public enum MultiChildType implements IMultiChildMatcher
         return null;
     }
 
-    public static boolean convert(IBiomeReader accessor, BlockPos pos)
+    public static boolean convert(CommonLevelAccessor accessor, BlockPos pos)
     {
         BlockState state = accessor.getBlockState(pos);
         MultiChildType type = get(state, accessor, pos);
@@ -70,7 +70,7 @@ public enum MultiChildType implements IMultiChildMatcher
 
         accessor.setBlock(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
 
-        TileEntity blockEntity = accessor.getBlockEntity(pos);
+        BlockEntity blockEntity = accessor.getBlockEntity(pos);
 
         if (!(blockEntity instanceof IMultiChild))
             return false;
@@ -86,12 +86,12 @@ public enum MultiChildType implements IMultiChildMatcher
     }
 
     @Override
-    public boolean matches(IBlockReader getter, BlockPos pos)
+    public boolean matches(BlockGetter getter, BlockPos pos)
     {
         return get(getter, pos) == this;
     }
 
-    public boolean matches(BlockState state, IBlockReader getter, BlockPos pos)
+    public boolean matches(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return (!state.hasTileEntity() || state.getBlock() instanceof ConvertedMultiChildBlock) && matcher.matches(state, getter, pos);
     }
@@ -99,6 +99,6 @@ public enum MultiChildType implements IMultiChildMatcher
     @FunctionalInterface
     private interface Matcher
     {
-        boolean matches(BlockState state, IBlockReader getter, BlockPos pos);
+        boolean matches(BlockState state, BlockGetter getter, BlockPos pos);
     }
 }

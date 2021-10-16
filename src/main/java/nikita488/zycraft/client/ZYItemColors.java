@@ -1,8 +1,8 @@
 package nikita488.zycraft.client;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.client.color.item.ItemColor;
 import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.block.state.properties.ValveIOMode;
@@ -12,7 +12,7 @@ import nikita488.zycraft.util.ItemStackUtils;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public enum ZYItemColors implements Supplier<IItemColor>
+public enum ZYItemColors implements Supplier<ItemColor>
 {
     ZYCHORIUM_LAMP((stack, tintIndex) -> 0x3F3F3F),
     FABRICATOR((stack, tintIndex) -> ZYType.BLUE.rgb()),
@@ -23,43 +23,43 @@ public enum ZYItemColors implements Supplier<IItemColor>
             .map(containedFluid -> containedFluid.getFluid().getAttributes().getColor(containedFluid))
             .orElse(0xFFFFFF) : ZYType.GREEN.rgb());
 
-    public static final Map<ZYType, IItemColor> ZY_COLORS = Util.make(() ->
+    public static final Map<ZYType, ItemColor> ZY_COLORS = Util.make(() ->
     {
-        ImmutableMap.Builder<ZYType, IItemColor> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<ZYType, ItemColor> builder = ImmutableMap.builder();
 
         for (ZYType type : ZYType.VALUES)
             builder.put(type, (stack, tintIndex) -> type.rgb());
 
         return builder.build();
     });
-    public static final Map<ZYType, IItemColor> ZY_COLORS_WITH_OVERLAY = Util.make(() ->
+    public static final Map<ZYType, ItemColor> ZY_COLORS_WITH_OVERLAY = Util.make(() ->
     {
-        ImmutableMap.Builder<ZYType, IItemColor> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<ZYType, ItemColor> builder = ImmutableMap.builder();
 
         for (ZYType type : ZYType.VALUES)
             builder.put(type, (stack, tintIndex) -> tintIndex == 1 ? type.overlayRGB() : type.rgb());
 
         return builder.build();
     });
-    private final IItemColor color;
+    private final ItemColor color;
 
-    ZYItemColors(IItemColor color)
+    ZYItemColors(ItemColor color)
     {
         this.color = color;
     }
 
-    public static IItemColor getZYItemColor(ZYType type)
+    public static ItemColor getZYItemColor(ZYType type)
     {
         return getZYItemColor(type, false);
     }
 
-    public static IItemColor getZYItemColor(ZYType type, boolean coloredOverlay)
+    public static ItemColor getZYItemColor(ZYType type, boolean coloredOverlay)
     {
         return (coloredOverlay ? ZY_COLORS_WITH_OVERLAY : ZY_COLORS).get(type);
     }
 
     @Override
-    public IItemColor get()
+    public ItemColor get()
     {
         return color;
     }

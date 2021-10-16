@@ -1,18 +1,19 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorable;
@@ -40,14 +41,14 @@ public class ImmortalViewerBlock extends ViewerBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
+    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
     {
         return ZYTiles.COLORABLE.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader getter, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.COLORABLE);
 
@@ -66,14 +67,14 @@ public class ImmortalViewerBlock extends ViewerBlock
     }
 
     @Override
-    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         return IColorable.interact(state, level, pos, player, hand, hitResult);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)
             ParticleUtils.glowingColorableBlock(state, level, pos, random);

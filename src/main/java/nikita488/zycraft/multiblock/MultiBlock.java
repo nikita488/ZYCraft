@@ -2,19 +2,19 @@ package nikita488.zycraft.multiblock;
 
 import com.google.common.base.MoreObjects;
 import it.unimi.dsi.fastutil.objects.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.CrashReportCategory;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
@@ -35,7 +35,7 @@ public abstract class MultiBlock
     private static final AtomicInteger NEXT_MULTI_ID = new AtomicInteger();
     final MultiType<?> type;
     final MultiManager manager;
-    final World level;
+    final Level level;
     final ChunkPos mainChunk;
     final ObjectList<BlockPos> childBlocks = new ObjectArrayList<>();
     final ObjectList<BlockPos> interfaces = new ObjectArrayList<>();
@@ -44,7 +44,7 @@ public abstract class MultiBlock
     boolean valid;
     private boolean changed;
 
-    public MultiBlock(MultiType<?> type, World level, ChunkPos mainChunk)
+    public MultiBlock(MultiType<?> type, Level level, ChunkPos mainChunk)
     {
         this.type = type;
         this.manager = MultiManager.getInstance(level);
@@ -99,7 +99,7 @@ public abstract class MultiBlock
             if (!level.isLoaded(pos))
                 continue;
 
-            TileEntity blockEntity = level.getBlockEntity(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof IMultiChild)
             {
@@ -129,7 +129,7 @@ public abstract class MultiBlock
             if (!level.isLoaded(pos))
                 continue;
 
-            TileEntity blockEntity = level.getBlockEntity(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof IMultiChild)
             {
@@ -147,12 +147,12 @@ public abstract class MultiBlock
 
     public abstract void initChildBlocks();
 
-    public ActionResultType onBlockActivated(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult onBlockActivated(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        return ActionResultType.PASS;
+        return InteractionResult.PASS;
     }
 
-    public int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
+    public int getLightValue(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return state.getLightEmission();
     }
@@ -177,7 +177,7 @@ public abstract class MultiBlock
             if (!capability.isPresent() || tank.getFluidInTank(0).isEmpty())
                 continue;
 
-            TileEntity blockEntity = level.getBlockEntity(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity instanceof ValveTile)
             {
@@ -199,21 +199,21 @@ public abstract class MultiBlock
         });
     }
 
-    public void encode(PacketBuffer buffer) {}
-    public void decode(PacketBuffer buffer) {}
+    public void encode(FriendlyByteBuf buffer) {}
+    public void decode(FriendlyByteBuf buffer) {}
 
-    public void encodeUpdate(PacketBuffer buffer)
+    public void encodeUpdate(FriendlyByteBuf buffer)
     {
         encode(buffer);
     }
 
-    public void decodeUpdate(PacketBuffer buffer)
+    public void decodeUpdate(FriendlyByteBuf buffer)
     {
         decode(buffer);
     }
 
-    public void save(CompoundNBT tag) {}
-    public void load(CompoundNBT tag) {}
+    public void save(CompoundTag tag) {}
+    public void load(CompoundTag tag) {}
 
     public final void markUnsaved()
     {
@@ -269,7 +269,7 @@ public abstract class MultiBlock
         return type;
     }
 
-    public final World level()
+    public final Level level()
     {
         return level;
     }

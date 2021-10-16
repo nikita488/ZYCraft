@@ -1,10 +1,10 @@
 package nikita488.zycraft.multiblock.child.tile;
 
-import net.minecraft.state.EnumProperty;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import nikita488.zycraft.block.state.properties.InterfaceAxis;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.multiblock.MultiBlock;
@@ -22,7 +22,7 @@ public class MultiInterfaceTile extends MultiChildTile
     @Nullable
     private Direction validSide;
 
-    public MultiInterfaceTile(TileEntityType<?> type)
+    public MultiInterfaceTile(BlockEntityType<?> type)
     {
         super(type);
     }
@@ -66,7 +66,7 @@ public class MultiInterfaceTile extends MultiChildTile
             if (!level.isLoaded(relativePos))
                 continue;
 
-            TileEntity blockEntity = level.getBlockEntity(relativePos);
+            BlockEntity blockEntity = level.getBlockEntity(relativePos);
 
             if (blockEntity instanceof IMultiChild && ((IMultiChild)blockEntity).hasParent(getParent()))
                 continue;

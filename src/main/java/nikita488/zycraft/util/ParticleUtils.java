@@ -1,10 +1,10 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import nikita488.zycraft.particle.SparkleParticleData;
@@ -13,20 +13,20 @@ import java.util.Random;
 
 public class ParticleUtils
 {
-    public static void glowingBlock(BlockState state, World level, BlockPos pos, Random random)
+    public static void glowingBlock(BlockState state, Level level, BlockPos pos, Random random)
     {
         glowingBlock(state, level, pos, random, 0xFFFFFF7F);
     }
 
-    public static void glowingColorableBlock(BlockState state, World level, BlockPos pos, Random random)
+    public static void glowingColorableBlock(BlockState state, Level level, BlockPos pos, Random random)
     {
-        TileEntity blockEntity = level.getBlockEntity(pos);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof IColorable)
             glowingBlock(state, level, pos, random, Color.rgba(((IColorable)blockEntity).getColor(state, level, pos), 192));
     }
 
-    public static void glowingBlock(BlockState state, World level, BlockPos pos, Random random, int rgba)
+    public static void glowingBlock(BlockState state, Level level, BlockPos pos, Random random, int rgba)
     {
         SparkleParticleData data = SparkleParticleData.builder()
                 .color(rgba)
@@ -56,7 +56,7 @@ public class ParticleUtils
         }
     }
 
-    public static void quartzCrystalCluster(BlockState state, World level, BlockPos pos, Random random)
+    public static void quartzCrystalCluster(BlockState state, Level level, BlockPos pos, Random random)
     {
         SparkleParticleData data = SparkleParticleData.builder()
                 .color(0xFFFFFF80)

@@ -1,8 +1,8 @@
 package nikita488.zycraft.network;
 
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import nikita488.zycraft.init.ZYRegistries;
@@ -19,7 +19,7 @@ public class AddMultiPacket
     private final ChunkPos mainChunk;
     private final int id;
     private MultiBlock multiBlock;
-    private PacketBuffer buffer;
+    private FriendlyByteBuf buffer;
 
     public AddMultiPacket(MultiBlock multiBlock)
     {
@@ -29,7 +29,7 @@ public class AddMultiPacket
         this.multiBlock = multiBlock;
     }
 
-    public AddMultiPacket(PacketBuffer buffer)
+    public AddMultiPacket(FriendlyByteBuf buffer)
     {
         this.type = buffer.readRegistryIdUnsafe(ZYRegistries.MULTI_TYPES.get());
         this.mainChunk = new ChunkPos(buffer.readVarInt(), buffer.readVarInt());
@@ -37,12 +37,12 @@ public class AddMultiPacket
         this.buffer = buffer;
     }
 
-    public static AddMultiPacket decode(PacketBuffer buffer)
+    public static AddMultiPacket decode(FriendlyByteBuf buffer)
     {
         return new AddMultiPacket(buffer);
     }
 
-    public static void encode(AddMultiPacket packet, PacketBuffer buffer)
+    public static void encode(AddMultiPacket packet, FriendlyByteBuf buffer)
     {
         buffer.writeRegistryIdUnsafe(ZYRegistries.MULTI_TYPES.get(), packet.type());
         buffer.writeVarInt(packet.mainChunk().x);
@@ -55,7 +55,7 @@ public class AddMultiPacket
     {
         context.get().enqueueWork(() ->
         {
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(context.get().getDirection().getReceptionSide());
+            Optional<Level> world = LogicalSidedProvider.CLIENTWORLD.get(context.get().getDirection().getReceptionSide());
             MultiBlock multiBlock = world.map(clientWorld -> packet.type().create(clientWorld, packet.mainChunk())).orElse(null);
 
             if (multiBlock == null)
@@ -85,7 +85,7 @@ public class AddMultiPacket
         return id;
     }
 
-    public PacketBuffer buffer()
+    public FriendlyByteBuf buffer()
     {
         return buffer;
     }

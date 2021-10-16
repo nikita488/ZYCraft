@@ -1,8 +1,8 @@
 package nikita488.zycraft.multiblock.area;
 
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 
 public class AirMultiArea implements IMultiArea
 {
@@ -21,7 +21,7 @@ public class AirMultiArea implements IMultiArea
     }
 
     @Override
-    public boolean matches(World level, BlockPos pos)
+    public boolean matches(Level level, BlockPos pos)
     {
         return level.isEmptyBlock(pos);
     }

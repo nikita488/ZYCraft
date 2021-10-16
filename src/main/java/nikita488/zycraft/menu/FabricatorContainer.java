@@ -1,18 +1,18 @@
 package nikita488.zycraft.menu;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.container.ClickType;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.network.play.server.SSetSlotPacket;
-import net.minecraft.world.World;
+import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import nikita488.zycraft.block.state.properties.FabricatorMode;
@@ -28,21 +28,21 @@ import java.util.Optional;
 
 public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
 {
-    private final World level;
-    private final PlayerEntity player;
+    private final Level level;
+    private final Player player;
     private final IntMenuData modeData;
 
-    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory)
+    public FabricatorContainer(@Nullable MenuType<?> type, int windowID, Inventory playerInventory)
     {
-        this(type, windowID, playerInventory, null, new Inventory(9), new ItemStackHandler(), new ItemStackHandler(9), new IntMenuData());
+        this(type, windowID, playerInventory, null, new SimpleContainer(9), new ItemStackHandler(), new ItemStackHandler(9), new IntMenuData());
     }
 
-    public FabricatorContainer(int windowID, PlayerInventory playerInventory, FabricatorTile fabricator)
+    public FabricatorContainer(int windowID, Inventory playerInventory, FabricatorTile fabricator)
     {
         this(ZYContainers.FABRICATOR.get(), windowID, playerInventory, fabricator, fabricator.recipePattern(), fabricator.craftingResult(), fabricator.inventory(), new IntMenuData(() -> fabricator.mode().ordinal()));
     }
 
-    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable FabricatorTile fabricator, IInventory recipePattern, IItemHandler craftingResult, IItemHandler inventory, IntMenuData modeData)
+    public FabricatorContainer(@Nullable MenuType<?> type, int windowID, Inventory playerInventory, @Nullable FabricatorTile fabricator, Container recipePattern, IItemHandler craftingResult, IItemHandler inventory, IntMenuData modeData)
     {
         super(type, windowID, fabricator);
 
@@ -63,7 +63,7 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
         addSlot(new ZYSlot(craftingResult, 0, 88, 43)
         {
             @Override
-            public boolean mayPickup(PlayerEntity player)
+            public boolean mayPickup(Player player)
             {
                 return false;
             }
@@ -83,7 +83,7 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     }
 
     @Override
-    protected ItemStack doClick(int slotIndex, int button, ClickType type, PlayerEntity player)
+    protected ItemStack doClick(int slotIndex, int button, ClickType type, Player player)
     {
         if (slotIndex >= 0 && slotIndex < 9)
         {
@@ -115,24 +115,24 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     }
 
     @Override
-    public void slotsChanged(IInventory inventory)
+    public void slotsChanged(Container inventory)
     {
         if (blockEntity == null)
             return;
 
-        CraftingInventory recipePattern = blockEntity.recipePattern();
-        ICraftingRecipe lastRecipe = blockEntity.craftingRecipe();
+        CraftingContainer recipePattern = blockEntity.recipePattern();
+        CraftingRecipe lastRecipe = blockEntity.craftingRecipe();
 
         if (lastRecipe != null && lastRecipe.matches(recipePattern, level))
             return;
 
-        ServerPlayerEntity player = (ServerPlayerEntity)this.player;
-        Optional<ICraftingRecipe> craftingRecipe = level.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, recipePattern, level)
+        ServerPlayer player = (ServerPlayer)this.player;
+        Optional<CraftingRecipe> craftingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, recipePattern, level)
                 .filter(FabricatorTile::isRecipeCompatible);
         ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(recipePattern)).orElse(ItemStack.EMPTY);
 
         blockEntity.setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
-        player.connection.send(new SSetSlotPacket(containerId, 9, craftingResult));
+        player.connection.send(new ClientboundContainerSetSlotPacket(containerId, 9, craftingResult));
     }
 
     @Override
@@ -142,7 +142,7 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     }
 
     @Override
-    public boolean clickMenuButton(PlayerEntity player, int index)
+    public boolean clickMenuButton(Player player, int index)
     {
         if (blockEntity != null)
             blockEntity.setMode(FabricatorMode.VALUES[index]);

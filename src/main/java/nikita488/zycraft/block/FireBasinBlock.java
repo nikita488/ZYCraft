@@ -1,10 +1,10 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class FireBasinBlock extends Block
 {
@@ -14,7 +14,7 @@ public class FireBasinBlock extends Block
     }
 
     @Override
-    public boolean isFireSource(BlockState state, IWorldReader reader, BlockPos pos, Direction side)
+    public boolean isFireSource(BlockState state, LevelReader reader, BlockPos pos, Direction side)
     {
         return side == Direction.UP;
     }

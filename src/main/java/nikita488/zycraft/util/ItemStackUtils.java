@@ -1,8 +1,8 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.Constants;
 
 public class ItemStackUtils
@@ -87,14 +87,14 @@ public class ItemStackUtils
         return stack.getTag().contains(key, Constants.NBT.TAG_LONG_ARRAY) ? stack.getTag().getLongArray(key) : defaultValue;
     }
 
-    public static CompoundNBT getCompound(ItemStack stack, String key, CompoundNBT defaultValue)
+    public static CompoundTag getCompound(ItemStack stack, String key, CompoundTag defaultValue)
     {
         if (!stack.hasTag())
             return defaultValue;
         return stack.getTag().contains(key, Constants.NBT.TAG_COMPOUND) ? stack.getTag().getCompound(key) : defaultValue;
     }
 
-    public static ListNBT getList(ItemStack stack, String key, int type, ListNBT defaultValue)
+    public static ListTag getList(ItemStack stack, String key, int type, ListTag defaultValue)
     {
         if (!stack.hasTag())
             return defaultValue;

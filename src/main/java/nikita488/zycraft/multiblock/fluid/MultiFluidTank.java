@@ -1,12 +1,12 @@
 package nikita488.zycraft.multiblock.fluid;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.Util;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -106,7 +106,7 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
 
     public void onFluidChanged() {}
 
-    public void render(MatrixStack stack, IRenderTypeBuffer source, IBlockDisplayReader getter, float partialTicks)
+    public void render(PoseStack stack, MultiBufferSource source, BlockAndTintGetter getter, float partialTicks)
     {
         if (lastFluid.isEmpty() || capacity <= 0)
             return;
@@ -123,7 +123,7 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
     }
 
     @Override
-    public MultiFluidTank readFromNBT(CompoundNBT tag)
+    public MultiFluidTank readFromNBT(CompoundTag tag)
     {
         if (tag.contains("Fluid", Constants.NBT.TAG_COMPOUND))
             setFluid(FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid")));
@@ -131,19 +131,19 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
     }
 
     @Override
-    public CompoundNBT writeToNBT(CompoundNBT tag)
+    public CompoundTag writeToNBT(CompoundTag tag)
     {
         if (!fluid.isEmpty())
-            tag.put("Fluid", fluid.writeToNBT(new CompoundNBT()));
+            tag.put("Fluid", fluid.writeToNBT(new CompoundTag()));
         return tag;
     }
 
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         setFluid(buffer.readFluidStack());
     }
 
-    public void decodeUpdate(PacketBuffer buffer)
+    public void decodeUpdate(FriendlyByteBuf buffer)
     {
         this.fluid = buffer.readFluidStack();
 
@@ -154,7 +154,7 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
         }
     }
 
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeFluidStack(fluid);
     }

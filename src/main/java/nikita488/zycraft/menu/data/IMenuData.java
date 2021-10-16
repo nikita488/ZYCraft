@@ -1,6 +1,6 @@
 package nikita488.zycraft.menu.data;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 public interface IMenuData
 {
@@ -8,7 +8,7 @@ public interface IMenuData
 
     void update();
 
-    void encode(PacketBuffer buffer);
+    void encode(FriendlyByteBuf buffer);
 
-    void decode(PacketBuffer buffer);
+    void decode(FriendlyByteBuf buffer);
 }

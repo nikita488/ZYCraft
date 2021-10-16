@@ -1,10 +1,10 @@
 package nikita488.zycraft.client.gui.screen.inventory;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.GuiComponent;
 import nikita488.zycraft.client.gui.screen.ZYScreen;
@@ -19,7 +19,7 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/fabricator.png");
     private Menu modeMenu;
 
-    public FabricatorScreen(FabricatorContainer container, PlayerInventory inventory, ITextComponent title)
+    public FabricatorScreen(FabricatorContainer container, Inventory inventory, Component title)
     {
         super(container, inventory, title);
     }
@@ -35,7 +35,7 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();

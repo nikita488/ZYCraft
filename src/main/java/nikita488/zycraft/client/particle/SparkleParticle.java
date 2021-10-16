@@ -1,18 +1,18 @@
 package nikita488.zycraft.client.particle;
 
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.world.ClientWorld;
 import nikita488.zycraft.particle.SparkleParticleData;
 
 import javax.annotation.Nullable;
 
-public class SparkleParticle extends SpriteTexturedParticle
+public class SparkleParticle extends TextureSheetParticle
 {
-    private final IAnimatedSprite sprites;
+    private final SpriteSet sprites;
     private final boolean hasFixedSize;
 
-    public SparkleParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean hasFixedSize)
+    public SparkleParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites, boolean hasFixedSize)
     {
         super(world, x, y, z, xSpeed, ySpeed, zSpeed);
         this.sprites = sprites;
@@ -27,7 +27,7 @@ public class SparkleParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public void setSpriteFromAge(IAnimatedSprite sprites)
+    public void setSpriteFromAge(SpriteSet sprites)
     {
         setSprite(sprites.get(age, lifetime));
     }
@@ -44,9 +44,9 @@ public class SparkleParticle extends SpriteTexturedParticle
     }
 
     @Override
-    public IParticleRenderType getRenderType()
+    public ParticleRenderType getRenderType()
     {
-        return IParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
 
     @Override
@@ -60,18 +60,18 @@ public class SparkleParticle extends SpriteTexturedParticle
         this.gravity = gravity;
     }
 
-    public static class Factory implements IParticleFactory<SparkleParticleData>
+    public static class Factory implements ParticleProvider<SparkleParticleData>
     {
-        private final IAnimatedSprite sprites;
+        private final SpriteSet sprites;
 
-        public Factory(IAnimatedSprite sprites)
+        public Factory(SpriteSet sprites)
         {
             this.sprites = sprites;
         }
 
         @Nullable
         @Override
-        public Particle createParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SparkleParticleData data, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
             SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
 

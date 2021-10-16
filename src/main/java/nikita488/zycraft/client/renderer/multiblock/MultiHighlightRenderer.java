@@ -1,17 +1,17 @@
 package nikita488.zycraft.client.renderer.multiblock;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.DrawHighlightEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
@@ -25,8 +25,8 @@ public class MultiHighlightRenderer
 {
     private static final float MIN = -0.009F;
     private static final float MAX = 1.009F;
-    private static final BlockPos.Mutable LAST_POS = new BlockPos.Mutable();
-    private static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
+    private static final BlockPos.MutableBlockPos LAST_POS = new BlockPos.MutableBlockPos();
+    private static final BlockPos.MutableBlockPos RELATIVE_POS = new BlockPos.MutableBlockPos();
     private static long startTime, lastTime;
 
     public static void init()
@@ -42,12 +42,12 @@ public class MultiHighlightRenderer
             return;
 
         Minecraft mc = Minecraft.getInstance();
-        RayTraceResult hitResult = mc.hitResult;
+        HitResult hitResult = mc.hitResult;
 
-        if (hitResult != null && hitResult.getType() == RayTraceResult.Type.BLOCK)
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK)
             return;
 
-        World level = mc.level;
+        Level level = mc.level;
 
         if (level != null && (level.getGameTime() - lastTime) > 10)
             LAST_POS.set(BlockPos.ZERO);
@@ -61,9 +61,9 @@ public class MultiHighlightRenderer
 
     private static void onDrawBlockHighlight(DrawHighlightEvent.HighlightBlock event)
     {
-        World level = event.getInfo().getEntity().getCommandSenderWorld();
+        Level level = event.getInfo().getEntity().getCommandSenderWorld();
         BlockPos highlightPos = event.getTarget().getBlockPos();
-        TileEntity blockEntity = level.getBlockEntity(highlightPos);
+        BlockEntity blockEntity = level.getBlockEntity(highlightPos);
         long time = level.getGameTime();
 
         if (!LAST_POS.equals(highlightPos))
@@ -92,13 +92,13 @@ public class MultiHighlightRenderer
             for (MultiBlock multiBlock : child.parentMultiBlocks())
                 highlightBlocks.addAll(multiBlock.childBlocks());
 
-            MatrixStack stack = event.getMatrix();
-            Vector3d cameraPos = event.getInfo().getPosition();
+            PoseStack stack = event.getMatrix();
+            Vec3 cameraPos = event.getInfo().getPosition();
 
             stack.pushPose();
             stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
 
-            IVertexBuilder buffer = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
+            VertexConsumer buffer = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
 
             for (BlockPos pos : highlightBlocks)
                 for (Direction side : ZYConstants.DIRECTIONS)
@@ -109,7 +109,7 @@ public class MultiHighlightRenderer
         }
     }
 
-    private static void renderHighlightQuad(MatrixStack stack, IVertexBuilder buffer, BlockPos pos, Direction side, float alpha)
+    private static void renderHighlightQuad(PoseStack stack, VertexConsumer buffer, BlockPos pos, Direction side, float alpha)
     {
         stack.pushPose();
         stack.translate(pos.getX(), pos.getY(), pos.getZ());

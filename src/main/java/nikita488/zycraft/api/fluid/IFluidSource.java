@@ -1,14 +1,14 @@
 package nikita488.zycraft.api.fluid;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
 
 public interface IFluidSource
 {
-    FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side);
+    FluidStack getFluid(BlockState state, Level level, BlockPos pos, @Nullable Direction side);
 }

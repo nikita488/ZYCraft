@@ -1,16 +1,16 @@
 package nikita488.zycraft.client.texture;
 
-import net.minecraft.client.renderer.texture.SpriteUploader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.TextureAtlasHolder;
+import net.minecraft.resources.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.GuiComponent;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-public class GuiComponentManager extends SpriteUploader
+public class GuiComponentManager extends TextureAtlasHolder
 {
     public static final ResourceLocation ATLAS_ID = ZYCraft.id("textures/atlas/gui_components.png");
 

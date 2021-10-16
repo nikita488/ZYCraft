@@ -1,25 +1,25 @@
 package nikita488.zycraft.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Util;
+import net.minecraft.Util;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.Connection;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import nikita488.zycraft.util.BlockUtils;
 
 import javax.annotation.Nullable;
 
-public class ZYTile extends TileEntity
+public class ZYTile extends BlockEntity
 {
-    public ZYTile(TileEntityType<?> type)
+    public ZYTile(BlockEntityType<?> type)
     {
         super(type);
     }
 
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(Player player)
     {
         return level.getBlockEntity(worldPosition) == this && player.distanceToSqr(worldPosition.getX() + 0.5D, worldPosition.getY() + 0.5D, worldPosition.getZ() + 0.5D) <= 64D;
     }
@@ -42,42 +42,42 @@ public class ZYTile extends TileEntity
         BlockUtils.blockChanged(level, worldPosition, getBlockState(), false);
     }
 
-    public void decode(CompoundNBT tag) {}
+    public void decode(CompoundTag tag) {}
 
-    public void encode(CompoundNBT tag) {}
+    public void encode(CompoundTag tag) {}
 
     @Override
-    public CompoundNBT getUpdateTag()
+    public CompoundTag getUpdateTag()
     {
         return Util.make(super.getUpdateTag(), this::encode);
     }
 
     @Override
-    public void handleUpdateTag(BlockState state, CompoundNBT tag)
+    public void handleUpdateTag(BlockState state, CompoundTag tag)
     {
         decode(tag);
     }
 
-    public void decodeUpdate(CompoundNBT tag)
+    public void decodeUpdate(CompoundTag tag)
     {
         decode(tag);
     }
 
-    public void encodeUpdate(CompoundNBT tag)
+    public void encodeUpdate(CompoundTag tag)
     {
         encode(tag);
     }
 
     @Nullable
     @Override
-    public SUpdateTileEntityPacket getUpdatePacket()
+    public ClientboundBlockEntityDataPacket getUpdatePacket()
     {
-        CompoundNBT tag = Util.make(new CompoundNBT(), this::encodeUpdate);
-        return !tag.isEmpty() ? new SUpdateTileEntityPacket(worldPosition, 0, tag) : null;
+        CompoundTag tag = Util.make(new CompoundTag(), this::encodeUpdate);
+        return !tag.isEmpty() ? new ClientboundBlockEntityDataPacket(worldPosition, 0, tag) : null;
     }
 
     @Override
-    public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet)
+    public void onDataPacket(Connection manager, ClientboundBlockEntityDataPacket packet)
     {
         decodeUpdate(packet.getTag());
     }

@@ -7,14 +7,18 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.ItemOverride;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.resources.model.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.model.*;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -50,41 +54,41 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
     }
 
     @Override
-    public IBakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<RenderMaterial, TextureAtlasSprite> spriteGetter, IModelTransform transform, ItemOverrideList overrides, ResourceLocation location)
+    public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, ResourceLocation location)
     {
         if (replacementTexture == null)
             return new Baked(model.bake(bakery, model, spriteGetter, transform, location, true), new ItemOverrides(this, bakery, model, model.getOverrides()));
 
-        Map<String, Either<RenderMaterial, String>> textures = new HashMap<>(model.textureMap);
+        Map<String, Either<Material, String>> textures = new HashMap<>(model.textureMap);
 
         for (String textureName : fluidTextures)
             if (model.hasTexture(textureName))
                 textures.put(textureName, Either.left(ModelLoaderRegistry.blockMaterial(replacementTexture)));
 
-        BlockModel wrappedModel = new BlockModel(null, Collections.emptyList(), textures, false, null, ItemCameraTransforms.NO_TRANSFORMS, Collections.emptyList());
+        BlockModel wrappedModel = new BlockModel(null, Collections.emptyList(), textures, false, null, ItemTransforms.NO_TRANSFORMS, Collections.emptyList());
 
         wrappedModel.parent = model;
         return wrappedModel.bake(bakery, wrappedModel, spriteGetter, transform, location, true);
     }
 
     @Override
-    public Collection<RenderMaterial> getTextures(IModelConfiguration owner, Function<ResourceLocation, IUnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
+    public Collection<Material> getTextures(IModelConfiguration owner, Function<ResourceLocation, UnbakedModel> modelGetter, Set<Pair<String, String>> missingTextureErrors)
     {
         return model.getMaterials(modelGetter, missingTextureErrors);
     }
 
-    private static class Baked extends BakedModelWrapper<IBakedModel>
+    private static class Baked extends BakedModelWrapper<BakedModel>
     {
-        private final ItemOverrideList overrides;
+        private final ItemOverrides overrides;
 
-        public Baked(IBakedModel model, ItemOverrideList overrides)
+        public Baked(BakedModel model, ItemOverrides overrides)
         {
             super(model);
             this.overrides = overrides;
         }
 
         @Override
-        public ItemOverrideList getOverrides()
+        public ItemOverrides getOverrides()
         {
             return overrides;
         }
@@ -95,13 +99,13 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
         public static final Loader INSTANCE = new Loader();
 
         @Override
-        public void onResourceManagerReload(IResourceManager manager) {}
+        public void onResourceManagerReload(ResourceManager manager) {}
 
         @Override
         public FluidContainerModel read(JsonDeserializationContext ctx, JsonObject data)
         {
-            BlockModel model = JSONUtils.getAsObject(data, "model", ctx, BlockModel.class);
-            JsonArray array = JSONUtils.getAsJsonArray(data, "fluid_textures");
+            BlockModel model = GsonHelper.getAsObject(data, "model", ctx, BlockModel.class);
+            JsonArray array = GsonHelper.getAsJsonArray(data, "fluid_textures");
 
             if (array.size() == 0)
                 throw new JsonParseException("Expected at least 1 fluid texture, got 0");
@@ -109,21 +113,21 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
             ObjectList<String> fluidTextures = new ObjectArrayList<>();
 
             for (JsonElement element : array)
-                fluidTextures.add(JSONUtils.convertToString(element, "texture"));
+                fluidTextures.add(GsonHelper.convertToString(element, "texture"));
 
             return new FluidContainerModel(model, fluidTextures);
         }
     }
 
-    private static class ItemOverrides extends ItemOverrideList
+    private static class ItemOverrides extends ItemOverrides
     {
         private final FluidContainerModel parent;
         private final ModelBakery bakery;
-        private final IUnbakedModel emptyModel;
+        private final UnbakedModel emptyModel;
         private final ItemOverride[] overrides;
-        private final Object2ObjectMap<ResourceLocation, IBakedModel[]> overrideModels = new Object2ObjectOpenHashMap<>();
+        private final Object2ObjectMap<ResourceLocation, BakedModel[]> overrideModels = new Object2ObjectOpenHashMap<>();
 
-        public ItemOverrides(FluidContainerModel parent, ModelBakery bakery, IUnbakedModel emptyModel, List<ItemOverride> overrides)
+        public ItemOverrides(FluidContainerModel parent, ModelBakery bakery, UnbakedModel emptyModel, List<ItemOverride> overrides)
         {
             this.parent = parent;
             this.bakery = bakery;
@@ -136,7 +140,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
         @Nullable
         @Override
-        public IBakedModel resolve(IBakedModel emptyModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
+        public BakedModel resolve(BakedModel emptyModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity)
         {
             if (overrides.length == 0)
                 return emptyModel;
@@ -149,15 +153,15 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
             FluidAttributes attributes = fluidStack.getFluid().getAttributes();
             ResourceLocation texture = attributes.getStillTexture(fluidStack);
-            IBakedModel[] models = overrideModels.computeIfAbsent(id, key ->
+            BakedModel[] models = overrideModels.computeIfAbsent(id, key ->
             {
-                IBakedModel[] wrappedModels = new IBakedModel[overrides.length];
-                ModelRotation rotation = attributes.isLighterThanAir() ? ModelRotation.X180_Y0 : ModelRotation.X0_Y0;
+                BakedModel[] wrappedModels = new BakedModel[overrides.length];
+                BlockModelRotation rotation = attributes.isLighterThanAir() ? BlockModelRotation.X180_Y0 : BlockModelRotation.X0_Y0;
 
                 for (int i = 0; i < overrides.length; i++)
                 {
                     ItemOverride override = overrides[i];
-                    IUnbakedModel model = bakery.getModel(override.getModel());
+                    UnbakedModel model = bakery.getModel(override.getModel());
 
                     if (!Objects.equals(model, this.emptyModel) && model instanceof BlockModel)
                         wrappedModels[i] = parent.wrapModel((BlockModel)model, texture)
@@ -172,7 +176,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
                 if (!overrides[i].test(stack, world, entity))
                     continue;
 
-                IBakedModel model = models[i];
+                BakedModel model = models[i];
                 return model != null ? model : emptyModel;
             }
 

@@ -1,16 +1,16 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
@@ -34,14 +34,14 @@ public class ZychoriumLampBlock extends ColorableBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
+    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
     {
         return ZYTiles.ZYCHORIUM_LAMP.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (state.getValue(LIT))
             ParticleUtils.glowingColorableBlock(state, level, pos, random);
@@ -49,13 +49,13 @@ public class ZychoriumLampBlock extends ColorableBlock
 
     @Nullable
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         return defaultBlockState().setValue(LIT, inverted != context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
     @Override
-    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
         if (level.isClientSide())
             return;
@@ -70,7 +70,7 @@ public class ZychoriumLampBlock extends ColorableBlock
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
     {
         if (isLit(state) && !world.hasNeighborSignal(pos))
             world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
@@ -82,7 +82,7 @@ public class ZychoriumLampBlock extends ColorableBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(LIT);
     }

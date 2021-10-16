@@ -1,14 +1,14 @@
 package nikita488.zycraft.multiblock.child;
 
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.multiblock.MultiBlock;
 
 public interface IMultiChild
@@ -61,12 +61,12 @@ public interface IMultiChild
         return parentMultiBlocks().get(index);
     }
 
-    default ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    default InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        return parentCount() == 1 ? getParent().onBlockActivated(state, level, pos, player, hand, hitResult) : ActionResultType.CONSUME;
+        return parentCount() == 1 ? getParent().onBlockActivated(state, level, pos, player, hand, hitResult) : InteractionResult.CONSUME;
     }
 
-    default int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
+    default int getLightValue(BlockState state, BlockGetter getter, BlockPos pos)
     {
         int emission = state.getLightEmission();
 
@@ -76,7 +76,7 @@ public interface IMultiChild
         return emission;
     }
 
-    default int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
+    default int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
         return 0;
     }

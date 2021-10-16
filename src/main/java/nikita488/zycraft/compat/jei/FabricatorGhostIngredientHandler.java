@@ -3,10 +3,10 @@ package nikita488.zycraft.compat.jei;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import mezz.jei.api.gui.handlers.IGhostIngredientHandler;
-import net.minecraft.client.renderer.Rectangle2d;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
+import net.minecraft.client.renderer.Rect2i;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
 import nikita488.zycraft.network.SetSlotStackPacket;
@@ -22,7 +22,7 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
         if (!(ingredient instanceof ItemStack))
             return Collections.emptyList();
 
-        Container menu = screen.getMenu();
+        AbstractContainerMenu menu = screen.getMenu();
         ObjectList<Target<I>> targets = new ObjectArrayList<>();
 
         for (int i = 0; i < 9; i++)
@@ -32,9 +32,9 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
             targets.add(new Target<I>()
             {
                 @Override
-                public Rectangle2d getArea()
+                public Rect2i getArea()
                 {
-                    return new Rectangle2d(screen.getGuiLeft() + slot.x, screen.getGuiTop() + slot.y, 16, 16);
+                    return new Rect2i(screen.getGuiLeft() + slot.x, screen.getGuiTop() + slot.y, 16, 16);
                 }
 
                 @Override

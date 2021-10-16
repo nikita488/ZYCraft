@@ -1,13 +1,13 @@
 package nikita488.zycraft.client.texture;
 
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.client.renderer.texture.NativeImage;
+import com.mojang.blaze3d.platform.NativeImage;
+import net.minecraft.Util;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.IResource;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.server.packs.resources.Resource;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.Mth;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.textures.ITextureAtlasSpriteLoader;
 import nikita488.zycraft.ZYCraft;
@@ -19,12 +19,12 @@ import java.util.Random;
 
 public class CloudSprite extends TextureAtlasSprite
 {
-    public static final RenderMaterial MATERIAL = ModelLoaderRegistry.blockMaterial(ZYCraft.id("cloud"));
+    public static final Material MATERIAL = ModelLoaderRegistry.blockMaterial(ZYCraft.id("cloud"));
     private static final int[] OFFSETS = new int[] {0, -1, 0, 1};
     private static final Random RANDOM = new Random();
     private final float[] pixels, baseLayer, adjustmentLayer;
 
-    protected CloudSprite(AtlasTexture atlas, TextureAtlasSprite.Info info, int mipMapLevel, int atlasWidth, int atlasHeight, int x, int y, NativeImage image)
+    protected CloudSprite(TextureAtlas atlas, TextureAtlasSprite.Info info, int mipMapLevel, int atlasWidth, int atlasHeight, int x, int y, NativeImage image)
     {
         super(atlas, info, 0, atlasWidth, atlasHeight, x, y, image);
         this.pixels = new float[info.width() * info.height()];
@@ -64,7 +64,7 @@ public class CloudSprite extends TextureAtlasSprite
 
     private void set(int x, int y)
     {
-        int color = (int)(MathHelper.clamp(pixel(pixels, x, y) * 2F, 0F, 1F) * 255);
+        int color = (int)(Mth.clamp(pixel(pixels, x, y) * 2F, 0F, 1F) * 255);
         mainImage[0].setPixelRGBA(x, y, Color.argb(color, color, color, 255));
     }
 
@@ -106,7 +106,7 @@ public class CloudSprite extends TextureAtlasSprite
     {
         @Nonnull
         @Override
-        public TextureAtlasSprite load(AtlasTexture atlas, IResourceManager manager, Info info, IResource resource, int atlasWidth, int atlasHeight, int spriteX, int spriteY, int mipMapLevel, NativeImage image)
+        public TextureAtlasSprite load(TextureAtlas atlas, ResourceManager manager, Info info, Resource resource, int atlasWidth, int atlasHeight, int spriteX, int spriteY, int mipMapLevel, NativeImage image)
         {
             return new CloudSprite(atlas, info, mipMapLevel, atlasWidth, atlasHeight, spriteX, spriteY, Util.make(new NativeImage(image.getWidth(), image.getHeight(), false), NativeImage::untrack));
         }

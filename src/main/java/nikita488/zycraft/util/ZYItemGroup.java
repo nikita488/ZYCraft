@@ -1,14 +1,14 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.ZYCraft;
 
 import java.util.function.Supplier;
 
-public class ZYItemGroup extends ItemGroup
+public class ZYItemGroup extends CreativeModeTab
 {
     private final Supplier<ItemStack> iconFactory;
 

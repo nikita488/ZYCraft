@@ -3,19 +3,19 @@ package nikita488.zycraft.tile;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectListIterator;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.world.Containers;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
@@ -39,7 +39,7 @@ public class FabricatorLogic
     private final EnumSet<Direction> checkedSides = EnumSet.noneOf(Direction.class);
     private final EnumSet<Direction> pendingSides = EnumSet.noneOf(Direction.class);
     private final EnumMap<Direction, ObjectList<ItemStack>> pendingItems = new EnumMap<>(Direction.class);
-    private final CraftingInventory craftingInventory = new CraftingInventory(ZYContainer.EMPTY_CONTAINER, 3, 3);
+    private final CraftingContainer craftingInventory = new CraftingContainer(ZYContainer.EMPTY_CONTAINER, 3, 3);
     private int foundIngredientCount;
 
     public FabricatorLogic(FabricatorTile fabricator)
@@ -49,13 +49,13 @@ public class FabricatorLogic
 
     private LazyOptional<IItemHandler> getRelativeInventory(Direction side)
     {
-        World level = fabricator.getLevel();
+        Level level = fabricator.getLevel();
         BlockPos relativePos = fabricator.getBlockPos().relative(side);
 
         if (!level.isLoaded(relativePos))
             return LazyOptional.empty();
 
-        TileEntity blockEntity = level.getBlockEntity(relativePos);
+        BlockEntity blockEntity = level.getBlockEntity(relativePos);
         return blockEntity != null ? blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite()) : LazyOptional.empty();
     }
 
@@ -139,7 +139,7 @@ public class FabricatorLogic
 
     public void tryCraft()
     {
-        ICraftingRecipe recipe = fabricator.craftingRecipe();
+        CraftingRecipe recipe = fabricator.craftingRecipe();
         ItemStack craftingResult = fabricator.craftingResultStack();
 
         if (recipe == null || craftingResult.isEmpty() || isAllSidesChecked())
@@ -169,7 +169,7 @@ public class FabricatorLogic
 
         tryInsertItem(fabricator.inventory(), craftingResult);
 
-        PlayerInventory playerInventory = player.inventory;
+        Inventory playerInventory = player.inventory;
 
         for (int slot = 0; slot < playerInventory.getContainerSize(); slot++)
         {
@@ -266,34 +266,34 @@ public class FabricatorLogic
         BlockPos pos = fabricator.getBlockPos();
 
         for (ObjectList<ItemStack> items : pendingItems.values())
-            items.forEach(stack -> InventoryHelper.dropItemStack(fabricator.getLevel(), pos.getX(), pos.getY(), pos.getZ(), stack));
+            items.forEach(stack -> Containers.dropItemStack(fabricator.getLevel(), pos.getX(), pos.getY(), pos.getZ(), stack));
     }
 
-    public void load(CompoundNBT tag)
+    public void load(CompoundTag tag)
     {
         if (!tag.contains("PendingItems", Constants.NBT.TAG_LIST))
             return;
 
-        ListNBT pendingItemTags = tag.getList("PendingItems", Constants.NBT.TAG_COMPOUND);
+        ListTag pendingItemTags = tag.getList("PendingItems", Constants.NBT.TAG_COMPOUND);
 
         for (int i = 0; i < pendingItemTags.size(); i++)
         {
-            CompoundNBT pendingItemTag = pendingItemTags.getCompound(i);
+            CompoundTag pendingItemTag = pendingItemTags.getCompound(i);
             Direction side = ZYConstants.DIRECTIONS[pendingItemTag.getInt("Side")];
 
             addPendingItem(side, ItemStack.of(pendingItemTag));
         }
     }
 
-    public void save(CompoundNBT tag)
+    public void save(CompoundTag tag)
     {
-        ListNBT pendingItemTags = new ListNBT();
+        ListTag pendingItemTags = new ListTag();
 
         pendingItems.forEach((side, items) ->
         {
             for (ItemStack stack : items)
             {
-                CompoundNBT pendingItemTag = new CompoundNBT();
+                CompoundTag pendingItemTag = new CompoundTag();
 
                 pendingItemTag.putInt("Side", side.get3DDataValue());
                 stack.save(pendingItemTag);

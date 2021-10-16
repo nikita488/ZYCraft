@@ -2,7 +2,7 @@ package nikita488.zycraft.multiblock.child.tile;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import nikita488.zycraft.multiblock.MultiBlock;
@@ -14,7 +14,7 @@ public class MultiChildTile extends ZYTile implements IMultiChild
     public static final int FIRST_AND_ONLY = -1;
     protected final ObjectList<MultiBlock> parentMultiBlocks = new ObjectArrayList<>();
 
-    public MultiChildTile(TileEntityType<?> type)
+    public MultiChildTile(BlockEntityType<?> type)
     {
         super(type);
     }

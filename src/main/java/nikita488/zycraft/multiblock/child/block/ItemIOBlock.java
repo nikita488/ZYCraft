@@ -1,12 +1,13 @@
 package nikita488.zycraft.multiblock.child.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.state.EnumProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.init.ZYLang;
@@ -26,7 +27,7 @@ public class ItemIOBlock extends MultiInterfaceBlock
     }
 
     @Override
-    protected void addTooltip(List<ITextComponent> tooltip)
+    protected void addTooltip(List<Component> tooltip)
     {
         tooltip.add(ZYLang.ITEM_IO_INFO);
         tooltip.add(ZYLang.ITEM_IO_FEATURE);
@@ -34,7 +35,7 @@ public class ItemIOBlock extends MultiInterfaceBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
+    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
     {
         return ZYTiles.ITEM_IO.create();
     }
@@ -46,7 +47,7 @@ public class ItemIOBlock extends MultiInterfaceBlock
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         super.createBlockStateDefinition(builder);
         builder.add(IO_MODE);

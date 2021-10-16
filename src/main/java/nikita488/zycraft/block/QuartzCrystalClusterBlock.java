@@ -1,23 +1,23 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.ItemEntity;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.block.shape.ClusterShapes;
@@ -38,20 +38,20 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    public boolean canBeReplaced(BlockState state, BlockItemUseContext context)
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext context)
     {
         return context.getItemInHand().getItem() == asItem() && state.getValue(AMOUNT) < 5 || super.canBeReplaced(state, context);
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext context)
+    public BlockState getStateForPlacement(BlockPlaceContext context)
     {
         BlockState state = context.getLevel().getBlockState(context.getClickedPos());
         return state.is(this) ? state.setValue(AMOUNT, Math.min(state.getValue(AMOUNT) + 1, 5)) : defaultBlockState().setValue(FACING, context.getClickedFace());
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader reader, BlockPos pos)
+    public boolean canSurvive(BlockState state, LevelReader reader, BlockPos pos)
     {
         Direction facing = state.getValue(FACING);
         BlockPos oppositePos = pos.relative(facing.getOpposite());
@@ -60,7 +60,7 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld accessor, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos currentPos, BlockPos facingPos)
     {
         if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos))
             return state;
@@ -70,26 +70,26 @@ public class QuartzCrystalClusterBlock extends Block
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         ParticleUtils.quartzCrystalCluster(state, level, pos, random);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
     {
         return ClusterShapes.get(state);
     }
 
     @Override
-    public void entityInside(BlockState state, World level, BlockPos pos, Entity entity)
+    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
         if (!(entity instanceof ItemEntity))
             entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
     {
         builder.add(FACING, AMOUNT);
     }

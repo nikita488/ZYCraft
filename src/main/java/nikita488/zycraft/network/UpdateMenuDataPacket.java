@@ -1,8 +1,8 @@
 package nikita488.zycraft.network;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.fml.LogicalSidedProvider;
 import net.minecraftforge.fml.network.NetworkEvent;
 import nikita488.zycraft.menu.ZYContainer;
@@ -14,7 +14,7 @@ public class UpdateMenuDataPacket
 {
     private final int windowID, index;
     private IMenuData variable;
-    private PacketBuffer buffer;
+    private FriendlyByteBuf buffer;
 
     public UpdateMenuDataPacket(int windowID, int index, IMenuData variable)
     {
@@ -23,19 +23,19 @@ public class UpdateMenuDataPacket
         this.variable = variable;
     }
 
-    public UpdateMenuDataPacket(PacketBuffer buffer)
+    public UpdateMenuDataPacket(FriendlyByteBuf buffer)
     {
         this.windowID = buffer.readVarInt();
         this.index = buffer.readVarInt();
         this.buffer = buffer;
     }
 
-    public static UpdateMenuDataPacket decode(PacketBuffer buffer)
+    public static UpdateMenuDataPacket decode(FriendlyByteBuf buffer)
     {
         return new UpdateMenuDataPacket(buffer);
     }
 
-    public static void encode(UpdateMenuDataPacket packet, PacketBuffer buffer)
+    public static void encode(UpdateMenuDataPacket packet, FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(packet.windowID());
         buffer.writeVarInt(packet.id());
@@ -52,7 +52,7 @@ public class UpdateMenuDataPacket
             if (mc.player == null)
                 return;
 
-            Container container = mc.player.containerMenu;
+            AbstractContainerMenu container = mc.player.containerMenu;
 
             if (container.containerId == packet.windowID && container instanceof ZYContainer)
                 ((ZYContainer)container).handleVariable(packet.id(), packet.buffer());
@@ -76,7 +76,7 @@ public class UpdateMenuDataPacket
         return variable;
     }
 
-    public PacketBuffer buffer()
+    public FriendlyByteBuf buffer()
     {
         return buffer;
     }

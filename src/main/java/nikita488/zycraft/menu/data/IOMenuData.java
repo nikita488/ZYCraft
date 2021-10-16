@@ -1,6 +1,6 @@
 package nikita488.zycraft.menu.data;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.multiblock.inventory.IMultiItemIOHandler;
 
@@ -43,7 +43,7 @@ public class IOMenuData implements IMenuData, Supplier<EnumSet<ItemIOMode>>
     }
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(activeModes.size());
 
@@ -52,7 +52,7 @@ public class IOMenuData implements IMenuData, Supplier<EnumSet<ItemIOMode>>
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         activeModes.clear();
 

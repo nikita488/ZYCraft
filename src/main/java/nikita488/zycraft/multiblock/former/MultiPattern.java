@@ -2,9 +2,9 @@ package nikita488.zycraft.multiblock.former;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBiomeReader;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.CommonLevelAccessor;
 import nikita488.zycraft.multiblock.MultiBlock;
 import nikita488.zycraft.multiblock.child.IMultiChild;
 import nikita488.zycraft.multiblock.child.IMultiChildMatcher;
@@ -31,7 +31,7 @@ public class MultiPattern
 
     public boolean process(BlockPos basePos, MultiChildProcessor processor)
     {
-        BlockPos.Mutable processingPos = basePos.mutable();
+        BlockPos.MutableBlockPos processingPos = basePos.mutable();
 
         for (int x = 0; x < width(); x++)
             for (int y = 0; y < height(); y++)
@@ -42,7 +42,7 @@ public class MultiPattern
         return true;
     }
 
-    public void convert(IBiomeReader world, BlockPos basePos, MultiBlock multiBlock)
+    public void convert(CommonLevelAccessor world, BlockPos basePos, MultiBlock multiBlock)
     {
         process(basePos, (matcherIndex, pos) ->
         {
@@ -57,7 +57,7 @@ public class MultiPattern
         });
     }
 
-    public boolean matches(IBlockReader getter, BlockPos basePos)
+    public boolean matches(BlockGetter getter, BlockPos basePos)
     {
         return process(basePos, (matcherIndex, pos) -> matcherIndex < 0 || matchers[matcherIndex].matches(getter, pos));
     }

@@ -1,8 +1,8 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.util.Mth;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -81,23 +81,23 @@ public class Color
         return fromRGBA((int)r, (int)g, (int)b, (int)a);
     }
 
-    public static Color load(CompoundNBT tag)
+    public static Color load(CompoundTag tag)
     {
         return fromRGBA(tag.getInt("Color"));
     }
 
-    public Color save(CompoundNBT tag)
+    public Color save(CompoundTag tag)
     {
         tag.putInt("Color", color);
         return this;
     }
 
-    public static Color decode(PacketBuffer buffer)
+    public static Color decode(FriendlyByteBuf buffer)
     {
         return fromRGBA(buffer.readVarInt());
     }
 
-    public Color encode(PacketBuffer buffer)
+    public Color encode(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(color);
         return this;
@@ -252,7 +252,7 @@ public class Color
 
     public static int hsvToRGB(float h, float s, float v)
     {
-        return MathHelper.hsvToRgb(h, s, v);
+        return Mth.hsvToRgb(h, s, v);
     }
 
     private static int wrap(int value)
@@ -262,11 +262,11 @@ public class Color
 
     private static int clamp(int value)
     {
-        return MathHelper.clamp(value, 0, 255);
+        return Mth.clamp(value, 0, 255);
     }
 
     private static float clamp(float value)
     {
-        return MathHelper.clamp(value, 0, 255);
+        return Mth.clamp(value, 0, 255);
     }
 }

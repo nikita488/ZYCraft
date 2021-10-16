@@ -1,8 +1,8 @@
 package nikita488.zycraft.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.util.Color;
@@ -12,7 +12,7 @@ public class FluidSelectorTile extends ZYTile
     private float[] hsv;
     private FluidStack selectedFluid = FluidStack.EMPTY;
 
-    public FluidSelectorTile(TileEntityType<?> type)
+    public FluidSelectorTile(BlockEntityType<?> type)
     {
         super(type);
     }
@@ -24,7 +24,7 @@ public class FluidSelectorTile extends ZYTile
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundTag tag)
     {
         super.load(state, tag);
 
@@ -33,18 +33,18 @@ public class FluidSelectorTile extends ZYTile
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         super.save(tag);
 
         if (!selectedFluid.isEmpty())
-            tag.put("SelectedFluid", selectedFluid.writeToNBT(new CompoundNBT()));
+            tag.put("SelectedFluid", selectedFluid.writeToNBT(new CompoundTag()));
 
         return tag;
     }
 
     @Override
-    public void decode(CompoundNBT tag)
+    public void decode(CompoundTag tag)
     {
         this.selectedFluid = FluidStack.loadFluidStackFromNBT(tag);
 
@@ -56,14 +56,14 @@ public class FluidSelectorTile extends ZYTile
     }
 
     @Override
-    public void decodeUpdate(CompoundNBT tag)
+    public void decodeUpdate(CompoundTag tag)
     {
         super.decodeUpdate(tag);
         blockChanged();
     }
 
     @Override
-    public void encode(CompoundNBT tag)
+    public void encode(CompoundTag tag)
     {
         if (!selectedFluid.isEmpty())
             selectedFluid.writeToNBT(tag);

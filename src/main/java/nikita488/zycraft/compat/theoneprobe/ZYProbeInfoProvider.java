@@ -1,13 +1,12 @@
 package nikita488.zycraft.compat.theoneprobe;
 
-import mcjty.theoneprobe.api.*;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.api.fluid.IFluidSource;
@@ -37,7 +36,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player, World level, BlockState state, IProbeHitData data)
+    public void addProbeInfo(ProbeMode mode, IProbeInfo info, Player player, Level level, BlockState state, IProbeHitData data)
     {
         if (ZYBlocks.FABRICATOR.has(state))
             addFabricatorProbeInfo(info, state);
@@ -56,11 +55,11 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(FabricatorBlock.MODE).displayName()));
     }
 
-    private void addValveProbeInfo(IProbeInfo info, World level, BlockState state, BlockPos pos)
+    private void addValveProbeInfo(IProbeInfo info, Level level, BlockState state, BlockPos pos)
     {
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ValveBlock.IO_MODE).displayName()));
 
-        TileEntity blockEntity = level.getBlockEntity(pos);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
 
         if (blockEntity instanceof ValveTile)
         {
@@ -72,7 +71,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                         .tankSimple(storedFluid.getAmount(), storedFluid,
                                 info.defaultProgressStyle()
                                         .prefix(storedFluid.getDisplayName().copy().append(" "))
-                                        .suffix(new StringTextComponent(" mB")));
+                                        .suffix(new TextComponent(" mB")));
         }
     }
 
@@ -81,7 +80,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ItemIOBlock.IO_MODE).displayName()));
     }
 
-    private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, World level, BlockState state, BlockPos pos, Direction side)
+    private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, Level level, BlockState state, BlockPos pos, Direction side)
     {
         FluidStack fluid = source.getFluid(state, level, pos, side);
 
@@ -91,10 +90,10 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .tankSimple(fluid.getAmount(), fluid,
                             info.defaultProgressStyle()
                                     .prefix(fluid.getDisplayName().copy().append(" "))
-                                    .suffix(new StringTextComponent(" mB")));
+                                    .suffix(new TextComponent(" mB")));
     }
 
-    private void addFluidVoidProbeInfo(IProbeInfo info, IFluidVoid fluidVoid, World level, BlockState state, BlockPos pos, Direction side)
+    private void addFluidVoidProbeInfo(IProbeInfo info, IFluidVoid fluidVoid, Level level, BlockState state, BlockPos pos, Direction side)
     {
         FluidStack fluidToDrain = fluidVoid.getFluidToDrain(state, level, pos, side);
         int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(state, level, pos, side) : 0;
@@ -105,7 +104,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .tankSimple(fluidToDrain.getAmount(), fluidToDrain,
                             info.defaultProgressStyle()
                                     .prefix(fluidToDrain.getDisplayName().copy().append(" "))
-                                    .suffix(new StringTextComponent(" mB")));
+                                    .suffix(new TextComponent(" mB")));
         else if (drainAmount > 0)
             info.horizontal().text(CompoundText.create()
                     .label(ZYLang.VOID_FLUID_LABEL)

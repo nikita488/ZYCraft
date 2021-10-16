@@ -1,9 +1,9 @@
 package nikita488.zycraft.network;
 
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.function.Supplier;
@@ -20,19 +20,19 @@ public class SetSlotStackPacket
         this.stack = stack;
     }
 
-    public SetSlotStackPacket(PacketBuffer buffer)
+    public SetSlotStackPacket(FriendlyByteBuf buffer)
     {
         this.windowID = buffer.readVarInt();
         this.slotIndex = buffer.readVarInt();
         this.stack = buffer.readItem();
     }
 
-    public static SetSlotStackPacket decode(PacketBuffer buffer)
+    public static SetSlotStackPacket decode(FriendlyByteBuf buffer)
     {
         return new SetSlotStackPacket(buffer);
     }
 
-    public static void encode(SetSlotStackPacket packet, PacketBuffer buffer)
+    public static void encode(SetSlotStackPacket packet, FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(packet.windowID());
         buffer.writeVarInt(packet.slotIndex());
@@ -43,14 +43,14 @@ public class SetSlotStackPacket
     {
         context.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = context.get().getSender();
+            ServerPlayer player = context.get().getSender();
 
             if (player == null)
                 return;
 
             player.resetLastActionTime();
 
-            Container container = player.containerMenu;
+            AbstractContainerMenu container = player.containerMenu;
 
             if (container.containerId == packet.windowID() && container.isSynched(player) && !player.isSpectator())
                 container.getSlot(packet.slotIndex()).set(packet.stack());

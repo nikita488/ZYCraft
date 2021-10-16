@@ -1,6 +1,6 @@
 package nikita488.zycraft.client.gui;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 
 public enum GuiComponent

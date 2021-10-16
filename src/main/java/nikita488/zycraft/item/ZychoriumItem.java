@@ -1,15 +1,15 @@
 package nikita488.zycraft.item;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ZYType;
@@ -26,7 +26,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean canChangeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int rgb)
+    public boolean canChangeColor(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, int rgb)
     {
         int red = (rgb >> 16) & 255;
         int green = (rgb >> 8) & 255;
@@ -57,7 +57,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public int changeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int rgb)
+    public int changeColor(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult, int rgb)
     {
         int rgba = Color.rgba(rgb, 255);
         boolean sneaking = player.isShiftKeyDown();
@@ -79,7 +79,7 @@ public class ZychoriumItem extends Item implements IColorChanger
                 else
                     brightness -= (8 / 255F);
 
-                return Color.hsvToRGB(hsv[0], hsv[1], MathHelper.clamp(brightness, 0F, 1F));
+                return Color.hsvToRGB(hsv[0], hsv[1], Mth.clamp(brightness, 0F, 1F));
             case LIGHT:
                 return sneaking ? 0x080808 : 0xFFFFFF;
         }
@@ -88,7 +88,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader reader, BlockPos pos, PlayerEntity player)
+    public boolean doesSneakBypassUse(ItemStack stack, LevelReader reader, BlockPos pos, Player player)
     {
         return IColorable.isColorable(reader, pos);
     }

@@ -2,9 +2,9 @@ package nikita488.zycraft.worldgen.placement;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.level.levelgen.feature.configurations.DecoratorConfiguration;
 
-public class ClusterPlacementConfig implements IPlacementConfig
+public class ClusterPlacementConfig implements DecoratorConfiguration
 {
     public static final Codec<ClusterPlacementConfig> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.INT.fieldOf("generation_attempts").orElse(0).forGetter(config -> config.generationAttempts),

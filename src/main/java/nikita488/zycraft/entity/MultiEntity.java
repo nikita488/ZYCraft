@@ -1,15 +1,15 @@
 package nikita488.zycraft.entity;
 
-import net.minecraft.block.material.PushReaction;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.LightningBoltEntity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.IPacket;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.network.NetworkHooks;
 import nikita488.zycraft.init.ZYEntities;
@@ -25,12 +25,12 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     private IDynamicMultiBlock parentMultiBlock;
     private int multiID = -1;
 
-    public MultiEntity(EntityType<MultiEntity> type, World level)
+    public MultiEntity(EntityType<MultiEntity> type, Level level)
     {
         super(type, level);
     }
 
-    public MultiEntity(World level, IDynamicMultiBlock parentMultiBlock, int multiID)
+    public MultiEntity(Level level, IDynamicMultiBlock parentMultiBlock, int multiID)
     {
         super(ZYEntities.MULTI_BLOCK.get(), level);
 
@@ -80,13 +80,13 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     }
 
     @Override
-    public void readSpawnData(PacketBuffer buffer)
+    public void readSpawnData(FriendlyByteBuf buffer)
     {
         this.multiID = buffer.readVarInt();
     }
 
     @Override
-    public void writeSpawnData(PacketBuffer buffer)
+    public void writeSpawnData(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(multiID);
     }
@@ -95,13 +95,13 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     protected void defineSynchedData() {}
 
     @Override
-    protected void readAdditionalSaveData(CompoundNBT tag) {}
+    protected void readAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    protected void addAdditionalSaveData(CompoundNBT tag) {}
+    protected void addAdditionalSaveData(CompoundTag tag) {}
 
     @Override
-    public IPacket<?> getAddEntityPacket()
+    public Packet<?> getAddEntityPacket()
     {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
@@ -116,7 +116,7 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     public void kill() {}
 
     @Override
-    public void thunderHit(ServerWorld world, LightningBoltEntity lightning) {}
+    public void thunderHit(ServerLevel world, LightningBolt lightning) {}
 
     @Nullable
     public IDynamicMultiBlock parentMultiBlock()

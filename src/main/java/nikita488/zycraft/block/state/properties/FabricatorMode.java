@@ -1,11 +1,11 @@
 package nikita488.zycraft.block.state.properties;
 
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.StringRepresentable;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.init.ZYLang;
 
-public enum FabricatorMode implements IStringSerializable
+public enum FabricatorMode implements StringRepresentable
 {
     AUTO_LOW("auto_low"),
     AUTO_HIGH("auto_high"),
@@ -41,7 +41,7 @@ public enum FabricatorMode implements IStringSerializable
         return powered ? ZYType.BLUE.rgb() : 0x002142;
     }
 
-    public TranslationTextComponent displayName()
+    public TranslatableComponent displayName()
     {
         switch (this)
         {

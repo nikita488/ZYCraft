@@ -1,6 +1,6 @@
 package nikita488.zycraft.menu.data;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.Nullable;
 import java.util.function.IntSupplier;
@@ -31,13 +31,13 @@ public class IntMenuData implements IMenuData, IntSupplier {
     }
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(value);
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         this.value = buffer.readVarInt();
     }

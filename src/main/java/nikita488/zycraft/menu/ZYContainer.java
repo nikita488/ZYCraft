@@ -2,15 +2,15 @@ package nikita488.zycraft.menu;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.IContainerListener;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerListener;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fml.network.PacketDistributor;
 import net.minecraftforge.items.IItemHandler;
 import nikita488.zycraft.ZYCraft;
@@ -19,19 +19,19 @@ import nikita488.zycraft.network.UpdateMenuDataPacket;
 
 import javax.annotation.Nullable;
 
-public abstract class ZYContainer extends Container
+public abstract class ZYContainer extends AbstractContainerMenu
 {
-    public static final Container EMPTY_CONTAINER = new Container(null, -1)
+    public static final AbstractContainerMenu EMPTY_CONTAINER = new AbstractContainerMenu(null, -1)
     {
         @Override
-        public boolean stillValid(PlayerEntity player)
+        public boolean stillValid(Player player)
         {
             return false;
         }
     };
     protected final ObjectList<IMenuData> data = new ObjectArrayList<>();
 
-    public ZYContainer(@Nullable ContainerType<?> type, int id)
+    public ZYContainer(@Nullable MenuType<?> type, int id)
     {
         super(type, id);
     }
@@ -52,12 +52,12 @@ public abstract class ZYContainer extends Container
             throw new IllegalArgumentException("Data size " + size + " is smaller than expected " + minSize);
     }
 
-    public void addPlayerInventorySlots(PlayerInventory inventory)
+    public void addPlayerInventorySlots(Inventory inventory)
     {
         addPlayerInventorySlots(inventory, 16, 92);
     }
 
-    public void addPlayerInventorySlots(PlayerInventory inventory, int x, int y)
+    public void addPlayerInventorySlots(Inventory inventory, int x, int y)
     {
         for(int i = 0; i < 3; i++)
             for (int j = 0; j < 9; j++)
@@ -72,7 +72,7 @@ public abstract class ZYContainer extends Container
         data.add(variable);
     }
 
-    public void handleVariable(int index, PacketBuffer buffer)
+    public void handleVariable(int index, FriendlyByteBuf buffer)
     {
         data.get(index).decode(buffer);
     }
@@ -92,9 +92,9 @@ public abstract class ZYContainer extends Container
             if (!variable.canBeUpdated())
                 continue;
 
-            for (IContainerListener listener : containerListeners)
-                if (listener instanceof ServerPlayerEntity)
-                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayerEntity)listener)), new UpdateMenuDataPacket(containerId, i, variable));
+            for (ContainerListener listener : containerListeners)
+                if (listener instanceof ServerPlayer)
+                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> ((ServerPlayer)listener)), new UpdateMenuDataPacket(containerId, i, variable));
         }
     }
 
@@ -104,7 +104,7 @@ public abstract class ZYContainer extends Container
     }
 
     @Override
-    public ItemStack quickMoveStack(PlayerEntity player, int slotIndex)
+    public ItemStack quickMoveStack(Player player, int slotIndex)
     {
         ItemStack stack = ItemStack.EMPTY;
         Slot slot = slots.get(slotIndex);

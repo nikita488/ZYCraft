@@ -4,12 +4,12 @@ import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.particles.IParticleData;
-import net.minecraft.particles.ParticleType;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.FriendlyByteBuf;
 import nikita488.zycraft.init.ZYParticles;
 
-public class SparkleParticleData implements IParticleData
+public class SparkleParticleData implements ParticleOptions
 {
     public static final Codec<SparkleParticleData> CODEC = RecordCodecBuilder.create(instance -> instance
             .group(Codec.INT.fieldOf("color").forGetter(data -> data.color),
@@ -21,7 +21,7 @@ public class SparkleParticleData implements IParticleData
                     Codec.BOOL.fieldOf("has_fixed_size").forGetter(data -> data.hasFixedSize))
             .apply(instance, SparkleParticleData::new));
 
-    public static final IParticleData.IDeserializer<SparkleParticleData> DESERIALIZER = new IParticleData.IDeserializer<SparkleParticleData>()
+    public static final ParticleOptions.Deserializer<SparkleParticleData> DESERIALIZER = new ParticleOptions.Deserializer<SparkleParticleData>()
     {
         @Override
         public SparkleParticleData fromCommand(ParticleType<SparkleParticleData> type, StringReader reader) throws CommandSyntaxException
@@ -44,7 +44,7 @@ public class SparkleParticleData implements IParticleData
         }
 
         @Override
-        public SparkleParticleData fromNetwork(ParticleType<SparkleParticleData> type, PacketBuffer buffer)
+        public SparkleParticleData fromNetwork(ParticleType<SparkleParticleData> type, FriendlyByteBuf buffer)
         {
             return new SparkleParticleData(buffer.readVarInt(), buffer.readVarInt(), buffer.readFloat(), buffer.readFloat(), buffer.readBoolean(), buffer.readBoolean(), buffer.readBoolean());
         }
@@ -75,7 +75,7 @@ public class SparkleParticleData implements IParticleData
     }
 
     @Override
-    public void writeToNetwork(PacketBuffer buffer)
+    public void writeToNetwork(FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(color);
         buffer.writeVarInt(lifetimeFactor);

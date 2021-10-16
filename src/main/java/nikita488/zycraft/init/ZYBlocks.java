@@ -9,31 +9,36 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import net.minecraft.advancements.criterion.StatePropertiesPredicate;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
+import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.data.ShapedRecipeBuilder;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Items;
-import net.minecraft.item.Rarity;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.loot.*;
-import net.minecraft.loot.conditions.BlockStateProperty;
-import net.minecraft.loot.conditions.SurvivesExplosion;
-import net.minecraft.loot.functions.ApplyBonus;
-import net.minecraft.loot.functions.ExplosionDecay;
-import net.minecraft.loot.functions.SetCount;
-import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.level.material.MaterialColor;
+import net.minecraft.world.level.storage.loot.ConstantIntValue;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.RandomValueBounds;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
+import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
+import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
+import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
+import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
@@ -47,7 +52,9 @@ import nikita488.zycraft.client.ZYBlockColors;
 import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.multiblock.child.block.*;
+import nikita488.zycraft.multiblock.child.block.ConvertedMultiChildBlock;
+import nikita488.zycraft.multiblock.child.block.ItemIOBlock;
+import nikita488.zycraft.multiblock.child.block.MultiAirBlock;
 import nikita488.zycraft.multiblock.child.tile.ItemIOTile;
 import nikita488.zycraft.multiblock.child.tile.MultiAirTile;
 import nikita488.zycraft.multiblock.child.tile.ValveTile;
@@ -136,20 +143,20 @@ public class ZYBlocks
             .addLayer(() -> RenderType::translucent)
             .loot((tables, block) -> tables.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
-                            .when(SurvivesExplosion.survivesExplosion())
-                            .setRolls(ConstantRange.exactly(1))
-                            .add(ItemLootEntry.lootTableItem(block)
-                                    .apply(SetCount.setCount(ConstantRange.exactly(2))
-                                            .when(BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
+                            .when(ExplosionCondition.survivesExplosion())
+                            .setRolls(ConstantIntValue.exactly(1))
+                            .add(LootItem.lootTableItem(block)
+                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(2))
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 2))))
-                                    .apply(SetCount.setCount(ConstantRange.exactly(3))
-                                            .when(BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
+                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(3))
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 3))))
-                                    .apply(SetCount.setCount(ConstantRange.exactly(4))
-                                            .when(BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
+                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(4))
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 4))))
-                                    .apply(SetCount.setCount(ConstantRange.exactly(5))
-                                            .when(BlockStateProperty.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
+                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(5))
+                                            .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 5))))))))
             .blockstate((ctx, provider) -> NonNullConsumer.noop())
             .item()
@@ -192,10 +199,10 @@ public class ZYBlocks
             .properties(properties -> properties.requiresCorrectToolForDrops().strength(3F))
             .tag(ZYTags.Blocks.ORES_ZYCHORIUM)
             .loot((tables, ore) -> tables.add(ore, RegistrateBlockLootTables.droppingWithSilkTouch(ore,
-                    ItemLootEntry.lootTableItem(ZYItems.ZYCHORIUM.get(type).get())
-                            .apply(ExplosionDecay.explosionDecay())
-                            .apply(SetCount.setCount(RandomValueRange.between(1, 3)))
-                            .apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))))));
+                    LootItem.lootTableItem(ZYItems.ZYCHORIUM.get(type).get())
+                            .apply(ApplyExplosionDecay.explosionDecay())
+                            .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1, 3)))
+                            .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))))));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, block) -> block
             .tag(ZYTags.Blocks.STORAGE_BLOCKS_ZYCHORIUM)
@@ -312,7 +319,7 @@ public class ZYBlocks
     );
 
     public static final Map<ViewerType, BlockEntry<ViewerBlock>> PHANTOMIZED_VIEWER = viewer("phantomized_{type}_viewer", (type, block) -> block
-            .properties(AbstractBlock.Properties::noCollission)
+            .properties(BlockBehaviour.Properties::noCollission)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(VIEWER.get(type).getId())))
             .tag(ZYTags.Blocks.VIEWERS_PHANTOMIZED)
             .recipe((ctx, provider) -> infused(provider, DataIngredient.items(Items.PHANTOM_MEMBRANE), DataIngredient.items(VIEWER.get(type)), ctx::getEntry))
@@ -342,7 +349,7 @@ public class ZYBlocks
     );
 
     public static final Map<ViewerType, BlockEntry<ImmortalViewerBlock>> PHANTOMIZED_IMMORTAL_VIEWER = immortalViewer("phantomized_{type}_immortal_viewer", (type, block) -> block
-            .properties(AbstractBlock.Properties::noCollission)
+            .properties(BlockBehaviour.Properties::noCollission)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(basicImmortalViewer().getId())))
             .tag(ZYTags.Blocks.VIEWERS_PHANTOMIZED_IMMORTAL)
             .recipe((ctx, provider) -> infused(provider, DataIngredient.items(Items.PHANTOM_MEMBRANE), DataIngredient.items(IMMORTAL_VIEWER.get(type)), ctx::getEntry))
@@ -367,7 +374,7 @@ public class ZYBlocks
 
     public static final BlockEntry<ZychoriumSoilBlock> ZYCHORIUM_SOIL = REGISTRATE.block("zychorium_soil", ZychoriumSoilBlock::new)
             .transform(builder -> basicMachine(builder, ZYType.GREEN))
-            .properties(AbstractBlock.Properties::randomTicks)
+            .properties(BlockBehaviour.Properties::randomTicks)
             .blockstate((ctx, provider) ->
             {
                 ModelFile model = provider.models()
@@ -603,7 +610,7 @@ public class ZYBlocks
                 .emissiveRendering(ConvertedMultiChildBlock::emissiveRendering))
                 .color(() -> ZYBlockColors.CONVERTED_MULTI_CHILD)
                 .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(ZYCraft.id("block/converted_multi_child"))))
-                .onRegister(entry -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> RenderTypeLookup.setRenderLayer(entry, layer -> true)));
+                .onRegister(entry -> DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> ItemBlockRenderTypes.setRenderLayer(entry, layer -> true)));
     }
 
     private static <T extends MultiInterfaceBlock> BlockBuilder<T, Registrate> multiInterface(BlockBuilder<T, Registrate> block)
@@ -631,7 +638,7 @@ public class ZYBlocks
                 });
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)
     {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result.get(), count).define('X', source);
 
@@ -647,18 +654,18 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
     {
         bricks(provider, DataIngredient.items(source), result);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         square(provider, source, result, 4, true);
         provider.stonecutting(source, result);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get(), 4)
                 .define('I', infusionSource)
@@ -670,7 +677,7 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         DataIngredient core = DataIngredient.tag(Tags.Items.DUSTS_REDSTONE);
 
@@ -685,12 +692,12 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         colorable(provider.safeId(result.get()), provider, source, result);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get(), 4)
                 .define('#', source)
@@ -706,7 +713,7 @@ public class ZYBlocks
                 .save(provider, name);
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void lamp(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> result, boolean inverted)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void lamp(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> result, boolean inverted)
     {
         DataIngredient quartzCrystalSource = DataIngredient.items(QUARTZ_CRYSTAL);
 
@@ -732,7 +739,7 @@ public class ZYBlocks
                 .save(provider, provider.safeId(to.getId()) + "_from_" + provider.safeName(from.getId()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void basicMachine(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void basicMachine(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result.get())
                 .define('X', DataIngredient.tag(ZYTags.Items.ENGINEERING_BLOCKS.get(type)))
@@ -749,7 +756,7 @@ public class ZYBlocks
         builder.save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends IItemProvider & IForgeRegistryEntry<?>> void multiInterface(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike & IForgeRegistryEntry<?>> void multiInterface(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get())
                 .define('X', DataIngredient.tag(ZYTags.Items.ENGINEERING_BLOCKS.get(type)))

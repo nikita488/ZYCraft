@@ -1,7 +1,7 @@
 package nikita488.zycraft.api.util;
 
-import net.minecraft.item.DyeColor;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 
 import javax.annotation.Nullable;
 

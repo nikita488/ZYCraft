@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
 import mezz.jei.api.constants.VanillaRecipeCategoryUid;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
-import net.minecraft.client.renderer.Rectangle2d;
+import net.minecraft.client.renderer.Rect2i;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
 
 import java.util.Collection;
@@ -15,9 +15,9 @@ import java.util.List;
 public class FabricatorGuiContainerHandler implements IGuiContainerHandler<FabricatorScreen>
 {
     @Override
-    public List<Rectangle2d> getGuiExtraAreas(FabricatorScreen screen)
+    public List<Rect2i> getGuiExtraAreas(FabricatorScreen screen)
     {
-        return Collections.singletonList(new Rectangle2d(screen.getGuiLeft() - 34, screen.getGuiTop() + 23, 34, 80));
+        return Collections.singletonList(new Rect2i(screen.getGuiLeft() - 34, screen.getGuiTop() + 23, 34, 80));
     }
 
     @Override

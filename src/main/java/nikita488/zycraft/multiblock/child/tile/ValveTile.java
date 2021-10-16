@@ -1,17 +1,17 @@
 package nikita488.zycraft.multiblock.child.tile;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tileentity.ITickableTileEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Util;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.World;
+import net.minecraft.Util;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.TickableBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.LazyOptional;
@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity, IFluidHandler
+public class ValveTile extends MultiInterfaceTile implements TickableBlockEntity, IFluidHandler
 {
     private final Supplier<ValveIOMode> mode = () -> getBlockState().getValue(ValveBlock.IO_MODE);
     private LazyOptional<IFluidHandler> capability = LazyOptional.empty();
@@ -41,7 +41,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     private IMultiFluidHandler.Level fromTank, toTank;
     private FluidStack storedFluid = FluidStack.EMPTY;
 
-    public ValveTile(TileEntityType<?> type)
+    public ValveTile(BlockEntityType<?> type)
     {
         super(type);
     }
@@ -82,7 +82,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         }
         else if (state.hasTileEntity())
         {
-            TileEntity blockEntity = level.getBlockEntity(pos);
+            BlockEntity blockEntity = level.getBlockEntity(pos);
 
             if (blockEntity != null)
                 blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())
@@ -185,7 +185,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
         if (!mode.get().isOutput())
             return 0;
@@ -193,7 +193,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
         int capacity = mainTank.getTankCapacity(0);
         float proportion = capacity > 0 ? (float)mainTank.getFluidInTank(0).getAmount() / capacity : 0;
 
-        return MathHelper.floor(proportion * 14) + (proportion > 0 ? 1 : 0);
+        return Mth.floor(proportion * 14) + (proportion > 0 ? 1 : 0);
     }
 
     @Override
@@ -242,7 +242,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundTag tag)
     {
         super.load(state, tag);
 
@@ -251,12 +251,12 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         super.save(tag);
 
         if (!storedFluid.isEmpty())
-            tag.put("StoredFluid", storedFluid.writeToNBT(new CompoundNBT()));
+            tag.put("StoredFluid", storedFluid.writeToNBT(new CompoundTag()));
 
         return tag;
     }

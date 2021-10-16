@@ -1,20 +1,20 @@
 package nikita488.zycraft.multiblock.child.tile;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
-import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.ColorResolver;
-import net.minecraft.world.lighting.WorldLightManager;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.lighting.LevelLightEngine;
+import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -29,11 +29,11 @@ import javax.annotation.Nullable;
 public class ConvertedMultiChildTile extends MultiChildTile
 {
     public static final ModelProperty<BlockState> INITIAL_STATE = new ModelProperty<>();
-    public static final ModelProperty<IBlockDisplayReader> BLOCK_GETTER = new ModelProperty<>();
+    public static final ModelProperty<BlockAndTintGetter> BLOCK_GETTER = new ModelProperty<>();
     public static final ModelProperty<BlockPos> POS = new ModelProperty<>();
     private BlockState initialState = Blocks.AIR.defaultBlockState();
 
-    public ConvertedMultiChildTile(TileEntityType<ConvertedMultiChildTile> type)
+    public ConvertedMultiChildTile(BlockEntityType<ConvertedMultiChildTile> type)
     {
         super(type);
     }
@@ -81,28 +81,28 @@ public class ConvertedMultiChildTile extends MultiChildTile
     }
 
     @Override
-    public void load(BlockState state, CompoundNBT tag)
+    public void load(BlockState state, CompoundTag tag)
     {
         super.load(state, tag);
-        this.initialState = NBTUtil.readBlockState(tag.getCompound("InitialState"));
+        this.initialState = NbtUtils.readBlockState(tag.getCompound("InitialState"));
     }
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         super.save(tag);
-        tag.put("InitialState", NBTUtil.writeBlockState(initialState));
+        tag.put("InitialState", NbtUtils.writeBlockState(initialState));
         return tag;
     }
 
     @Override
-    public void decode(CompoundNBT tag)
+    public void decode(CompoundTag tag)
     {
         this.initialState = Block.stateById(tag.getInt("InitialState"));
     }
 
     @Override
-    public void decodeUpdate(CompoundNBT tag)
+    public void decodeUpdate(CompoundTag tag)
     {
         super.decodeUpdate(tag);
         requestModelDataUpdate();
@@ -110,7 +110,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
     }
 
     @Override
-    public void encode(CompoundNBT tag)
+    public void encode(CompoundTag tag)
     {
         tag.putInt("InitialState", Block.getId(initialState));
     }
@@ -120,7 +120,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
         return initialState;
     }
 
-    private class BlockGetter implements IBlockDisplayReader
+    private class BlockGetter implements BlockAndTintGetter
     {
         @Override
         public BlockState getBlockState(BlockPos pos)
@@ -128,7 +128,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
             if (pos.equals(ConvertedMultiChildTile.this.getBlockPos()))
                 return initialState;
 
-            TileEntity blockEntity = getBlockEntity(pos);
+            BlockEntity blockEntity = getBlockEntity(pos);
             return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState() : level.getBlockState(pos);
         }
 
@@ -140,7 +140,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
         }
 
         @Override
-        public WorldLightManager getLightEngine()
+        public LevelLightEngine getLightEngine()
         {
             return level.getLightEngine();
         }
@@ -154,7 +154,7 @@ public class ConvertedMultiChildTile extends MultiChildTile
 
         @Nullable
         @Override
-        public TileEntity getBlockEntity(BlockPos pos)
+        public BlockEntity getBlockEntity(BlockPos pos)
         {
             return level.getBlockEntity(pos);
         }

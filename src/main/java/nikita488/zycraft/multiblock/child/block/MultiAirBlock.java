@@ -1,15 +1,15 @@
 package nikita488.zycraft.multiblock.child.block;
 
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.util.math.shapes.VoxelShapes;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import nikita488.zycraft.init.ZYTiles;
 
 import javax.annotation.Nullable;
@@ -23,31 +23,31 @@ public class MultiAirBlock extends MultiChildBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
+    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
     {
         return ZYTiles.MULTI_AIR.create();
     }
 
     @Override
-    public BlockRenderType getRenderShape(BlockState state)
+    public RenderShape getRenderShape(BlockState state)
     {
-        return BlockRenderType.INVISIBLE;
+        return RenderShape.INVISIBLE;
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext ctx)
     {
-        return VoxelShapes.block();
+        return Shapes.block();
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext ctx)
     {
-        return VoxelShapes.empty();
+        return Shapes.empty();
     }
 
     @Override
-    public boolean canBeReplaced(BlockState state, BlockItemUseContext ctx)
+    public boolean canBeReplaced(BlockState state, BlockPlaceContext ctx)
     {
         return false;
     }
@@ -59,19 +59,19 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader getter, BlockPos pos)
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return true;
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, IBlockReader getter, BlockPos pos)
+    public float getShadeBrightness(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return 1F;
     }
 
     @Override
-    public boolean isAir(BlockState state, IBlockReader getter, BlockPos pos)
+    public boolean isAir(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return false;
     }

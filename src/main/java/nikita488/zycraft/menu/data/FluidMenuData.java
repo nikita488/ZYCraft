@@ -1,6 +1,6 @@
 package nikita488.zycraft.menu.data;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
@@ -33,13 +33,13 @@ public class FluidMenuData implements IMenuData, Supplier<FluidStack>
     }
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeFluidStack(fluid);
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         this.fluid = buffer.readFluidStack();
     }

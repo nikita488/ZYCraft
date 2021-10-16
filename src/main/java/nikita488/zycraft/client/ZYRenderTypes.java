@@ -1,21 +1,21 @@
 package nikita488.zycraft.client;
 
-import net.minecraft.client.renderer.RenderState;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import nikita488.zycraft.ZYCraft;
 import org.lwjgl.opengl.GL11;
 
-public class ZYRenderTypes extends RenderState
+public class ZYRenderTypes extends RenderStateShard
 {
     public static final RenderType MULTI_HIGHLIGHT = RenderType.create(ZYCraft.string("multi_highlight"),
-            DefaultVertexFormats.POSITION_COLOR_TEX,
+            DefaultVertexFormat.POSITION_COLOR_TEX,
             GL11.GL_QUADS, 256,
             false, true,
-            RenderType.State.builder()
-                    .setTextureState(new TextureState(ZYCraft.id("textures/misc/multi_highlight.png"), false, false))
-                    .setTransparencyState(RenderState.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(RenderState.COLOR_WRITE)
+            RenderType.CompositeState.builder()
+                    .setTextureState(new TextureStateShard(ZYCraft.id("textures/misc/multi_highlight.png"), false, false))
+                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(RenderStateShard.COLOR_WRITE)
                     .createCompositeState(false));
 
     private ZYRenderTypes(String name, Runnable setupTask, Runnable clearTask)

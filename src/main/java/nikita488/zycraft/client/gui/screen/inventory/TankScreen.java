@@ -1,13 +1,14 @@
 package nikita488.zycraft.client.gui.screen.inventory;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Inventory;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.GuiComponent;
 import nikita488.zycraft.client.gui.screen.ZYScreen;
+import nikita488.zycraft.client.gui.screen.ZYScreen.FluidGaugeWidget;
 import nikita488.zycraft.client.texture.GuiComponentManager;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.menu.TankContainer;
@@ -17,7 +18,7 @@ public class TankScreen extends ZYScreen<TankContainer>
 {
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/tank.png");
 
-    public TankScreen(TankContainer container, PlayerInventory inventory, ITextComponent title)
+    public TankScreen(TankContainer container, Inventory inventory, Component title)
     {
         super(container, inventory, title);
         this.imageHeight = 188;
@@ -31,7 +32,7 @@ public class TankScreen extends ZYScreen<TankContainer>
     }
 
     @Override
-    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY)
+    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY)
     {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();

@@ -1,18 +1,18 @@
 package nikita488.zycraft.client.renderer.multiblock;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.vertex.IVertexBuilder;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.Matrix4f;
+import com.mojang.math.Vector3f;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.LevelRenderer;
+import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.RenderTypeLookup;
-import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.fluid.Fluid;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,12 +23,12 @@ import static net.minecraft.client.renderer.LightTexture.*;
 
 public class MultiFluidRenderer
 {
-    public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, IBlockDisplayReader getter, BlockPos lightPos)
+    public static void render(PoseStack pose, MultiBufferSource source, FluidStack stack, Cuboid6i bounds, float resolution, float density, BlockAndTintGetter getter, BlockPos lightPos)
     {
-        render(pose, source, stack, bounds, resolution, density, WorldRenderer.getLightColor(getter, lightPos));
+        render(pose, source, stack, bounds, resolution, density, LevelRenderer.getLightColor(getter, lightPos));
     }
 
-    public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, int lightMap)
+    public static void render(PoseStack pose, MultiBufferSource source, FluidStack stack, Cuboid6i bounds, float resolution, float density, int lightMap)
     {
         if (stack.isEmpty())
             return;
@@ -49,10 +49,10 @@ public class MultiFluidRenderer
 
         for (RenderType type : RenderType.chunkBufferLayers())
         {
-            if (!RenderTypeLookup.canRenderInLayer(fluid.defaultFluidState(), type))
+            if (!ItemBlockRenderTypes.canRenderInLayer(fluid.defaultFluidState(), type))
                 continue;
 
-            IVertexBuilder builder = source.getBuffer(type);
+            VertexConsumer builder = source.getBuffer(type);
 
             origin.set(bounds.minX(), bounds.minY(), bounds.minZ());
             fillFluidQuads(pose, builder, origin, Direction.DOWN, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);
@@ -82,7 +82,7 @@ public class MultiFluidRenderer
         return vec;
     }
 
-    private static void fillFluidQuads(MatrixStack pose, IVertexBuilder consumer, Vector3f origin, Direction side, float resolution, float width, float height, int color, TextureAtlasSprite sprite, int lightMap)
+    private static void fillFluidQuads(PoseStack pose, VertexConsumer consumer, Vector3f origin, Direction side, float resolution, float width, float height, int color, TextureAtlasSprite sprite, int lightMap)
     {
         pose.pushPose();
         pose.translate(origin.x(), origin.y(), origin.z());

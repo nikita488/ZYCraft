@@ -1,24 +1,24 @@
 package nikita488.zycraft.multiblock;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.INamedContainerProvider;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.common.util.NonNullLazy;
@@ -42,7 +42,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, INamedContainerProvider
+public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, MenuProvider
 {
     public static final int INPUT_SLOT = 0;
     public static final int OUTPUT_SLOT = 1;
@@ -81,12 +81,12 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     private LazyOptional<IFluidHandler> fluidCapability = LazyOptional.empty();
     private LazyOptional<IItemHandler> itemCapability = LazyOptional.empty();
 
-    public TankMultiBlock(World level, ChunkPos pos)
+    public TankMultiBlock(Level level, ChunkPos pos)
     {
         super(ZYMultiTypes.TANK.get(), level, pos);
     }
 
-    public TankMultiBlock(World level, Cuboid6i innerArea)
+    public TankMultiBlock(Level level, Cuboid6i innerArea)
     {
         this(level, new ChunkPos(innerArea.center()));
         this.innerArea = innerArea.immutable();
@@ -106,30 +106,30 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public AxisAlignedBB aabb()
+    public AABB aabb()
     {
-        return new AxisAlignedBB(innerArea.minX(), innerArea.minY(), innerArea.minZ(), innerArea.maxX() + 1, innerArea.maxY() + 1, innerArea.maxZ() + 1);
+        return new AABB(innerArea.minX(), innerArea.minY(), innerArea.minZ(), innerArea.maxX() + 1, innerArea.maxY() + 1, innerArea.maxZ() + 1);
     }
 
     @Override
-    public ITextComponent getDisplayName()
+    public Component getDisplayName()
     {
         return ZYLang.TANK;
     }
 
     @Nullable
     @Override
-    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player)
+    public AbstractContainerMenu createMenu(int windowID, Inventory playerInventory, Player player)
     {
         return new TankContainer(windowID, playerInventory, this);
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult onBlockActivated(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (!level.isClientSide())
-            NetworkHooks.openGui((ServerPlayerEntity)player, this, buffer -> buffer.writeVarInt(tank.get().getCapacity()));
-        return ActionResultType.sidedSuccess(level.isClientSide());
+            NetworkHooks.openGui((ServerPlayer)player, this, buffer -> buffer.writeVarInt(tank.get().getCapacity()));
+        return InteractionResult.sidedSuccess(level.isClientSide());
     }
 
     @Override
@@ -186,7 +186,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int lightMap, float partialTicks)
+    public void render(PoseStack stack, MultiBufferSource buffer, int lightMap, float partialTicks)
     {
         tank.get().render(stack, buffer, level, partialTicks);
     }
@@ -215,7 +215,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public void load(CompoundNBT tag)
+    public void load(CompoundTag tag)
     {
         this.innerArea = Cuboid6i.load(tag.getCompound("InnerArea"));
         tank.get().readFromNBT(tag.getCompound("Tank"));
@@ -223,35 +223,35 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public void save(CompoundNBT tag)
+    public void save(CompoundTag tag)
     {
-        tag.put("InnerArea", innerArea.save(new CompoundNBT()));
-        tag.put("Tank", tank.get().writeToNBT(new CompoundNBT()));
+        tag.put("InnerArea", innerArea.save(new CompoundTag()));
+        tag.put("Tank", tank.get().writeToNBT(new CompoundTag()));
         tag.put("Inventory", inventory.serializeNBT());
     }
 
     @Override
-    public void decode(PacketBuffer buffer)
+    public void decode(FriendlyByteBuf buffer)
     {
         this.innerArea = Cuboid6i.decode(buffer);
         tank.get().decode(buffer);
     }
 
     @Override
-    public void encode(PacketBuffer buffer)
+    public void encode(FriendlyByteBuf buffer)
     {
         innerArea.encode(buffer);
         tank.get().encode(buffer);
     }
 
     @Override
-    public void decodeUpdate(PacketBuffer buffer)
+    public void decodeUpdate(FriendlyByteBuf buffer)
     {
         tank.get().decodeUpdate(buffer);
     }
 
     @Override
-    public void encodeUpdate(PacketBuffer buffer)
+    public void encodeUpdate(FriendlyByteBuf buffer)
     {
         tank.get().encode(buffer);
     }

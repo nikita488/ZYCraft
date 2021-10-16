@@ -1,7 +1,7 @@
 package nikita488.zycraft.init.worldgen;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.worldgen.feature.ClusterFeature;
 import nikita488.zycraft.worldgen.feature.ClusterFeatureConfig;

@@ -1,10 +1,10 @@
 package nikita488.zycraft.block;
 
-import net.minecraft.block.AbstractGlassBlock;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractGlassBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.enums.ViewerType;
@@ -23,20 +23,20 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader getter, BlockPos pos)
+    public int getLightBlock(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return type == ViewerType.DARK ? getter.getMaxLightLevel() : super.getLightBlock(state, getter, pos);
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader getter, BlockPos pos)
+    public boolean propagatesSkylightDown(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return type != ViewerType.DARK;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)
             ParticleUtils.glowingBlock(state, level, pos, random);

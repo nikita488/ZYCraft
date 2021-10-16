@@ -1,15 +1,15 @@
 package nikita488.zycraft.multiblock.child.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.multiblock.child.IMultiChild;
 
 import javax.annotation.Nullable;
@@ -29,26 +29,26 @@ public abstract class MultiChildBlock extends Block
 
     @Nullable
     @Override
-    public abstract TileEntity createTileEntity(BlockState state, IBlockReader getter);
+    public abstract BlockEntity createTileEntity(BlockState state, BlockGetter getter);
 
     @Override
-    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
-        TileEntity blockEntity = level.getBlockEntity(pos);
-        return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).use(state, level, pos, player, hand, hitResult) : ActionResultType.CONSUME;
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).use(state, level, pos, player, hand, hitResult) : InteractionResult.CONSUME;
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
+    public int getLightValue(BlockState state, BlockGetter getter, BlockPos pos)
     {
-        TileEntity blockEntity = getter.getBlockEntity(pos);
+        BlockEntity blockEntity = getter.getBlockEntity(pos);
         return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).getLightValue(state, getter, pos) : state.getLightEmission();
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
-        TileEntity blockEntity = level.getBlockEntity(pos);
+        BlockEntity blockEntity = level.getBlockEntity(pos);
         return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).getAnalogOutputSignal(state, level, pos) : 0;
     }
 }

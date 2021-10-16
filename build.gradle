@@ -24,7 +24,7 @@ version = "${minecraft_version}-${mod_version}"
 group = "${mod_base_package}.${mod_id}"
 archivesBaseName = mod_name
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 
@@ -94,18 +94,19 @@ dependencies {
     implementation fg.deobf(registrate)
     shade registrate
 
-    implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
+    //implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-    compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
-    runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
+    //compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
+    //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
     compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}:api")
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
 
-    runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
+    runtimeOnly fg.deobf('curse.maven:the-one-probe-245211:3430022')
+    //runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
     //runtimeOnly fg.deobf('curse.maven:storage-drawers-223852:3180569')
-    runtimeOnly fg.deobf('curse.maven:mantle-74924:3389377')
-    runtimeOnly fg.deobf('curse.maven:tinkers-construct-74072:3389395')
+    //runtimeOnly fg.deobf('curse.maven:mantle-74924:3389377')
+    //runtimeOnly fg.deobf('curse.maven:tinkers-construct-74072:3389395')
     //runtimeOnly fg.deobf('curse.maven:chisel-235279:3376782')
 }
 
@@ -196,6 +197,7 @@ publishing {
     }
 }
 
+/*
 tasks.curseforge.enabled = project.hasProperty('api_key')
 
 curseforge {
@@ -220,4 +222,4 @@ curseforge {
             optionalDependency 'jade'
         }
     }
-}
+}*/

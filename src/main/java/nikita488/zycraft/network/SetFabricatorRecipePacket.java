@@ -1,13 +1,13 @@
 package nikita488.zycraft.network;
 
 import mezz.jei.api.gui.ingredient.IGuiIngredient;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.ICraftingRecipe;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraftforge.fml.network.NetworkEvent;
 import nikita488.zycraft.menu.FabricatorContainer;
 import nikita488.zycraft.tile.FabricatorTile;
@@ -22,7 +22,7 @@ public class SetFabricatorRecipePacket
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
     private ItemStack craftingResult = ItemStack.EMPTY;
 
-    public SetFabricatorRecipePacket(int windowID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
+    public SetFabricatorRecipePacket(int windowID, CraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
     {
         this.windowID = windowID;
         this.recipeID = recipe.getId();
@@ -41,7 +41,7 @@ public class SetFabricatorRecipePacket
         });
     }
 
-    public SetFabricatorRecipePacket(PacketBuffer buffer)
+    public SetFabricatorRecipePacket(FriendlyByteBuf buffer)
     {
         this.windowID = buffer.readVarInt();
         this.recipeID = buffer.readResourceLocation();
@@ -52,12 +52,12 @@ public class SetFabricatorRecipePacket
         this.craftingResult = buffer.readItem();
     }
 
-    public static SetFabricatorRecipePacket decode(PacketBuffer buffer)
+    public static SetFabricatorRecipePacket decode(FriendlyByteBuf buffer)
     {
         return new SetFabricatorRecipePacket(buffer);
     }
 
-    public static void encode(SetFabricatorRecipePacket packet, PacketBuffer buffer)
+    public static void encode(SetFabricatorRecipePacket packet, FriendlyByteBuf buffer)
     {
         buffer.writeVarInt(packet.windowID());
         buffer.writeResourceLocation(packet.recipeID());
@@ -72,14 +72,14 @@ public class SetFabricatorRecipePacket
     {
         context.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = context.get().getSender();
+            ServerPlayer player = context.get().getSender();
 
             if (player == null)
                 return;
 
             player.resetLastActionTime();
 
-            Container container = player.containerMenu;
+            AbstractContainerMenu container = player.containerMenu;
 
             if (container.containerId == packet.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
             {
@@ -91,7 +91,7 @@ public class SetFabricatorRecipePacket
                 for (int slot = 0; slot < 9; slot++)
                     fabricator.recipePattern().setItem(slot, packet.recipePattern().get(slot));
 
-                ICraftingRecipe recipe = (ICraftingRecipe)player.getLevel().getRecipeManager().byKey(packet.recipeID()).orElse(null);
+                CraftingRecipe recipe = (CraftingRecipe)player.getLevel().getRecipeManager().byKey(packet.recipeID()).orElse(null);
 
                 fabricator.setCraftingRecipeAndResult(recipe, packet.craftingResult());
             }

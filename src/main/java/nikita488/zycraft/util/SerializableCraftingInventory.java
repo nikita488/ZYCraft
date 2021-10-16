@@ -1,15 +1,15 @@
 package nikita488.zycraft.util;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
 
-public class SerializableCraftingInventory extends CraftingInventory
+public class SerializableCraftingInventory extends CraftingContainer
 {
-    public SerializableCraftingInventory(Container container, int width, int height)
+    public SerializableCraftingInventory(AbstractContainerMenu container, int width, int height)
     {
         super(container, width, height);
     }
@@ -39,14 +39,14 @@ public class SerializableCraftingInventory extends CraftingInventory
         setChanged();
     }
 
-    public void load(CompoundNBT tag)
+    public void load(CompoundTag tag)
     {
-        ItemStackHelper.loadAllItems(tag, items);
+        ContainerHelper.loadAllItems(tag, items);
     }
 
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
-        return ItemStackHelper.saveAllItems(tag, items);
+        return ContainerHelper.saveAllItems(tag, items);
     }
 
     public NonNullList<ItemStack> getItems()

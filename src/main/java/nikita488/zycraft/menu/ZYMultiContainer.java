@@ -2,9 +2,9 @@ package nikita488.zycraft.menu;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import nikita488.zycraft.menu.slot.IOSlotOverlay;
 import nikita488.zycraft.menu.slot.SlotIOMode;
 import nikita488.zycraft.multiblock.MultiBlock;
@@ -18,7 +18,7 @@ public class ZYMultiContainer<M extends MultiBlock> extends ZYContainer
     protected final M multiBlock;
     private final ObjectList<IOSlotOverlay> slotOverlays = new ObjectArrayList<>();
 
-    public ZYMultiContainer(@Nullable ContainerType<?> type, int windowID, @Nullable M multiBlock)
+    public ZYMultiContainer(@Nullable MenuType<?> type, int windowID, @Nullable M multiBlock)
     {
         super(type, windowID);
         this.multiBlock = multiBlock;
@@ -37,7 +37,7 @@ public class ZYMultiContainer<M extends MultiBlock> extends ZYContainer
     }
 
     @Override
-    public boolean stillValid(PlayerEntity player)
+    public boolean stillValid(Player player)
     {
         return multiBlock != null && multiBlock.isValid();
     }

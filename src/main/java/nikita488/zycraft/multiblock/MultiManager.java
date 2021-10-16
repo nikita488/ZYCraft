@@ -8,14 +8,14 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
@@ -36,7 +36,7 @@ import nikita488.zycraft.network.UpdateMultiPacket;
 import javax.annotation.Nullable;
 import java.util.Iterator;
 
-public class MultiManager extends WorldSavedData
+public class MultiManager extends SavedData
 {
     public static final String ID = ZYCraft.string("multi_blocks");
     public static final String MULTI_BLOCKS_TAG = ZYCraft.string("MultiBlocks");
@@ -80,9 +80,9 @@ public class MultiManager extends WorldSavedData
         return instance;
     }
 
-    public static MultiManager getInstance(IWorld accessor)
+    public static MultiManager getInstance(LevelAccessor accessor)
     {
-        return !accessor.isClientSide() ? ((ServerWorld)accessor).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
+        return !accessor.isClientSide() ? ((ServerLevel)accessor).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
     }
 
     @Nullable
@@ -274,13 +274,13 @@ public class MultiManager extends WorldSavedData
 
     private static void onPostLoadChunk(PostLoadChunkEvent event)
     {
-        CompoundNBT tag = event.getChunkTag();
+        CompoundTag tag = event.getChunkTag();
 
         if (!tag.contains(MULTI_BLOCKS_TAG, Constants.NBT.TAG_LIST))
             return;
 
-        ListNBT multiTags = tag.getList(MULTI_BLOCKS_TAG, Constants.NBT.TAG_COMPOUND);
-        World level = (World)event.getWorld();
+        ListTag multiTags = tag.getList(MULTI_BLOCKS_TAG, Constants.NBT.TAG_COMPOUND);
+        Level level = (Level)event.getWorld();
         MultiManager manager = getInstance(level);
         ChunkPos pos = event.getChunk().getPos();
 
@@ -311,7 +311,7 @@ public class MultiManager extends WorldSavedData
         if (multiBlocks == null)
             return;
 
-        ListNBT multiTags = new ListNBT();
+        ListTag multiTags = new ListTag();
 
         for (MultiBlock multiBlock : multiBlocks)
         {
@@ -326,7 +326,7 @@ public class MultiManager extends WorldSavedData
                 continue;
             }
 
-            CompoundNBT multiTag = new CompoundNBT();
+            CompoundTag multiTag = new CompoundTag();
 
             multiTag.putString("ID", id.toString());
             multiBlock.save(multiTag);
@@ -366,10 +366,10 @@ public class MultiManager extends WorldSavedData
     }
 
     @Override
-    public void load(CompoundNBT tag) {}
+    public void load(CompoundTag tag) {}
 
     @Override
-    public CompoundNBT save(CompoundNBT tag)
+    public CompoundTag save(CompoundTag tag)
     {
         return tag;
     }

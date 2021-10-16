@@ -1,10 +1,10 @@
 package nikita488.zycraft.block.state.properties;
 
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.StringRepresentable;
 import nikita488.zycraft.init.ZYLang;
 
-public enum ItemIOMode implements IStringSerializable
+public enum ItemIOMode implements StringRepresentable
 {
     ANY("any", 0xFFFFFF),
     ALL_IN("all_in", 0x204090),
@@ -35,7 +35,7 @@ public enum ItemIOMode implements IStringSerializable
         return rgb;
     }
 
-    public TranslationTextComponent displayName()
+    public TranslatableComponent displayName()
     {
         switch (this)
         {

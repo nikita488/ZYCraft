@@ -1,11 +1,11 @@
 package nikita488.zycraft.multiblock.former;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.multiblock.TankMultiBlock;
 import nikita488.zycraft.multiblock.area.AirMultiArea;
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 public class TankFormer
 {
-    public static boolean form(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
+    public static boolean form(BlockState interfaceState, Level level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
         if (formingSide == null)
             return false;
@@ -51,14 +51,14 @@ public class TankFormer
         private int valveCount;
 
         @Override
-        public boolean matches(IBlockReader getter, BlockPos pos)
+        public boolean matches(BlockGetter getter, BlockPos pos)
         {
             MultiChildType type = MultiChildType.get(getter, pos);
 
             if (type == MultiChildType.HARD || type == MultiChildType.GLASS)
                 return true;
 
-            TileEntity blockEntity = getter.getBlockEntity(pos);
+            BlockEntity blockEntity = getter.getBlockEntity(pos);
 
             if (blockEntity == null)
                 return false;

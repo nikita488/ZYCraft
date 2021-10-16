@@ -1,10 +1,10 @@
 package nikita488.zycraft.block.state.properties;
 
-import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.util.StringRepresentable;
 import nikita488.zycraft.init.ZYLang;
 
-public enum ValveIOMode implements IStringSerializable
+public enum ValveIOMode implements StringRepresentable
 {
     IN("in", 0x204090),
     OUT("out", 0xDD8000);
@@ -29,7 +29,7 @@ public enum ValveIOMode implements IStringSerializable
         return rgb;
     }
 
-    public TranslationTextComponent displayName()
+    public TranslatableComponent displayName()
     {
         switch (this)
         {
