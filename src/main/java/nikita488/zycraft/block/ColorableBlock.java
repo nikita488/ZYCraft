@@ -11,11 +11,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYTiles;
@@ -23,28 +22,21 @@ import nikita488.zycraft.init.ZYTiles;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ColorableBlock extends Block
+public class ColorableBlock extends Block implements EntityBlock
 {
     public ColorableBlock(Properties properties)
     {
         super(properties);
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.COLORABLE.create();
+        return ZYTiles.COLORABLE.create(pos, state);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.COLORABLE);
@@ -68,4 +60,6 @@ public class ColorableBlock extends Block
     {
         return IColorable.interact(state, level, pos, player, hand, hitResult);
     }
+
+
 }

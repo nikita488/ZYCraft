@@ -5,8 +5,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.AbstractGlassBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.util.ParticleUtils;
 
@@ -35,7 +33,6 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)

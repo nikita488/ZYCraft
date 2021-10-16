@@ -18,8 +18,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.block.shape.ClusterShapes;
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleUtils;
@@ -69,7 +67,6 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         ParticleUtils.quartzCrystalCluster(state, level, pos, random);

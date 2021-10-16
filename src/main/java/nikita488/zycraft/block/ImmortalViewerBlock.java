@@ -10,12 +10,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ViewerType;
 import nikita488.zycraft.init.ZYLang;
@@ -26,28 +24,21 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class ImmortalViewerBlock extends ViewerBlock
+public class ImmortalViewerBlock extends ViewerBlock implements EntityBlock
 {
     public ImmortalViewerBlock(ViewerType type, Properties properties)
     {
         super(type, properties);
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.COLORABLE.create();
+        return ZYTiles.COLORABLE.create(pos, state);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.COLORABLE);
@@ -73,7 +64,6 @@ public class ImmortalViewerBlock extends ViewerBlock
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)

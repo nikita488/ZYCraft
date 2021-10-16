@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 
 import javax.annotation.Nullable;
@@ -78,7 +77,7 @@ public class ZychoriumSoilBlock extends Block
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
         if (state.getValue(FLIPPED) != level.hasNeighborSignal(pos))
-            level.setBlock(pos, state.cycle(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
+            level.setBlock(pos, state.cycle(FLIPPED), Block.UPDATE_CLIENTS);
     }
 
     @Override

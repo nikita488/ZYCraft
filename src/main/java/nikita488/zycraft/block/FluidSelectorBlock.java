@@ -11,11 +11,10 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.api.fluid.IFluidSource;
@@ -26,28 +25,21 @@ import nikita488.zycraft.tile.FluidSelectorTile;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class FluidSelectorBlock extends Block implements IFluidSource
+public class FluidSelectorBlock extends Block implements EntityBlock, IFluidSource
 {
     public FluidSelectorBlock(Properties properties)
     {
         super(properties);
     }
 
-    @Override
-    public boolean hasTileEntity(BlockState state)
-    {
-        return true;
-    }
-
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.FLUID_SELECTOR.create();
+        return ZYTiles.FLUID_SELECTOR.create(pos, state);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.CREATIVE_ONLY);

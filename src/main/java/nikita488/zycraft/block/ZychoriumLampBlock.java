@@ -3,24 +3,21 @@ package nikita488.zycraft.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class ZychoriumLampBlock extends ColorableBlock
+public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
 {
     public static final BooleanProperty LIT = BlockStateProperties.LIT;
     private final boolean inverted;
@@ -34,13 +31,12 @@ public class ZychoriumLampBlock extends ColorableBlock
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.ZYCHORIUM_LAMP.create();
+        return ZYTiles.ZYCHORIUM_LAMP.create(pos, state);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         if (state.getValue(LIT))
@@ -66,14 +62,14 @@ public class ZychoriumLampBlock extends ColorableBlock
             if (lit)
                 level.getBlockTicks().scheduleTick(pos, this, 4);
             else
-                level.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+                level.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
     }
 
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
     {
         if (isLit(state) && !world.hasNeighborSignal(pos))
-            world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+            world.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
     }
 
     private boolean isLit(BlockState state)
