@@ -23,26 +23,26 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         if (world == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof IColorable ? ((IColorable)tile).getColor(state, world, pos, tintIndex) : 0xFFFFFF;
+        TileEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof IColorable ? ((IColorable)blockEntity).getColor(state, world, pos, tintIndex) : 0xFFFFFF;
     }),
     FABRICATOR((state, world, pos, tintIndex) ->
     {
         if (world == null || pos == null || !state.hasTileEntity())
             return ZYType.BLUE.rgb();
 
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof FabricatorTile ? ((FabricatorTile)tile).getColor(state) : ZYType.BLUE.rgb();
+        TileEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof FabricatorTile ? ((FabricatorTile)blockEntity).getColor(state) : ZYType.BLUE.rgb();
     }),
     CONVERTED_MULTI_CHILD((state, world, pos, tintIndex) ->
     {
         if (world == null || pos == null)
             return 0xFFFFFF;
 
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = world.getBlockEntity(pos);
 
-        if (tile instanceof ConvertedMultiChildTile)
-            return Minecraft.getInstance().getBlockColors().getColor(((ConvertedMultiChildTile)tile).initialState(), world, pos, tintIndex);
+        if (blockEntity instanceof ConvertedMultiChildTile)
+            return Minecraft.getInstance().getBlockColors().getColor(((ConvertedMultiChildTile)blockEntity).initialState(), world, pos, tintIndex);
 
         return 0xFFFFFF;
     }),
@@ -53,8 +53,8 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         if (world == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof FluidSelectorTile ? ((FluidSelectorTile)tile).getColor() : 0xFFFFFF;
+        TileEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof FluidSelectorTile ? ((FluidSelectorTile)blockEntity).getColor() : 0xFFFFFF;
     });
 
     public static final Map<ZYType, IBlockColor> ZY_COLORS = Util.make(() ->

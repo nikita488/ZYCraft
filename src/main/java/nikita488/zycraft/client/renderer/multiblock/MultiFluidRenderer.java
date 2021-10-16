@@ -23,9 +23,9 @@ import static net.minecraft.client.renderer.LightTexture.*;
 
 public class MultiFluidRenderer
 {
-    public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, IBlockDisplayReader world, BlockPos lightPos)
+    public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, IBlockDisplayReader getter, BlockPos lightPos)
     {
-        render(pose, source, stack, bounds, resolution, density, WorldRenderer.getLightColor(world, lightPos));
+        render(pose, source, stack, bounds, resolution, density, WorldRenderer.getLightColor(getter, lightPos));
     }
 
     public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, int lightMap)

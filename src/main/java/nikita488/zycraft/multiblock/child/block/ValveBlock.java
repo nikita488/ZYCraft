@@ -40,7 +40,7 @@ public class ValveBlock extends MultiInterfaceBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.VALVE.create();
     }
@@ -52,13 +52,13 @@ public class ValveBlock extends MultiInterfaceBlock
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         if (!player.isShiftKeyDown())
-            return super.use(state, world, pos, player, hand, hit);
+            return super.use(state, level, pos, player, hand, hitResult);
 
-        world.setBlockAndUpdate(pos, state.cycle(IO_MODE));
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        level.setBlockAndUpdate(pos, state.cycle(IO_MODE));
+        return ActionResultType.sidedSuccess(level.isClientSide());
     }
 
     @Override

@@ -22,12 +22,12 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
         if (!(ingredient instanceof ItemStack))
             return Collections.emptyList();
 
-        Container container = screen.getMenu();
+        Container menu = screen.getMenu();
         ObjectList<Target<I>> targets = new ObjectArrayList<>();
 
         for (int i = 0; i < 9; i++)
         {
-            Slot slot = container.getSlot(i);
+            Slot slot = menu.getSlot(i);
 
             targets.add(new Target<I>()
             {
@@ -41,7 +41,7 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
                 public void accept(I ingredient)
                 {
                     if (ingredient instanceof ItemStack)
-                        ZYCraft.CHANNEL.sendToServer(new SetSlotStackPacket(container.containerId, slot.getSlotIndex(), (ItemStack)ingredient));
+                        ZYCraft.CHANNEL.sendToServer(new SetSlotStackPacket(menu.containerId, slot.getSlotIndex(), (ItemStack)ingredient));
                 }
             });
         }

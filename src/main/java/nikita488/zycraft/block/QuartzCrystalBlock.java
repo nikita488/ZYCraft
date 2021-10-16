@@ -19,8 +19,8 @@ public class QuartzCrystalBlock extends BreakableBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
-        ParticleUtils.glowingBlock(state, world, pos, rand);
+        ParticleUtils.glowingBlock(state, level, pos, random);
     }
 }

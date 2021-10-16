@@ -14,7 +14,7 @@ public class FireBasinBlock extends Block
     }
 
     @Override
-    public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side)
+    public boolean isFireSource(BlockState state, IWorldReader reader, BlockPos pos, Direction side)
     {
         return side == Direction.UP;
     }

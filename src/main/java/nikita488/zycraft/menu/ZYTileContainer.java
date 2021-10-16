@@ -9,23 +9,23 @@ import javax.annotation.Nullable;
 public class ZYTileContainer<T extends ZYTile> extends ZYContainer
 {
     @Nullable
-    protected final T tile;
+    protected final T blockEntity;
 
-    public ZYTileContainer(@Nullable ContainerType<?> type, int windowID, @Nullable T tile)
+    public ZYTileContainer(@Nullable ContainerType<?> type, int windowID, @Nullable T blockEntity)
     {
         super(type, windowID);
-        this.tile = tile;
+        this.blockEntity = blockEntity;
     }
 
     @Override
     public boolean stillValid(PlayerEntity player)
     {
-        return tile != null && tile.stillValid(player);
+        return blockEntity != null && blockEntity.stillValid(player);
     }
 
     @Nullable
-    public T tile()
+    public T blockEntity()
     {
-        return tile;
+        return blockEntity;
     }
 }

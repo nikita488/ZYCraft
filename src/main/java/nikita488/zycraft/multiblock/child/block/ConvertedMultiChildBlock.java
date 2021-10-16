@@ -55,99 +55,87 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.CONVERTED_MULTI_CHILD.create();
     }
 
-    private static BlockState getState(IBlockReader world, BlockPos pos)
+    private static BlockState getState(IBlockReader getter, BlockPos pos)
     {
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : Blocks.AIR.defaultBlockState();
+        TileEntity blockEntity = getter.getBlockEntity(pos);
+        return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState() : Blocks.AIR.defaultBlockState();
     }
     //AbstractBlock.Properties methods
-    public static boolean isValidSpawn(BlockState state, IBlockReader world, BlockPos pos, EntityType<?> type)
+    public static boolean isValidSpawn(BlockState state, IBlockReader getter, BlockPos pos, EntityType<?> type)
     {
-        return getState(world, pos).isValidSpawn(world, pos, type);
+        return getState(getter, pos).isValidSpawn(getter, pos, type);
     }
 
-    public static boolean isRedstoneConductor(BlockState state, IBlockReader world, BlockPos pos)
+    public static boolean isRedstoneConductor(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isRedstoneConductor(world, pos);
+        return getState(getter, pos).isRedstoneConductor(getter, pos);
     }
 
-    public static boolean isSuffocating(BlockState state, IBlockReader world, BlockPos pos)
+    public static boolean isSuffocating(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isSuffocating(world, pos);
+        return getState(getter, pos).isSuffocating(getter, pos);
     }
 
-    public static boolean isViewBlocking(BlockState state, IBlockReader world, BlockPos pos)
+    public static boolean isViewBlocking(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isViewBlocking(world, pos);
+        return getState(getter, pos).isViewBlocking(getter, pos);
     }
 
-    public static boolean emissiveRendering(BlockState state, IBlockReader world, BlockPos pos)
+    public static boolean emissiveRendering(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).emissiveRendering(world, pos);
+        return getState(getter, pos).emissiveRendering(getter, pos);
     }
     //AbstactBlock methods
 /*    //TODO: Probably remove
     @Override
-    public void updateDiagonalNeighbors(BlockState state, IWorld world, BlockPos pos, int flags, int recursionLeft)
+    public void updateDiagonalNeighbors(BlockState state, IWorld accessor, BlockPos pos, int flags, int recursionLeft)
     {
         getState(world, pos).updateDiagonalNeighbors(world, pos, flags, recursionLeft);
     }
 
     //TODO: Probably false
     @Override
-    public boolean allowsMovement(BlockState state, IBlockReader world, BlockPos pos, PathType type)
+    public boolean allowsMovement(BlockState state, IBlockReader getter, BlockPos pos, PathType type)
     {
         return getState(world, pos).allowsMovement(world, pos, type);
     }
 
     //TODO: Probably remove
     @Override
-    public BlockState updatePostPlacement(BlockState state, Direction side, BlockState adjState, IWorld world, BlockPos pos, BlockPos adjPos)
+    public BlockState updatePostPlacement(BlockState state, Direction side, BlockState adjState, IWorld accessor, BlockPos pos, BlockPos adjPos)
     {
-        TileEntity tile = world.getTileEntity(pos);
-
-        if (!(tile instanceof DefaultMultiChildTile))
-            return state;
-
-        DefaultMultiChildTile child = (DefaultMultiChildTile)tile;
-        BlockState oldState = child.state();
-        BlockState newState = oldState.updatePostPlacement(side, adjState, world, pos, adjPos);
-
-        if (oldState != newState && !newState.isAir())
-            child.setState(newState);
-
         return state;
     }
 
     //TODO: Probably remove
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos adjPos, boolean isMoving)
     {
         getState(world, pos).neighborChanged(world, pos, block, adjPos, isMoving);
     }*/
 
     @Override
-    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+    public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        getState(world, pos).onRemove(world, pos, newState, isMoving);
-        super.onRemove(state, world, pos, newState, isMoving);
+        getState(level, pos).onRemove(level, pos, newState, isMoving);
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
 /*    //TODO: Probably remove
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         return super.onBlockActivated(state, world, pos, player, hand, hit);
     }*/
 
 /*    //TODO: Probably remove
     @Override
-    public boolean eventReceived(BlockState state, World world, BlockPos pos, int id, int param)
+    public boolean eventReceived(BlockState state, World level, BlockPos pos, int id, int param)
     {
         return getState(world, pos).receiveBlockEvent(world, pos, id, param);
     }*/
@@ -185,42 +173,42 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        TileEntity tile = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
-        return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState().getDrops(builder) : super.getDrops(state, builder);
+        TileEntity blockEntity = builder.getOptionalParameter(LootParameters.BLOCK_ENTITY);
+        return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState().getDrops(builder) : super.getDrops(state, builder);
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightBlock(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).getLightBlock(world, pos);
+        return getState(getter, pos).getLightBlock(getter, pos);
     }
 
 /*    //TODO: Probably remove
     @Nullable
     @Override
-    public INamedContainerProvider getContainer(BlockState state, World world, BlockPos pos)
+    public INamedContainerProvider getContainer(BlockState state, World level, BlockPos pos)
     {
         return getState(world, pos).getContainer(world, pos);
     }
 
     //TODO: Probably remove
     @Override
-    public boolean isValidPosition(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean isValidPosition(BlockState state, IWorldReader reader, BlockPos pos)
     {
         return getState(world, pos).isValidPosition(world, pos);
     }*/
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
+    public float getShadeBrightness(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).getShadeBrightness(world, pos);
+        return getState(getter, pos).getShadeBrightness(getter, pos);
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
-        return getState(world, pos).getAnalogOutputSignal(world, pos);
+        return getState(level, pos).getAnalogOutputSignal(level, pos);
     }
 
 /*    //TODO: Probably remove
@@ -238,9 +226,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public float getDestroyProgress(BlockState state, PlayerEntity player, IBlockReader world, BlockPos pos)
+    public float getDestroyProgress(BlockState state, PlayerEntity player, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).getDestroyProgress(player, world, pos);
+        return getState(getter, pos).getDestroyProgress(player, getter, pos);
     }
 
     @Override
@@ -251,33 +239,33 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
 /*    //TODO: Probably remove?
     @Override
-    public void onBlockClicked(BlockState state, World world, BlockPos pos, PlayerEntity player)
+    public void onBlockClicked(BlockState state, World level, BlockPos pos, PlayerEntity player)
     {
         getState(world, pos).onBlockClicked(world, pos, player);
     }*/
 
     @Override
-    public int getSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getSignal(BlockState state, IBlockReader getter, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getSignal(world, pos, side);
+        return getState(getter, pos).getSignal(getter, pos, side);
     }
 
     @Override
-    public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+    public void entityInside(BlockState state, World level, BlockPos pos, Entity entity)
     {
-        getState(world, pos).entityInside(world, pos, entity);
+        getState(level, pos).entityInside(level, pos, entity);
     }
 
     @Override
-    public int getDirectSignal(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getDirectSignal(BlockState state, IBlockReader getter, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getDirectSignal(world, pos, side);
+        return getState(getter, pos).getDirectSignal(getter, pos, side);
     }
 
     @Override
-    public void onProjectileHit(World world, BlockState state, BlockRayTraceResult hit, ProjectileEntity projectile)
+    public void onProjectileHit(World level, BlockState state, BlockRayTraceResult hitResult, ProjectileEntity projectile)
     {
-        getState(world, hit.getBlockPos()).onProjectileHit(world, state, hit, projectile);
+        getState(level, hitResult.getBlockPos()).onProjectileHit(level, state, hitResult, projectile);
     }
     //Block methods
 /*    //TODO: Probably remove
@@ -288,22 +276,22 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos) 
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).propagatesSkylightDown(world, pos);
+        return getState(getter, pos).propagatesSkylightDown(getter, pos);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand) 
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
-        getState(world, pos).getBlock().animateTick(state, world, pos, rand);
+        getState(level, pos).getBlock().animateTick(state, level, pos, random);
     }
 
     @Override
-    public void destroy(IWorld world, BlockPos pos, BlockState state) 
+    public void destroy(IWorld accessor, BlockPos pos, BlockState state) 
     {
-        getState(world, pos).getBlock().destroy(world, pos, state);
+        getState(accessor, pos).getBlock().destroy(accessor, pos, state);
     }
 
     @Override
@@ -313,124 +301,124 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void wasExploded(World world, BlockPos pos, Explosion explosion) 
+    public void wasExploded(World level, BlockPos pos, Explosion explosion) 
     {
-        getState(world, pos).getBlock().wasExploded(world, pos, explosion);
+        getState(level, pos).getBlock().wasExploded(level, pos, explosion);
     }
 
     @Override
-    public void stepOn(World world, BlockPos pos, Entity entity) 
+    public void stepOn(World level, BlockPos pos, Entity entity) 
     {
-        getState(world, pos).getBlock().stepOn(world, pos, entity);
+        getState(level, pos).getBlock().stepOn(level, pos, entity);
     }
 
     @Override
-    public void playerDestroy(World world, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity tile, ItemStack stack)
+    public void playerDestroy(World level, PlayerEntity player, BlockPos pos, BlockState state, @Nullable TileEntity blockEntity, ItemStack stack)
     {
-        getState(world, pos).getBlock().playerDestroy(world, player, pos, state, tile, stack);
+        getState(level, pos).getBlock().playerDestroy(level, player, pos, state, blockEntity, stack);
     }
 
     @Override
-    public void fallOn(World world, BlockPos pos, Entity entity, float fallDistance) 
+    public void fallOn(World level, BlockPos pos, Entity entity, float fallDistance) 
     {
-        getState(world, pos).getBlock().fallOn(world, pos, entity, fallDistance);
+        getState(level, pos).getBlock().fallOn(level, pos, entity, fallDistance);
     }
 
     @Override
-    public void updateEntityAfterFallOn(IBlockReader world, Entity entity) 
+    public void updateEntityAfterFallOn(IBlockReader getter, Entity entity)
     {
-        getState(world, entity.blockPosition()).getBlock().updateEntityAfterFallOn(world, entity);
+        getState(getter, entity.blockPosition()).getBlock().updateEntityAfterFallOn(getter, entity);
     }
 
     @Override
-    public void playerWillDestroy(World world, BlockPos pos, BlockState state, PlayerEntity player) 
+    public void playerWillDestroy(World level, BlockPos pos, BlockState state, PlayerEntity player) 
     {
-        getState(world, pos).getBlock().playerWillDestroy(world, pos, state, player);
+        getState(level, pos).getBlock().playerWillDestroy(level, pos, state, player);
     }
 
 /*    //TODO: Probably remove
     @Override
-    public void fillWithRain(World world, BlockPos pos) 
+    public void fillWithRain(World level, BlockPos pos) 
     {
         getState(world, pos).getBlock().fillWithRain(world, pos);
     }*/
 
     @Override
-    public float getSlipperiness(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity) 
+    public float getSlipperiness(BlockState state, IWorldReader reader, BlockPos pos, @Nullable Entity entity) 
     {
-        return getState(world, pos).getSlipperiness(world, pos, entity);
+        return getState(reader, pos).getSlipperiness(reader, pos, entity);
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable) 
+    public boolean canSustainPlant(BlockState state, IBlockReader getter, BlockPos pos, Direction facing, IPlantable plantable)
     {
-        return getState(world, pos).canSustainPlant(world, pos, facing, plantable);
+        return getState(getter, pos).canSustainPlant(getter, pos, facing, plantable);
     }
     //IForgeBlock methods
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).getLightValue(world, pos);
+        return getState(getter, pos).getLightValue(getter, pos);
     }
 
     @Override
-    public boolean isLadder(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) 
+    public boolean isLadder(BlockState state, IWorldReader reader, BlockPos pos, LivingEntity entity) 
     {
-        return getState(world, pos).isLadder(world, pos, entity);
+        return getState(reader, pos).isLadder(reader, pos, entity);
     }
 
     @Override
-    public boolean isBurning(BlockState state, IBlockReader world, BlockPos pos) 
+    public boolean isBurning(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isBurning(world, pos);
+        return getState(getter, pos).isBurning(getter, pos);
     }
 
     @Override
-    public boolean canHarvestBlock(BlockState state, IBlockReader world, BlockPos pos, PlayerEntity player) 
+    public boolean canHarvestBlock(BlockState state, IBlockReader getter, BlockPos pos, PlayerEntity player)
     {
-        return getState(world, pos).canHarvestBlock(world, pos, player);
+        return getState(getter, pos).canHarvestBlock(getter, pos, player);
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) 
+    public boolean removedByPlayer(BlockState state, World level, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) 
     {
-        return getState(world, pos).removedByPlayer(world, pos, player, willHarvest, fluid);
+        return getState(level, pos).removedByPlayer(level, pos, player, willHarvest, fluid);
     }
 
     @Override
-    public boolean canCreatureSpawn(BlockState state, IBlockReader world, BlockPos pos, EntitySpawnPlacementRegistry.PlacementType type, @Nullable EntityType<?> entityType)
+    public boolean canCreatureSpawn(BlockState state, IBlockReader getter, BlockPos pos, EntitySpawnPlacementRegistry.PlacementType type, @Nullable EntityType<?> entityType)
     {
-        return getState(world, pos).canCreatureSpawn((IWorldReader)world, pos, type, entityType);
+        return getState(getter, pos).canCreatureSpawn((IWorldReader)getter, pos, type, entityType);
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(BlockState state, IWorldReader world, BlockPos pos) 
+    public boolean canBeReplacedByLeaves(BlockState state, IWorldReader reader, BlockPos pos) 
     {
         return false;
     }
 
     @Override
-    public boolean canBeReplacedByLogs(BlockState state, IWorldReader world, BlockPos pos) 
+    public boolean canBeReplacedByLogs(BlockState state, IWorldReader reader, BlockPos pos) 
     {
         return false;
     }
 
     @Override
-    public float getExplosionResistance(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion) 
+    public float getExplosionResistance(BlockState state, IBlockReader getter, BlockPos pos, Explosion explosion)
     {
-        return getState(world, pos).getExplosionResistance(world, pos, explosion);
+        return getState(getter, pos).getExplosionResistance(getter, pos, explosion);
     }
 
     @Override
-    public boolean canConnectRedstone(BlockState state, IBlockReader world, BlockPos pos, @Nullable Direction side)
+    public boolean canConnectRedstone(BlockState state, IBlockReader getter, BlockPos pos, @Nullable Direction side)
     {
-        return getState(world, pos).canConnectRedstone(world, pos, side);
+        return getState(getter, pos).canConnectRedstone(getter, pos, side);
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader world, BlockPos pos, PlayerEntity player) 
+    public ItemStack getPickBlock(BlockState state, RayTraceResult target, IBlockReader getter, BlockPos pos, PlayerEntity player)
     {
-        return getState(world, pos).getPickBlock(target, world, pos, player);
+        return getState(getter, pos).getPickBlock(target, getter, pos, player);
     }
 
     @Override
@@ -440,184 +428,184 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public boolean addRunningEffects(BlockState state, World world, BlockPos pos, Entity entity) 
+    public boolean addRunningEffects(BlockState state, World level, BlockPos pos, Entity entity) 
     {
-        return getState(world, pos).addRunningEffects(world, pos, entity);
+        return getState(level, pos).addRunningEffects(level, pos, entity);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addHitEffects(BlockState state, World world, RayTraceResult target, ParticleManager manager)
+    public boolean addHitEffects(BlockState state, World level, RayTraceResult target, ParticleManager manager)
     {
-        return getState(world, ((BlockRayTraceResult)target).getBlockPos()).addHitEffects(world, target, manager);
+        return getState(level, ((BlockRayTraceResult)target).getBlockPos()).addHitEffects(level, target, manager);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public boolean addDestroyEffects(BlockState state, World world, BlockPos pos, ParticleManager manager) 
+    public boolean addDestroyEffects(BlockState state, World level, BlockPos pos, ParticleManager manager) 
     {
-        return getState(world, pos).addDestroyEffects(world, pos, manager);
+        return getState(level, pos).addDestroyEffects(level, pos, manager);
     }
 
     @Override
-    public boolean isFertile(BlockState state, IBlockReader world, BlockPos pos) 
+    public boolean isFertile(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isFertile(world, pos);
+        return getState(getter, pos).isFertile(getter, pos);
     }
 
     @Override
-    public boolean isConduitFrame(BlockState state, IWorldReader world, BlockPos pos, BlockPos conduit) 
+    public boolean isConduitFrame(BlockState state, IWorldReader reader, BlockPos pos, BlockPos conduit) 
     {
-        return getState(world, pos).isConduitFrame(world, pos, conduit);
+        return getState(reader, pos).isConduitFrame(reader, pos, conduit);
     }
 
     @Override
-    public boolean isPortalFrame(BlockState state, IBlockReader world, BlockPos pos) 
+    public boolean isPortalFrame(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return getState(world, pos).isPortalFrame(world, pos);
+        return getState(getter, pos).isPortalFrame(getter, pos);
     }
 
     @Override
-    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortuneLevel, int silkTouch)
+    public int getExpDrop(BlockState state, IWorldReader reader, BlockPos pos, int fortuneLevel, int silkTouch)
     {
-        return getState(world, pos).getExpDrop(world, pos, fortuneLevel, silkTouch);
+        return getState(reader, pos).getExpDrop(reader, pos, fortuneLevel, silkTouch);
     }
 
     @Override
-    public float getEnchantPowerBonus(BlockState state, IWorldReader world, BlockPos pos) 
+    public float getEnchantPowerBonus(BlockState state, IWorldReader reader, BlockPos pos) 
     {
-        return getState(world, pos).getEnchantPowerBonus(world, pos);
+        return getState(reader, pos).getEnchantPowerBonus(reader, pos);
     }
 
 /*    //TODO: Probably remove
     @Override
-    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos adjPos)
+    public void onNeighborChange(BlockState state, IWorldReader reader, BlockPos pos, BlockPos adjPos)
     {
         getState(world, pos).onNeighborChange(world, pos, adjPos);
     }*/
 
     @Override
-    public boolean shouldCheckWeakPower(BlockState state, IWorldReader world, BlockPos pos, Direction side) 
+    public boolean shouldCheckWeakPower(BlockState state, IWorldReader reader, BlockPos pos, Direction side) 
     {
-        return getState(world, pos).shouldCheckWeakPower(world, pos, side);
+        return getState(reader, pos).shouldCheckWeakPower(reader, pos, side);
     }
 
     @Override
-    public boolean getWeakChanges(BlockState state, IWorldReader world, BlockPos pos) 
+    public boolean getWeakChanges(BlockState state, IWorldReader reader, BlockPos pos) 
     {
-        return getState(world, pos).getWeakChanges(world, pos);
+        return getState(reader, pos).getWeakChanges(reader, pos);
     }
 
     @Override
-    public SoundType getSoundType(BlockState state, IWorldReader world, BlockPos pos, @Nullable Entity entity)
+    public SoundType getSoundType(BlockState state, IWorldReader reader, BlockPos pos, @Nullable Entity entity)
     {
-        return getState(world, pos).getSoundType(world, pos, entity);
-    }
-
-    @Nullable
-    @Override
-    public float[] getBeaconColorMultiplier(BlockState state, IWorldReader world, BlockPos pos, BlockPos beaconPos) 
-    {
-        return getState(world, pos).getBeaconColorMultiplier(world, pos, beaconPos);
-    }
-
-    @Override
-    public BlockState getStateAtViewpoint(BlockState state, IBlockReader world, BlockPos pos, Vector3d viewpoint) 
-    {
-        return getState(world, pos).getStateAtViewpoint(world, pos, viewpoint);
+        return getState(reader, pos).getSoundType(reader, pos, entity);
     }
 
     @Nullable
     @Override
-    public PathNodeType getAiPathNodeType(BlockState state, IBlockReader world, BlockPos pos, @Nullable MobEntity entity)
+    public float[] getBeaconColorMultiplier(BlockState state, IWorldReader reader, BlockPos pos, BlockPos beaconPos) 
     {
-        return getState(world, pos).getAiPathNodeType(world, pos, entity);
+        return getState(reader, pos).getBeaconColorMultiplier(reader, pos, beaconPos);
+    }
+
+    @Override
+    public BlockState getStateAtViewpoint(BlockState state, IBlockReader getter, BlockPos pos, Vector3d viewpoint)
+    {
+        return getState(getter, pos).getStateAtViewpoint(getter, pos, viewpoint);
+    }
+
+    @Nullable
+    @Override
+    public PathNodeType getAiPathNodeType(BlockState state, IBlockReader getter, BlockPos pos, @Nullable MobEntity entity)
+    {
+        return getState(getter, pos).getAiPathNodeType(getter, pos, entity);
     }
     //FLAMMABLE START
     @Override
-    public int getFlammability(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getFlammability(BlockState state, IBlockReader getter, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getFlammability(world, pos, side);
+        return getState(getter, pos).getFlammability(getter, pos, side);
     }
 
     @Override
-    public boolean isFlammable(BlockState state, IBlockReader world, BlockPos pos, Direction face) 
+    public boolean isFlammable(BlockState state, IBlockReader getter, BlockPos pos, Direction face)
     {
-        return getState(world, pos).isFlammable(world, pos, face);
+        return getState(getter, pos).isFlammable(getter, pos, face);
     }
 
 /*    //TODO: Probably remove
     @Override
-    public void catchFire(BlockState state, World world, BlockPos pos, @Nullable Direction face, @Nullable LivingEntity igniter)
+    public void catchFire(BlockState state, World level, BlockPos pos, @Nullable Direction face, @Nullable LivingEntity igniter)
     {
         getState(world, pos).catchFire(world, pos, face, igniter);
     }*/
 
     @Override
-    public int getFireSpreadSpeed(BlockState state, IBlockReader world, BlockPos pos, Direction side)
+    public int getFireSpreadSpeed(BlockState state, IBlockReader getter, BlockPos pos, Direction side)
     {
-        return getState(world, pos).getFireSpreadSpeed(world, pos, side);
+        return getState(getter, pos).getFireSpreadSpeed(getter, pos, side);
     }
 
     @Override
-    public boolean isFireSource(BlockState state, IWorldReader world, BlockPos pos, Direction side) 
+    public boolean isFireSource(BlockState state, IWorldReader reader, BlockPos pos, Direction side) 
     {
-        return getState(world, pos).isFireSource(world, pos, side);
+        return getState(reader, pos).isFireSource(reader, pos, side);
     }
     //FLAMMABLE END
     @Override
-    public boolean canEntityDestroy(BlockState state, IBlockReader world, BlockPos pos, Entity entity) 
+    public boolean canEntityDestroy(BlockState state, IBlockReader getter, BlockPos pos, Entity entity)
     {
-        return getState(world, pos).canEntityDestroy(world, pos, entity);
+        return getState(getter, pos).canEntityDestroy(getter, pos, entity);
     }
 
     @Override
-    public boolean canDropFromExplosion(BlockState state, IBlockReader world, BlockPos pos, Explosion explosion) 
+    public boolean canDropFromExplosion(BlockState state, IBlockReader getter, BlockPos pos, Explosion explosion)
     {
-        return getState(world, pos).canDropFromExplosion(world, pos, explosion);
+        return getState(getter, pos).canDropFromExplosion(getter, pos, explosion);
     }
 
     @Override
-    public void onBlockExploded(BlockState state, World world, BlockPos pos, Explosion explosion) 
+    public void onBlockExploded(BlockState state, World level, BlockPos pos, Explosion explosion) 
     {
-        getState(world, pos).onBlockExploded(world, pos, explosion);
+        getState(level, pos).onBlockExploded(level, pos, explosion);
     }
 
     @Override
-    public boolean collisionExtendsVertically(BlockState state, IBlockReader world, BlockPos pos, Entity collidingEntity) 
+    public boolean collisionExtendsVertically(BlockState state, IBlockReader getter, BlockPos pos, Entity collidingEntity)
     {
-        return getState(world, pos).collisionExtendsVertically(world, pos, collidingEntity);
+        return getState(getter, pos).collisionExtendsVertically(getter, pos, collidingEntity);
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockState state, IBlockDisplayReader world, BlockPos pos, FluidState fluidState) 
+    public boolean shouldDisplayFluidOverlay(BlockState state, IBlockDisplayReader getter, BlockPos pos, FluidState fluidState) 
     {
-        return getState(world, pos).shouldDisplayFluidOverlay(world, pos, fluidState);
+        return getState(getter, pos).shouldDisplayFluidOverlay(getter, pos, fluidState);
     }
 
     @Nullable
     @Override
-    public BlockState getToolModifiedState(BlockState state, World world, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) 
+    public BlockState getToolModifiedState(BlockState state, World level, BlockPos pos, PlayerEntity player, ItemStack stack, ToolType toolType) 
     {
         return null;
     }
 
     @Override
-    public boolean isScaffolding(BlockState state, IWorldReader world, BlockPos pos, LivingEntity entity) 
+    public boolean isScaffolding(BlockState state, IWorldReader reader, BlockPos pos, LivingEntity entity) 
     {
-        return getState(world, pos).isScaffolding(entity);
+        return getState(reader, pos).isScaffolding(entity);
     }
 
     @Override
-    public Vector3d getFogColor(BlockState state, IWorldReader world, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
+    public Vector3d getFogColor(BlockState state, IWorldReader reader, BlockPos pos, Entity entity, Vector3d originalColor, float partialTicks)
     {
-        return getState(world, pos).getFogColor(world, pos, entity, originalColor, partialTicks);
+        return getState(reader, pos).getFogColor(reader, pos, entity, originalColor, partialTicks);
     }
 
     @Override
-    public BlockState rotate(BlockState state, IWorld world, BlockPos pos, Rotation rotation)
+    public BlockState rotate(BlockState state, IWorld accessor, BlockPos pos, Rotation rotation)
     {
-        return getState(world, pos).rotate(world, pos, rotation);
+        return getState(accessor, pos).rotate(accessor, pos, rotation);
     }
 
     @Override
@@ -628,8 +616,8 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     @Nonnull
     @Override
-    public BlockState getFacade(@Nonnull IBlockReader world, @Nonnull BlockPos pos, @Nullable Direction side)
+    public BlockState getFacade(@Nonnull IBlockReader getter, @Nonnull BlockPos pos, @Nullable Direction side)
     {
-        return getState(world, pos);
+        return getState(getter, pos);
     }
 }

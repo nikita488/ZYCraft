@@ -41,38 +41,38 @@ public class FabricatorBlock extends Block
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.FABRICATOR.create();
     }
 
     @Override
-    public void onNeighborChange(BlockState state, IWorldReader world, BlockPos pos, BlockPos adjPos)
+    public void onNeighborChange(BlockState state, IWorldReader reader, BlockPos pos, BlockPos relativePos)
     {
-        if (world.isClientSide())
+        if (reader.isClientSide())
             return;
 
-        Direction side = Direction.getNearest(adjPos.getX() - pos.getX(), adjPos.getY() - pos.getY(), adjPos.getZ() - pos.getZ());
+        Direction side = Direction.getNearest(relativePos.getX() - pos.getX(), relativePos.getY() - pos.getY(), relativePos.getZ() - pos.getZ());
 
         if (side != Direction.UP)
-            ZYTiles.FABRICATOR.get(world, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
+            ZYTiles.FABRICATOR.get(reader, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
     }
 
     @Override
-    public void onRemove(BlockState state, World world, BlockPos pos, BlockState newState, boolean isMoving)
+    public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving)
     {
-        if (world.isClientSide() || state.is(newState.getBlock()))
+        if (level.isClientSide() || state.is(newState.getBlock()))
             return;
 
-        FabricatorTile fabricator = ZYTiles.FABRICATOR.getNullable(world, pos);
+        FabricatorTile fabricator = ZYTiles.FABRICATOR.getNullable(level, pos);
 
         if (fabricator != null)
         {
             fabricator.dropItems();
-            world.updateNeighbourForOutputSignal(pos, this);
+            level.updateNeighbourForOutputSignal(pos, this);
         }
 
-        super.onRemove(state, world, pos, newState, isMoving);
+        super.onRemove(state, level, pos, newState, isMoving);
     }
 
     @Override
@@ -82,17 +82,17 @@ public class FabricatorBlock extends Block
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
-        return ZYTiles.FABRICATOR.get(world, pos).map(FabricatorTile::getComparatorInputOverride).orElse(0);
+        return ZYTiles.FABRICATOR.get(level, pos).map(FabricatorTile::getAnalogOutputSignal).orElse(0);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        if (!world.isClientSide())
-            NetworkHooks.openGui((ServerPlayerEntity)player, ZYTiles.FABRICATOR.getNullable(world, pos));
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        if (!level.isClientSide())
+            NetworkHooks.openGui((ServerPlayerEntity)player, ZYTiles.FABRICATOR.getNullable(level, pos));
+        return ActionResultType.sidedSuccess(level.isClientSide());
     }
 
     @Override

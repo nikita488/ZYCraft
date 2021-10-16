@@ -34,17 +34,17 @@ public class ZychoriumLampBlock extends ColorableBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.ZYCHORIUM_LAMP.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
         if (state.getValue(LIT))
-            ParticleUtils.glowingColorableBlock(state, world, pos, rand);
+            ParticleUtils.glowingColorableBlock(state, level, pos, random);
     }
 
     @Nullable
@@ -55,18 +55,18 @@ public class ZychoriumLampBlock extends ColorableBlock
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving)
     {
-        if (world.isClientSide())
+        if (level.isClientSide())
             return;
 
         boolean lit = isLit(state);
 
-        if (lit != world.hasNeighborSignal(pos))
+        if (lit != level.hasNeighborSignal(pos))
             if (lit)
-                world.getBlockTicks().scheduleTick(pos, this, 4);
+                level.getBlockTicks().scheduleTick(pos, this, 4);
             else
-                world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+                level.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override

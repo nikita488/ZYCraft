@@ -11,18 +11,18 @@ import javax.annotation.Nullable;
 public interface IMultiArea
 {
     @Nullable
-    default Cuboid6i getArea(World world, BlockPos basePos, Direction formingSide)
+    default Cuboid6i getArea(World level, BlockPos basePos, Direction formingSide)
     {
         BlockPos innerPos = basePos.relative(formingSide.getOpposite());
 
-        if (!matches(world, innerPos))
+        if (!matches(level, innerPos))
             return null;
 
         Cuboid6i innerArea = new Cuboid6i.Mutable(innerPos);
 
         for (Direction side : ZYConstants.DIRECTIONS)
             if (canExpand(side, formingSide))
-                while (innerArea.size(side.getAxis()) < maxSize(side) && matches(world, innerArea.copy().expand(side).side(side)))
+                while (innerArea.size(side.getAxis()) < maxSize(side) && matches(level, innerArea.copy().expand(side).side(side)))
                     innerArea.expand(side);
 
         return innerArea.immutable();
@@ -35,13 +35,13 @@ public interface IMultiArea
 
     int maxSize(Direction side);
 
-    default boolean matches(World world, Cuboid6i cuboid)
+    default boolean matches(World level, Cuboid6i cuboid)
     {
         for (BlockPos pos : cuboid)
-            if (!matches(world, pos))
+            if (!matches(level, pos))
                 return false;
         return true;
     }
 
-    boolean matches(World world, BlockPos pos);
+    boolean matches(World level, BlockPos pos);
 }

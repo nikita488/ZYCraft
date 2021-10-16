@@ -51,18 +51,18 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    public boolean canSurvive(BlockState state, IWorldReader world, BlockPos pos)
+    public boolean canSurvive(BlockState state, IWorldReader reader, BlockPos pos)
     {
         Direction facing = state.getValue(FACING);
         BlockPos oppositePos = pos.relative(facing.getOpposite());
-        BlockState oppositeState = world.getBlockState(oppositePos);
-        return (facing == Direction.UP && oppositeState.is(Blocks.HOPPER)) || oppositeState.isFaceSturdy(world, oppositePos, facing);
+        BlockState oppositeState = reader.getBlockState(oppositePos);
+        return (facing == Direction.UP && oppositeState.is(Blocks.HOPPER)) || oppositeState.isFaceSturdy(reader, oppositePos, facing);
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld world, BlockPos currentPos, BlockPos facingPos)
+    public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld accessor, BlockPos currentPos, BlockPos facingPos)
     {
-        if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(world, currentPos))
+        if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos))
             return state;
 
         return Blocks.AIR.defaultBlockState();
@@ -70,19 +70,19 @@ public class QuartzCrystalClusterBlock extends Block
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
-        ParticleUtils.quartzCrystalCluster(state, world, pos, rand);
+        ParticleUtils.quartzCrystalCluster(state, level, pos, random);
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext context)
+    public VoxelShape getShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext context)
     {
         return ClusterShapes.get(state);
     }
 
     @Override
-    public void entityInside(BlockState state, World world, BlockPos pos, Entity entity)
+    public void entityInside(BlockState state, World level, BlockPos pos, Entity entity)
     {
         if (!(entity instanceof ItemEntity))
             entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));

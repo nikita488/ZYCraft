@@ -57,7 +57,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    protected void processAdjacentPos(BlockPos pos, Direction side)
+    protected void processRelativePos(BlockPos pos, Direction side)
     {
         BlockState state = level.getBlockState(pos);
 
@@ -67,37 +67,37 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
             absorb(state, pos, side);
     }
 
-    private void eject(BlockState adjState, BlockPos adjPos, Direction side)
+    private void eject(BlockState state, BlockPos pos, Direction side)
     {
-        if (adjState.getBlock() instanceof IFluidVoid)
+        if (state.getBlock() instanceof IFluidVoid)
         {
-            IFluidVoid fluidVoid = (IFluidVoid)adjState.getBlock();
-            FluidStack fluidToDrain = fluidVoid.getFluidToDrain(adjState, level, adjPos, side.getOpposite());
-            int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(adjState, level, adjPos, side.getOpposite()) : 0;
+            IFluidVoid fluidVoid = (IFluidVoid)state.getBlock();
+            FluidStack fluidToDrain = fluidVoid.getFluidToDrain(state, level, pos, side.getOpposite());
+            int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(state, level, pos, side.getOpposite()) : 0;
 
             if (!fluidToDrain.isEmpty())
                 mainTank.drain(fluidToDrain, IFluidHandler.FluidAction.EXECUTE);
             else if (drainAmount > 0)
                 mainTank.drain(drainAmount, IFluidHandler.FluidAction.EXECUTE);
         }
-        else if (adjState.hasTileEntity())
+        else if (state.hasTileEntity())
         {
-            TileEntity tile = level.getBlockEntity(adjPos);
+            TileEntity blockEntity = level.getBlockEntity(pos);
 
-            if (tile != null)
-                tile.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())
-                        .ifPresent(adjTank -> FluidUtils.transferFromTo(mainTank, adjTank, 200));
+            if (blockEntity != null)
+                blockEntity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, side.getOpposite())
+                        .ifPresent(tank -> FluidUtils.transferFromTo(mainTank, tank, 200));
         }
     }
 
-    private void absorb(BlockState adjState, BlockPos adjPos, Direction side)
+    private void absorb(BlockState state, BlockPos pos, Direction side)
     {
         FluidStack fluid = FluidStack.EMPTY;
-        FluidState adjFluidState = adjState.getFluidState();
+        FluidState fluidState = state.getFluidState();
 
-        if (adjState.getBlock() instanceof IFluidSource)
-            fluid = ((IFluidSource)adjState.getBlock()).getFluid(adjState, level, adjPos, side.getOpposite());
-        else if (adjFluidState.getType() == Fluids.WATER.delegate.get())
+        if (state.getBlock() instanceof IFluidSource)
+            fluid = ((IFluidSource)state.getBlock()).getFluid(state, level, pos, side.getOpposite());
+        else if (fluidState.getType() == Fluids.WATER.delegate.get())
             fluid = new FluidStack(Fluids.WATER, 50);
 
         if (!fluid.isEmpty())
@@ -185,7 +185,7 @@ public class ValveTile extends MultiInterfaceTile implements ITickableTileEntity
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
         if (!mode.get().isOutput())
             return 0;

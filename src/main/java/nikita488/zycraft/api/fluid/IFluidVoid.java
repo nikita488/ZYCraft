@@ -10,10 +10,10 @@ import javax.annotation.Nullable;
 
 public interface IFluidVoid
 {
-    default FluidStack getFluidToDrain(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    default FluidStack getFluidToDrain(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
         return FluidStack.EMPTY;
     }
 
-    int getDrainAmount(BlockState state, World world, BlockPos pos, @Nullable Direction side);
+    int getDrainAmount(BlockState state, World level, BlockPos pos, @Nullable Direction side);
 }

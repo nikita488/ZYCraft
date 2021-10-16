@@ -45,31 +45,31 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     }
 
     @Override
-    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
-            transform(world, pos, pos.relative(side));
+            transform(level, pos, pos.relative(side));
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        transform(world, pos, adjPos);
+        transform(level, pos, relativePos);
     }
 
-    private void transform(World world, BlockPos pos, BlockPos adjPos)
+    private void transform(World level, BlockPos pos, BlockPos relativePos)
     {
-        FluidState fluidState = world.getFluidState(adjPos);
+        FluidState fluidState = level.getFluidState(relativePos);
 
         if (!fluidState.is(FluidTags.LAVA))
             return;
 
-        world.setBlockAndUpdate(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, (fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE).defaultBlockState()));
-        world.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, adjPos, -1);
+        level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, (fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE).defaultBlockState()));
+        level.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, relativePos, -1);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         ItemStack heldStack = player.getItemInHand(hand);
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
@@ -86,7 +86,7 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
         player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
         player.playSound(water.getFluid().getAttributes().getFillSound(), 1F, 1F);
 
-        if (world.isClientSide())
+        if (level.isClientSide())
             return ActionResultType.SUCCESS;
 
         handler.fill(water, IFluidHandler.FluidAction.EXECUTE);
@@ -101,7 +101,7 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     }
 
     @Override
-    public FluidStack getFluid(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
         return new FluidStack(Fluids.WATER, 50);
     }

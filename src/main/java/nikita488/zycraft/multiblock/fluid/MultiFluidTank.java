@@ -106,14 +106,14 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
 
     public void onFluidChanged() {}
 
-    public void render(MatrixStack stack, IRenderTypeBuffer source, IBlockDisplayReader world, float partialTicks)
+    public void render(MatrixStack stack, IRenderTypeBuffer source, IBlockDisplayReader getter, float partialTicks)
     {
         if (lastFluid.isEmpty() || capacity <= 0)
             return;
 
         stack.pushPose();
         stack.translate(-bounds.minX() + 1, -bounds.minY() + 1, -bounds.minZ() + 1);
-        MultiFluidRenderer.render(stack, source, lastFluid, bounds, 1F, (float)lastFluid.getAmount() / capacity, world, center);
+        MultiFluidRenderer.render(stack, source, lastFluid, bounds, 1F, (float)lastFluid.getAmount() / capacity, getter, center);
         stack.popPose();
     }
 

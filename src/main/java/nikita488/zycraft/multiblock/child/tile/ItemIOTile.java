@@ -42,13 +42,13 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         if (!player.isShiftKeyDown())
-            return super.onBlockActivated(state, world, pos, player, hand, hit);
+            return super.use(state, level, pos, player, hand, hitResult);
 
         nextMode(state);
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        return ActionResultType.sidedSuccess(level.isClientSide());
     }
 
     private void nextMode(BlockState state)
@@ -95,41 +95,41 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     }
 
     @Override
-    protected void processAdjacentPos(BlockPos pos, Direction side)
+    protected void processRelativePos(BlockPos pos, Direction side)
     {
         if (mode.get().isOutput())
             eject(pos, side);
     }
 
-    private void eject(BlockPos adjPos, Direction side)
+    private void eject(BlockPos pos, Direction side)
     {
-        TileEntity adjTile = level.getBlockEntity(adjPos);
+        TileEntity blockEntity = level.getBlockEntity(pos);
 
-        if (adjTile == null)
+        if (blockEntity == null)
             return;
 
-        LazyOptional<IItemHandler> adjCapability = adjTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite());
+        LazyOptional<IItemHandler> capability = blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite());
 
-        if (!adjCapability.isPresent())
+        if (!capability.isPresent())
             return;
 
-        IItemHandler adjInventory = adjCapability.orElse(EmptyHandler.INSTANCE);
+        IItemHandler inventory = capability.orElse(EmptyHandler.INSTANCE);
 
-        for (int slot = 0; slot < inventory.getSlots(); slot++)
+        for (int slot = 0; slot < this.inventory.getSlots(); slot++)
         {
-            ItemStack stack = inventory.extractItem(slot, Integer.MAX_VALUE, true);
+            ItemStack stack = this.inventory.extractItem(slot, Integer.MAX_VALUE, true);
 
             if (stack.isEmpty())
                 continue;
 
-            ItemStack remainder = ItemHandlerHelper.insertItemStacked(adjInventory, stack, true);
+            ItemStack remainder = ItemHandlerHelper.insertItemStacked(inventory, stack, true);
             int amount = stack.getCount() - remainder.getCount();
 
             if (amount <= 0)
                 continue;
 
-            stack = inventory.extractItem(slot, amount, false);
-            ItemHandlerHelper.insertItemStacked(adjInventory, stack, false);
+            stack = this.inventory.extractItem(slot, amount, false);
+            ItemHandlerHelper.insertItemStacked(inventory, stack, false);
         }
     }
 
@@ -189,7 +189,7 @@ public class ItemIOTile extends MultiInterfaceTile implements ITickableTileEntit
     }
 
     @Override
-    public int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
         return inventory.getSlots() > 0 ? ItemHandlerHelper.calcRedstoneFromInventory(inventory) : 0;
     }

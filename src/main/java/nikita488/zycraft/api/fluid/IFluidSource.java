@@ -10,5 +10,5 @@ import javax.annotation.Nullable;
 
 public interface IFluidSource
 {
-    FluidStack getFluid(BlockState state, World world, BlockPos pos, @Nullable Direction side);
+    FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side);
 }

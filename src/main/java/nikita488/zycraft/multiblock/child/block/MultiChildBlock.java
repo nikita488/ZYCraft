@@ -29,26 +29,26 @@ public abstract class MultiChildBlock extends Block
 
     @Nullable
     @Override
-    public abstract TileEntity createTileEntity(BlockState state, IBlockReader world);
+    public abstract TileEntity createTileEntity(BlockState state, IBlockReader getter);
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof IMultiChild ? ((IMultiChild)tile).onBlockActivated(state, world, pos, player, hand, hit) : ActionResultType.CONSUME;
+        TileEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).use(state, level, pos, player, hand, hitResult) : ActionResultType.CONSUME;
     }
 
     @Override
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof IMultiChild ? ((IMultiChild)tile).getLightValue(state, world, pos) : state.getLightEmission();
+        TileEntity blockEntity = getter.getBlockEntity(pos);
+        return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).getLightValue(state, getter, pos) : state.getLightEmission();
     }
 
     @Override
-    public int getAnalogOutputSignal(BlockState state, World world, BlockPos pos)
+    public int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
-        TileEntity tile = world.getBlockEntity(pos);
-        return tile instanceof IMultiChild ? ((IMultiChild)tile).getComparatorInputOverride(state, world, pos) : 0;
+        TileEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity instanceof IMultiChild ? ((IMultiChild)blockEntity).getAnalogOutputSignal(state, level, pos) : 0;
     }
 }

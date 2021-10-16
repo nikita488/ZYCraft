@@ -59,12 +59,12 @@ public class FluidUtils
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
     }
 
-    public static boolean canBlockContainFluid(World world, BlockPos pos, BlockState state, Fluid fluid)
+    public static boolean canBlockContainFluid(World level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canPlaceLiquid(world, pos, state, fluid);
+        return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canPlaceLiquid(level, pos, state, fluid);
     }
 
-    public static boolean tryPlaceFluid(FluidStack stack, @Nullable PlayerEntity player, World world, BlockPos pos, @Nullable BlockRayTraceResult rayCastResult)
+    public static boolean tryPlaceFluid(FluidStack stack, @Nullable PlayerEntity player, World level, BlockPos pos, @Nullable BlockRayTraceResult hitResult)
     {
         Fluid fluid = stack.getFluid();
 
@@ -72,49 +72,49 @@ public class FluidUtils
             return false;
 
         FluidAttributes attributes = fluid.getAttributes();
-        FluidState fluidState = attributes.getStateForPlacement(world, pos, stack);
+        FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
 
-        if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(world, pos, fluidState))
+        if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
             return false;
 
-        BlockState blockState = world.getBlockState(pos);
+        BlockState blockState = level.getBlockState(pos);
         boolean replaceable = blockState.canBeReplaced(fluid);
-        boolean canContainFluid = blockState.isAir() || replaceable || canBlockContainFluid(world, pos, blockState, fluid);
+        boolean canContainFluid = blockState.isAir() || replaceable || canBlockContainFluid(level, pos, blockState, fluid);
 
         if (!canContainFluid)
-            return rayCastResult != null && tryPlaceFluid(stack, player, world, rayCastResult.getBlockPos().relative(rayCastResult.getDirection()), null);
+            return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
 
-        if (world.dimensionType().ultraWarm() && attributes.doesVaporize(world, pos, stack))
+        if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
         {
-            attributes.vaporize(player, world, pos, stack);
+            attributes.vaporize(player, level, pos, stack);
             return true;
         }
 
-        if (canBlockContainFluid(world, pos, blockState, fluid))
+        if (canBlockContainFluid(level, pos, blockState, fluid))
         {
-            ((ILiquidContainer)blockState.getBlock()).placeLiquid(world, pos, blockState, ((FlowingFluid)fluid).getSource(false));
-            world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
+            ((ILiquidContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
+            level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
             return true;
         }
 
-        if (!world.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
-            world.destroyBlock(pos, true);
+        if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
+            level.destroyBlock(pos, true);
 
-        if (!world.setBlock(pos, attributes.getBlock(world, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
+        if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
             return false;
 
-        world.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
+        level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
         return true;
     }
 
-    public static boolean voidFluid(World world, BlockPos pos, Predicate<FluidState> predicate)
+    public static boolean voidFluid(World level, BlockPos pos, Predicate<FluidState> predicate)
     {
-        if (!predicate.test(world.getFluidState(pos)))
+        if (!predicate.test(level.getFluidState(pos)))
             return false;
 
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).takeLiquid(world, pos, state) != Fluids.EMPTY)
+        if (state.getBlock() instanceof IBucketPickupHandler && ((IBucketPickupHandler)state.getBlock()).takeLiquid(level, pos, state) != Fluids.EMPTY)
             return true;
 
         if (!(state.getBlock() instanceof FlowingFluidBlock))
@@ -124,10 +124,10 @@ public class FluidUtils
             if (material != Material.WATER_PLANT && material != Material.REPLACEABLE_WATER_PLANT)
                 return false;
 
-            Block.dropResources(state, world, pos, state.hasTileEntity() ? world.getBlockEntity(pos) : null);
+            Block.dropResources(state, level, pos, state.hasTileEntity() ? level.getBlockEntity(pos) : null);
         }
 
-        world.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
         return true;
     }
 }

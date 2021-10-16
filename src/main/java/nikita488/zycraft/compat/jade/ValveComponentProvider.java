@@ -45,11 +45,11 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
     }
 
     @Override
-    public void appendServerData(CompoundNBT data, ServerPlayerEntity player, World world, TileEntity tile)
+    public void appendServerData(CompoundNBT data, ServerPlayerEntity player, World level, TileEntity blockEntity)
     {
-        if (tile instanceof ValveTile)
+        if (blockEntity instanceof ValveTile)
         {
-            FluidStack storedFluid = ((ValveTile)tile).getStoredFluid();
+            FluidStack storedFluid = ((ValveTile)blockEntity).getStoredFluid();
 
             if (!storedFluid.isEmpty())
                 data.put("StoredFluid", storedFluid.writeToNBT(new CompoundNBT()));

@@ -13,20 +13,20 @@ import java.util.Random;
 
 public class ParticleUtils
 {
-    public static void glowingBlock(BlockState state, World world, BlockPos pos, Random rand)
+    public static void glowingBlock(BlockState state, World level, BlockPos pos, Random random)
     {
-        glowingBlock(state, world, pos, rand, 0xFFFFFF7F);
+        glowingBlock(state, level, pos, random, 0xFFFFFF7F);
     }
 
-    public static void glowingColorableBlock(BlockState state, World world, BlockPos pos, Random rand)
+    public static void glowingColorableBlock(BlockState state, World level, BlockPos pos, Random random)
     {
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = level.getBlockEntity(pos);
 
-        if (tile instanceof IColorable)
-            glowingBlock(state, world, pos, rand, Color.rgba(((IColorable)tile).getColor(state, world, pos), 192));
+        if (blockEntity instanceof IColorable)
+            glowingBlock(state, level, pos, random, Color.rgba(((IColorable)blockEntity).getColor(state, level, pos), 192));
     }
 
-    public static void glowingBlock(BlockState state, World world, BlockPos pos, Random rand, int rgba)
+    public static void glowingBlock(BlockState state, World level, BlockPos pos, Random random, int rgba)
     {
         SparkleParticleData data = SparkleParticleData.builder()
                 .color(rgba)
@@ -36,26 +36,27 @@ public class ParticleUtils
 
         double offset = 9 / 16F;
 
-        for (Direction dir : ZYConstants.DIRECTIONS)
+        for (Direction side : ZYConstants.DIRECTIONS)
         {
-            if (rand.nextFloat() > 0.15F)
+            if (random.nextFloat() > 0.15F)
                 continue;
 
-            BlockPos adjPos = pos.relative(dir);
-            BlockState adjState = world.getBlockState(adjPos);
-            if (state == adjState || adjState.isCollisionShapeFullBlock(world, adjPos))
+            BlockPos relativePos = pos.relative(side);
+            BlockState relativeState = level.getBlockState(relativePos);
+
+            if (state == relativeState || relativeState.isCollisionShapeFullBlock(level, relativePos))
                 continue;
 
-            Direction.Axis axis = dir.getAxis();
-            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * dir.getStepX() : rand.nextFloat();
-            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * dir.getStepY() : rand.nextFloat();
-            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * dir.getStepZ() : rand.nextFloat();
+            Direction.Axis axis = side.getAxis();
+            double xOffset = axis == Direction.Axis.X ? 0.5D + offset * side.getStepX() : random.nextFloat();
+            double yOffset = axis == Direction.Axis.Y ? 0.5D + offset * side.getStepY() : random.nextFloat();
+            double zOffset = axis == Direction.Axis.Z ? 0.5D + offset * side.getStepZ() : random.nextFloat();
 
-            world.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0D, 0D, 0D);
+            level.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0D, 0D, 0D);
         }
     }
 
-    public static void quartzCrystalCluster(BlockState state, World world, BlockPos pos, Random rand)
+    public static void quartzCrystalCluster(BlockState state, World level, BlockPos pos, Random random)
     {
         SparkleParticleData data = SparkleParticleData.builder()
                 .color(0xFFFFFF80)
@@ -65,22 +66,22 @@ public class ParticleUtils
 
         float size = 6 / 16F;
         float height = 11 / 16F;
-        Direction dir = state.getValue(QuartzCrystalClusterBlock.FACING);
-        double xOffset = getOffset(rand, dir, Direction.Axis.X, size, height);
-        double yOffset = getOffset(rand, dir, Direction.Axis.Y, size, height);
-        double zOffset = getOffset(rand, dir, Direction.Axis.Z, size, height);
+        Direction facing = state.getValue(QuartzCrystalClusterBlock.FACING);
+        double xOffset = getOffset(random, facing, Direction.Axis.X, size, height);
+        double yOffset = getOffset(random, facing, Direction.Axis.Y, size, height);
+        double zOffset = getOffset(random, facing, Direction.Axis.Z, size, height);
 
-        world.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0D, 0D, 0D);
+        level.addParticle(data, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, 0D, 0D, 0D);
     }
 
-    private static double getOffset(Random rand, Direction dir, Direction.Axis axis, float size, float height)
+    private static double getOffset(Random random, Direction facing, Direction.Axis axis, float size, float height)
     {
-        if (dir.getAxis() == axis)
-            if (dir.getAxisDirection() == Direction.AxisDirection.POSITIVE)
-                return rand.nextFloat() * height;
+        if (facing.getAxis() == axis)
+            if (facing.getAxisDirection() == Direction.AxisDirection.POSITIVE)
+                return random.nextFloat() * height;
             else
-                return 1D - rand.nextFloat() * height;
+                return 1D - random.nextFloat() * height;
         else
-            return 0.5D + (rand.nextFloat() - 0.5D) * size;
+            return 0.5D + (random.nextFloat() - 0.5D) * size;
     }
 }

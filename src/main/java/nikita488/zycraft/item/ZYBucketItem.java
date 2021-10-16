@@ -46,7 +46,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
     }
 
     @Override
-    public ActionResult<ItemStack> use(World world, PlayerEntity player, Hand hand)
+    public ActionResult<ItemStack> use(World level, PlayerEntity player, Hand hand)
     {
         ItemStack heldStack = player.getItemInHand(hand);
         Optional<IFluidHandlerItem> capability = FluidUtils.getItemFluidHandler(heldStack);
@@ -56,43 +56,43 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         IFluidHandlerItem handler = capability.get();
         FluidStack containedFluid = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        BlockRayTraceResult rayCastResult = getPlayerPOVHitResult(world, player, containedFluid.isEmpty() ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
-        ActionResult<ItemStack> eventResult = ForgeEventFactory.onBucketUse(player, world, heldStack, rayCastResult);
+        BlockRayTraceResult hitResult = getPlayerPOVHitResult(level, player, containedFluid.isEmpty() ? RayTraceContext.FluidMode.SOURCE_ONLY : RayTraceContext.FluidMode.NONE);
+        ActionResult<ItemStack> eventResult = ForgeEventFactory.onBucketUse(player, level, heldStack, hitResult);
 
         if (eventResult != null)
             return eventResult;
 
-        if (rayCastResult.getType() != RayTraceResult.Type.BLOCK)
+        if (hitResult.getType() != RayTraceResult.Type.BLOCK)
             return ActionResult.pass(heldStack);
 
-        BlockPos pos = rayCastResult.getBlockPos();
-        Direction side = rayCastResult.getDirection();
-        BlockPos adjPos = pos.relative(side);
+        BlockPos pos = hitResult.getBlockPos();
+        Direction side = hitResult.getDirection();
+        BlockPos relativePos = pos.relative(side);
 
-        if (!world.mayInteract(player, pos) || !player.mayUseItemAt(adjPos, side, heldStack))
+        if (!level.mayInteract(player, pos) || !player.mayUseItemAt(relativePos, side, heldStack))
             return ActionResult.fail(heldStack);
 
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
         if (!containedFluid.isEmpty())
         {
-            BlockPos fluidPos = FluidUtils.canBlockContainFluid(world, pos, state, containedFluid.getFluid()) ? pos : adjPos;
+            BlockPos fluidPos = FluidUtils.canBlockContainFluid(level, pos, state, containedFluid.getFluid()) ? pos : relativePos;
 
-            if (!FluidUtils.tryPlaceFluid(containedFluid, player, world, fluidPos, rayCastResult))
+            if (!FluidUtils.tryPlaceFluid(containedFluid, player, level, fluidPos, hitResult))
                 return ActionResult.fail(heldStack);
 
-            if (!world.isClientSide())
+            if (!level.isClientSide())
                 CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)player, fluidPos, heldStack);
 
             player.awardStat(Stats.ITEM_USED.get(this));
-            return ActionResult.sidedSuccess(emptyBucket(handler, heldStack, player), world.isClientSide());
+            return ActionResult.sidedSuccess(emptyBucket(handler, heldStack, player), level.isClientSide());
         }
 
         if (!(block instanceof IBucketPickupHandler))
             return ActionResult.fail(heldStack);
 
-        Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(world, pos, state);
+        Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(level, pos, state);
 
         if (fluid == Fluids.EMPTY)
             return ActionResult.fail(heldStack);
@@ -108,9 +108,9 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
 
-        if (!world.isClientSide())
+        if (!level.isClientSide())
             CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
 
-        return ActionResult.sidedSuccess(filledContainer, world.isClientSide());
+        return ActionResult.sidedSuccess(filledContainer, level.isClientSide());
     }
 }

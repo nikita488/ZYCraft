@@ -24,13 +24,13 @@ public class ColorableTile extends ZYTile implements IColorable
     }
 
     @Override
-    public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos)
+    public int getColor(BlockState state, IBlockDisplayReader getter, BlockPos pos)
     {
         return color.rgb();
     }
 
     @Override
-    public void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb)
+    public void setColor(BlockState state, IBlockDisplayReader getter, BlockPos pos, int rgb)
     {
         this.color = Color.fromRGB(rgb);
         setChanged();

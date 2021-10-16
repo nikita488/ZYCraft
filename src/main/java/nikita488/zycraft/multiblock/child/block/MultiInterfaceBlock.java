@@ -39,7 +39,7 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader getter, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.INTERFACE);
 
@@ -52,18 +52,18 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
     protected void addTooltip(List<ITextComponent> tooltip) {}
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = level.getBlockEntity(pos);
 
-        if (tile instanceof IMultiChild)
+        if (blockEntity instanceof IMultiChild)
         {
-            if (((IMultiChild)tile).hasParents() || player.isShiftKeyDown())
-                return super.use(state, world, pos, player, hand, hit);
+            if (((IMultiChild)blockEntity).hasParents() || player.isShiftKeyDown())
+                return super.use(state, level, pos, player, hand, hitResult);
 
-            if (!world.isClientSide())
-                MultiType.tryFormMultiBlock(state, world, pos, hit.getDirection());
-            return ActionResultType.sidedSuccess(world.isClientSide());
+            if (!level.isClientSide())
+                MultiType.tryFormMultiBlock(state, level, pos, hitResult.getDirection());
+            return ActionResultType.sidedSuccess(level.isClientSide());
         }
 
         return ActionResultType.CONSUME;

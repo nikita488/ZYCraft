@@ -41,47 +41,47 @@ public class FluidSelectorBlock extends Block implements IFluidSource
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.FLUID_SELECTOR.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader getter, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.CREATIVE_ONLY);
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         FluidStack containedFluid = FluidUtil.getFluidContained(player.getItemInHand(hand)).orElse(FluidStack.EMPTY);
 
         if (containedFluid.isEmpty())
             return ActionResultType.PASS;
 
-        FluidSelectorTile selector = ZYTiles.FLUID_SELECTOR.getNullable(world, pos);
+        FluidSelectorTile selector = ZYTiles.FLUID_SELECTOR.getNullable(level, pos);
 
         if (selector != null)
             if (selector.getSelectedFluid().isFluidEqual(containedFluid))
                 return ActionResultType.CONSUME;
-            else if (!world.isClientSide())
+            else if (!level.isClientSide())
                 selector.setSelectedFluid(containedFluid);
 
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        return ActionResultType.sidedSuccess(level.isClientSide());
     }
 
     @Override
-    public FluidStack getFluid(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
-        FluidStack fluid = ZYTiles.FLUID_SELECTOR.get(world, pos).map(FluidSelectorTile::getSelectedFluid).orElse(FluidStack.EMPTY);
+        FluidStack fluid = ZYTiles.FLUID_SELECTOR.get(level, pos).map(FluidSelectorTile::getSelectedFluid).orElse(FluidStack.EMPTY);
 
         if (fluid.isEmpty())
             return FluidStack.EMPTY;
 
         fluid = fluid.copy();
-        fluid.setAmount(150 - world.getBestNeighborSignal(pos) * 10);
+        fluid.setAmount(150 - level.getBestNeighborSignal(pos) * 10);
         return fluid;
     }
 }

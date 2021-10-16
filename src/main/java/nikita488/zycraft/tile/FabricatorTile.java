@@ -140,7 +140,7 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
         logic.dropPendingItems();
     }
 
-    public int getComparatorInputOverride()
+    public int getAnalogOutputSignal()
     {
         return ItemHandlerHelper.calcRedstoneFromInventory(inventory);
     }

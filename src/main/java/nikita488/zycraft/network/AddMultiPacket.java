@@ -37,32 +37,32 @@ public class AddMultiPacket
         this.buffer = buffer;
     }
 
-    public static AddMultiPacket decode(PacketBuffer buf)
+    public static AddMultiPacket decode(PacketBuffer buffer)
     {
-        return new AddMultiPacket(buf);
+        return new AddMultiPacket(buffer);
     }
 
-    public static void encode(AddMultiPacket msg, PacketBuffer buf)
+    public static void encode(AddMultiPacket packet, PacketBuffer buffer)
     {
-        buf.writeRegistryIdUnsafe(ZYRegistries.MULTI_TYPES.get(), msg.type());
-        buf.writeVarInt(msg.mainChunk().x);
-        buf.writeVarInt(msg.mainChunk().z);
-        buf.writeVarInt(msg.id());
-        msg.multiBlock.encode(buf);
+        buffer.writeRegistryIdUnsafe(ZYRegistries.MULTI_TYPES.get(), packet.type());
+        buffer.writeVarInt(packet.mainChunk().x);
+        buffer.writeVarInt(packet.mainChunk().z);
+        buffer.writeVarInt(packet.id());
+        packet.multiBlock.encode(buffer);
     }
 
-    public static boolean handle(AddMultiPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(AddMultiPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(ctx.get().getDirection().getReceptionSide());
-            MultiBlock multiBlock = world.map(clientWorld -> msg.type().create(clientWorld, msg.mainChunk())).orElse(null);
+            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(context.get().getDirection().getReceptionSide());
+            MultiBlock multiBlock = world.map(clientWorld -> packet.type().create(clientWorld, packet.mainChunk())).orElse(null);
 
             if (multiBlock == null)
                 return;
 
-            multiBlock.setID(msg.id());
-            multiBlock.decode(msg.buffer());
+            multiBlock.setID(packet.id());
+            multiBlock.decode(packet.buffer());
             multiBlock.initChildBlocks();
             MultiManager.getInstance().addMultiBlock(multiBlock, MultiBlock.AddingReason.LOADED);
         });

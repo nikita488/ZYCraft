@@ -15,44 +15,44 @@ import nikita488.zycraft.api.util.ZYDyeColor;
 
 public interface IColorable
 {
-    default int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int tintIndex)
+    default int getColor(BlockState state, IBlockDisplayReader getter, BlockPos pos, int tintIndex)
     {
-        return getColor(state, world, pos);
+        return getColor(state, getter, pos);
     }
 
-    int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos);
+    int getColor(BlockState state, IBlockDisplayReader getter, BlockPos pos);
 
-    void setColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int rgb);
+    void setColor(BlockState state, IBlockDisplayReader getter, BlockPos pos, int rgb);
 
-    static boolean isColorable(IBlockReader world, BlockPos pos)
+    static boolean isColorable(IBlockReader getter, BlockPos pos)
     {
-        return world.getBlockEntity(pos) instanceof IColorable;
+        return getter.getBlockEntity(pos) instanceof IColorable;
     }
 
-    static ActionResultType interact(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    static ActionResultType interact(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         ItemStack stack = player.getItemInHand(hand);
 
         if (stack.isEmpty())
             return ActionResultType.PASS;
 
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = level.getBlockEntity(pos);
 
-        if (tile instanceof IColorable)
+        if (blockEntity instanceof IColorable)
         {
-            IColorable colorable = (IColorable)tile;
-            int rgb = colorable.getColor(state, world, pos);
+            IColorable colorable = (IColorable)blockEntity;
+            int rgb = colorable.getColor(state, level, pos);
 
             if (stack.getItem() instanceof IColorChanger)
             {
                 IColorChanger changer = (IColorChanger)stack.getItem();
 
-                if (!changer.canChangeColor(state, world, pos, player, hand, hit, rgb))
+                if (!changer.canChangeColor(state, level, pos, player, hand, hitResult, rgb))
                     return ActionResultType.PASS;
 
-                if (!world.isClientSide())
-                    colorable.setColor(state, world, pos, changer.changeColor(state, world, pos, player, hand, hit, rgb));
-                return ActionResultType.sidedSuccess(world.isClientSide());
+                if (!level.isClientSide())
+                    colorable.setColor(state, level, pos, changer.changeColor(state, level, pos, player, hand, hitResult, rgb));
+                return ActionResultType.sidedSuccess(level.isClientSide());
             }
 
             ZYDyeColor dyeColor = ZYDyeColor.byDyeColor(stack);
@@ -60,9 +60,9 @@ public interface IColorable
             if (dyeColor == null || rgb == dyeColor.rgb())
                 return ActionResultType.PASS;
 
-            if (!world.isClientSide())
-                colorable.setColor(state, world, pos, dyeColor.rgb());
-            return ActionResultType.sidedSuccess(world.isClientSide());
+            if (!level.isClientSide())
+                colorable.setColor(state, level, pos, dyeColor.rgb());
+            return ActionResultType.sidedSuccess(level.isClientSide());
         }
 
         return ActionResultType.CONSUME;

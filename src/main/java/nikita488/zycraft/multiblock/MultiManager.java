@@ -80,9 +80,9 @@ public class MultiManager extends WorldSavedData
         return instance;
     }
 
-    public static MultiManager getInstance(IWorld world)
+    public static MultiManager getInstance(IWorld accessor)
     {
-        return !world.isClientSide() ? ((ServerWorld)world).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
+        return !accessor.isClientSide() ? ((ServerWorld)accessor).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
     }
 
     @Nullable
@@ -144,7 +144,7 @@ public class MultiManager extends WorldSavedData
             multiBlocksToSend.add(multiBlock);//Defer packet sending here because child block entities is not available on client yet
 
         if (multiBlock instanceof IDynamicMultiBlock)
-            multiBlock.world().addFreshEntity(new MultiEntity(multiBlock.world(), (IDynamicMultiBlock)multiBlock, multiBlock.id()));
+            multiBlock.level().addFreshEntity(new MultiEntity(multiBlock.level(), (IDynamicMultiBlock)multiBlock, multiBlock.id()));
     }
 
     public void removeMultiBlock(MultiBlock multiBlock, MultiBlock.RemovalReason reason)
@@ -280,12 +280,12 @@ public class MultiManager extends WorldSavedData
             return;
 
         ListNBT multiTags = tag.getList(MULTI_BLOCKS_TAG, Constants.NBT.TAG_COMPOUND);
-        World world = (World)event.getWorld();
-        MultiManager manager = getInstance(world);
+        World level = (World)event.getWorld();
+        MultiManager manager = getInstance(level);
         ChunkPos pos = event.getChunk().getPos();
 
         for (int i = 0; i < multiTags.size(); i++)
-            MultiType.create(world, pos, multiTags.getCompound(i)).ifPresent(manager::addPendingMultiBlock);
+            MultiType.create(level, pos, multiTags.getCompound(i)).ifPresent(manager::addPendingMultiBlock);
     }
 
     private static void onPlayerLoadedChunk(PlayerLoadedChunkEvent event)

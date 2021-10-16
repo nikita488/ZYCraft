@@ -81,14 +81,14 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     private LazyOptional<IFluidHandler> fluidCapability = LazyOptional.empty();
     private LazyOptional<IItemHandler> itemCapability = LazyOptional.empty();
 
-    public TankMultiBlock(World world, ChunkPos pos)
+    public TankMultiBlock(World level, ChunkPos pos)
     {
-        super(ZYMultiTypes.TANK.get(), world, pos);
+        super(ZYMultiTypes.TANK.get(), level, pos);
     }
 
-    public TankMultiBlock(World world, Cuboid6i innerArea)
+    public TankMultiBlock(World level, Cuboid6i innerArea)
     {
-        this(world, new ChunkPos(innerArea.center()));
+        this(level, new ChunkPos(innerArea.center()));
         this.innerArea = innerArea.immutable();
         tank.get();
     }
@@ -125,17 +125,17 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        if (!world.isClientSide())
+        if (!level.isClientSide())
             NetworkHooks.openGui((ServerPlayerEntity)player, this, buffer -> buffer.writeVarInt(tank.get().getCapacity()));
-        return ActionResultType.sidedSuccess(world.isClientSide());
+        return ActionResultType.sidedSuccess(level.isClientSide());
     }
 
     @Override
     public void tick()
     {
-        if (world.isClientSide())
+        if (level.isClientSide())
         {
             tank.get().tick();
             return;
@@ -188,7 +188,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer buffer, int lightMap, float partialTicks)
     {
-        tank.get().render(stack, buffer, world, partialTicks);
+        tank.get().render(stack, buffer, level, partialTicks);
     }
 
     @Override
@@ -203,7 +203,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     public void onDestroy()
     {
         super.onDestroy();
-        InventoryUtils.dropInventoryItems(world, innerArea.center(), inventory);
+        InventoryUtils.dropInventoryItems(level, innerArea.center(), inventory);
         updateComparatorOutputLevel();
     }
 

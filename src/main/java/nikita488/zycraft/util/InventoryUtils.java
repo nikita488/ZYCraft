@@ -7,14 +7,14 @@ import net.minecraftforge.items.IItemHandler;
 
 public class InventoryUtils
 {
-    public static void dropInventoryItems(World world, BlockPos pos, IItemHandler inventory)
+    public static void dropInventoryItems(World level, BlockPos pos, IItemHandler inventory)
     {
-        dropInventoryItems(world, pos.getX(), pos.getY(), pos.getZ(), inventory);
+        dropInventoryItems(level, pos.getX(), pos.getY(), pos.getZ(), inventory);
     }
 
-    public static void dropInventoryItems(World world, double x, double y, double z, IItemHandler inventory)
+    public static void dropInventoryItems(World level, double x, double y, double z, IItemHandler inventory)
     {
         for (int slot = 0; slot < inventory.getSlots(); slot++)
-            InventoryHelper.dropItemStack(world, x, y, z, inventory.getStackInSlot(slot));
+            InventoryHelper.dropItemStack(level, x, y, z, inventory.getStackInSlot(slot));
     }
 }

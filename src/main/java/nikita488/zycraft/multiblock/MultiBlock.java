@@ -35,7 +35,7 @@ public abstract class MultiBlock
     private static final AtomicInteger NEXT_MULTI_ID = new AtomicInteger();
     final MultiType<?> type;
     final MultiManager manager;
-    final World world;
+    final World level;
     final ChunkPos mainChunk;
     final ObjectList<BlockPos> childBlocks = new ObjectArrayList<>();
     final ObjectList<BlockPos> interfaces = new ObjectArrayList<>();
@@ -44,13 +44,13 @@ public abstract class MultiBlock
     boolean valid;
     private boolean changed;
 
-    public MultiBlock(MultiType<?> type, World world, ChunkPos mainChunk)
+    public MultiBlock(MultiType<?> type, World level, ChunkPos mainChunk)
     {
         this.type = type;
-        this.manager = MultiManager.getInstance(world);
-        this.world = world;
+        this.manager = MultiManager.getInstance(level);
+        this.level = level;
         this.mainChunk = mainChunk;
-        this.id = !world.isClientSide() ? NEXT_MULTI_ID.incrementAndGet() : 0;
+        this.id = !level.isClientSide() ? NEXT_MULTI_ID.incrementAndGet() : 0;
     }
 
     public final void form()
@@ -96,14 +96,14 @@ public abstract class MultiBlock
 
         for (BlockPos pos : childBlocks)
         {
-            if (!world.isLoaded(pos))
+            if (!level.isLoaded(pos))
                 continue;
 
-            TileEntity tile = world.getBlockEntity(pos);
+            TileEntity blockEntity = level.getBlockEntity(pos);
 
-            if (tile instanceof IMultiChild)
+            if (blockEntity instanceof IMultiChild)
             {
-                IMultiChild child = (IMultiChild)tile;
+                IMultiChild child = (IMultiChild)blockEntity;
                 child.onMultiValidation(this);
                 onChildValidation(child);
             }
@@ -119,21 +119,21 @@ public abstract class MultiBlock
 
     public void invalidate(RemovalReason reason)
     {
-        if (!world.isClientSide() && reason.isDestroyed())
+        if (!level.isClientSide() && reason.isDestroyed())
             onDestroy();
 
         this.valid = false;
 
         for (BlockPos pos : childBlocks)
         {
-            if (!world.isLoaded(pos))
+            if (!level.isLoaded(pos))
                 continue;
 
-            TileEntity tile = world.getBlockEntity(pos);
+            TileEntity blockEntity = level.getBlockEntity(pos);
 
-            if (tile instanceof IMultiChild)
+            if (blockEntity instanceof IMultiChild)
             {
-                IMultiChild child = (IMultiChild)tile;
+                IMultiChild child = (IMultiChild)blockEntity;
                 child.onMultiInvalidation(this);
                 onChildInvalidation(child);
             }
@@ -147,12 +147,12 @@ public abstract class MultiBlock
 
     public abstract void initChildBlocks();
 
-    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType onBlockActivated(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
         return ActionResultType.PASS;
     }
 
-    public int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return state.getLightEmission();
     }
@@ -168,7 +168,7 @@ public abstract class MultiBlock
 
         for (BlockPos pos : interfaces)
         {
-            if (!world.isLoaded(pos))
+            if (!level.isLoaded(pos))
                 continue;
 
             LazyOptional<IFluidHandler> capability = getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, pos);
@@ -177,11 +177,11 @@ public abstract class MultiBlock
             if (!capability.isPresent() || tank.getFluidInTank(0).isEmpty())
                 continue;
 
-            TileEntity tile = world.getBlockEntity(pos);
+            TileEntity blockEntity = level.getBlockEntity(pos);
 
-            if (tile instanceof ValveTile)
+            if (blockEntity instanceof ValveTile)
             {
-                ValveTile valve = (ValveTile)tile;
+                ValveTile valve = (ValveTile)blockEntity;
 
                 if (!valve.hasStoredFluid())
                     tankValves.computeIfAbsent(tank, key -> new ObjectArrayList<>()).add(valve);
@@ -217,16 +217,16 @@ public abstract class MultiBlock
 
     public final void markUnsaved()
     {
-        if (!world.isClientSide() && world.hasChunk(mainChunk.x, mainChunk.z))
-            world.getChunk(mainChunk.x, mainChunk.z).markUnsaved();
+        if (!level.isClientSide() && level.hasChunk(mainChunk.x, mainChunk.z))
+            level.getChunk(mainChunk.x, mainChunk.z).markUnsaved();
     }
 
     public final void updateComparatorOutputLevel()
     {
-        if (!world.isClientSide())
+        if (!level.isClientSide())
             for (BlockPos pos : interfaces)
-                if (world.isLoaded(pos))
-                    world.updateNeighbourForOutputSignal(pos, world.getBlockState(pos).getBlock());
+                if (level.isLoaded(pos))
+                    level.updateNeighbourForOutputSignal(pos, level.getBlockState(pos).getBlock());
     }
 
     public final boolean isMainChunk(ChunkPos chunkPos)
@@ -237,7 +237,7 @@ public abstract class MultiBlock
     public final boolean isLoaded()
     {
         for (ChunkPos pos : parentChunks)
-            if (!world.getChunkSource().hasChunk(pos.x, pos.z))
+            if (!level.getChunkSource().hasChunk(pos.x, pos.z))
                 return false;
         return true;
     }
@@ -249,7 +249,7 @@ public abstract class MultiBlock
 
     public final boolean isClientSide()
     {
-        return world.isClientSide();
+        return level.isClientSide();
     }
 
     public <T> LazyOptional<T> getCapability(Capability<T> type, @Nullable BlockPos pos)
@@ -269,9 +269,9 @@ public abstract class MultiBlock
         return type;
     }
 
-    public final World world()
+    public final World level()
     {
-        return world;
+        return level;
     }
 
     public final ChunkPos mainChunk()
@@ -330,7 +330,7 @@ public abstract class MultiBlock
     public final String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("type", type.getRegistryName())
-                .add("world", world.toString() + "/" + world.dimension().location())
+                .add("level", level.toString() + "/" + level.dimension().location())
                 .add("mainChunk", mainChunk)
                 .add("id", id)
                 .toString();

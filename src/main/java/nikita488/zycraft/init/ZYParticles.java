@@ -18,9 +18,9 @@ public class ZYParticles
     {
         private final Codec<T> codec;
 
-        public ZYParticleType(Codec<T> codec, boolean alwaysShow, IParticleData.IDeserializer<T> deserializer)
+        public ZYParticleType(Codec<T> codec, boolean overrideLimiter, IParticleData.IDeserializer<T> deserializer)
         {
-            super(alwaysShow, deserializer);
+            super(overrideLimiter, deserializer);
             this.codec = codec;
         }
 

@@ -8,5 +8,5 @@ public interface IMultiChildMatcher
 {
     IMultiChildMatcher ALWAYS_MATCHES = (world, pos) -> true;
 
-    boolean matches(IBlockReader world, BlockPos pos);
+    boolean matches(IBlockReader getter, BlockPos pos);
 }

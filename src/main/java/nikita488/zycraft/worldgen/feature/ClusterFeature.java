@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class ClusterFeature extends Feature<ClusterFeatureConfig>
 {
-    public static final BlockPos.Mutable POS = new BlockPos.Mutable();
+    public static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
 
     public ClusterFeature(Codec<ClusterFeatureConfig> codec)
     {
@@ -31,7 +31,7 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
         ObjectList<Direction> possibleSides = new ObjectArrayList<>();
 
         for (Direction side : ZYConstants.DIRECTIONS)
-            if (config.target.test(world.getBlockState(POS.setWithOffset(pos, side)), random))
+            if (config.target.test(world.getBlockState(RELATIVE_POS.setWithOffset(pos, side)), random))
                 possibleSides.add(side);
 
         if (possibleSides.isEmpty())

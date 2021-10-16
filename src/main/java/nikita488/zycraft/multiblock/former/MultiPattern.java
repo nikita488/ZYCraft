@@ -57,9 +57,9 @@ public class MultiPattern
         });
     }
 
-    public boolean matches(IBlockReader world, BlockPos basePos)
+    public boolean matches(IBlockReader getter, BlockPos basePos)
     {
-        return process(basePos, (matcherIndex, pos) -> matcherIndex < 0 || matchers[matcherIndex].matches(world, pos));
+        return process(basePos, (matcherIndex, pos) -> matcherIndex < 0 || matchers[matcherIndex].matches(getter, pos));
     }
 
     public int width()

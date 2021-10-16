@@ -50,9 +50,9 @@ public class ZYFluidContainerItem extends Item
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
-        if (world == null)
+        if (level == null)
             return;
 
         FluidStack fluid = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);

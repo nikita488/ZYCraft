@@ -20,30 +20,30 @@ public class SetSlotStackPacket
         this.stack = stack;
     }
 
-    public SetSlotStackPacket(PacketBuffer buf)
+    public SetSlotStackPacket(PacketBuffer buffer)
     {
-        this.windowID = buf.readVarInt();
-        this.slotIndex = buf.readVarInt();
-        this.stack = buf.readItem();
+        this.windowID = buffer.readVarInt();
+        this.slotIndex = buffer.readVarInt();
+        this.stack = buffer.readItem();
     }
 
-    public static SetSlotStackPacket decode(PacketBuffer buf)
+    public static SetSlotStackPacket decode(PacketBuffer buffer)
     {
-        return new SetSlotStackPacket(buf);
+        return new SetSlotStackPacket(buffer);
     }
 
-    public static void encode(SetSlotStackPacket msg, PacketBuffer buf)
+    public static void encode(SetSlotStackPacket packet, PacketBuffer buffer)
     {
-        buf.writeVarInt(msg.windowID());
-        buf.writeVarInt(msg.slotIndex());
-        buf.writeItem(msg.stack());
+        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.slotIndex());
+        buffer.writeItem(packet.stack());
     }
 
-    public static boolean handle(SetSlotStackPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(SetSlotStackPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayerEntity player = context.get().getSender();
 
             if (player == null)
                 return;
@@ -52,8 +52,8 @@ public class SetSlotStackPacket
 
             Container container = player.containerMenu;
 
-            if (container.containerId == msg.windowID() && container.isSynched(player) && !player.isSpectator())
-                container.getSlot(msg.slotIndex()).set(msg.stack());
+            if (container.containerId == packet.windowID() && container.isSynched(player) && !player.isSpectator())
+                container.getSlot(packet.slotIndex()).set(packet.stack());
         });
 
         return true;

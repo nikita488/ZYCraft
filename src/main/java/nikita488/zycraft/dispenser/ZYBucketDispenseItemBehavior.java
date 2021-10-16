@@ -35,23 +35,23 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
 
         IFluidHandlerItem handler = capability.get();
         FluidStack containedFluid = handler.drain(Integer.MAX_VALUE, IFluidHandler.FluidAction.SIMULATE);
-        World world = source.getLevel();
+        World level = source.getLevel();
         BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
 
         if (!containedFluid.isEmpty())
         {
-            if (FluidUtils.tryPlaceFluid(containedFluid, null, world, pos, null))
+            if (FluidUtils.tryPlaceFluid(containedFluid, null, level, pos, null))
                 return new ItemStack(stack.getItem());
 
             return defaultBehaviour.dispense(source, stack);
         }
 
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
         if (block instanceof IBucketPickupHandler)
         {
-            Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(world, pos, state);
+            Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(level, pos, state);
 
             if (!(fluid instanceof FlowingFluid))
                 return super.execute(source, stack);

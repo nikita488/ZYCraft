@@ -19,12 +19,12 @@ public class ZychoriumLampTile extends ColorableTile
 
     protected float brightness(boolean inverted)
     {
-        int strength = level.getBestNeighborSignal(worldPosition);
-        return 0.25F + 0.05F * (inverted ? 15 - strength : strength);
+        int signal = level.getBestNeighborSignal(worldPosition);
+        return 0.25F + 0.05F * (inverted ? 15 - signal : signal);
     }
 
     @Override
-    public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int tintIndex)
+    public int getColor(BlockState state, IBlockDisplayReader getter, BlockPos pos, int tintIndex)
     {
         boolean inverted = ((ZychoriumLampBlock)state.getBlock()).inverted();
         int defaultColor = inverted ? 0xFFFFFF : 0x3F3F3F;

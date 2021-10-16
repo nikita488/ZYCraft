@@ -17,12 +17,12 @@ import javax.annotation.Nullable;
 
 public class TankFormer
 {
-    public static boolean form(BlockState interfaceState, World world, BlockPos interfacePos, @Nullable Direction formingSide)
+    public static boolean form(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
         if (formingSide == null)
             return false;
 
-        Cuboid6i innerArea = AirMultiArea.TANK.getArea(world, interfacePos, formingSide);
+        Cuboid6i innerArea = AirMultiArea.TANK.getArea(level, interfacePos, formingSide);
 
         if (innerArea == null)
             return false;
@@ -36,12 +36,12 @@ public class TankFormer
                 .build();
         BlockPos basePos = innerArea.min().offset(-1, -1, -1);
 
-        if (!pattern.matches(world, basePos) || !faceMatcher.hasValves())
+        if (!pattern.matches(level, basePos) || !faceMatcher.hasValves())
             return false;
 
-        TankMultiBlock tank = new TankMultiBlock(world, innerArea);
+        TankMultiBlock tank = new TankMultiBlock(level, innerArea);
 
-        pattern.convert(world, basePos, tank);
+        pattern.convert(level, basePos, tank);
         tank.form();
         return true;
     }
@@ -51,25 +51,25 @@ public class TankFormer
         private int valveCount;
 
         @Override
-        public boolean matches(IBlockReader world, BlockPos pos)
+        public boolean matches(IBlockReader getter, BlockPos pos)
         {
-            MultiChildType type = MultiChildType.get(world, pos);
+            MultiChildType type = MultiChildType.get(getter, pos);
 
             if (type == MultiChildType.HARD || type == MultiChildType.GLASS)
                 return true;
 
-            TileEntity tile = world.getBlockEntity(pos);
+            TileEntity blockEntity = getter.getBlockEntity(pos);
 
-            if (tile == null)
+            if (blockEntity == null)
                 return false;
 
-            if (ZYTiles.VALVE.is(tile))
+            if (ZYTiles.VALVE.is(blockEntity))
             {
                 this.valveCount++;
                 return true;
             }
 
-            return ZYTiles.ITEM_IO.is(tile);
+            return ZYTiles.ITEM_IO.is(blockEntity);
         }
 
         private boolean hasValves()

@@ -32,11 +32,11 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         return Optional.ofNullable(ZYRegistries.MULTI_TYPES.get().getValue(new ResourceLocation(tag.getString("ID"))));
     }
 
-    public static Optional<MultiBlock> create(World world, ChunkPos mainChunk, CompoundNBT tag)
+    public static Optional<MultiBlock> create(World level, ChunkPos mainChunk, CompoundNBT tag)
     {
         try
         {
-            return createUnchecked(world, mainChunk, tag);
+            return createUnchecked(level, mainChunk, tag);
         }
         catch (Throwable throwable)
         {
@@ -45,28 +45,28 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         }
     }
 
-    private static Optional<MultiBlock> createUnchecked(World world, ChunkPos mainChunk, CompoundNBT tag)
+    private static Optional<MultiBlock> createUnchecked(World level, ChunkPos mainChunk, CompoundNBT tag)
     {
-        return Util.ifElse(load(tag).map(type -> type.create(world, mainChunk)), multiBlock ->
+        return Util.ifElse(load(tag).map(type -> type.create(level, mainChunk)), multiBlock ->
         {
             multiBlock.load(tag);
             multiBlock.initChildBlocks();
         }, () -> ZYCraft.LOGGER.warn("Skipping MultiBlock {}", tag.getString("ID")));
     }
 
-    public T create(World world, ChunkPos pos)
+    public T create(World level, ChunkPos pos)
     {
-        return factory.create(world, pos);
+        return factory.create(level, pos);
     }
 
-    public boolean form(BlockState interfaceState, World world, BlockPos interfacePos)
+    public boolean form(BlockState interfaceState, World level, BlockPos interfacePos)
     {
-        return form(interfaceState, world, interfacePos, null);
+        return form(interfaceState, level, interfacePos, null);
     }
 
-    public boolean form(BlockState interfaceState, World world, BlockPos interfacePos, @Nullable Direction formingSide)
+    public boolean form(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
-        return former.form(interfaceState, world, interfacePos, formingSide);
+        return former.form(interfaceState, level, interfacePos, formingSide);
     }
 
     public boolean is(MultiBlock multiBlock)
@@ -74,11 +74,11 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
         return multiBlock != null && multiBlock.type() == this;
     }
 
-    public static boolean tryFormMultiBlock(BlockState interfaceState, World world, BlockPos interfacePos, @Nullable Direction formingSide)
+    public static boolean tryFormMultiBlock(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide)
     {
-        if (!world.isClientSide())
+        if (!level.isClientSide())
             for (MultiType<?> type : ZYRegistries.MULTI_TYPES.get().getValues())
-                if (type.form(interfaceState, world, interfacePos, formingSide))
+                if (type.form(interfaceState, level, interfacePos, formingSide))
                     return true;
         return false;
     }
@@ -86,6 +86,6 @@ public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiTyp
     @FunctionalInterface
     public interface MultiSupplier<T extends MultiBlock>
     {
-        T create(World world, ChunkPos pos);
+        T create(World level, ChunkPos pos);
     }
 }

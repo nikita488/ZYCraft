@@ -16,12 +16,12 @@ public class ZYPackets
     public static final PacketDistributor<MultiBlock> TRACKING_MULTI_BLOCK = new PacketDistributor<>(ZYPackets::trackingMultiBlock, NetworkDirection.PLAY_TO_CLIENT);
     private static int id;
 
-    private static Consumer<IPacket<?>> trackingMultiBlock(PacketDistributor<MultiBlock> distributor, Supplier<MultiBlock> multiSupplier)
+    private static Consumer<IPacket<?>> trackingMultiBlock(PacketDistributor<MultiBlock> distributor, Supplier<MultiBlock> supplier)
     {
         return packet ->
         {
-            MultiBlock multiBlock = multiSupplier.get();
-            ((ServerChunkProvider)multiBlock.world().getChunkSource()).chunkMap.getPlayers(multiBlock.mainChunk(), false)
+            MultiBlock multiBlock = supplier.get();
+            ((ServerChunkProvider)multiBlock.level().getChunkSource()).chunkMap.getPlayers(multiBlock.mainChunk(), false)
                     .forEach(player -> player.connection.send(packet));
         };
     }

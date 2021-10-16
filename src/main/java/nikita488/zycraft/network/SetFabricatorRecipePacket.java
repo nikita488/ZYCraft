@@ -41,38 +41,38 @@ public class SetFabricatorRecipePacket
         });
     }
 
-    public SetFabricatorRecipePacket(PacketBuffer buf)
+    public SetFabricatorRecipePacket(PacketBuffer buffer)
     {
-        this.windowID = buf.readVarInt();
-        this.recipeID = buf.readResourceLocation();
+        this.windowID = buffer.readVarInt();
+        this.recipeID = buffer.readResourceLocation();
 
         for (int slot = 0; slot < 9; slot++)
-            recipePattern.set(slot, buf.readItem());
+            recipePattern.set(slot, buffer.readItem());
 
-        this.craftingResult = buf.readItem();
+        this.craftingResult = buffer.readItem();
     }
 
-    public static SetFabricatorRecipePacket decode(PacketBuffer buf)
+    public static SetFabricatorRecipePacket decode(PacketBuffer buffer)
     {
-        return new SetFabricatorRecipePacket(buf);
+        return new SetFabricatorRecipePacket(buffer);
     }
 
-    public static void encode(SetFabricatorRecipePacket msg, PacketBuffer buf)
+    public static void encode(SetFabricatorRecipePacket packet, PacketBuffer buffer)
     {
-        buf.writeVarInt(msg.windowID());
-        buf.writeResourceLocation(msg.recipeID());
+        buffer.writeVarInt(packet.windowID());
+        buffer.writeResourceLocation(packet.recipeID());
 
         for (int slot = 0; slot < 9; slot++)
-            buf.writeItem(msg.recipePattern().get(slot));
+            buffer.writeItem(packet.recipePattern().get(slot));
 
-        buf.writeItem(msg.craftingResult());
+        buffer.writeItem(packet.craftingResult());
     }
 
-    public static boolean handle(SetFabricatorRecipePacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(SetFabricatorRecipePacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            ServerPlayerEntity player = ctx.get().getSender();
+            ServerPlayerEntity player = context.get().getSender();
 
             if (player == null)
                 return;
@@ -81,19 +81,19 @@ public class SetFabricatorRecipePacket
 
             Container container = player.containerMenu;
 
-            if (container.containerId == msg.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
+            if (container.containerId == packet.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
             {
-                FabricatorTile fabricator = ((FabricatorContainer)container).tile();
+                FabricatorTile fabricator = ((FabricatorContainer)container).blockEntity();
 
                 if (fabricator == null)
                     return;
 
                 for (int slot = 0; slot < 9; slot++)
-                    fabricator.recipePattern().setItem(slot, msg.recipePattern().get(slot));
+                    fabricator.recipePattern().setItem(slot, packet.recipePattern().get(slot));
 
-                ICraftingRecipe recipe = (ICraftingRecipe)player.getLevel().getRecipeManager().byKey(msg.recipeID()).orElse(null);
+                ICraftingRecipe recipe = (ICraftingRecipe)player.getLevel().getRecipeManager().byKey(packet.recipeID()).orElse(null);
 
-                fabricator.setCraftingRecipeAndResult(recipe, msg.craftingResult());
+                fabricator.setCraftingRecipeAndResult(recipe, packet.craftingResult());
             }
         });
 

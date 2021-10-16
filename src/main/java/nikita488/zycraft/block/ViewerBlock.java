@@ -23,23 +23,23 @@ public class ViewerBlock extends AbstractGlassBlock
     }
 
     @Override
-    public int getLightBlock(BlockState state, IBlockReader world, BlockPos pos)
+    public int getLightBlock(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return type == ViewerType.DARK ? world.getMaxLightLevel() : super.getLightBlock(state, world, pos);
+        return type == ViewerType.DARK ? getter.getMaxLightLevel() : super.getLightBlock(state, getter, pos);
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos)
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return type != ViewerType.DARK;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)
-            ParticleUtils.glowingBlock(state, world, pos, rand);
+            ParticleUtils.glowingBlock(state, level, pos, random);
     }
 
     public ViewerType type()

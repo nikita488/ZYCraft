@@ -38,25 +38,25 @@ public enum MultiChildType implements IMultiChildMatcher
     }
 
     @Nullable
-    public static MultiChildType get(IBlockReader world, BlockPos pos)
+    public static MultiChildType get(IBlockReader getter, BlockPos pos)
     {
-        return get(world.getBlockState(pos), world, pos);
+        return get(getter.getBlockState(pos), getter, pos);
     }
 
     @Nullable
-    public static MultiChildType get(BlockState state, IBlockReader world, BlockPos pos)
+    public static MultiChildType get(BlockState state, IBlockReader getter, BlockPos pos)
     {
         for (MultiChildType type : VALUES)
-            if (type.matches(state, world, pos))
+            if (type.matches(state, getter, pos))
                 return type;
 
         return null;
     }
 
-    public static boolean convert(IBiomeReader world, BlockPos pos)
+    public static boolean convert(IBiomeReader accessor, BlockPos pos)
     {
-        BlockState state = world.getBlockState(pos);
-        MultiChildType type = get(state, world, pos);
+        BlockState state = accessor.getBlockState(pos);
+        MultiChildType type = get(state, accessor, pos);
 
         if (type == null)
             return false;
@@ -68,15 +68,15 @@ public enum MultiChildType implements IMultiChildMatcher
                     .setValue(ConvertedMultiChildBlock.HAS_ANALOG_OUTPUT_SIGNAL, state.hasAnalogOutputSignal())
                     .setValue(ConvertedMultiChildBlock.SIGNAL_SOURCE, state.isSignalSource());
 
-        world.setBlock(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
+        accessor.setBlock(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
 
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = accessor.getBlockEntity(pos);
 
-        if (!(tile instanceof IMultiChild))
+        if (!(blockEntity instanceof IMultiChild))
             return false;
 
-        if (tile instanceof ConvertedMultiChildTile)
-            ((ConvertedMultiChildTile)tile).setInitialState(state);
+        if (blockEntity instanceof ConvertedMultiChildTile)
+            ((ConvertedMultiChildTile)blockEntity).setInitialState(state);
         return true;
     }
 
@@ -86,19 +86,19 @@ public enum MultiChildType implements IMultiChildMatcher
     }
 
     @Override
-    public boolean matches(IBlockReader world, BlockPos pos)
+    public boolean matches(IBlockReader getter, BlockPos pos)
     {
-        return get(world, pos) == this;
+        return get(getter, pos) == this;
     }
 
-    public boolean matches(BlockState state, IBlockReader world, BlockPos pos)
+    public boolean matches(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        return (!state.hasTileEntity() || state.getBlock() instanceof ConvertedMultiChildBlock) && matcher.matches(state, world, pos);
+        return (!state.hasTileEntity() || state.getBlock() instanceof ConvertedMultiChildBlock) && matcher.matches(state, getter, pos);
     }
 
     @FunctionalInterface
     private interface Matcher
     {
-        boolean matches(BlockState state, IBlockReader world, BlockPos pos);
+        boolean matches(BlockState state, IBlockReader getter, BlockPos pos);
     }
 }

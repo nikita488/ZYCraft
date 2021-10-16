@@ -40,14 +40,14 @@ public class ImmortalViewerBlock extends ViewerBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.COLORABLE.create();
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable IBlockReader world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable IBlockReader getter, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         tooltip.add(ZYLang.COLORABLE);
 
@@ -66,16 +66,16 @@ public class ImmortalViewerBlock extends ViewerBlock
     }
 
     @Override
-    public ActionResultType use(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        return IColorable.interact(state, world, pos, player, hand, hit);
+        return IColorable.interact(state, level, pos, player, hand, hitResult);
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void animateTick(BlockState state, World world, BlockPos pos, Random rand)
+    public void animateTick(BlockState state, World level, BlockPos pos, Random random)
     {
         if (type == ViewerType.GLOWING)
-            ParticleUtils.glowingColorableBlock(state, world, pos, rand);
+            ParticleUtils.glowingColorableBlock(state, level, pos, random);
     }
 }

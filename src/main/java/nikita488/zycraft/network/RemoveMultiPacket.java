@@ -21,21 +21,21 @@ public class RemoveMultiPacket
         this.id = buffer.readVarInt();
     }
 
-    public static RemoveMultiPacket decode(PacketBuffer buf)
+    public static RemoveMultiPacket decode(PacketBuffer buffer)
     {
-        return new RemoveMultiPacket(buf);
+        return new RemoveMultiPacket(buffer);
     }
 
-    public static void encode(RemoveMultiPacket msg, PacketBuffer buf)
+    public static void encode(RemoveMultiPacket packet, PacketBuffer buffer)
     {
-        buf.writeVarInt(msg.id());
+        buffer.writeVarInt(packet.id());
     }
 
-    public static boolean handle(RemoveMultiPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(RemoveMultiPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            MultiBlock multiBlock = MultiManager.getInstance().getMultiBlock(msg.id());
+            MultiBlock multiBlock = MultiManager.getInstance().getMultiBlock(packet.id());
 
             if (multiBlock != null)
                 MultiManager.getInstance().removeMultiBlock(multiBlock, MultiBlock.RemovalReason.UNLOADED);

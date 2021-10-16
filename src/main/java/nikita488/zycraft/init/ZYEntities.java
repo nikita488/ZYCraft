@@ -12,7 +12,7 @@ public class ZYEntities
             .properties(properties -> properties
                     .setTrackingRange(10)
                     .setUpdateInterval(Integer.MAX_VALUE)
-                    .sized(1F, 1F)
+                    .sized(0F, 0F)
                     .setShouldReceiveVelocityUpdates(false)
                     .noSave()
                     .noSummon()

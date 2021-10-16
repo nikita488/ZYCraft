@@ -37,18 +37,18 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
     }
 
     @Override
-    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player, World world, BlockState state, IProbeHitData data)
+    public void addProbeInfo(ProbeMode mode, IProbeInfo info, PlayerEntity player, World level, BlockState state, IProbeHitData data)
     {
         if (ZYBlocks.FABRICATOR.has(state))
             addFabricatorProbeInfo(info, state);
         else if (ZYBlocks.VALVE.has(state))
-            addValveProbeInfo(info, world, state, data.getPos());
+            addValveProbeInfo(info, level, state, data.getPos());
         else if (ZYBlocks.ITEM_IO.has(state))
             addItemIOProbeInfo(info, state);
         else if (state.getBlock() instanceof IFluidSource)
-            addFluidSourceProbeInfo(info, (IFluidSource)state.getBlock(), world, state, data.getPos(), data.getSideHit());
+            addFluidSourceProbeInfo(info, (IFluidSource)state.getBlock(), level, state, data.getPos(), data.getSideHit());
         else if (state.getBlock() instanceof IFluidVoid)
-            addFluidVoidProbeInfo(info, (IFluidVoid)state.getBlock(), world, state, data.getPos(), data.getSideHit());
+            addFluidVoidProbeInfo(info, (IFluidVoid)state.getBlock(), level, state, data.getPos(), data.getSideHit());
     }
 
     private void addFabricatorProbeInfo(IProbeInfo info, BlockState state)
@@ -56,15 +56,15 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(FabricatorBlock.MODE).displayName()));
     }
 
-    private void addValveProbeInfo(IProbeInfo info, World world, BlockState state, BlockPos pos)
+    private void addValveProbeInfo(IProbeInfo info, World level, BlockState state, BlockPos pos)
     {
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ValveBlock.IO_MODE).displayName()));
 
-        TileEntity tile = world.getBlockEntity(pos);
+        TileEntity blockEntity = level.getBlockEntity(pos);
 
-        if (tile instanceof ValveTile)
+        if (blockEntity instanceof ValveTile)
         {
-            FluidStack storedFluid = ((ValveTile)tile).getStoredFluid();
+            FluidStack storedFluid = ((ValveTile)blockEntity).getStoredFluid();
 
             if (!storedFluid.isEmpty())
                 info.horizontal()
@@ -81,9 +81,9 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ItemIOBlock.IO_MODE).displayName()));
     }
 
-    private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, World world, BlockState state, BlockPos pos, Direction side)
+    private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, World level, BlockState state, BlockPos pos, Direction side)
     {
-        FluidStack fluid = source.getFluid(state, world, pos, side);
+        FluidStack fluid = source.getFluid(state, level, pos, side);
 
         if (!fluid.isEmpty())
             info.horizontal()
@@ -94,10 +94,10 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                                     .suffix(new StringTextComponent(" mB")));
     }
 
-    private void addFluidVoidProbeInfo(IProbeInfo info, IFluidVoid fluidVoid, World world, BlockState state, BlockPos pos, Direction side)
+    private void addFluidVoidProbeInfo(IProbeInfo info, IFluidVoid fluidVoid, World level, BlockState state, BlockPos pos, Direction side)
     {
-        FluidStack fluidToDrain = fluidVoid.getFluidToDrain(state, world, pos, side);
-        int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(state, world, pos, side) : 0;
+        FluidStack fluidToDrain = fluidVoid.getFluidToDrain(state, level, pos, side);
+        int drainAmount = fluidToDrain.isEmpty() ? fluidVoid.getDrainAmount(state, level, pos, side) : 0;
 
         if (!fluidToDrain.isEmpty())
             info.horizontal()

@@ -39,10 +39,10 @@ public class MultiInterfaceTile extends MultiChildTile
             if (validSide != null && side != validSide)
                 continue;
 
-            BlockPos adjPos = worldPosition.relative(side);
+            BlockPos relativePos = worldPosition.relative(side);
 
-            if (level.isLoaded(adjPos))
-                processAdjacentPos(adjPos, side);
+            if (level.isLoaded(relativePos))
+                processRelativePos(relativePos, side);
 
             if (validSide != null)
                 break;
@@ -61,14 +61,14 @@ public class MultiInterfaceTile extends MultiChildTile
 
         for (Direction side : ZYConstants.DIRECTIONS)
         {
-            BlockPos adjPos = worldPosition.relative(side);
+            BlockPos relativePos = worldPosition.relative(side);
 
-            if (!level.isLoaded(adjPos))
+            if (!level.isLoaded(relativePos))
                 continue;
 
-            TileEntity adjTile = level.getBlockEntity(adjPos);
+            TileEntity blockEntity = level.getBlockEntity(relativePos);
 
-            if (adjTile instanceof IMultiChild && ((IMultiChild)adjTile).hasParent(getParent()))
+            if (blockEntity instanceof IMultiChild && ((IMultiChild)blockEntity).hasParent(getParent()))
                 continue;
 
             InterfaceAxis interfaceAxis = InterfaceAxis.get(side.getAxis());
@@ -81,7 +81,7 @@ public class MultiInterfaceTile extends MultiChildTile
         }
     }
 
-    protected void processAdjacentPos(BlockPos pos, Direction side) {}
+    protected void processRelativePos(BlockPos pos, Direction side) {}
 
     @Override
     public void onMultiValidation(MultiBlock multiBlock)

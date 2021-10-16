@@ -9,20 +9,9 @@ import net.minecraft.util.NonNullList;
 
 public class SerializableCraftingInventory extends CraftingInventory
 {
-    public SerializableCraftingInventory(Container eventHandler, int width, int height)
+    public SerializableCraftingInventory(Container container, int width, int height)
     {
-        super(eventHandler, width, height);
-    }
-
-    @Override
-    public ItemStack removeItemNoUpdate(int slot)
-    {
-        ItemStack stack = super.removeItemNoUpdate(slot);
-
-        if (!stack.isEmpty())
-            setChanged();
-
-        return stack;
+        super(container, width, height);
     }
 
     @Override

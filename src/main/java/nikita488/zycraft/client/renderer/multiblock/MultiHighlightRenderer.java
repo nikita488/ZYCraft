@@ -26,7 +26,7 @@ public class MultiHighlightRenderer
     private static final float MIN = -0.009F;
     private static final float MAX = 1.009F;
     private static final BlockPos.Mutable LAST_POS = new BlockPos.Mutable();
-    private static final BlockPos.Mutable ADJACENT_POS = new BlockPos.Mutable();
+    private static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
     private static long startTime, lastTime;
 
     public static void init()
@@ -61,10 +61,10 @@ public class MultiHighlightRenderer
 
     private static void onDrawBlockHighlight(DrawHighlightEvent.HighlightBlock event)
     {
-        World world = event.getInfo().getEntity().getCommandSenderWorld();
+        World level = event.getInfo().getEntity().getCommandSenderWorld();
         BlockPos highlightPos = event.getTarget().getBlockPos();
-        TileEntity blockEntity = world.getBlockEntity(highlightPos);
-        long time = world.getGameTime();
+        TileEntity blockEntity = level.getBlockEntity(highlightPos);
+        long time = level.getGameTime();
 
         if (!LAST_POS.equals(highlightPos))
         {
@@ -102,7 +102,7 @@ public class MultiHighlightRenderer
 
             for (BlockPos pos : highlightBlocks)
                 for (Direction side : ZYConstants.DIRECTIONS)
-                    if (!highlightBlocks.contains(ADJACENT_POS.setWithOffset(pos, side)))
+                    if (!highlightBlocks.contains(RELATIVE_POS.setWithOffset(pos, side)))
                         renderHighlightQuad(stack, buffer, pos, side, 0.3F * strength);
 
             stack.popPose();

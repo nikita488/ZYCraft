@@ -61,22 +61,22 @@ public interface IMultiChild
         return parentMultiBlocks().get(index);
     }
 
-    default ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit)
+    default ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
     {
-        return parentCount() == 1 ? getParent().onBlockActivated(state, world, pos, player, hand, hit) : ActionResultType.CONSUME;
+        return parentCount() == 1 ? getParent().onBlockActivated(state, level, pos, player, hand, hitResult) : ActionResultType.CONSUME;
     }
 
-    default int getLightValue(BlockState state, IBlockReader world, BlockPos pos)
+    default int getLightValue(BlockState state, IBlockReader getter, BlockPos pos)
     {
-        int lightValue = state.getLightEmission();
+        int emission = state.getLightEmission();
 
         for (MultiBlock multiBlock : parentMultiBlocks())
-            lightValue = Math.max(lightValue, multiBlock.getLightValue(state, world, pos));
+            emission = Math.max(emission, multiBlock.getLightValue(state, getter, pos));
 
-        return lightValue;
+        return emission;
     }
 
-    default int getComparatorInputOverride(BlockState state, World world, BlockPos pos)
+    default int getAnalogOutputSignal(BlockState state, World level, BlockPos pos)
     {
         return 0;
     }

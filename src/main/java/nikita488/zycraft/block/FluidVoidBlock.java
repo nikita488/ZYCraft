@@ -19,25 +19,25 @@ public class FluidVoidBlock extends Block implements IFluidVoid
     }
 
     @Override
-    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
-            voidFluid(world, pos.relative(side));
+            voidFluid(level, pos.relative(side));
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        voidFluid(world, adjPos);
+        voidFluid(level, relativePos);
     }
 
-    private void voidFluid(World world, BlockPos pos)
+    private void voidFluid(World level, BlockPos pos)
     {
-        FluidUtils.voidFluid(world, pos, fluidState -> !fluidState.isEmpty());
+        FluidUtils.voidFluid(level, pos, fluidState -> !fluidState.isEmpty());
     }
 
     @Override
-    public int getDrainAmount(BlockState state, World world, BlockPos pos, @Nullable Direction side)
+    public int getDrainAmount(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
         return 50;
     }

@@ -128,8 +128,8 @@ public class ConvertedMultiChildTile extends MultiChildTile
             if (pos.equals(ConvertedMultiChildTile.this.getBlockPos()))
                 return initialState;
 
-            TileEntity tile = getBlockEntity(pos);
-            return tile instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)tile).initialState() : level.getBlockState(pos);
+            TileEntity blockEntity = getBlockEntity(pos);
+            return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState() : level.getBlockState(pos);
         }
 
         @Override

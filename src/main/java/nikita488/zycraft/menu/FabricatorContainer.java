@@ -28,8 +28,8 @@ import java.util.Optional;
 
 public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
 {
+    private final World level;
     private final PlayerEntity player;
-    private final World world;
     private final IntMenuData modeData;
 
     public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory)
@@ -47,7 +47,7 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
         super(type, windowID, fabricator);
 
         this.player = playerInventory.player;
-        this.world = player.level;
+        this.level = player.level;
         this.modeData = modeData;
 
         addVariable(modeData);
@@ -93,18 +93,18 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
         }
         else if (slotIndex == 9)
         {
-            if (tile == null || type != ClickType.PICKUP)
+            if (blockEntity == null || type != ClickType.PICKUP)
                 return ItemStack.EMPTY;
 
             if (button == 0)
             {
-                tile.logic().recheckSides();
-                tile.logic().tryCraft();
+                blockEntity.logic().recheckSides();
+                blockEntity.logic().tryCraft();
             }
             else if (button == 1)
             {
-                tile.recipePattern().clearContent();
-                tile.setCraftingRecipeAndResult(null, ItemStack.EMPTY);
+                blockEntity.recipePattern().clearContent();
+                blockEntity.setCraftingRecipeAndResult(null, ItemStack.EMPTY);
             }
 
             broadcastChanges();
@@ -117,21 +117,21 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     @Override
     public void slotsChanged(IInventory inventory)
     {
-        if (tile == null)
+        if (blockEntity == null)
             return;
 
-        CraftingInventory recipePattern = tile.recipePattern();
-        ICraftingRecipe lastRecipe = tile.craftingRecipe();
+        CraftingInventory recipePattern = blockEntity.recipePattern();
+        ICraftingRecipe lastRecipe = blockEntity.craftingRecipe();
 
-        if (lastRecipe != null && lastRecipe.matches(recipePattern, world))
+        if (lastRecipe != null && lastRecipe.matches(recipePattern, level))
             return;
 
         ServerPlayerEntity player = (ServerPlayerEntity)this.player;
-        Optional<ICraftingRecipe> craftingRecipe = world.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, recipePattern, world)
+        Optional<ICraftingRecipe> craftingRecipe = level.getRecipeManager().getRecipeFor(IRecipeType.CRAFTING, recipePattern, level)
                 .filter(FabricatorTile::isRecipeCompatible);
         ItemStack craftingResult = craftingRecipe.map(recipe -> recipe.assemble(recipePattern)).orElse(ItemStack.EMPTY);
 
-        tile.setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
+        blockEntity.setCraftingRecipeAndResult(craftingRecipe.orElse(null), craftingResult);
         player.connection.send(new SSetSlotPacket(containerId, 9, craftingResult));
     }
 
@@ -144,8 +144,8 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     @Override
     public boolean clickMenuButton(PlayerEntity player, int index)
     {
-        if (tile != null)
-            tile.setMode(FabricatorMode.VALUES[index]);
+        if (blockEntity != null)
+            blockEntity.setMode(FabricatorMode.VALUES[index]);
         return modeData.getAsInt() != index;
     }
 

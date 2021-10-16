@@ -25,14 +25,14 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     private IDynamicMultiBlock parentMultiBlock;
     private int multiID = -1;
 
-    public MultiEntity(EntityType<MultiEntity> type, World world)
+    public MultiEntity(EntityType<MultiEntity> type, World level)
     {
-        super(type, world);
+        super(type, level);
     }
 
-    public MultiEntity(World world, IDynamicMultiBlock parentMultiBlock, int multiID)
+    public MultiEntity(World level, IDynamicMultiBlock parentMultiBlock, int multiID)
     {
-        super(ZYEntities.MULTI_BLOCK.get(), world);
+        super(ZYEntities.MULTI_BLOCK.get(), level);
 
         this.parentMultiBlock = parentMultiBlock;
         this.multiID = multiID;

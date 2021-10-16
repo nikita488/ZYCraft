@@ -37,9 +37,9 @@ public enum InterfaceAxis implements IStringSerializable
         }
     }
 
-    public static void set(BlockState state, World world, BlockPos pos, InterfaceAxis axis)
+    public static void set(BlockState state, World level, BlockPos pos, InterfaceAxis axis)
     {
-        world.setBlock(pos, state.setValue(ZYBlockStateProperties.INTERFACE_AXIS, axis), Constants.BlockFlags.BLOCK_UPDATE);
+        level.setBlock(pos, state.setValue(ZYBlockStateProperties.INTERFACE_AXIS, axis), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override

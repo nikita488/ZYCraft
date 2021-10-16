@@ -29,7 +29,7 @@ public class ZychoriumSoilBlock extends Block
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random rand)
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         Direction dir = state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP;
         BlockPos tickPos = pos.relative(dir);
@@ -47,11 +47,11 @@ public class ZychoriumSoilBlock extends Block
                 stateToTick = world.getBlockState(checkPos.move(dir));
 
             stateToTick = world.getBlockState(checkPos.move(dir.getOpposite()));
-            stateToTick.randomTick(world, checkPos.immutable(), rand);
+            stateToTick.randomTick(world, checkPos.immutable(), random);
         }
         else if (blockToTick == this)
         {
-            stateToTick.randomTick(world, tickPos, rand);
+            stateToTick.randomTick(world, tickPos, random);
         }
     }
 
@@ -63,22 +63,22 @@ public class ZychoriumSoilBlock extends Block
     }
 
     @Override
-    public boolean canSustainPlant(BlockState state, IBlockReader world, BlockPos pos, Direction facing, IPlantable plantable)
+    public boolean canSustainPlant(BlockState state, IBlockReader getter, BlockPos pos, Direction facing, IPlantable plantable)
     {
         return facing == (state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP);
     }
 
     @Override
-    public boolean isFertile(BlockState state, IBlockReader world, BlockPos pos)
+    public boolean isFertile(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return true;
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjacentPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        if (state.getValue(FLIPPED) != world.hasNeighborSignal(pos))
-            world.setBlock(pos, state.cycle(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
+        if (state.getValue(FLIPPED) != level.hasNeighborSignal(pos))
+            level.setBlock(pos, state.cycle(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override

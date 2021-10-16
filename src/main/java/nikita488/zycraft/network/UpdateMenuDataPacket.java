@@ -30,32 +30,32 @@ public class UpdateMenuDataPacket
         this.buffer = buffer;
     }
 
-    public static UpdateMenuDataPacket decode(PacketBuffer buf)
+    public static UpdateMenuDataPacket decode(PacketBuffer buffer)
     {
-        return new UpdateMenuDataPacket(buf);
+        return new UpdateMenuDataPacket(buffer);
     }
 
-    public static void encode(UpdateMenuDataPacket msg, PacketBuffer buf)
+    public static void encode(UpdateMenuDataPacket packet, PacketBuffer buffer)
     {
-        buf.writeVarInt(msg.windowID());
-        buf.writeVarInt(msg.id());
-        msg.variable().update();
-        msg.variable().encode(buf);
+        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.id());
+        packet.variable().update();
+        packet.variable().encode(buffer);
     }
 
-    public static boolean handle(UpdateMenuDataPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(UpdateMenuDataPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            Minecraft mc = LogicalSidedProvider.INSTANCE.get(ctx.get().getDirection().getReceptionSide());
+            Minecraft mc = LogicalSidedProvider.INSTANCE.get(context.get().getDirection().getReceptionSide());
 
             if (mc.player == null)
                 return;
 
             Container container = mc.player.containerMenu;
 
-            if (container.containerId == msg.windowID && container instanceof ZYContainer)
-                ((ZYContainer)container).handleVariable(msg.id(), msg.buffer());
+            if (container.containerId == packet.windowID && container instanceof ZYContainer)
+                ((ZYContainer)container).handleVariable(packet.id(), packet.buffer());
         });
 
         return true;

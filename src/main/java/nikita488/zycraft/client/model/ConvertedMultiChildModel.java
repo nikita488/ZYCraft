@@ -44,7 +44,7 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
 
     private static class Baked implements IDynamicBakedModel
     {
-        private static final BlockPos.Mutable ADJACENT_POS = new BlockPos.Mutable();
+        private static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
         private final TextureAtlasSprite missingSprite;
 
         public Baked(TextureAtlasSprite missingSprite)
@@ -71,10 +71,10 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
             if (initialState == null || getter == null || pos == null || !RenderTypeLookup.canRenderInLayer(initialState, layer))
                 return Collections.emptyList();
 
-            BlockState adjacentState = getter.getBlockState(ADJACENT_POS.setWithOffset(pos, side));
+            BlockState relativeState = getter.getBlockState(RELATIVE_POS.setWithOffset(pos, side));
             IBakedModel model = mc.getBlockRenderer().getBlockModel(initialState);
 
-            return !initialState.skipRendering(adjacentState, side) ?
+            return !initialState.skipRendering(relativeState, side) ?
                     model.getQuads(initialState, side, random, model.getModelData(getter, pos, initialState, modelData)) :
                     Collections.emptyList();
         }

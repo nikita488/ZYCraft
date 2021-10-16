@@ -47,16 +47,16 @@ public class FabricatorLogic
         this.fabricator = fabricator;
     }
 
-    private LazyOptional<IItemHandler> getAdjacentInventory(Direction side)
+    private LazyOptional<IItemHandler> getRelativeInventory(Direction side)
     {
-        World world = fabricator.getLevel();
-        BlockPos adjacentPos = fabricator.getBlockPos().relative(side);
+        World level = fabricator.getLevel();
+        BlockPos relativePos = fabricator.getBlockPos().relative(side);
 
-        if (!world.isLoaded(adjacentPos))
+        if (!level.isLoaded(relativePos))
             return LazyOptional.empty();
 
-        TileEntity adjacentTile = world.getBlockEntity(adjacentPos);
-        return adjacentTile != null ? adjacentTile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite()) : LazyOptional.empty();
+        TileEntity blockEntity = level.getBlockEntity(relativePos);
+        return blockEntity != null ? blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side.getOpposite()) : LazyOptional.empty();
     }
 
     private ItemStack insertItem(IItemHandler inventory, ItemStack stack)
@@ -85,7 +85,7 @@ public class FabricatorLogic
 
             if (side != Direction.UP)
             {
-                LazyOptional<IItemHandler> capability = getAdjacentInventory(side);
+                LazyOptional<IItemHandler> capability = getRelativeInventory(side);
 
                 if (!capability.isPresent())
                     continue;
@@ -187,8 +187,8 @@ public class FabricatorLogic
                 tryInsertItem(ingredients[slot], stack);
         }
 
-        playerInventory.clearContent();
         pendingSides.clear();
+        playerInventory.clearContent();
         craftingInventory.clearContent();
     }
 
@@ -222,7 +222,7 @@ public class FabricatorLogic
 
             setSideChecked(side);
 
-            LazyOptional<IItemHandler> capability = getAdjacentInventory(side);
+            LazyOptional<IItemHandler> capability = getRelativeInventory(side);
 
             if (capability.isPresent() && tryFindIngredients(capability.orElse(EmptyHandler.INSTANCE), recipeIngredients, side, foundIngredients))
                 return foundIngredients;

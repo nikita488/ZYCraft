@@ -53,7 +53,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
         return false;
     }
 
-    protected boolean doPlace(IWorld world, Random random, ZychoriteVeinConfig config, double p_207803_4_, double p_207803_6_, double p_207803_8_, double p_207803_10_, double p_207803_12_, double p_207803_14_, int p_207803_16_, int p_207803_17_, int p_207803_18_, int p_207803_19_, int p_207803_20_)
+    protected boolean doPlace(IWorld accessor, Random random, ZychoriteVeinConfig config, double p_207803_4_, double p_207803_6_, double p_207803_8_, double p_207803_10_, double p_207803_12_, double p_207803_14_, int p_207803_16_, int p_207803_17_, int p_207803_18_, int p_207803_19_, int p_207803_20_)
     {
         int i = 0;
         BitSet bitset = new BitSet(p_207803_19_ * p_207803_20_ * p_207803_19_);
@@ -120,13 +120,13 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
                                         if (!bitset.get(l2)) {
                                             bitset.set(l2);
                                             blockpos$mutable.set(i2, j2, k2);
-                                            if (config.target.test(world.getBlockState(blockpos$mutable), random)) {
+                                            if (config.target.test(accessor.getBlockState(blockpos$mutable), random)) {
                                                 Block block = ZYBlocks.ZYCHORITE.get();
 
                                                 if (random.nextFloat() < config.orePercentage)
                                                     block = ZYBlocks.ZYCHORIUM_ORE.get(ZYType.randomType(random)).get();
 
-                                                world.setBlock(blockpos$mutable, block.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
+                                                accessor.setBlock(blockpos$mutable, block.defaultBlockState(), Constants.BlockFlags.BLOCK_UPDATE);
                                                 ++i;
                                             }
                                         }

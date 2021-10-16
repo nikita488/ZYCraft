@@ -19,31 +19,31 @@ public class UpdateMultiPacket
         this.multiBlock = multiBlock;
     }
 
-    public UpdateMultiPacket(PacketBuffer buf)
+    public UpdateMultiPacket(PacketBuffer buffer)
     {
-        this.id = buf.readVarInt();
-        this.buffer = buf;
+        this.id = buffer.readVarInt();
+        this.buffer = buffer;
     }
 
-    public static UpdateMultiPacket decode(PacketBuffer buf)
+    public static UpdateMultiPacket decode(PacketBuffer buffer)
     {
-        return new UpdateMultiPacket(buf);
+        return new UpdateMultiPacket(buffer);
     }
 
-    public static void encode(UpdateMultiPacket msg, PacketBuffer buf)
+    public static void encode(UpdateMultiPacket packet, PacketBuffer buffer)
     {
-        buf.writeVarInt(msg.id());
-        msg.multiBlock.encodeUpdate(buf);
+        buffer.writeVarInt(packet.id());
+        packet.multiBlock.encodeUpdate(buffer);
     }
 
-    public static boolean handle(UpdateMultiPacket msg, Supplier<NetworkEvent.Context> ctx)
+    public static boolean handle(UpdateMultiPacket packet, Supplier<NetworkEvent.Context> context)
     {
-        ctx.get().enqueueWork(() ->
+        context.get().enqueueWork(() ->
         {
-            MultiBlock multiBlock = MultiManager.getInstance().getMultiBlock(msg.id());
+            MultiBlock multiBlock = MultiManager.getInstance().getMultiBlock(packet.id());
 
             if (multiBlock != null)
-                multiBlock.decodeUpdate(msg.buffer());
+                multiBlock.decodeUpdate(packet.buffer());
         });
         return true;
     }

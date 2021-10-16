@@ -31,7 +31,7 @@ public class ColorScannerItem extends Item implements IColorChanger
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         int color = ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);
 
@@ -52,13 +52,13 @@ public class ColorScannerItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
+    public boolean canChangeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int color)
     {
         return color != ItemStackUtils.getInt(player.getItemInHand(hand), "Color", 0xFFFFFF);
     }
 
     @Override
-    public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int color)
+    public int changeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int color)
     {
         ItemStack stack = player.getItemInHand(hand);
 
@@ -71,8 +71,8 @@ public class ColorScannerItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader reader, BlockPos pos, PlayerEntity player)
     {
-        return IColorable.isColorable(world, pos);
+        return IColorable.isColorable(reader, pos);
     }
 }

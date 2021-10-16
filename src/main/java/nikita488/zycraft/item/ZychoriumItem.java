@@ -26,7 +26,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean canChangeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
+    public boolean canChangeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int rgb)
     {
         int red = (rgb >> 16) & 255;
         int green = (rgb >> 8) & 255;
@@ -57,7 +57,7 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public int changeColor(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit, int rgb)
+    public int changeColor(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult, int rgb)
     {
         int rgba = Color.rgba(rgb, 255);
         boolean sneaking = player.isShiftKeyDown();
@@ -88,8 +88,8 @@ public class ZychoriumItem extends Item implements IColorChanger
     }
 
     @Override
-    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader world, BlockPos pos, PlayerEntity player)
+    public boolean doesSneakBypassUse(ItemStack stack, IWorldReader reader, BlockPos pos, PlayerEntity player)
     {
-        return IColorable.isColorable(world, pos);
+        return IColorable.isColorable(reader, pos);
     }
 }

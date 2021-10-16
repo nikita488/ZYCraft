@@ -21,31 +21,31 @@ public class ZychoriumIceBlock extends Block
     }
 
     @Override
-    public void onPlace(BlockState state, World world, BlockPos pos, BlockState oldState, boolean isMoving)
+    public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
         for (Direction side : ZYConstants.DIRECTIONS)
-            transform(world, pos, pos.relative(side));
+            transform(level, pos, pos.relative(side));
     }
 
     @Override
-    public void neighborChanged(BlockState state, World world, BlockPos pos, Block block, BlockPos adjPos, boolean isMoving)
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        transform(world, pos, adjPos);
+        transform(level, pos, relativePos);
     }
 
-    private void transform(World world, BlockPos pos, BlockPos adjPos)
+    private void transform(World level, BlockPos pos, BlockPos relativePos)
     {
-        FluidState fluidState = world.getFluidState(adjPos);
+        FluidState fluidState = level.getFluidState(relativePos);
 
         if (fluidState.is(FluidTags.WATER))
         {
-            if (world.getBlockState(adjPos).getBlock() instanceof FlowingFluidBlock)
-                world.setBlockAndUpdate(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.ICE.defaultBlockState()));
+            if (level.getBlockState(relativePos).getBlock() instanceof FlowingFluidBlock)
+                level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.ICE.defaultBlockState()));
         }
-        else if (fluidState.is(FluidTags.LAVA) && world.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
+        else if (fluidState.is(FluidTags.LAVA) && level.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
         {
-            world.setBlockAndUpdate(adjPos, ForgeEventFactory.fireFluidPlaceBlockEvent(world, adjPos, pos, Blocks.BASALT.defaultBlockState()));
-            world.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, adjPos, -1);
+            level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.BASALT.defaultBlockState()));
+            level.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, relativePos, -1);
         }
     }
 }

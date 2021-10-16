@@ -10,10 +10,10 @@ import javax.annotation.Nullable;
 @FunctionalInterface
 public interface IMultiFormer
 {
-    default boolean form(BlockState interfaceState, World world, BlockPos interfacePos)
+    default boolean form(BlockState interfaceState, World level, BlockPos interfacePos)
     {
-        return form(interfaceState, world, interfacePos, null);
+        return form(interfaceState, level, interfacePos, null);
     }
 
-    boolean form(BlockState interfaceState, World world, BlockPos interfacePos, @Nullable Direction formingSide);
+    boolean form(BlockState interfaceState, World level, BlockPos interfacePos, @Nullable Direction formingSide);
 }

@@ -40,7 +40,7 @@ public class ScytheItem extends Item
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void appendHoverText(ItemStack stack, @Nullable World world, List<ITextComponent> tooltip, ITooltipFlag flag)
+    public void appendHoverText(ItemStack stack, @Nullable World level, List<ITextComponent> tooltip, ITooltipFlag flag)
     {
         float durability = (stack.getMaxDamage() - stack.getDamageValue()) / (float)stack.getMaxDamage();
         TextFormatting formatting = TextFormatting.RED;
@@ -91,9 +91,9 @@ public class ScytheItem extends Item
     }
 
     @Override
-    public boolean mineBlock(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity player)
+    public boolean mineBlock(ItemStack stack, World level, BlockState state, BlockPos pos, LivingEntity player)
     {
-        if (world.isClientSide() || mining)
+        if (level.isClientSide() || mining)
             return false;
 
         stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));
@@ -107,7 +107,7 @@ public class ScytheItem extends Item
 
             for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
             {
-                if (destroyPos.equals(pos) || !world.mayInteract(gameMode.player, destroyPos) || !MATERIALS.contains(world.getBlockState(destroyPos).getMaterial()) || !gameMode.destroyBlock(destroyPos.immutable()))
+                if (destroyPos.equals(pos) || !level.mayInteract(gameMode.player, destroyPos) || !MATERIALS.contains(level.getBlockState(destroyPos).getMaterial()) || !gameMode.destroyBlock(destroyPos.immutable()))
                     continue;
 
                 stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlotType.MAINHAND));

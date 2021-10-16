@@ -23,7 +23,7 @@ public class MultiAirBlock extends MultiChildBlock
 
     @Nullable
     @Override
-    public TileEntity createTileEntity(BlockState state, IBlockReader world)
+    public TileEntity createTileEntity(BlockState state, IBlockReader getter)
     {
         return ZYTiles.MULTI_AIR.create();
     }
@@ -35,13 +35,13 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public VoxelShape getCollisionShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getCollisionShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext ctx)
     {
         return VoxelShapes.block();
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader world, BlockPos pos, ISelectionContext ctx)
+    public VoxelShape getShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext ctx)
     {
         return VoxelShapes.empty();
     }
@@ -59,19 +59,19 @@ public class MultiAirBlock extends MultiChildBlock
     }
 
     @Override
-    public boolean propagatesSkylightDown(BlockState state, IBlockReader world, BlockPos pos)
+    public boolean propagatesSkylightDown(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return true;
     }
 
     @Override
-    public float getShadeBrightness(BlockState state, IBlockReader world, BlockPos pos)
+    public float getShadeBrightness(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return 1F;
     }
 
     @Override
-    public boolean isAir(BlockState state, IBlockReader world, BlockPos pos)
+    public boolean isAir(BlockState state, IBlockReader getter, BlockPos pos)
     {
         return false;
     }
