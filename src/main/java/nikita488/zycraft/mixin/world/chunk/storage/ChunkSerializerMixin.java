@@ -1,6 +1,7 @@
 package nikita488.zycraft.mixin.world.chunk.storage;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.storage.ChunkSerializer;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ChunkSerializerMixin
 {
     @Inject(method = "postLoadChunk", at = @At(value = "TAIL"))
-    private static void postLoadChunk(CompoundTag tag, LevelChunk chunk, CallbackInfo callback)
+    private static void postLoadChunk(ServerLevel level, CompoundTag tag, LevelChunk chunk, CallbackInfo callback)
     {
         MinecraftForge.EVENT_BUS.post(new PostLoadChunkEvent(chunk, tag));
     }
