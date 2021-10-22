@@ -232,9 +232,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void spawnAfterBreak(BlockState state, ServerWorld world, BlockPos pos, ItemStack stack)
+    public void spawnAfterBreak(BlockState state, ServerWorld level, BlockPos pos, ItemStack stack)
     {
-        getState(world, pos).spawnAfterBreak(world, pos, stack);
+        getState(level, pos).spawnAfterBreak(level, pos, stack);
     }
 
 /*    //TODO: Probably remove?
@@ -295,9 +295,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void popExperience(ServerWorld world, BlockPos pos, int amount) 
+    public void popExperience(ServerWorld level, BlockPos pos, int amount)
     {
-        getState(world, pos).getBlock().popExperience(world, pos, amount);
+        getState(level, pos).getBlock().popExperience(level, pos, amount);
     }
 
     @Override
@@ -422,9 +422,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public boolean addLandingEffects(BlockState state, ServerWorld world, BlockPos pos, BlockState unused, LivingEntity entity, int numberOfParticles)
+    public boolean addLandingEffects(BlockState state, ServerWorld level, BlockPos pos, BlockState unused, LivingEntity entity, int numberOfParticles)
     {
-        return getState(world, pos).addLandingEffects(world, pos, state, entity, numberOfParticles);
+        return getState(level, pos).addLandingEffects(level, pos, state, entity, numberOfParticles);
     }
 
     @Override

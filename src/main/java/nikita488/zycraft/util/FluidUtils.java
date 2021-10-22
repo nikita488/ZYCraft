@@ -59,7 +59,7 @@ public class FluidUtils
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
     }
 
-    public static boolean canBlockContainFluid(World level, BlockPos pos, BlockState state, Fluid fluid)
+    public static boolean canPlaceFluid(World level, BlockPos pos, BlockState state, Fluid fluid)
     {
         return state.getBlock() instanceof ILiquidContainer && ((ILiquidContainer)state.getBlock()).canPlaceLiquid(level, pos, state, fluid);
     }
@@ -68,43 +68,45 @@ public class FluidUtils
     {
         Fluid fluid = stack.getFluid();
 
-        if (!(fluid instanceof FlowingFluid))
-            return false;
-
-        FluidAttributes attributes = fluid.getAttributes();
-        FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
-
-        if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
-            return false;
-
-        BlockState blockState = level.getBlockState(pos);
-        boolean replaceable = blockState.canBeReplaced(fluid);
-        boolean canContainFluid = blockState.isAir() || replaceable || canBlockContainFluid(level, pos, blockState, fluid);
-
-        if (!canContainFluid)
-            return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
-
-        if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
+        if (fluid instanceof FlowingFluid)
         {
-            attributes.vaporize(player, level, pos, stack);
-            return true;
-        }
+            FluidAttributes attributes = fluid.getAttributes();
+            FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
 
-        if (canBlockContainFluid(level, pos, blockState, fluid))
-        {
-            ((ILiquidContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
+            if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
+                return false;
+
+            BlockState blockState = level.getBlockState(pos);
+            boolean replaceable = blockState.canBeReplaced(fluid);
+            boolean canPlace = blockState.isAir() || replaceable || canPlaceFluid(level, pos, blockState, fluid);
+
+            if (!canPlace)
+                return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
+
+            if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
+            {
+                attributes.vaporize(player, level, pos, stack);
+                return true;
+            }
+
+            if (canPlaceFluid(level, pos, blockState, fluid))
+            {
+                ((ILiquidContainer) blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid) fluid).getSource(false));
+                level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
+                return true;
+            }
+
+            if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
+                level.destroyBlock(pos, true);
+
+            if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
+                return false;
+
             level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
             return true;
         }
 
-        if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
-            level.destroyBlock(pos, true);
-
-        if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Constants.BlockFlags.DEFAULT_AND_RERENDER) && !blockState.getFluidState().isSource())
-            return false;
-
-        level.playSound(player, pos, attributes.getEmptySound(), SoundCategory.BLOCKS, 1F, 1F);
-        return true;
+        return false;
     }
 
     public static boolean voidFluid(World level, BlockPos pos, Predicate<FluidState> predicate)

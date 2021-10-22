@@ -40,7 +40,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
         super(properties, capacity, 1);
     }
 
-    protected ItemStack emptyBucket(IFluidHandlerItem handler, ItemStack stack, PlayerEntity player)
+    protected ItemStack getEmptySuccessItem(IFluidHandlerItem handler, ItemStack stack, PlayerEntity player)
     {
         return !player.abilities.instabuild ? new ItemStack(this) : stack;
     }
@@ -77,40 +77,42 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         if (!containedFluid.isEmpty())
         {
-            BlockPos fluidPos = FluidUtils.canBlockContainFluid(level, pos, state, containedFluid.getFluid()) ? pos : relativePos;
+            BlockPos fluidPos = FluidUtils.canPlaceFluid(level, pos, state, containedFluid.getFluid()) ? pos : relativePos;
 
             if (!FluidUtils.tryPlaceFluid(containedFluid, player, level, fluidPos, hitResult))
                 return ActionResult.fail(heldStack);
 
-            if (!level.isClientSide())
+            if (player instanceof ServerPlayerEntity)
                 CriteriaTriggers.PLACED_BLOCK.trigger((ServerPlayerEntity)player, fluidPos, heldStack);
 
             player.awardStat(Stats.ITEM_USED.get(this));
-            return ActionResult.sidedSuccess(emptyBucket(handler, heldStack, player), level.isClientSide());
+            return ActionResult.sidedSuccess(getEmptySuccessItem(handler, heldStack, player), level.isClientSide());
         }
 
-        if (!(block instanceof IBucketPickupHandler))
-            return ActionResult.fail(heldStack);
+        if (block instanceof IBucketPickupHandler)
+        {
+            Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(level, pos, state);
 
-        Fluid fluid = ((IBucketPickupHandler)block).takeLiquid(level, pos, state);
+            if (fluid == Fluids.EMPTY)
+                return ActionResult.fail(heldStack);
 
-        if (fluid == Fluids.EMPTY)
-            return ActionResult.fail(heldStack);
+            FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
-        FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
+            if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
+                return ActionResult.fail(heldStack);
 
-        if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-            return ActionResult.fail(heldStack);
+            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+            player.awardStat(Stats.ITEM_USED.get(this));
+            player.playSound(fluid.getAttributes().getFillSound(), 1F, 1F);
 
-        handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
-        player.awardStat(Stats.ITEM_USED.get(this));
-        player.playSound(fluid.getAttributes().getFillSound(), 1F, 1F);
+            ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
 
-        ItemStack filledContainer = DrinkHelper.createFilledResult(heldStack, player, handler.getContainer(), false);
+            if (player instanceof ServerPlayerEntity)
+                CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity) player, filledContainer);
 
-        if (!level.isClientSide())
-            CriteriaTriggers.FILLED_BUCKET.trigger((ServerPlayerEntity)player, filledContainer);
+            return ActionResult.sidedSuccess(filledContainer, level.isClientSide());
+        }
 
-        return ActionResult.sidedSuccess(filledContainer, level.isClientSide());
+        return ActionResult.fail(heldStack);
     }
 }

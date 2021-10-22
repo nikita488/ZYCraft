@@ -12,9 +12,9 @@ public class SparkleParticle extends SpriteTexturedParticle
     private final IAnimatedSprite sprites;
     private final boolean hasFixedSize;
 
-    public SparkleParticle(ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean hasFixedSize)
+    public SparkleParticle(ClientWorld level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, IAnimatedSprite sprites, boolean hasFixedSize)
     {
-        super(world, x, y, z, xSpeed, ySpeed, zSpeed);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
         this.sprites = sprites;
         this.hasFixedSize = hasFixedSize;
     }
@@ -71,9 +71,9 @@ public class SparkleParticle extends SpriteTexturedParticle
 
         @Nullable
         @Override
-        public Particle createParticle(SparkleParticleData data, ClientWorld world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SparkleParticleData data, ClientWorld level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
+            SparkleParticle particle = new SparkleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
 
             particle.setColor(data.r(), data.g(), data.b());
             particle.setAlpha(data.a());

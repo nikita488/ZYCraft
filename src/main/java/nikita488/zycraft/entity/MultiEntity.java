@@ -116,7 +116,7 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     public void kill() {}
 
     @Override
-    public void thunderHit(ServerWorld world, LightningBoltEntity lightning) {}
+    public void thunderHit(ServerWorld level, LightningBoltEntity lightning) {}
 
     @Nullable
     public IDynamicMultiBlock parentMultiBlock()

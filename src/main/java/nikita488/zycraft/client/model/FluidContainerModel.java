@@ -136,7 +136,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
         @Nullable
         @Override
-        public IBakedModel resolve(IBakedModel emptyModel, ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
+        public IBakedModel resolve(IBakedModel emptyModel, ItemStack stack, @Nullable ClientWorld level, @Nullable LivingEntity entity)
         {
             if (overrides.length == 0)
                 return emptyModel;
@@ -169,7 +169,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
             for (int i = 0; i < overrides.length; i++)
             {
-                if (!overrides[i].test(stack, world, entity))
+                if (!overrides[i].test(stack, level, entity))
                     continue;
 
                 IBakedModel model = models[i];

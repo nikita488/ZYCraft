@@ -194,7 +194,7 @@ public class ZYBlocks
             .loot((tables, ore) -> tables.add(ore, RegistrateBlockLootTables.droppingWithSilkTouch(ore,
                     ItemLootEntry.lootTableItem(ZYItems.ZYCHORIUM.get(type).get())
                             .apply(ExplosionDecay.explosionDecay())
-                            .apply(SetCount.setCount(RandomValueRange.between(1, 3)))
+                            .apply(SetCount.setCount(RandomValueRange.between(1F, 3F)))
                             .apply(ApplyBonus.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))))));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, block) -> block

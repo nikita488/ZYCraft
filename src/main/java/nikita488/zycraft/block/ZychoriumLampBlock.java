@@ -70,10 +70,10 @@ public class ZychoriumLampBlock extends ColorableBlock
     }
 
     @Override
-    public void tick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    public void tick(BlockState state, ServerWorld level, BlockPos pos, Random random)
     {
-        if (isLit(state) && !world.hasNeighborSignal(pos))
-            world.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
+        if (isLit(state) && !level.hasNeighborSignal(pos))
+            level.setBlock(pos, state.cycle(LIT), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     private boolean isLit(BlockState state)
