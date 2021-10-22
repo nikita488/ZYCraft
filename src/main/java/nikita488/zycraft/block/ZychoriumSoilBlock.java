@@ -29,29 +29,30 @@ public class ZychoriumSoilBlock extends Block
     }
 
     @Override
-    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random)
     {
-        Direction dir = state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP;
+        boolean flipped = state.getValue(FLIPPED);
+        Direction dir = flipped ? Direction.DOWN : Direction.UP;
         BlockPos tickPos = pos.relative(dir);
-        BlockState stateToTick = world.getBlockState(tickPos);
+        BlockState stateToTick = level.getBlockState(tickPos);
         Block blockToTick = stateToTick.getBlock();
 
         if (!stateToTick.isRandomlyTicking())
             return;
 
-        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).isValidBonemealTarget(world, tickPos, stateToTick, false)))
+        if (blockToTick instanceof IPlantable || (blockToTick instanceof IGrowable && ((IGrowable)blockToTick).isValidBonemealTarget(level, tickPos, stateToTick, false)))
         {
             BlockPos.Mutable checkPos = new BlockPos.Mutable().set(tickPos);
 
             while (blockToTick == stateToTick.getBlock() && stateToTick.isRandomlyTicking())
-                stateToTick = world.getBlockState(checkPos.move(dir));
+                stateToTick = level.getBlockState(checkPos.move(dir));
 
-            stateToTick = world.getBlockState(checkPos.move(dir.getOpposite()));
-            stateToTick.randomTick(world, checkPos.immutable(), random);
+            stateToTick = level.getBlockState(checkPos.move(dir.getOpposite()));
+            stateToTick.randomTick(level, checkPos.immutable(), random);
         }
-        else if (blockToTick == this)
+        else if (blockToTick == this && flipped == stateToTick.getValue(FLIPPED))
         {
-            stateToTick.randomTick(world, tickPos, random);
+            stateToTick.randomTick(level, tickPos, random);
         }
     }
 
