@@ -1,3 +1,8 @@
+### 3.1.3 (2021-10-22)
+
+* Added check to prevent Quartz Crystal cluster accessing chunk that doesn't exist yet while generating
+* Fixed an issue that caused Zychorium Soil's to end up in an infinite loop if placed on top of each other and one of them is powered with redstone signal
+
 ### 3.1.2 (2021-10-16)
 
 * Reworked Scythe again
