@@ -26,18 +26,18 @@ public class ClusterFeature extends Feature<ClusterFeatureConfig>
     }
 
     @Override
-    public boolean place(ISeedReader world, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
+    public boolean place(ISeedReader level, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
     {
         ObjectList<Direction> possibleSides = new ObjectArrayList<>();
 
         for (Direction side : ZYConstants.DIRECTIONS)
-            if (config.target.test(world.getBlockState(RELATIVE_POS.setWithOffset(pos, side)), random))
+            if (level.hasChunkAt(RELATIVE_POS.setWithOffset(pos, side)) && config.target.test(level.getBlockState(RELATIVE_POS), random))
                 possibleSides.add(side);
 
         if (possibleSides.isEmpty())
             return false;
 
-        world.setBlock(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
+        level.setBlock(pos, ZYBlocks.QUARTZ_CRYSTAL.getDefaultState()
                 .setValue(QuartzCrystalClusterBlock.FACING, possibleSides.get(random.nextInt(possibleSides.size())).getOpposite())
                 .setValue(QuartzCrystalClusterBlock.AMOUNT, MathHelper.nextInt(random, 1, config.size)),
                 Constants.BlockFlags.BLOCK_UPDATE);
