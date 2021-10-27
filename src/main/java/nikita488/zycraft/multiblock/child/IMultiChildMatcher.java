@@ -6,7 +6,7 @@ import net.minecraft.world.IBlockReader;
 @FunctionalInterface
 public interface IMultiChildMatcher
 {
-    IMultiChildMatcher ALWAYS_MATCHES = (world, pos) -> true;
+    IMultiChildMatcher ALWAYS_MATCHES = (getter, pos) -> true;
 
     boolean matches(IBlockReader getter, BlockPos pos);
 }

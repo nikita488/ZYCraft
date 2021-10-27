@@ -42,15 +42,15 @@ public class MultiPattern
         return true;
     }
 
-    public void convert(IBiomeReader world, BlockPos basePos, MultiBlock multiBlock)
+    public void convert(IBiomeReader accessor, BlockPos basePos, MultiBlock multiBlock)
     {
         process(basePos, (matcherIndex, pos) ->
         {
             if (matcherIndex < ALWAYS_MATCHES)
                 return true;
 
-            if (!(world.getBlockEntity(pos) instanceof IMultiChild))
-                MultiChildType.convert(world, pos);
+            if (!(accessor.getBlockEntity(pos) instanceof IMultiChild))
+                MultiChildType.convert(accessor, pos);
 
             multiBlock.addChildBlock(pos);
             return true;

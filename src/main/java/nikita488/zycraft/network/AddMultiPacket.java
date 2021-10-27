@@ -55,8 +55,8 @@ public class AddMultiPacket
     {
         context.get().enqueueWork(() ->
         {
-            Optional<World> world = LogicalSidedProvider.CLIENTWORLD.get(context.get().getDirection().getReceptionSide());
-            MultiBlock multiBlock = world.map(clientWorld -> packet.type().create(clientWorld, packet.mainChunk())).orElse(null);
+            Optional<World> level = LogicalSidedProvider.CLIENTWORLD.get(context.get().getDirection().getReceptionSide());
+            MultiBlock multiBlock = level.map(clientLevel -> packet.type().create(clientLevel, packet.mainChunk())).orElse(null);
 
             if (multiBlock == null)
                 return;

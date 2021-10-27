@@ -18,42 +18,42 @@ import java.util.function.Supplier;
 
 public enum ZYBlockColors implements Supplier<IBlockColor>
 {
-    COLORABLE((state, world, pos, tintIndex) ->
+    COLORABLE((state, getter, pos, tintIndex) ->
     {
-        if (world == null || pos == null || !state.hasTileEntity())
+        if (getter == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof IColorable ? ((IColorable)blockEntity).getColor(state, world, pos, tintIndex) : 0xFFFFFF;
+        TileEntity blockEntity = getter.getBlockEntity(pos);
+        return blockEntity instanceof IColorable ? ((IColorable)blockEntity).getColor(state, getter, pos, tintIndex) : 0xFFFFFF;
     }),
-    FABRICATOR((state, world, pos, tintIndex) ->
+    FABRICATOR((state, getter, pos, tintIndex) ->
     {
-        if (world == null || pos == null || !state.hasTileEntity())
+        if (getter == null || pos == null || !state.hasTileEntity())
             return ZYType.BLUE.rgb();
 
-        TileEntity blockEntity = world.getBlockEntity(pos);
+        TileEntity blockEntity = getter.getBlockEntity(pos);
         return blockEntity instanceof FabricatorTile ? ((FabricatorTile)blockEntity).getColor(state) : ZYType.BLUE.rgb();
     }),
-    CONVERTED_MULTI_CHILD((state, world, pos, tintIndex) ->
+    CONVERTED_MULTI_CHILD((state, getter, pos, tintIndex) ->
     {
-        if (world == null || pos == null)
+        if (getter == null || pos == null)
             return 0xFFFFFF;
 
-        TileEntity blockEntity = world.getBlockEntity(pos);
+        TileEntity blockEntity = getter.getBlockEntity(pos);
 
         if (blockEntity instanceof ConvertedMultiChildTile)
-            return Minecraft.getInstance().getBlockColors().getColor(((ConvertedMultiChildTile)blockEntity).initialState(), world, pos, tintIndex);
+            return Minecraft.getInstance().getBlockColors().getColor(((ConvertedMultiChildTile)blockEntity).initialState(), getter, pos, tintIndex);
 
         return 0xFFFFFF;
     }),
-    VALVE((state, world, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ValveBlock.IO_MODE).rgb() : ZYType.BLUE.rgb()),
-    ITEM_IO((state, world, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ItemIOBlock.IO_MODE).rgb() : ZYType.GREEN.rgb()),
-    FLUID_SELECTOR((state, world, pos, tintIndex) ->
+    VALVE((state, getter, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ValveBlock.IO_MODE).rgb() : ZYType.BLUE.rgb()),
+    ITEM_IO((state, getter, pos, tintIndex) -> tintIndex == 1 ? state.getValue(ItemIOBlock.IO_MODE).rgb() : ZYType.GREEN.rgb()),
+    FLUID_SELECTOR((state, getter, pos, tintIndex) ->
     {
-        if (world == null || pos == null || !state.hasTileEntity())
+        if (getter == null || pos == null || !state.hasTileEntity())
             return 0xFFFFFF;
 
-        TileEntity blockEntity = world.getBlockEntity(pos);
+        TileEntity blockEntity = getter.getBlockEntity(pos);
         return blockEntity instanceof FluidSelectorTile ? ((FluidSelectorTile)blockEntity).getColor() : 0xFFFFFF;
     });
 
@@ -62,7 +62,7 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         ImmutableMap.Builder<ZYType, IBlockColor> builder = ImmutableMap.builder();
 
         for (ZYType type : ZYType.VALUES)
-            builder.put(type, (state, world, pos, tintIndex) -> type.rgb());
+            builder.put(type, (state, getter, pos, tintIndex) -> type.rgb());
 
         return builder.build();
     });
@@ -71,7 +71,7 @@ public enum ZYBlockColors implements Supplier<IBlockColor>
         ImmutableMap.Builder<ZYType, IBlockColor> builder = ImmutableMap.builder();
 
         for (ZYType type : ZYType.VALUES)
-            builder.put(type, (state, world, pos, tintIndex) -> tintIndex == 1 ? type.overlayRGB() : type.rgb());
+            builder.put(type, (state, getter, pos, tintIndex) -> tintIndex == 1 ? type.overlayRGB() : type.rgb());
 
         return builder.build();
     });

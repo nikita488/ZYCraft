@@ -19,12 +19,12 @@ import java.util.Arrays;
 
 public enum MultiChildType implements IMultiChildMatcher
 {
-    AIR(ZYBlocks.MULTI_AIR, (state, world, pos) -> state.isAir() || state.isAir(world, pos)),
-    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
-            Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(world, pos, side))),
-    HARD(ZYBlocks.HARD_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
+    AIR(ZYBlocks.MULTI_AIR, (state, getter, pos) -> state.isAir() || state.isAir(getter, pos)),
+    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
+            Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(getter, pos, side))),
+    HARD(ZYBlocks.HARD_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
             state.requiresCorrectToolForDrops()),
-    GLASS(ZYBlocks.GLASS_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && !state.isSolidRender(world, pos) &&
+    GLASS(ZYBlocks.GLASS_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && !state.isSolidRender(getter, pos) &&
             (state.getMaterial() == Material.GLASS || state.getMaterial() == Material.BUILDABLE_GLASS));
 
     public static final MultiChildType[] VALUES = values();
