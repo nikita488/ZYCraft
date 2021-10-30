@@ -152,9 +152,9 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
         if (!containerFluid.isEmpty())
         {
             int filled = tank.get().fill(containerFluid, IFluidHandler.FluidAction.SIMULATE);
-            FluidStack drained;
+            FluidStack drained = filled > 0 ? handler.drain(filled, IFluidHandler.FluidAction.EXECUTE) : FluidStack.EMPTY;
 
-            if (filled <= 0 || (drained = handler.drain(filled, IFluidHandler.FluidAction.EXECUTE)).isEmpty())
+            if (drained.isEmpty())
                 return;
 
             ItemStack container = handler.getContainer();

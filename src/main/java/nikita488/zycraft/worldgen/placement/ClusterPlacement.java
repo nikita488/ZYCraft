@@ -2,6 +2,7 @@ package nikita488.zycraft.worldgen.placement;
 
 import com.mojang.serialization.Codec;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;
@@ -21,9 +22,9 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
     }
 
     @Override
-    public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random random, ClusterPlacementConfig config, BlockPos pos)
+    public Stream<BlockPos> getPositions(WorldDecoratingHelper context, Random random, ClusterPlacementConfig config, BlockPos pos)
     {
-        ObjectArrayList<BlockPos> clusters = new ObjectArrayList<>();
+        ObjectList<BlockPos> clusters = new ObjectArrayList<>();
 
         for (int i = 0; i < config.generationAttempts; i++)
         {
@@ -32,14 +33,14 @@ public class ClusterPlacement extends Placement<ClusterPlacementConfig>
 
             int x = pos.getX() + random.nextInt(16);
             int z = pos.getZ() + random.nextInt(16);
-            int surfaceHeight = Math.min(helper.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, x, z), helper.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z));
+            int surfaceHeight = Math.min(context.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, x, z), context.getHeight(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z));
 
             if (surfaceHeight <= 0)
                 continue;
 
             POS.set(x, random.nextInt(surfaceHeight), z);
 
-            if (helper.getBlockState(POS).getBlock() == Blocks.CAVE_AIR)
+            if (context.getBlockState(POS).getBlock() == Blocks.CAVE_AIR)
                 clusters.add(POS.immutable());
         }
 
