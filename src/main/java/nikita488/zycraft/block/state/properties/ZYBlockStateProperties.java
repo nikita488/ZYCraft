@@ -5,7 +5,6 @@ import net.minecraft.state.EnumProperty;
 
 public class ZYBlockStateProperties
 {
-    public static final BooleanProperty ZYCHORIUM_WATER_POWERED = BooleanProperty.create("powered");
     public static final BooleanProperty ZYCHORIUM_SOIL_FLIPPED = BooleanProperty.create("flipped");
     public static final EnumProperty<FabricatorMode> FABRICATOR_MODE = EnumProperty.create("mode", FabricatorMode.class);
 

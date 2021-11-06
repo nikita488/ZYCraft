@@ -129,7 +129,7 @@ public class FluidUtils
             Block.dropResources(state, level, pos, state.hasTileEntity() ? level.getBlockEntity(pos) : null);
         }
 
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Constants.BlockFlags.DEFAULT);
+        level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
         return true;
     }
 }

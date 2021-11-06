@@ -47,25 +47,31 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     @Override
     public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        for (Direction side : ZYConstants.DIRECTIONS)
-            transform(level, pos, pos.relative(side));
+        transform(level, pos);
     }
 
     @Override
     public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        transform(level, pos, relativePos);
+        transform(level, pos);
     }
 
-    private void transform(World level, BlockPos pos, BlockPos relativePos)
+    private void transform(World level, BlockPos pos)
     {
-        FluidState fluidState = level.getFluidState(relativePos);
-
-        if (!fluidState.is(FluidTags.LAVA))
+        if (level.hasNeighborSignal(pos))
             return;
 
-        level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, (fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE).defaultBlockState()));
-        level.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, relativePos, -1);
+        for (Direction side : ZYConstants.DIRECTIONS)
+        {
+            BlockPos relativePos = pos.relative(side);
+            FluidState fluidState = level.getFluidState(relativePos);
+
+            if (!fluidState.is(FluidTags.LAVA))
+                continue;
+
+            level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, (fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE).defaultBlockState()));
+            level.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, relativePos, -1);
+        }
     }
 
     @Override

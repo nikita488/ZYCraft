@@ -376,9 +376,9 @@ public class ZYBlocks
                         .texture("top", provider.modLoc("block/" + ctx.getName() + "_top"));
 
                 provider.getVariantBuilder(ctx.getEntry())
-                        .partialState().with(ZychoriumSoilBlock.FLIPPED, false)
+                        .partialState().with(ZychoriumSoilBlock.POWERED, false)
                         .modelForState().modelFile(model).addModel()
-                        .partialState().with(ZychoriumSoilBlock.FLIPPED, true)
+                        .partialState().with(ZychoriumSoilBlock.POWERED, true)
                         .modelForState().modelFile(model).rotationX(180).addModel();
             })
             .recipe((ctx, provider) -> basicMachine(ZYType.GREEN, provider, DataIngredient.tag(ItemTags.SAPLINGS), ctx::getEntry))

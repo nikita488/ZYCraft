@@ -20,19 +20,19 @@ import java.util.Random;
 
 public class ZychoriumSoilBlock extends Block
 {
-    public final static BooleanProperty FLIPPED = ZYBlockStateProperties.ZYCHORIUM_SOIL_FLIPPED;
+    public final static BooleanProperty POWERED = ZYBlockStateProperties.ZYCHORIUM_SOIL_FLIPPED;
 
     public ZychoriumSoilBlock(Properties properties)
     {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(FLIPPED, false));
+        registerDefaultState(defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
     public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random)
     {
-        boolean flipped = state.getValue(FLIPPED);
-        Direction dir = flipped ? Direction.DOWN : Direction.UP;
+        boolean powered = state.getValue(POWERED);
+        Direction dir = powered ? Direction.DOWN : Direction.UP;
         BlockPos tickPos = pos.relative(dir);
         BlockState stateToTick = level.getBlockState(tickPos);
         Block blockToTick = stateToTick.getBlock();
@@ -50,7 +50,7 @@ public class ZychoriumSoilBlock extends Block
             stateToTick = level.getBlockState(checkPos.move(dir.getOpposite()));
             stateToTick.randomTick(level, checkPos.immutable(), random);
         }
-        else if (blockToTick == this && flipped == stateToTick.getValue(FLIPPED))
+        else if (blockToTick == this && powered == stateToTick.getValue(POWERED))
         {
             stateToTick.randomTick(level, tickPos, random);
         }
@@ -60,13 +60,13 @@ public class ZychoriumSoilBlock extends Block
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext context)
     {
-        return defaultBlockState().setValue(FLIPPED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
+        return defaultBlockState().setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
     @Override
     public boolean canSustainPlant(BlockState state, IBlockReader getter, BlockPos pos, Direction facing, IPlantable plantable)
     {
-        return facing == (state.getValue(FLIPPED) ? Direction.DOWN : Direction.UP);
+        return facing == (state.getValue(POWERED) ? Direction.DOWN : Direction.UP);
     }
 
     @Override
@@ -78,13 +78,13 @@ public class ZychoriumSoilBlock extends Block
     @Override
     public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        if (state.getValue(FLIPPED) != level.hasNeighborSignal(pos))
-            level.setBlock(pos, state.cycle(FLIPPED), Constants.BlockFlags.BLOCK_UPDATE);
+        if (level.hasNeighborSignal(pos) != state.getValue(POWERED))
+            level.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
     {
-        builder.add(FLIPPED);
+        builder.add(POWERED);
     }
 }
