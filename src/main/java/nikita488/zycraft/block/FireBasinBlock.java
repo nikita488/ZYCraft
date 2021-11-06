@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.SoulFireBlock;
+import net.minecraft.block.TNTBlock;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -48,21 +49,37 @@ public class FireBasinBlock extends Block
     {
         BlockPos abovePos = pos.above();
         BlockState aboveState = level.getBlockState(abovePos);
+        boolean flammable = false;
 
         if (state.getValue(POWERED))
         {
-            if (CampfireBlock.canLight(aboveState))
-                aboveState = aboveState.setValue(BlockStateProperties.LIT, true);
-            else if (aboveState.isAir())
+            if (aboveState.isAir())
                 aboveState = SoulFireBlock.canSurviveOnBlock(state.getBlock()) ? Blocks.SOUL_FIRE.defaultBlockState() : Blocks.FIRE.defaultBlockState();
+            else if (CampfireBlock.canLight(aboveState))
+                aboveState = aboveState.setValue(BlockStateProperties.LIT, true);
+            else if (aboveState.isFlammable(level, abovePos, Direction.DOWN))
+                flammable = true;
             else
                 return;
 
-            level.playSound(null, abovePos, SoundEvents.FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-            level.setBlock(abovePos, aboveState, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            if (flammable)
+            {
+                aboveState.catchFire(level, abovePos, Direction.DOWN, null);
+
+                if (aboveState.getBlock() instanceof TNTBlock)
+                    level.removeBlock(abovePos, false);
+            }
+            else
+            {
+                level.playSound(null, abovePos, SoundEvents.FLINTANDSTEEL_USE, SoundCategory.BLOCKS, 1F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+                level.setBlock(abovePos, aboveState, Constants.BlockFlags.DEFAULT_AND_RERENDER);
+            }
         }
         else if (aboveState.getBlock() instanceof AbstractFireBlock)
+        {
+            level.levelEvent(Constants.WorldEvents.FIRE_EXTINGUISH_SOUND, abovePos, -1);
             level.setBlockAndUpdate(abovePos, Blocks.AIR.defaultBlockState());
+        }
     }
 
     @Override
