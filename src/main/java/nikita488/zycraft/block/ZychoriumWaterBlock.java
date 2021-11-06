@@ -8,7 +8,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.ActionResultType;
@@ -33,32 +37,43 @@ import java.util.Optional;
 
 public class ZychoriumWaterBlock extends Block implements IFluidSource
 {
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
     public ZychoriumWaterBlock(Properties properties)
     {
         super(properties);
+        registerDefaultState(defaultBlockState().setValue(POWERED, false));
     }
 
     @Override
     public FluidState getFluidState(BlockState state)
     {
-        return Fluids.WATER.getFlowing(1, false);
+        return !state.getValue(POWERED) ? Fluids.WATER.getFlowing(1, false) : Fluids.EMPTY.defaultFluidState();
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext context)
+    {
+        return defaultBlockState().setValue(POWERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
     }
 
     @Override
     public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        transform(level, pos);
+        transform(state, level, pos);
     }
 
     @Override
     public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        transform(level, pos);
+        if (level.hasNeighborSignal(pos) != state.getValue(POWERED))
+            level.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
-    private void transform(World level, BlockPos pos)
+    private void transform(BlockState state, World level, BlockPos pos)
     {
-        if (level.hasNeighborSignal(pos))
+        if (state.getValue(POWERED))
             return;
 
         for (Direction side : ZYConstants.DIRECTIONS)
@@ -109,6 +124,12 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     @Override
     public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
-        return new FluidStack(Fluids.WATER, 50);
+        return !state.getValue(POWERED) ? new FluidStack(Fluids.WATER, 50) : FluidStack.EMPTY;
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
+    {
+        builder.add(POWERED);
     }
 }

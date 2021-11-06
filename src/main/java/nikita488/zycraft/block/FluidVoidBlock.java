@@ -44,6 +44,6 @@ public class FluidVoidBlock extends Block implements IFluidVoid
     @Override
     public int getDrainAmount(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
-        return 50;
+        return !level.hasNeighborSignal(pos) ? 50 : 0;
     }
 }
