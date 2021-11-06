@@ -12,7 +12,12 @@ import net.minecraftforge.fluids.FluidAttributes;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.item.*;
+import nikita488.zycraft.item.AluminiumFoilItem;
+import nikita488.zycraft.item.ColorScannerItem;
+import nikita488.zycraft.item.ScytheItem;
+import nikita488.zycraft.item.ZYBucketItem;
+import nikita488.zycraft.item.ZYFluidContainerItem;
+import nikita488.zycraft.item.ZychoriumItem;
 
 import java.util.Map;
 

@@ -19,10 +19,14 @@ import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.util.Color;
 import nikita488.zycraft.util.Cuboid6i;
 
-import static net.minecraft.client.renderer.LightTexture.*;
+import static net.minecraft.client.renderer.LightTexture.block;
+import static net.minecraft.client.renderer.LightTexture.pack;
+import static net.minecraft.client.renderer.LightTexture.sky;
 
 public class MultiFluidRenderer
 {
+    private static final Vector3f ORIGIN = new Vector3f();
+
     public static void render(MatrixStack pose, IRenderTypeBuffer source, FluidStack stack, Cuboid6i bounds, float resolution, float density, IBlockDisplayReader getter, BlockPos lightPos)
     {
         render(pose, source, stack, bounds, resolution, density, WorldRenderer.getLightColor(getter, lightPos));
@@ -33,7 +37,6 @@ public class MultiFluidRenderer
         if (stack.isEmpty())
             return;
 
-        Vector3f origin = new Vector3f();
         Fluid fluid = stack.getFluid();
         FluidAttributes attributes = fluid.getAttributes();
         int color = attributes.getColor(stack);
@@ -54,18 +57,18 @@ public class MultiFluidRenderer
 
             IVertexBuilder builder = source.getBuffer(type);
 
-            origin.set(bounds.minX(), bounds.minY(), bounds.minZ());
-            fillFluidQuads(pose, builder, origin, Direction.DOWN, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);
-            origin.set(bounds.minX(), bounds.minY() + fluidHeight, bounds.maxZ() + 1);
-            fillFluidQuads(pose, builder, origin, Direction.UP, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);
-            origin.set(bounds.minX(), bounds.minY(), bounds.maxZ() + 1);
-            fillFluidQuads(pose, builder, origin, Direction.NORTH, resolution, bounds.width(), fluidHeight, color, sprite, lightMap);
-            origin.set(bounds.maxX() + 1, bounds.minY(), bounds.minZ());
-            fillFluidQuads(pose, builder, origin, Direction.SOUTH, resolution, bounds.width(), fluidHeight, color, sprite, lightMap);
-            origin.set(bounds.maxX() + 1, bounds.minY(), bounds.maxZ() + 1);
-            fillFluidQuads(pose, builder, origin, Direction.WEST, resolution, bounds.depth(), fluidHeight, color, sprite, lightMap);
-            origin.set(bounds.minX(), bounds.minY(), bounds.minZ());
-            fillFluidQuads(pose, builder, origin, Direction.EAST, resolution, bounds.depth(), fluidHeight, color, sprite, lightMap);
+            ORIGIN.set(bounds.minX(), bounds.minY(), bounds.minZ());
+            fillFluidQuads(pose, builder, Direction.DOWN, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);
+            ORIGIN.set(bounds.minX(), bounds.minY() + fluidHeight, bounds.maxZ() + 1);
+            fillFluidQuads(pose, builder, Direction.UP, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);
+            ORIGIN.set(bounds.minX(), bounds.minY(), bounds.maxZ() + 1);
+            fillFluidQuads(pose, builder, Direction.NORTH, resolution, bounds.width(), fluidHeight, color, sprite, lightMap);
+            ORIGIN.set(bounds.maxX() + 1, bounds.minY(), bounds.minZ());
+            fillFluidQuads(pose, builder, Direction.SOUTH, resolution, bounds.width(), fluidHeight, color, sprite, lightMap);
+            ORIGIN.set(bounds.maxX() + 1, bounds.minY(), bounds.maxZ() + 1);
+            fillFluidQuads(pose, builder, Direction.WEST, resolution, bounds.depth(), fluidHeight, color, sprite, lightMap);
+            ORIGIN.set(bounds.minX(), bounds.minY(), bounds.minZ());
+            fillFluidQuads(pose, builder, Direction.EAST, resolution, bounds.depth(), fluidHeight, color, sprite, lightMap);
         }
     }
 
@@ -82,10 +85,10 @@ public class MultiFluidRenderer
         return vec;
     }
 
-    private static void fillFluidQuads(MatrixStack pose, IVertexBuilder consumer, Vector3f origin, Direction side, float resolution, float width, float height, int color, TextureAtlasSprite sprite, int lightMap)
+    private static void fillFluidQuads(MatrixStack pose, IVertexBuilder consumer, Direction side, float resolution, float width, float height, int color, TextureAtlasSprite sprite, int lightMap)
     {
         pose.pushPose();
-        pose.translate(origin.x(), origin.y(), origin.z());
+        pose.translate(ORIGIN.x(), ORIGIN.y(), ORIGIN.z());
 
         Matrix4f matrix = pose.last().pose();
         Vector3f widthAxis = side.getAxis().isHorizontal() ? cross(side.step(), Vector3f.YP) : Vector3f.XP;
