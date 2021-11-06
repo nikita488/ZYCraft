@@ -61,18 +61,6 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
     @Override
     public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        transform(state, level, pos);
-    }
-
-    @Override
-    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
-    {
-        if (level.hasNeighborSignal(pos) != state.getValue(POWERED))
-            level.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.BLOCK_UPDATE);
-    }
-
-    private void transform(BlockState state, World level, BlockPos pos)
-    {
         if (state.getValue(POWERED))
             return;
 
@@ -87,6 +75,13 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
             level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, (fluidState.isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE).defaultBlockState()));
             level.levelEvent(Constants.WorldEvents.LAVA_EXTINGUISH, relativePos, -1);
         }
+    }
+
+    @Override
+    public void neighborChanged(BlockState state, World level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
+    {
+        if (level.hasNeighborSignal(pos) != state.getValue(POWERED))
+            level.setBlock(pos, state.cycle(POWERED), Constants.BlockFlags.BLOCK_UPDATE);
     }
 
     @Override
