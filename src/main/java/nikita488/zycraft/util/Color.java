@@ -1,5 +1,6 @@
 package nikita488.zycraft.util;
 
+import com.google.common.base.MoreObjects;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
@@ -136,6 +137,24 @@ public class Color
     public int alpha()
     {
         return wrap(color);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return this == obj || (obj instanceof Color && color == ((Color)obj).color);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return color;
+    }
+
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this).add("color", Integer.toHexString(color)).toString();
     }
 
     public static int add(int rgba1, int rgba2)
