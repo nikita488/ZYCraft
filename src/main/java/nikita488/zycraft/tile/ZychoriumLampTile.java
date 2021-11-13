@@ -8,8 +8,11 @@ import net.minecraft.world.IBlockDisplayReader;
 import nikita488.zycraft.block.ZychoriumLampBlock;
 import nikita488.zycraft.util.Color;
 
+import javax.annotation.Nullable;
+
 public class ZychoriumLampTile extends ColorableTile
 {
+    @Nullable
     private float[] hsv;
 
     public ZychoriumLampTile(TileEntityType<ZychoriumLampTile> type)

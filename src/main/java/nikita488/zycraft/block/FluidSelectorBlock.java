@@ -64,7 +64,7 @@ public class FluidSelectorBlock extends Block implements IFluidSource
         FluidSelectorTile selector = ZYTiles.FLUID_SELECTOR.getNullable(level, pos);
 
         if (selector != null)
-            if (selector.getSelectedFluid().isFluidEqual(containedFluid))
+            if (!selector.canSelectFluid(containedFluid))
                 return ActionResultType.CONSUME;
             else if (!level.isClientSide())
                 selector.setSelectedFluid(containedFluid);
@@ -75,13 +75,7 @@ public class FluidSelectorBlock extends Block implements IFluidSource
     @Override
     public FluidStack getFluid(BlockState state, World level, BlockPos pos, @Nullable Direction side)
     {
-        FluidStack fluid = ZYTiles.FLUID_SELECTOR.get(level, pos).map(FluidSelectorTile::getSelectedFluid).orElse(FluidStack.EMPTY);
-
-        if (fluid.isEmpty())
-            return FluidStack.EMPTY;
-
-        fluid = fluid.copy();
-        fluid.setAmount(150 - level.getBestNeighborSignal(pos) * 10);
-        return fluid;
+        FluidSelectorTile fluidSelector = ZYTiles.FLUID_SELECTOR.getNullable(level, pos);
+        return fluidSelector != null ? fluidSelector.getSelectedFluid() : FluidStack.EMPTY;
     }
 }

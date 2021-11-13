@@ -13,51 +13,51 @@ import java.util.Map;
 public class ClusterShapes
 {
     public static final VoxelShape[] DOWN = new VoxelShape[] {
-            Block.box(6, 6, 6, 10, 16, 10),
-            Block.box(6, 6, 6, 10, 16, 14),
-            Block.box(2, 6, 6, 10, 16, 14),
-            Block.box(2, 6, 6, 14, 16, 14),
-            Block.box(2, 6, 2, 14, 16, 14)
+            Block.box(6D, 6D, 6D, 10D, 16D, 10D),
+            Block.box(6D, 6D, 6D, 10D, 16D, 14D),
+            Block.box(2D, 6D, 6D, 10D, 16D, 14D),
+            Block.box(2D, 6D, 6D, 14D, 16D, 14D),
+            Block.box(2D, 6D, 2D, 14D, 16D, 14D)
     };
 
     public static final VoxelShape[] UP = new VoxelShape[] {
-            Block.box(6, 0, 6, 10, 10, 10),
-            Block.box(6, 0, 2, 10, 10, 10),
-            Block.box(2, 0, 2, 10, 10, 10),
-            Block.box(2, 0, 2, 14, 10, 10),
-            Block.box(2, 0, 2, 14, 10, 14)
+            Block.box(6D, 0D, 6D, 10D, 10D, 10D),
+            Block.box(6D, 0D, 2D, 10D, 10D, 10D),
+            Block.box(2D, 0D, 2D, 10D, 10D, 10D),
+            Block.box(2D, 0D, 2D, 14D, 10D, 10D),
+            Block.box(2D, 0D, 2D, 14D, 10D, 14D)
     };
 
     public static final VoxelShape[] NORTH = new VoxelShape[] {
-            Block.box(6, 6, 6, 10, 10, 16),
-            Block.box(6, 6, 6, 10, 14, 16),
-            Block.box(6, 6, 6, 14, 14, 16),
-            Block.box(2, 6, 6, 14, 14, 16),
-            Block.box(2, 2, 6, 14, 14, 16)
+            Block.box(6D, 6D, 6D, 10D, 10D, 16D),
+            Block.box(6D, 6D, 6D, 10D, 14D, 16D),
+            Block.box(6D, 6D, 6D, 14D, 14D, 16D),
+            Block.box(2D, 6D, 6D, 14D, 14D, 16D),
+            Block.box(2D, 2D, 6D, 14D, 14D, 16D)
     };
 
     public static final VoxelShape[] SOUTH = new VoxelShape[] {
-            Block.box(6, 6, 0, 10, 10, 10),
-            Block.box(6, 6, 0, 10, 14, 10),
-            Block.box(2, 6, 0, 10, 14, 10),
-            Block.box(2, 6, 0, 14, 14, 10),
-            Block.box(2, 2, 0, 14, 14, 10)
+            Block.box(6D, 6D, 0D, 10D, 10D, 10D),
+            Block.box(6D, 6D, 0D, 10D, 14D, 10D),
+            Block.box(2D, 6D, 0D, 10D, 14D, 10D),
+            Block.box(2D, 6D, 0D, 14D, 14D, 10D),
+            Block.box(2D, 2D, 0D, 14D, 14D, 10D)
     };
 
     public static final VoxelShape[] WEST = new VoxelShape[] {
-            Block.box(6, 6, 6, 16, 10, 10),
-            Block.box(6, 6, 6, 16, 14, 10),
-            Block.box(6, 6, 2, 16, 14, 10),
-            Block.box(6, 6, 2, 16, 14, 14),
-            Block.box(6, 2, 2, 16, 14, 14)
+            Block.box(6D, 6D, 6D, 16D, 10D, 10D),
+            Block.box(6D, 6D, 6D, 16D, 14D, 10D),
+            Block.box(6D, 6D, 2D, 16D, 14D, 10D),
+            Block.box(6D, 6D, 2D, 16D, 14D, 14D),
+            Block.box(6D, 2D, 2D, 16D, 14D, 14D)
     };
 
     public static final VoxelShape[] EAST = new VoxelShape[] {
-            Block.box(0, 6, 6, 10, 10, 10),
-            Block.box(0, 6, 6, 10, 14, 10),
-            Block.box(0, 6, 6, 10, 14, 14),
-            Block.box(0, 6, 2, 10, 14, 14),
-            Block.box(0, 2, 2, 10, 14, 14)
+            Block.box(0D, 6D, 6D, 10D, 10D, 10D),
+            Block.box(0D, 6D, 6D, 10D, 14D, 10D),
+            Block.box(0D, 6D, 6D, 10D, 14D, 14D),
+            Block.box(0D, 6D, 2D, 10D, 14D, 14D),
+            Block.box(0D, 2D, 2D, 10D, 14D, 14D)
     };
 
     private static final Map<Direction, VoxelShape[]> SHAPES = Util.make(new EnumMap<>(Direction.class), shapes ->

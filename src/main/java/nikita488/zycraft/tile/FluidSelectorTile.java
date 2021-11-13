@@ -7,8 +7,11 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.util.Color;
 
+import javax.annotation.Nullable;
+
 public class FluidSelectorTile extends ZYTile
 {
+    @Nullable
     private float[] hsv;
     private FluidStack selectedFluid = FluidStack.EMPTY;
 
@@ -69,9 +72,19 @@ public class FluidSelectorTile extends ZYTile
             selectedFluid.writeToNBT(tag);
     }
 
+    public boolean canSelectFluid(FluidStack stack)
+    {
+        return !stack.isFluidEqual(selectedFluid);
+    }
+
     public FluidStack getSelectedFluid()
     {
-        return selectedFluid;
+        if (selectedFluid.isEmpty())
+            return FluidStack.EMPTY;
+
+        FluidStack stack = selectedFluid.copy();
+        stack.setAmount(150 - level.getBestNeighborSignal(worldPosition) * 10);
+        return stack;
     }
 
     public void setSelectedFluid(FluidStack stack)
