@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.api.colorable.IColorable;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.init.ZYTiles;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -33,7 +33,7 @@ public class ColorableBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.COLORABLE.create(pos, state);
+        return ZYBlockEntities.COLORABLE.create(pos, state);
     }
 
     @Override
@@ -60,6 +60,4 @@ public class ColorableBlock extends Block implements EntityBlock
     {
         return IColorable.interact(state, level, pos, player, hand, hitResult);
     }
-
-
 }

@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.multiblock.TankMultiBlock;
 import nikita488.zycraft.multiblock.area.AirMultiArea;
 import nikita488.zycraft.multiblock.child.IMultiChildMatcher;
@@ -63,13 +63,13 @@ public class TankFormer
             if (blockEntity == null)
                 return false;
 
-            if (ZYTiles.VALVE.is(blockEntity))
+            if (ZYBlockEntities.VALVE.is(blockEntity))
             {
                 this.valveCount++;
                 return true;
             }
 
-            return ZYTiles.ITEM_IO.is(blockEntity);
+            return ZYBlockEntities.ITEM_IO.is(blockEntity);
         }
 
         private boolean hasValves()

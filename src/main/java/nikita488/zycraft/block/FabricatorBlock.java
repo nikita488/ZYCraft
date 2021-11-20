@@ -18,13 +18,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import nikita488.zycraft.block.entity.FabricatorBlockEntity;
 import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
-import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.tile.FabricatorTile;
-import nikita488.zycraft.util.BlockEntityUtils;
+import nikita488.zycraft.init.ZYBlockEntities;
 
 import javax.annotation.Nullable;
+
+import static nikita488.zycraft.util.BlockEntityUtils.createTickerHelper;
 
 public class FabricatorBlock extends Block implements EntityBlock
 {
@@ -40,14 +41,14 @@ public class FabricatorBlock extends Block implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.FABRICATOR.create(pos, state);
+        return ZYBlockEntities.FABRICATOR.create(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
-        return level.isClientSide() ? null : BlockEntityUtils.createTickerHelper(type, ZYTiles.FABRICATOR.get(), FabricatorTile::serverTick);
+        return level.isClientSide() ? null : createTickerHelper(type, ZYBlockEntities.FABRICATOR.get(), FabricatorBlockEntity::serverTick);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class FabricatorBlock extends Block implements EntityBlock
         Direction side = Direction.getNearest(relativePos.getX() - pos.getX(), relativePos.getY() - pos.getY(), relativePos.getZ() - pos.getZ());
 
         if (side != Direction.UP)
-            ZYTiles.FABRICATOR.get(reader, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
+            ZYBlockEntities.FABRICATOR.get(reader, pos).ifPresent(fabricator -> fabricator.logic().setSideChanged(side));
     }
 
     @Override
@@ -68,7 +69,7 @@ public class FabricatorBlock extends Block implements EntityBlock
         if (level.isClientSide() || state.is(newState.getBlock()))
             return;
 
-        FabricatorTile fabricator = ZYTiles.FABRICATOR.getNullable(level, pos);
+        FabricatorBlockEntity fabricator = ZYBlockEntities.FABRICATOR.getNullable(level, pos);
 
         if (fabricator != null)
         {
@@ -88,14 +89,14 @@ public class FabricatorBlock extends Block implements EntityBlock
     @Override
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
     {
-        return ZYTiles.FABRICATOR.get(level, pos).map(FabricatorTile::getAnalogOutputSignal).orElse(0);
+        return ZYBlockEntities.FABRICATOR.get(level, pos).map(FabricatorBlockEntity::getAnalogOutputSignal).orElse(0);
     }
 
     @Override
     public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
     {
         if (!level.isClientSide())
-            NetworkHooks.openGui((ServerPlayer)player, ZYTiles.FABRICATOR.getNullable(level, pos));
+            NetworkHooks.openGui((ServerPlayer)player, ZYBlockEntities.FABRICATOR.getNullable(level, pos));
         return InteractionResult.sidedSuccess(level.isClientSide());
     }
 

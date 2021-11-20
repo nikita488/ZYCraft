@@ -8,10 +8,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.util.Constants;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.multiblock.child.block.ConvertedMultiChildBlock;
-import nikita488.zycraft.multiblock.child.tile.ConvertedMultiChildTile;
+import nikita488.zycraft.multiblock.child.block.entity.ConvertedMultiChildBlockEntity;
 import nikita488.zycraft.util.ZYConstants;
 
 import javax.annotation.Nullable;
@@ -19,12 +18,12 @@ import java.util.Arrays;
 
 public enum MultiChildType implements IMultiChildMatcher
 {
-    AIR(ZYBlocks.MULTI_AIR, (state, world, pos) -> state.isAir() || state.isAir(world, pos)),
-    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
-            Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(world, pos, side))),
-    HARD(ZYBlocks.HARD_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && state.isSolidRender(world, pos) &&
+    AIR(ZYBlocks.MULTI_AIR, (state, getter, pos) -> state.isAir()),
+    FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
+            Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(getter, pos, side))),
+    HARD(ZYBlocks.HARD_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
             state.requiresCorrectToolForDrops()),
-    GLASS(ZYBlocks.GLASS_BLOCK, (state, world, pos) -> state.isCollisionShapeFullBlock(world, pos) && !state.isSolidRender(world, pos) &&
+    GLASS(ZYBlocks.GLASS_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && !state.isSolidRender(getter, pos) &&
             (state.getMaterial() == Material.GLASS || state.getMaterial() == Material.BUILDABLE_GLASS));
 
     public static final MultiChildType[] VALUES = values();
@@ -68,15 +67,15 @@ public enum MultiChildType implements IMultiChildMatcher
                     .setValue(ConvertedMultiChildBlock.HAS_ANALOG_OUTPUT_SIGNAL, state.hasAnalogOutputSignal())
                     .setValue(ConvertedMultiChildBlock.SIGNAL_SOURCE, state.isSignalSource());
 
-        accessor.setBlock(pos, childState, Constants.BlockFlags.BLOCK_UPDATE);
+        accessor.setBlock(pos, childState, Block.UPDATE_CLIENTS);
 
         BlockEntity blockEntity = accessor.getBlockEntity(pos);
 
         if (!(blockEntity instanceof IMultiChild))
             return false;
 
-        if (blockEntity instanceof ConvertedMultiChildTile)
-            ((ConvertedMultiChildTile)blockEntity).setInitialState(state);
+        if (blockEntity instanceof ConvertedMultiChildBlockEntity converted)
+            converted.setInitialState(state);
         return true;
     }
 
@@ -93,7 +92,7 @@ public enum MultiChildType implements IMultiChildMatcher
 
     public boolean matches(BlockState state, BlockGetter getter, BlockPos pos)
     {
-        return (!state.hasTileEntity() || state.getBlock() instanceof ConvertedMultiChildBlock) && matcher.matches(state, getter, pos);
+        return (!state.hasBlockEntity() || state.getBlock() instanceof ConvertedMultiChildBlock) && matcher.matches(state, getter, pos);
     }
 
     @FunctionalInterface

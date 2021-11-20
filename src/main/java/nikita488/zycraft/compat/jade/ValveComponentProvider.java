@@ -1,23 +1,21 @@
 package nikita488.zycraft.compat.jade;
 
+import mcp.mobius.waila.api.BlockAccessor;
 import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IDataAccessor;
-import mcp.mobius.waila.api.IPluginConfig;
 import mcp.mobius.waila.api.IServerDataProvider;
+import mcp.mobius.waila.api.ITooltip;
+import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.multiblock.child.block.ValveBlock;
-import nikita488.zycraft.multiblock.child.tile.ValveTile;
-
-import java.util.List;
+import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
 
 public class ValveComponentProvider implements IComponentProvider, IServerDataProvider<BlockEntity>
 {
@@ -25,7 +23,7 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
     public static final ResourceLocation KEY = ZYCraft.id("valve");
 
     @Override
-    public void appendBody(List<Component> tooltip, IDataAccessor accessor, IPluginConfig config)
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config)
     {
         if (!config.get(KEY))
             return;
@@ -34,7 +32,7 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
 
         CompoundTag data = accessor.getServerData();
 
-        if (!data.contains("StoredFluid", Constants.NBT.TAG_COMPOUND))
+        if (!data.contains("StoredFluid", Tag.TAG_COMPOUND))
             return;
 
         FluidStack storedFluid = FluidStack.loadFluidStackFromNBT(data.getCompound("StoredFluid"));
@@ -45,11 +43,11 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
     }
 
     @Override
-    public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity)
+    public void appendServerData(CompoundTag data, ServerPlayer player, Level level, BlockEntity blockEntity, boolean showDetails)
     {
-        if (blockEntity instanceof ValveTile)
+        if (blockEntity instanceof ValveBlockEntity valve)
         {
-            FluidStack storedFluid = ((ValveTile)blockEntity).getStoredFluid();
+            FluidStack storedFluid = valve.getStoredFluid();
 
             if (!storedFluid.isEmpty())
                 data.put("StoredFluid", storedFluid.writeToNBT(new CompoundTag()));

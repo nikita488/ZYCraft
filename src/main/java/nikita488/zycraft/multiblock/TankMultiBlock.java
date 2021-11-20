@@ -26,12 +26,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYMultiTypes;
-import nikita488.zycraft.menu.TankContainer;
+import nikita488.zycraft.menu.TankMenu;
 import nikita488.zycraft.multiblock.fluid.MultiFluidTank;
 import nikita488.zycraft.multiblock.inventory.MultiItemIOHandler;
 import nikita488.zycraft.util.Cuboid6i;
@@ -121,7 +121,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, Me
     @Override
     public AbstractContainerMenu createMenu(int windowID, Inventory playerInventory, Player player)
     {
-        return new TankContainer(windowID, playerInventory, this);
+        return new TankMenu(windowID, playerInventory, this);
     }
 
     @Override
@@ -152,9 +152,9 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, Me
         if (!containerFluid.isEmpty())
         {
             int filled = tank.get().fill(containerFluid, IFluidHandler.FluidAction.SIMULATE);
-            FluidStack drained;
+            FluidStack drained = filled > 0 ? handler.drain(filled, IFluidHandler.FluidAction.EXECUTE) : FluidStack.EMPTY;
 
-            if (filled <= 0 || (drained = handler.drain(filled, IFluidHandler.FluidAction.EXECUTE)).isEmpty())
+            if (drained.isEmpty())
                 return;
 
             ItemStack container = handler.getContainer();

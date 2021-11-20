@@ -18,9 +18,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.api.fluid.IFluidSource;
+import nikita488.zycraft.block.entity.FluidSelectorBlockEntity;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.tile.FluidSelectorTile;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -36,7 +36,7 @@ public class FluidSelectorBlock extends Block implements EntityBlock, IFluidSour
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.FLUID_SELECTOR.create(pos, state);
+        return ZYBlockEntities.FLUID_SELECTOR.create(pos, state);
     }
 
     @Override
@@ -53,10 +53,10 @@ public class FluidSelectorBlock extends Block implements EntityBlock, IFluidSour
         if (containedFluid.isEmpty())
             return InteractionResult.PASS;
 
-        FluidSelectorTile selector = ZYTiles.FLUID_SELECTOR.getNullable(level, pos);
+        FluidSelectorBlockEntity selector = ZYBlockEntities.FLUID_SELECTOR.getNullable(level, pos);
 
         if (selector != null)
-            if (selector.getSelectedFluid().isFluidEqual(containedFluid))
+            if (!selector.canSelectFluid(containedFluid))
                 return InteractionResult.CONSUME;
             else if (!level.isClientSide())
                 selector.setSelectedFluid(containedFluid);
@@ -67,13 +67,7 @@ public class FluidSelectorBlock extends Block implements EntityBlock, IFluidSour
     @Override
     public FluidStack getFluid(BlockState state, Level level, BlockPos pos, @Nullable Direction side)
     {
-        FluidStack fluid = ZYTiles.FLUID_SELECTOR.get(level, pos).map(FluidSelectorTile::getSelectedFluid).orElse(FluidStack.EMPTY);
-
-        if (fluid.isEmpty())
-            return FluidStack.EMPTY;
-
-        fluid = fluid.copy();
-        fluid.setAmount(150 - level.getBestNeighborSignal(pos) * 10);
-        return fluid;
+        FluidSelectorBlockEntity fluidSelector = ZYBlockEntities.FLUID_SELECTOR.getNullable(level, pos);
+        return fluidSelector != null ? fluidSelector.getSelectedFluid() : FluidStack.EMPTY;
     }
 }

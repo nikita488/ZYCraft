@@ -16,19 +16,23 @@ public class IOSlotOverlay
         this.mode = mode;
     }
 
-    public int x() {
+    public int x()
+    {
         return x;
     }
 
-    public int y() {
+    public int y()
+    {
         return y;
     }
 
-    public int width() {
+    public int width()
+    {
         return width;
     }
 
-    public int height() {
+    public int height()
+    {
         return height;
     }
 

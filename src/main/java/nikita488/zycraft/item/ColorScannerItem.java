@@ -12,8 +12,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.api.colorable.IColorChanger;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.init.ZYLang;
@@ -30,7 +28,6 @@ public class ColorScannerItem extends Item implements IColorChanger
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
     {
         int color = ItemStackUtils.getInt(stack, "Color", 0xFFFFFF);

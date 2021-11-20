@@ -3,6 +3,7 @@ package nikita488.zycraft.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.CreativeModeTab;
@@ -11,10 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -22,7 +20,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
 import net.minecraftforge.registries.ForgeRegistries;
-import nikita488.zycraft.init.ZYGroups;
+import nikita488.zycraft.init.ZYCreativeModeTabs;
 import nikita488.zycraft.init.ZYLang;
 
 import javax.annotation.Nullable;
@@ -42,14 +40,13 @@ public class ZYFluidContainerItem extends Item
     @Override
     public int getItemStackLimit(ItemStack stack)
     {
-        if (stack.hasTag() && stack.getTag().contains(FluidHandlerItemStackSimple.FLUID_NBT_KEY, Constants.NBT.TAG_COMPOUND))
+        if (stack.hasTag() && stack.getTag().contains(FluidHandlerItemStackSimple.FLUID_NBT_KEY, Tag.TAG_COMPOUND))
             return filledStackSize;
 
         return super.getItemStackLimit(stack);
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
     {
         if (level == null)
@@ -69,7 +66,7 @@ public class ZYFluidContainerItem extends Item
     {
         super.fillItemCategory(group, items);
 
-        if (group != CreativeModeTab.TAB_SEARCH && group != ZYGroups.FLUIDS)
+        if (group != CreativeModeTab.TAB_SEARCH && group != ZYCreativeModeTabs.FLUIDS)
             return;
 
         for (Fluid fluid : ForgeRegistries.FLUIDS)

@@ -8,19 +8,18 @@ import net.minecraft.world.entity.player.Inventory;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.GuiComponent;
 import nikita488.zycraft.client.gui.screen.ZYScreen;
-import nikita488.zycraft.client.gui.screen.ZYScreen.FluidGaugeWidget;
 import nikita488.zycraft.client.texture.GuiComponentManager;
 import nikita488.zycraft.enums.ZYType;
-import nikita488.zycraft.menu.TankContainer;
+import nikita488.zycraft.menu.TankMenu;
 import nikita488.zycraft.util.Color;
 
-public class TankScreen extends ZYScreen<TankContainer>
+public class TankScreen extends ZYScreen<TankMenu>
 {
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/tank.png");
 
-    public TankScreen(TankContainer container, Inventory inventory, Component title)
+    public TankScreen(TankMenu menu, Inventory inventory, Component title)
     {
-        super(container, inventory, title);
+        super(menu, inventory, title);
         this.imageHeight = 188;
     }
 
@@ -28,7 +27,7 @@ public class TankScreen extends ZYScreen<TankContainer>
     protected void init()
     {
         super.init();
-        addButton(new FluidGaugeWidget(leftPos + 24, topPos + 24, menu.fluidData(), menu.capacity()));
+        addRenderableWidget(new FluidGaugeWidget(leftPos + 24, topPos + 24, menu.fluidData(), menu.capacity()));
     }
 
     @Override

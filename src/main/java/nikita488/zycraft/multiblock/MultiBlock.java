@@ -1,7 +1,12 @@
 package nikita488.zycraft.multiblock;
 
 import com.google.common.base.MoreObjects;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.Capability;
@@ -23,7 +27,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.multiblock.child.IMultiChild;
-import nikita488.zycraft.multiblock.child.tile.ValveTile;
+import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
 import nikita488.zycraft.network.ZYPackets;
 import nikita488.zycraft.util.Cuboid6i;
 
@@ -96,14 +100,8 @@ public abstract class MultiBlock
 
         for (BlockPos pos : childBlocks)
         {
-            if (!level.isLoaded(pos))
-                continue;
-
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-
-            if (blockEntity instanceof IMultiChild)
+            if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof IMultiChild child)
             {
-                IMultiChild child = (IMultiChild)blockEntity;
                 child.onMultiValidation(this);
                 onChildValidation(child);
             }
@@ -126,14 +124,8 @@ public abstract class MultiBlock
 
         for (BlockPos pos : childBlocks)
         {
-            if (!level.isLoaded(pos))
-                continue;
-
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-
-            if (blockEntity instanceof IMultiChild)
+            if (level.isLoaded(pos) && level.getBlockEntity(pos) instanceof IMultiChild child)
             {
-                IMultiChild child = (IMultiChild)blockEntity;
                 child.onMultiInvalidation(this);
                 onChildInvalidation(child);
             }
@@ -164,7 +156,7 @@ public abstract class MultiBlock
 
     protected final void splitFluids()
     {
-        Object2ObjectMap<IFluidHandler, ObjectList<ValveTile>> tankValves = new Object2ObjectArrayMap<>();
+        Object2ObjectMap<IFluidHandler, ObjectList<ValveBlockEntity>> tankValves = new Object2ObjectArrayMap<>();
 
         for (BlockPos pos : interfaces)
         {
@@ -174,18 +166,8 @@ public abstract class MultiBlock
             LazyOptional<IFluidHandler> capability = getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, pos);
             IFluidHandler tank = capability.orElse(EmptyFluidHandler.INSTANCE);
 
-            if (!capability.isPresent() || tank.getFluidInTank(0).isEmpty())
-                continue;
-
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-
-            if (blockEntity instanceof ValveTile)
-            {
-                ValveTile valve = (ValveTile)blockEntity;
-
-                if (!valve.hasStoredFluid())
-                    tankValves.computeIfAbsent(tank, key -> new ObjectArrayList<>()).add(valve);
-            }
+            if (capability.isPresent() && !tank.getFluidInTank(0).isEmpty() && level.getBlockEntity(pos) instanceof ValveBlockEntity valve && !valve.hasStoredFluid())
+                tankValves.computeIfAbsent(tank, key -> new ObjectArrayList<>()).add(valve);
         }
 
         tankValves.forEach((tank, valves) ->
@@ -194,7 +176,7 @@ public abstract class MultiBlock
 
             fluid.setAmount(fluid.getAmount() / valves.size());
 
-            for (ValveTile valve : valves)
+            for (ValveBlockEntity valve : valves)
                 valve.setStoredFluid(fluid);
         });
     }
@@ -317,7 +299,7 @@ public abstract class MultiBlock
     @Override
     public final boolean equals(Object obj)
     {
-        return obj == this || (obj instanceof MultiBlock && id == ((MultiBlock)obj).id);
+        return obj == this || (obj instanceof MultiBlock multiBlock && id == multiBlock.id);
     }
 
     @Override

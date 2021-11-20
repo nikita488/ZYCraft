@@ -1,7 +1,6 @@
 package nikita488.zycraft.item;
 
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.FluidAttributes;

@@ -9,8 +9,8 @@ import javax.annotation.Nullable;
 public class BlockEntityUtils
 {
     @Nullable
-    public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> typeA, BlockEntityType<E> typeE, BlockEntityTicker<? super E> ticker)
+    public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> type, BlockEntityType<E> entityType, BlockEntityTicker<? super E> ticker)
     {
-        return typeE == typeA ? (BlockEntityTicker<A>)ticker : null;
+        return type == entityType ? (BlockEntityTicker<A>)ticker : null;
     }
 }

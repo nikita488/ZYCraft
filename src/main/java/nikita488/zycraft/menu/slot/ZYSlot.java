@@ -14,6 +14,6 @@ public class ZYSlot extends SlotItemHandler
     @Override
     public boolean isSameInventory(Slot other)
     {
-        return other instanceof SlotItemHandler && getItemHandler() == ((SlotItemHandler)other).getItemHandler();
+        return other instanceof SlotItemHandler slot && getItemHandler() == slot.getItemHandler();
     }
 }

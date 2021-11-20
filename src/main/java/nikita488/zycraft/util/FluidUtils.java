@@ -5,7 +5,11 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.LiquidBlock;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.FlowingFluid;
@@ -59,54 +63,56 @@ public class FluidUtils
         return stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY).resolve();
     }
 
-    public static boolean canBlockContainFluid(Level level, BlockPos pos, BlockState state, Fluid fluid)
+    public static boolean canPlaceFluid(Level level, BlockPos pos, BlockState state, Fluid fluid)
     {
-        return state.getBlock() instanceof LiquidBlockContainer && ((LiquidBlockContainer)state.getBlock()).canPlaceLiquid(level, pos, state, fluid);
+        return state.getBlock() instanceof LiquidBlockContainer container && container.canPlaceLiquid(level, pos, state, fluid);
     }
 
     public static boolean tryPlaceFluid(FluidStack stack, @Nullable Player player, Level level, BlockPos pos, @Nullable BlockHitResult hitResult)
     {
         Fluid fluid = stack.getFluid();
 
-        if (!(fluid instanceof FlowingFluid))
-            return false;
-
-        FluidAttributes attributes = fluid.getAttributes();
-        FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
-
-        if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
-            return false;
-
-        BlockState blockState = level.getBlockState(pos);
-        boolean replaceable = blockState.canBeReplaced(fluid);
-        boolean canContainFluid = blockState.isAir() || replaceable || canBlockContainFluid(level, pos, blockState, fluid);
-
-        if (!canContainFluid)
-            return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
-
-        if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
+        if (fluid instanceof FlowingFluid flowingFluid)
         {
-            attributes.vaporize(player, level, pos, stack);
-            return true;
-        }
+            FluidAttributes attributes = fluid.getAttributes();
+            FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
 
-        if (canBlockContainFluid(level, pos, blockState, fluid))
-        {
-            ((LiquidBlockContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, ((FlowingFluid)fluid).getSource(false));
+            if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
+                return false;
+
+            BlockState blockState = level.getBlockState(pos);
+            boolean replaceable = blockState.canBeReplaced(fluid);
+            boolean canPlace = blockState.isAir() || replaceable || canPlaceFluid(level, pos, blockState, fluid);
+
+            if (!canPlace)
+                return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
+
+            if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
+            {
+                attributes.vaporize(player, level, pos, stack);
+                return true;
+            }
+
+            if (canPlaceFluid(level, pos, blockState, fluid))
+            {
+                ((LiquidBlockContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, flowingFluid.getSource(false));
+                level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
+                level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
+                return true;
+            }
+
+            if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
+                level.destroyBlock(pos, true);
+
+            if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Block.UPDATE_ALL_IMMEDIATE) && !blockState.getFluidState().isSource())
+                return false;
+
             level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
             level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
             return true;
         }
 
-        if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
-            level.destroyBlock(pos, true);
-
-        if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Block.UPDATE_ALL_IMMEDIATE) && !blockState.getFluidState().isSource())
-            return false;
-
-        level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
-        level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
-        return true;
+        return false;
     }
 
     public static boolean voidFluid(Level level, BlockPos pos, Predicate<FluidState> predicate)
@@ -116,7 +122,7 @@ public class FluidUtils
 
         BlockState state = level.getBlockState(pos);
 
-        if (state.getBlock() instanceof BucketPickup && !((BucketPickup)state.getBlock()).pickupBlock(level, pos, state).isEmpty())
+        if (state.getBlock() instanceof BucketPickup pickup && !pickup.pickupBlock(level, pos, state).isEmpty())
             return true;
 
         if (!(state.getBlock() instanceof LiquidBlock))

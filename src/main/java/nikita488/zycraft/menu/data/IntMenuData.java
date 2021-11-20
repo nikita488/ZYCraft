@@ -5,7 +5,8 @@ import net.minecraft.network.FriendlyByteBuf;
 import javax.annotation.Nullable;
 import java.util.function.IntSupplier;
 
-public class IntMenuData implements IMenuData, IntSupplier {
+public class IntMenuData implements IMenuData, IntSupplier
+{
     private int value;
     @Nullable
     private IntSupplier supplier;

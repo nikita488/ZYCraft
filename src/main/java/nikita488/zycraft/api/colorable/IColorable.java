@@ -8,7 +8,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.api.util.ZYDyeColor;
@@ -36,17 +35,12 @@ public interface IColorable
         if (stack.isEmpty())
             return InteractionResult.PASS;
 
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (blockEntity instanceof IColorable)
+        if (level.getBlockEntity(pos) instanceof IColorable colorable)
         {
-            IColorable colorable = (IColorable)blockEntity;
             int rgb = colorable.getColor(state, level, pos);
 
-            if (stack.getItem() instanceof IColorChanger)
+            if (stack.getItem() instanceof IColorChanger changer)
             {
-                IColorChanger changer = (IColorChanger)stack.getItem();
-
                 if (!changer.canChangeColor(state, level, pos, player, hand, hitResult, rgb))
                     return InteractionResult.PASS;
 

@@ -11,22 +11,15 @@ public enum SlotIOMode
 
     public boolean isSupported(ItemIOMode mode)
     {
-        switch (mode)
+        return switch (mode)
         {
-            case ALL_IN:
-                return this == IN1 || this == IN2;
-            case ALL_OUT:
-                return this == OUT1 || this == OUT2;
-            case IN1:
-                return this == IN1;
-            case OUT1:
-                return this == OUT1;
-            case IN2:
-                return this == IN2;
-            case OUT2:
-                return this == OUT2;
-            default:
-                return false;
-        }
+            case ALL_IN -> this == IN1 || this == IN2;
+            case ALL_OUT -> this == OUT1 || this == OUT2;
+            case IN1 -> this == IN1;
+            case OUT1 -> this == OUT1;
+            case IN2 -> this == IN2;
+            case OUT2 -> this == OUT2;
+            default -> false;
+        };
     }
 }

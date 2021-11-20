@@ -3,6 +3,7 @@ package nikita488.zycraft.config;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
 public class ZYConfig
@@ -30,7 +31,7 @@ public class ZYConfig
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON.getValue());
     }
 
-    public static void init(ModConfig.ModConfigEvent event)
+    public static void init(ModConfigEvent event)
     {
         ModConfig config = event.getConfig();
 

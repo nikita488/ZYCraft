@@ -23,29 +23,35 @@ public class ZychoriumIceBlock extends Block
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
     {
-        for (Direction side : ZYConstants.DIRECTIONS)
-            transform(level, pos, pos.relative(side));
+        transform(level, pos);
     }
 
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos relativePos, boolean isMoving)
     {
-        transform(level, pos, relativePos);
+        transform(level, pos);
     }
 
-    private void transform(Level level, BlockPos pos, BlockPos relativePos)
+    private void transform(Level level, BlockPos pos)
     {
-        FluidState fluidState = level.getFluidState(relativePos);
+        if (level.hasNeighborSignal(pos))
+            return;
 
-        if (fluidState.is(FluidTags.WATER))
+        for (Direction side : ZYConstants.DIRECTIONS)
         {
-            if (level.getBlockState(relativePos).getBlock() instanceof LiquidBlock)
-                level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.ICE.defaultBlockState()));
-        }
-        else if (fluidState.is(FluidTags.LAVA) && level.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
-        {
-            level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.BASALT.defaultBlockState()));
-            level.levelEvent(LevelEvent.LAVA_FIZZ, relativePos, -1);
+            BlockPos relativePos = pos.relative(side);
+            FluidState fluidState = level.getFluidState(relativePos);
+
+            if (fluidState.is(FluidTags.WATER))
+            {
+                if (level.getBlockState(relativePos).getBlock() instanceof LiquidBlock)
+                    level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.ICE.defaultBlockState()));
+            }
+            else if (fluidState.is(FluidTags.LAVA) && level.getBlockState(pos.below()).is(Blocks.SOUL_SOIL))
+            {
+                level.setBlockAndUpdate(relativePos, ForgeEventFactory.fireFluidPlaceBlockEvent(level, relativePos, pos, Blocks.BASALT.defaultBlockState()));
+                level.levelEvent(LevelEvent.LAVA_FIZZ, relativePos, -1);
+            }
         }
     }
 }

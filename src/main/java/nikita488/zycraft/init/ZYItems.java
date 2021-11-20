@@ -13,13 +13,17 @@ import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.item.AluminiumFoilItem;
+import nikita488.zycraft.item.ColorScannerItem;
+import nikita488.zycraft.item.ScytheItem;
 import nikita488.zycraft.item.ZYBucketItem;
+import nikita488.zycraft.item.ZYFluidContainerItem;
+import nikita488.zycraft.item.ZychoriumItem;
 
 import java.util.Map;
 
 public class ZYItems
 {
-    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.ITEMS, "ZYCraft Items");
+    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYCreativeModeTabs.ITEMS, "ZYCraft Items");
 
     public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = ZYType.buildMap("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
             .color(() -> () -> ZYItemColors.getZYItemColor(type))
@@ -60,7 +64,7 @@ public class ZYItems
                     .pattern(" X#")
                     .pattern(" # ")
                     .pattern("#X ")
-                    .unlockedBy("has_quartz_crystal", RegistrateRecipeProvider.hasItem(ZYBlocks.QUARTZ_CRYSTAL.get()))
+                    .unlockedBy("has_quartz_crystal", RegistrateRecipeProvider.has(ZYBlocks.QUARTZ_CRYSTAL.get()))
                     .save(provider))
             .register();
 
@@ -75,7 +79,7 @@ public class ZYItems
                     .pattern("#Z#")
                     .pattern("GXG")
                     .pattern("#Z#")
-                    .unlockedBy("has_aluminium", RegistrateRecipeProvider.hasItem(ALUMINIUM.get()))
+                    .unlockedBy("has_aluminium", RegistrateRecipeProvider.has(ALUMINIUM.get()))
                     .save(provider))
             .register();
 
@@ -86,7 +90,7 @@ public class ZYItems
                     .define('#', ZYBlocks.QUARTZ_CRYSTAL.get())
                     .pattern("# #")
                     .pattern(" # ")
-                    .unlockedBy("has_quartz_crystal", RegistrateRecipeProvider.hasItem(ZYBlocks.QUARTZ_CRYSTAL.get()))
+                    .unlockedBy("has_quartz_crystal", RegistrateRecipeProvider.has(ZYBlocks.QUARTZ_CRYSTAL.get()))
                     .save(provider))
             .register();
 
@@ -98,7 +102,7 @@ public class ZYItems
                     .pattern(" X ")
                     .pattern("X#X")
                     .pattern(" X ")
-                    .unlockedBy("has_aluminium", RegistrateRecipeProvider.hasItem(ALUMINIUM.get()))
+                    .unlockedBy("has_aluminium", RegistrateRecipeProvider.has(ALUMINIUM.get()))
                     .save(provider))
             .register();
 

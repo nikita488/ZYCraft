@@ -13,7 +13,6 @@ import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.loot.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
@@ -29,23 +28,37 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.level.material.MaterialColor;
-import net.minecraft.world.level.storage.loot.ConstantIntValue;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.RandomValueBounds;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.functions.ApplyBonusCount;
 import net.minecraft.world.level.storage.loot.functions.ApplyExplosionDecay;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.ExplosionCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.block.*;
+import nikita488.zycraft.block.ColorableBlock;
+import nikita488.zycraft.block.FabricatorBlock;
+import nikita488.zycraft.block.FireBasinBlock;
+import nikita488.zycraft.block.FluidSelectorBlock;
+import nikita488.zycraft.block.FluidVoidBlock;
+import nikita488.zycraft.block.ImmortalViewerBlock;
+import nikita488.zycraft.block.QuartzCrystalBlock;
+import nikita488.zycraft.block.QuartzCrystalClusterBlock;
+import nikita488.zycraft.block.ViewerBlock;
+import nikita488.zycraft.block.ZychoriumIceBlock;
+import nikita488.zycraft.block.ZychoriumLampBlock;
+import nikita488.zycraft.block.ZychoriumSoilBlock;
+import nikita488.zycraft.block.ZychoriumWaterBlock;
+import nikita488.zycraft.block.entity.FabricatorBlockEntity;
+import nikita488.zycraft.block.entity.FluidSelectorBlockEntity;
 import nikita488.zycraft.block.state.properties.InterfaceAxis;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.client.ZYBlockColors;
@@ -55,18 +68,18 @@ import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.multiblock.child.block.ConvertedMultiChildBlock;
 import nikita488.zycraft.multiblock.child.block.ItemIOBlock;
 import nikita488.zycraft.multiblock.child.block.MultiAirBlock;
-import nikita488.zycraft.multiblock.child.tile.ItemIOTile;
-import nikita488.zycraft.multiblock.child.tile.MultiAirTile;
-import nikita488.zycraft.multiblock.child.tile.ValveTile;
-import nikita488.zycraft.tile.FabricatorTile;
-import nikita488.zycraft.tile.FluidSelectorTile;
+import nikita488.zycraft.multiblock.child.block.MultiInterfaceBlock;
+import nikita488.zycraft.multiblock.child.block.ValveBlock;
+import nikita488.zycraft.multiblock.child.block.entity.ItemIOBlockEntity;
+import nikita488.zycraft.multiblock.child.block.entity.MultiAirBlockEntity;
+import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class ZYBlocks
 {
-    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYGroups.BLOCKS, "ZYCraft Blocks");
+    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYCreativeModeTabs.BLOCKS, "ZYCraft Blocks");
 
     public static final BlockEntry<Block> ZYCHORITE = REGISTRATE.block("zychorite", Block::new)
             .initialProperties(Material.STONE, MaterialColor.COLOR_BLACK)
@@ -144,18 +157,18 @@ public class ZYBlocks
             .loot((tables, block) -> tables.add(block, LootTable.lootTable()
                     .withPool(LootPool.lootPool()
                             .when(ExplosionCondition.survivesExplosion())
-                            .setRolls(ConstantIntValue.exactly(1))
+                            .setRolls(ConstantValue.exactly(1F))
                             .add(LootItem.lootTableItem(block)
-                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(2))
+                                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(2F))
                                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 2))))
-                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(3))
+                                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(3F))
                                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 3))))
-                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(4))
+                                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(4F))
                                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 4))))
-                                    .apply(SetItemCountFunction.setCount(ConstantIntValue.exactly(5))
+                                    .apply(SetItemCountFunction.setCount(ConstantValue.exactly(5F))
                                             .when(LootItemBlockStatePropertyCondition.hasBlockStateProperties(block).setProperties(StatePropertiesPredicate.Builder.properties()
                                                     .hasProperty(QuartzCrystalClusterBlock.AMOUNT, 5))))))))
             .blockstate((ctx, provider) -> NonNullConsumer.noop())
@@ -198,10 +211,10 @@ public class ZYBlocks
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_ORE = zyBlock("{type}_zychorium_ore", (type, block) -> block
             .properties(properties -> properties.requiresCorrectToolForDrops().strength(3F))
             .tag(ZYTags.Blocks.ORES_ZYCHORIUM)
-            .loot((tables, ore) -> tables.add(ore, RegistrateBlockLootTables.droppingWithSilkTouch(ore,
+            .loot((tables, ore) -> tables.add(ore, RegistrateBlockLootTables.createSilkTouchDispatchTable(ore,
                     LootItem.lootTableItem(ZYItems.ZYCHORIUM.get(type).get())
                             .apply(ApplyExplosionDecay.explosionDecay())
-                            .apply(SetItemCountFunction.setCount(RandomValueBounds.between(1, 3)))
+                            .apply(SetItemCountFunction.setCount(UniformGenerator.between(1F, 3F)))
                             .apply(ApplyBonusCount.addUniformBonusCount(Enchantments.BLOCK_FORTUNE))))));
 
     public static final Map<ZYType, BlockEntry<Block>> ZYCHORIUM_BLOCK = zyBlock("{type}_zychorium_block", (type, block) -> block
@@ -383,9 +396,9 @@ public class ZYBlocks
                         .texture("top", provider.modLoc("block/" + ctx.getName() + "_top"));
 
                 provider.getVariantBuilder(ctx.getEntry())
-                        .partialState().with(ZychoriumSoilBlock.FLIPPED, false)
+                        .partialState().with(ZychoriumSoilBlock.POWERED, false)
                         .modelForState().modelFile(model).addModel()
-                        .partialState().with(ZychoriumSoilBlock.FLIPPED, true)
+                        .partialState().with(ZychoriumSoilBlock.POWERED, true)
                         .modelForState().modelFile(model).rotationX(180).addModel();
             })
             .recipe((ctx, provider) -> basicMachine(ZYType.GREEN, provider, DataIngredient.tag(ItemTags.SAPLINGS), ctx::getEntry))
@@ -424,7 +437,7 @@ public class ZYBlocks
             .color(() -> ZYBlockColors.FABRICATOR)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .singleTexture(ctx.getName(), provider.modLoc("block/advanced_machine_top"), "top", provider.blockTexture(ctx.getEntry()))))
-            .simpleTileEntity(FabricatorTile::new)
+            .simpleTileEntity((pos, state, type) -> new FabricatorBlockEntity(type, pos, state))
             .item()
                 .properties(properties -> properties.rarity(Rarity.UNCOMMON))
                 .color(() -> ZYItemColors.FABRICATOR)
@@ -450,7 +463,7 @@ public class ZYBlocks
             .properties(properties -> properties.strength(-1F, 3600000.8F).noDrops().noOcclusion())
             .lang("MultiBlock Air")
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.mcLoc("block/air"))))
-            .simpleTileEntity(MultiAirTile::new)
+            .simpleTileEntity((pos, state, type) -> new MultiAirBlockEntity(type, pos, state))
             .register();
 
     public static final BlockEntry<ConvertedMultiChildBlock> FLAMMABLE_BLOCK = REGISTRATE.block("flammable_block", Material.WOOD, ConvertedMultiChildBlock::new)
@@ -470,7 +483,7 @@ public class ZYBlocks
     public static final BlockEntry<ValveBlock> VALVE = REGISTRATE.block("valve", ValveBlock::new)
             .transform(ZYBlocks::multiInterface)
             .color(() -> ZYBlockColors.VALVE)
-            .simpleTileEntity(ValveTile::new)
+            .simpleTileEntity((pos, state, type) -> new ValveBlockEntity(type, pos, state))
             .item()
                 .color(() -> ZYItemColors.VALVE)
                 .build()
@@ -481,7 +494,7 @@ public class ZYBlocks
             .transform(ZYBlocks::multiInterface)
             .lang("Item IO")
             .color(() -> ZYBlockColors.ITEM_IO)
-            .simpleTileEntity(ItemIOTile::new)
+            .simpleTileEntity((pos, state, type) -> new ItemIOBlockEntity(type, pos, state))
             .item()
                 .color(() -> ZYItemColors.ITEM_IO)
                 .build()
@@ -496,7 +509,7 @@ public class ZYBlocks
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
                     .withExistingParent(ctx.getName(), provider.modLoc("block/zy_cube_all"))
                     .texture("all", provider.blockTexture(ctx.getEntry()))))
-            .simpleTileEntity(FluidSelectorTile::new)
+            .simpleTileEntity((pos, state, type) -> new FluidSelectorBlockEntity(type, pos, state))
             .simpleItem()
             .register();
 

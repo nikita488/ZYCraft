@@ -50,10 +50,10 @@ public class SetSlotStackPacket
 
             player.resetLastActionTime();
 
-            AbstractContainerMenu container = player.containerMenu;
+            AbstractContainerMenu menu = player.containerMenu;
 
-            if (container.containerId == packet.windowID() && !player.isSpectator())
-                container.getSlot(packet.slotIndex()).set(packet.stack());
+            if (menu.containerId == packet.windowID() && !player.isSpectator())
+                menu.getSlot(packet.slotIndex()).set(packet.stack());
         });
 
         return true;

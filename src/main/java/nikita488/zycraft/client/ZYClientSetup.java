@@ -38,7 +38,7 @@ public class ZYClientSetup
 
         event.enqueueWork(() ->
         {
-            ItemProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, world, entity) ->
+            ItemProperties.register(ZYItems.ALUMINIUM_FOIL.get(), ZYCraft.id("filled"), (stack, level, entity, hashCode) ->
             {
                 FluidStack fluidStack = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
 

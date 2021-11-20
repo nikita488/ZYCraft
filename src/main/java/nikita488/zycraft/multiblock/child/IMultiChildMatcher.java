@@ -6,7 +6,7 @@ import net.minecraft.world.level.BlockGetter;
 @FunctionalInterface
 public interface IMultiChildMatcher
 {
-    IMultiChildMatcher ALWAYS_MATCHES = (world, pos) -> true;
+    IMultiChildMatcher ALWAYS_MATCHES = (getter, pos) -> true;
 
     boolean matches(BlockGetter getter, BlockPos pos);
 }

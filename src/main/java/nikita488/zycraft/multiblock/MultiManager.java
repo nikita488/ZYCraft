@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
@@ -17,13 +18,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.EntityTeleportEvent;
+import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.entity.MultiEntity;
 import nikita488.zycraft.event.PlayerLoadedChunkEvent;
@@ -48,11 +48,6 @@ public class MultiManager extends SavedData
     private final ObjectList<MultiBlock> multiBlocksToSend = new ObjectArrayList<>();
     private final ObjectList<MultiBlock> multiBlocksToUpdate = new ObjectArrayList<>();
     private boolean updatingPendingMultiBlocks;
-
-    public MultiManager()
-    {
-        super(ID);
-    }
 
     public static void commonSetup()
     {
@@ -82,7 +77,7 @@ public class MultiManager extends SavedData
 
     public static MultiManager getInstance(LevelAccessor accessor)
     {
-        return !accessor.isClientSide() ? ((ServerLevel)accessor).getDataStorage().computeIfAbsent(MultiManager::new, ID) : instance;
+        return !accessor.isClientSide() ? ((ServerLevel)accessor).getDataStorage().computeIfAbsent(tag -> null, MultiManager::new, ID) : instance;
     }
 
     @Nullable
@@ -143,8 +138,8 @@ public class MultiManager extends SavedData
         if (reason.isFormed())
             multiBlocksToSend.add(multiBlock);//Defer packet sending here because child block entities is not available on client yet
 
-        if (multiBlock instanceof IDynamicMultiBlock)
-            multiBlock.level().addFreshEntity(new MultiEntity(multiBlock.level(), (IDynamicMultiBlock)multiBlock, multiBlock.id()));
+        if (multiBlock instanceof IDynamicMultiBlock dynamic)
+            multiBlock.level().addFreshEntity(new MultiEntity(multiBlock.level(), dynamic, multiBlock.id()));
     }
 
     public void removeMultiBlock(MultiBlock multiBlock, MultiBlock.RemovalReason reason)
@@ -276,10 +271,10 @@ public class MultiManager extends SavedData
     {
         CompoundTag tag = event.getChunkTag();
 
-        if (!tag.contains(MULTI_BLOCKS_TAG, Constants.NBT.TAG_LIST))
+        if (!tag.contains(MULTI_BLOCKS_TAG, Tag.TAG_LIST))
             return;
 
-        ListTag multiTags = tag.getList(MULTI_BLOCKS_TAG, Constants.NBT.TAG_COMPOUND);
+        ListTag multiTags = tag.getList(MULTI_BLOCKS_TAG, Tag.TAG_COMPOUND);
         Level level = (Level)event.getWorld();
         MultiManager manager = getInstance(level);
         ChunkPos pos = event.getChunk().getPos();
@@ -364,9 +359,6 @@ public class MultiManager extends SavedData
         if (event.getEntity() instanceof MultiEntity)
             event.setCanceled(true);
     }
-
-    @Override
-    public void load(CompoundTag tag) {}
 
     @Override
     public CompoundTag save(CompoundTag tag)

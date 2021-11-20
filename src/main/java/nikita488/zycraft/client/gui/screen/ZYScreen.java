@@ -5,11 +5,14 @@ import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
 import com.mojang.math.Matrix4f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
+import net.minecraft.client.gui.narration.NarratedElementType;
+import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -34,16 +37,15 @@ import nikita488.zycraft.menu.data.IOMenuData;
 import nikita488.zycraft.menu.data.IntMenuData;
 import nikita488.zycraft.menu.slot.IOSlotOverlay;
 import nikita488.zycraft.util.Color;
-import org.lwjgl.opengl.GL11;
 
 public abstract class ZYScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T>
 {
     protected int titleColor = 0x999999;
     protected int playerInventoryTitleColor = 0x999999;
 
-    public ZYScreen(T container, Inventory inventory, Component title)
+    public ZYScreen(T menu, Inventory inventory, Component title)
     {
-        super(container, inventory, title);
+        super(menu, inventory, title);
         this.imageWidth = 192;
         this.imageHeight = 182;
         this.titleLabelY = 14;
@@ -70,16 +72,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
     protected void renderLabels(PoseStack stack, int mouseX, int mouseY)
     {
         font.draw(stack, title, titleLabelX, titleLabelY, titleColor);
-        font.draw(stack, inventory.getDisplayName(), inventoryLabelX, inventoryLabelY, playerInventoryTitleColor);
-
-        for (AbstractWidget widget : buttons)
-        {
-            if (!widget.isHovered())
-                continue;
-
-            widget.renderToolTip(stack, mouseX - leftPos, mouseY - topPos);
-            break;
-        }
+        font.draw(stack, playerInventoryTitle, inventoryLabelX, inventoryLabelY, playerInventoryTitleColor);
     }
 
     public void renderGUI(PoseStack stack, ResourceLocation texture, int argb)
@@ -138,12 +131,12 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
     public void bindTexture(ResourceLocation textureID)
     {
-        minecraft.getTextureManager().bind(textureID);
+        minecraft.getTextureManager().bindForSetup(textureID);
     }
 
     public static void resetColor()
     {
-        RenderSystem.color4f(1F, 1F, 1F, 1F);
+        RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
     }
 
     public static void setColor(int rgb, int a)
@@ -153,7 +146,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
     public static void setColor(int argb)
     {
-        RenderSystem.color4f(((argb >> 16) & 255) / 255F, ((argb >> 8) & 255) / 255F, (argb & 255) / 255F, ((argb >> 24) & 255) / 255F);
+        RenderSystem.setShaderColor(((argb >> 16) & 255) / 255F, ((argb >> 8) & 255) / 255F, (argb & 255) / 255F, ((argb >> 24) & 255) / 255F);
     }
 
     public static void renderGuiComponent(PoseStack stack, int x, int y, int blitOffset, GuiComponent component)
@@ -201,7 +194,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
         stack.pushPose();
         stack.translate(x, y, blitOffset);
-        buffer.begin(GL11.GL_QUADS, DefaultVertexFormat.POSITION_TEX);
+        buffer.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
 
         Matrix4f matrix = stack.last().pose();
 
@@ -275,7 +268,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
         public Menu addItem(Component tooltip, ResourceLocation iconName)
         {
-            addButton(new Item(x + 6, y + 5 + GuiComponent.MENU_MIDDLE.height() * itemCount, tooltip, itemCount, iconName));
+            addRenderableWidget(new Item(x + 6, y + 5 + GuiComponent.MENU_MIDDLE.height() * itemCount, tooltip, itemCount, iconName));
             this.itemCount++;
             return this;
         }
@@ -313,6 +306,12 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
             }
 
             @Override
+            public void updateNarration(NarrationElementOutput output)
+            {
+                defaultButtonNarrationText(output);
+            }
+
+            @Override
             public void renderToolTip(PoseStack stack, int mouseX, int mouseY)
             {
                 renderTooltip(stack, getMessage(), mouseX, mouseY);
@@ -336,6 +335,9 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
                 bindTexture(blockAtlas);
                 renderSprite(stack, x + 3, y + 3, 16, 16, getSprite(blockAtlas, iconName));
+
+                if (isHovered())
+                    renderToolTip(stack, mouseX, mouseY);
             }
         }
     }
@@ -369,6 +371,12 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
         public void playDownSound(SoundManager handler) {}
 
         @Override
+        public void updateNarration(NarrationElementOutput output)
+        {
+            output.add(NarratedElementType.TITLE, createNarrationMessage());
+        }
+
+        @Override
         public void renderToolTip(PoseStack pose, int mouseX, int mouseY)
         {
             FluidStack stack = fluidData.get();
@@ -399,6 +407,9 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
             renderGuiComponent(pose, x, y, width, height, GuiComponent.BIG_TANK);
 
             RenderSystem.disableBlend();
+
+            if (isHovered())
+                renderToolTip(pose, mouseX, mouseY);
         }
     }
 }

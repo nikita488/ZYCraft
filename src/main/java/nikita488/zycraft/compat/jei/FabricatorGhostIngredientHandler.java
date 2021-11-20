@@ -29,7 +29,7 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
         {
             Slot slot = menu.getSlot(i);
 
-            targets.add(new Target<I>()
+            targets.add(new Target<>()
             {
                 @Override
                 public Rect2i getArea()
@@ -40,8 +40,8 @@ public class FabricatorGhostIngredientHandler implements IGhostIngredientHandler
                 @Override
                 public void accept(I ingredient)
                 {
-                    if (ingredient instanceof ItemStack)
-                        ZYCraft.CHANNEL.sendToServer(new SetSlotStackPacket(menu.containerId, slot.getSlotIndex(), (ItemStack)ingredient));
+                    if (ingredient instanceof ItemStack stack)
+                        ZYCraft.CHANNEL.sendToServer(new SetSlotStackPacket(menu.containerId, slot.getSlotIndex(), stack));
                 }
             });
         }

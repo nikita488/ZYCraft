@@ -66,7 +66,7 @@ public interface IMultiChild
         return parentCount() == 1 ? getParent().onBlockActivated(state, level, pos, player, hand, hitResult) : InteractionResult.CONSUME;
     }
 
-    default int getLightValue(BlockState state, BlockGetter getter, BlockPos pos)
+    default int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos)
     {
         int emission = state.getLightEmission();
 

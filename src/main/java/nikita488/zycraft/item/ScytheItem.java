@@ -8,7 +8,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.level.ServerPlayerGameMode;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -18,8 +17,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYLang;
 
@@ -30,7 +27,7 @@ import java.util.List;
 public class ScytheItem extends Item
 {
     private static final ObjectSet<Material> MATERIALS = Util.make(new ObjectOpenHashSet<>(), materials ->
-            Collections.addAll(materials, Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES, Material.CORAL));
+            Collections.addAll(materials, Material.PLANT, Material.WATER_PLANT, Material.REPLACEABLE_PLANT, Material.REPLACEABLE_FIREPROOF_PLANT, Material.REPLACEABLE_WATER_PLANT, Material.WEB, Material.BAMBOO_SAPLING, Material.BAMBOO, Material.LEAVES));
     private boolean mining;
 
     public ScytheItem(Properties properties)
@@ -39,7 +36,6 @@ public class ScytheItem extends Item
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag)
     {
         float durability = (stack.getMaxDamage() - stack.getDamageValue()) / (float)stack.getMaxDamage();
@@ -98,16 +94,15 @@ public class ScytheItem extends Item
 
         stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));
 
-        if (!stack.isEmpty() && !player.isShiftKeyDown() && player instanceof ServerPlayer)
+        if (!stack.isEmpty() && !player.isShiftKeyDown() && player instanceof ServerPlayer serverPlayer)
         {
-            ServerPlayerGameMode gameMode = ((ServerPlayer)player).gameMode;
             int range = 2;
 
             this.mining = true;
 
             for (BlockPos destroyPos : BlockPos.betweenClosed(pos.getX() - range, pos.getY(), pos.getZ() - range, pos.getX() + range, pos.getY(), pos.getZ() + range))
             {
-                if (destroyPos.equals(pos) || !level.mayInteract(gameMode.player, destroyPos) || !MATERIALS.contains(level.getBlockState(destroyPos).getMaterial()) || !gameMode.destroyBlock(destroyPos.immutable()))
+                if (destroyPos.equals(pos) || !level.mayInteract(serverPlayer, destroyPos) || !MATERIALS.contains(level.getBlockState(destroyPos).getMaterial()) || !serverPlayer.gameMode.destroyBlock(destroyPos.immutable()))
                     continue;
 
                 stack.hurtAndBreak(1, player, entity -> entity.broadcastBreakEvent(EquipmentSlot.MAINHAND));

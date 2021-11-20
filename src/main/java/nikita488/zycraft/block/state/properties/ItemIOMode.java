@@ -37,24 +37,16 @@ public enum ItemIOMode implements StringRepresentable
 
     public TranslatableComponent displayName()
     {
-        switch (this)
+        return switch (this)
         {
-            case ANY:
-            default:
-                return ZYLang.ITEM_IO_ANY;
-            case ALL_IN:
-                return ZYLang.ITEM_IO_ALL_IN;
-            case ALL_OUT:
-                return ZYLang.ITEM_IO_ALL_OUT;
-            case IN1:
-                return ZYLang.ITEM_IO_IN1;
-            case OUT1:
-                return ZYLang.ITEM_IO_OUT1;
-            case IN2:
-                return ZYLang.ITEM_IO_IN2;
-            case OUT2:
-                return ZYLang.ITEM_IO_OUT2;
-        }
+            case ANY -> ZYLang.ITEM_IO_ANY;
+            case ALL_IN -> ZYLang.ITEM_IO_ALL_IN;
+            case ALL_OUT -> ZYLang.ITEM_IO_ALL_OUT;
+            case IN1 -> ZYLang.ITEM_IO_IN1;
+            case OUT1 -> ZYLang.ITEM_IO_OUT1;
+            case IN2 -> ZYLang.ITEM_IO_IN2;
+            case OUT2 -> ZYLang.ITEM_IO_OUT2;
+        };
     }
 
     @Override

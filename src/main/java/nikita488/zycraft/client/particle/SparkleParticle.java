@@ -1,7 +1,11 @@
 package nikita488.zycraft.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleProvider;
+import net.minecraft.client.particle.ParticleRenderType;
+import net.minecraft.client.particle.SpriteSet;
+import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.renderer.LightTexture;
 import nikita488.zycraft.particle.SparkleParticleData;
 
@@ -12,9 +16,9 @@ public class SparkleParticle extends TextureSheetParticle
     private final SpriteSet sprites;
     private final boolean hasFixedSize;
 
-    public SparkleParticle(ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites, boolean hasFixedSize)
+    public SparkleParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, SpriteSet sprites, boolean hasFixedSize)
     {
-        super(world, x, y, z, xSpeed, ySpeed, zSpeed);
+        super(level, x, y, z, xSpeed, ySpeed, zSpeed);
         this.sprites = sprites;
         this.hasFixedSize = hasFixedSize;
     }
@@ -71,9 +75,9 @@ public class SparkleParticle extends TextureSheetParticle
 
         @Nullable
         @Override
-        public Particle createParticle(SparkleParticleData data, ClientLevel world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
+        public Particle createParticle(SparkleParticleData data, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SparkleParticle particle = new SparkleParticle(world, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
+            SparkleParticle particle = new SparkleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
 
             particle.setColor(data.r(), data.g(), data.b());
             particle.setAlpha(data.a());

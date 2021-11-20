@@ -8,10 +8,13 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
@@ -25,10 +28,14 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
-import nikita488.zycraft.multiblock.child.tile.ConvertedMultiChildTile;
+import nikita488.zycraft.multiblock.child.block.entity.ConvertedMultiChildBlockEntity;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.Function;
 
 public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiChildModel>
@@ -67,9 +74,9 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
             if (layer == null)
                 return mc.getModelManager().getMissingModel().getQuads(state, side, random, modelData);
 
-            BlockState initialState = modelData.getData(ConvertedMultiChildTile.INITIAL_STATE);
-            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
-            BlockPos pos = modelData.getData(ConvertedMultiChildTile.POS);
+            BlockState initialState = modelData.getData(ConvertedMultiChildBlockEntity.INITIAL_STATE);
+            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildBlockEntity.BLOCK_GETTER);
+            BlockPos pos = modelData.getData(ConvertedMultiChildBlockEntity.POS);
 
             if (initialState == null || getter == null || pos == null || !ItemBlockRenderTypes.canRenderInLayer(initialState, layer))
                 return Collections.emptyList();
@@ -113,17 +120,17 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
         }
 
         @Override
-        public TextureAtlasSprite getParticleTexture(IModelData modelData)
+        public TextureAtlasSprite getParticleIcon(IModelData modelData)
         {
-            BlockState initialState = modelData.getData(ConvertedMultiChildTile.INITIAL_STATE);
-            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildTile.BLOCK_GETTER);
-            BlockPos pos = modelData.getData(ConvertedMultiChildTile.POS);
+            BlockState initialState = modelData.getData(ConvertedMultiChildBlockEntity.INITIAL_STATE);
+            BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildBlockEntity.BLOCK_GETTER);
+            BlockPos pos = modelData.getData(ConvertedMultiChildBlockEntity.POS);
 
             if (initialState == null || getter == null || pos == null)
                 return missingSprite;
 
             BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(initialState);
-            return model.getParticleTexture(model.getModelData(getter, pos, initialState, modelData));
+            return model.getParticleIcon(model.getModelData(getter, pos, initialState, modelData));
         }
 
         @Override

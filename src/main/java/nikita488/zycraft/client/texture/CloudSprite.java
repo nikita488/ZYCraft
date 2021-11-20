@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.Util;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.Tickable;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -15,9 +16,10 @@ import nikita488.zycraft.util.Color;
 import nikita488.zycraft.util.IntBiConsumer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class CloudSprite extends TextureAtlasSprite
+public class CloudSprite extends TextureAtlasSprite implements Tickable
 {
     public static final Material MATERIAL = ModelLoaderRegistry.blockMaterial(ZYCraft.id("cloud"));
     private static final int[] OFFSETS = new int[] {0, -1, 0, 1};
@@ -33,9 +35,11 @@ public class CloudSprite extends TextureAtlasSprite
     }
 
     @Override
-    public boolean isAnimation()
+    public void tick()
     {
-        return true;
+        forEachPixel(this::calculate);
+        forEachPixel(this::set);
+        uploadFirstFrame();
     }
 
     private void calculate(int x, int y)
@@ -75,24 +79,15 @@ public class CloudSprite extends TextureAtlasSprite
 
     private int pixelIndex(int x, int y)
     {
-        int mask = info.width() - 1;
-        return (x & mask) + (y & mask) * info.width();
+        int mask = getWidth() - 1;
+        return (x & mask) + (y & mask) * getWidth();
     }
 
     private void forEachPixel(IntBiConsumer consumer)
     {
-        for (int x = 0; x < info.width(); x++)
-            for (int y = 0; y < info.height(); y++)
+        for (int x = 0; x < getWidth(); x++)
+            for (int y = 0; y < getHeight(); y++)
                 consumer.accept(x, y);
-    }
-
-    @Override
-    public void cycleFrames()
-    {
-        subFrame++;
-        forEachPixel(this::calculate);
-        forEachPixel(this::set);
-        uploadFirstFrame();
     }
 
     @Override
@@ -100,6 +95,13 @@ public class CloudSprite extends TextureAtlasSprite
     {
         for (int i = 1; i < mainImage.length; i++)
             mainImage[i].close();
+    }
+
+    @Nullable
+    @Override
+    public Tickable getAnimationTicker()
+    {
+        return this;
     }
 
     public static class Loader implements ITextureAtlasSpriteLoader

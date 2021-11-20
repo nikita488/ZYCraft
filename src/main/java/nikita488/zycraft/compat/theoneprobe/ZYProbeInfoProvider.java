@@ -1,11 +1,17 @@
 package nikita488.zycraft.compat.theoneprobe;
 
+import mcjty.theoneprobe.api.CompoundText;
+import mcjty.theoneprobe.api.IProbeHitData;
+import mcjty.theoneprobe.api.IProbeInfo;
+import mcjty.theoneprobe.api.IProbeInfoProvider;
+import mcjty.theoneprobe.api.ITheOneProbe;
+import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
@@ -16,7 +22,7 @@ import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.multiblock.child.block.ItemIOBlock;
 import nikita488.zycraft.multiblock.child.block.ValveBlock;
-import nikita488.zycraft.multiblock.child.tile.ValveTile;
+import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
 
 import java.util.function.Function;
 
@@ -30,9 +36,9 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
     }
 
     @Override
-    public String getID()
+    public ResourceLocation getID()
     {
-        return ZYCraft.string("default");
+        return ZYCraft.id("default");
     }
 
     @Override
@@ -44,10 +50,10 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
             addValveProbeInfo(info, level, state, data.getPos());
         else if (ZYBlocks.ITEM_IO.has(state))
             addItemIOProbeInfo(info, state);
-        else if (state.getBlock() instanceof IFluidSource)
-            addFluidSourceProbeInfo(info, (IFluidSource)state.getBlock(), level, state, data.getPos(), data.getSideHit());
-        else if (state.getBlock() instanceof IFluidVoid)
-            addFluidVoidProbeInfo(info, (IFluidVoid)state.getBlock(), level, state, data.getPos(), data.getSideHit());
+        else if (state.getBlock() instanceof IFluidSource source)
+            addFluidSourceProbeInfo(info, source, level, state, data.getPos(), data.getSideHit());
+        else if (state.getBlock() instanceof IFluidVoid fluidVoid)
+            addFluidVoidProbeInfo(info, fluidVoid, level, state, data.getPos(), data.getSideHit());
     }
 
     private void addFabricatorProbeInfo(IProbeInfo info, BlockState state)
@@ -59,11 +65,9 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
     {
         info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ValveBlock.IO_MODE).displayName()));
 
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (blockEntity instanceof ValveTile)
+        if (level.getBlockEntity(pos) instanceof ValveBlockEntity valve)
         {
-            FluidStack storedFluid = ((ValveTile)blockEntity).getStoredFluid();
+            FluidStack storedFluid = valve.getStoredFluid();
 
             if (!storedFluid.isEmpty())
                 info.horizontal()

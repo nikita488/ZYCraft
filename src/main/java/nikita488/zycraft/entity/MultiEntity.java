@@ -10,11 +10,10 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.network.NetworkHooks;
+import net.minecraftforge.fmllegacy.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import nikita488.zycraft.init.ZYEntities;
 import nikita488.zycraft.multiblock.IDynamicMultiBlock;
-import nikita488.zycraft.multiblock.MultiBlock;
 import nikita488.zycraft.multiblock.MultiManager;
 
 import javax.annotation.Nullable;
@@ -46,14 +45,9 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
 
     private void computeClientMultiBlock()
     {
-        if (!level.isClientSide() || multiID < 0)
-            return;
-
-        MultiBlock multiBlock = MultiManager.getInstance(level).getMultiBlock(multiID);
-
-        if (multiBlock instanceof IDynamicMultiBlock)
+        if (level.isClientSide() && multiID >= 0 && MultiManager.getInstance(level).getMultiBlock(multiID) instanceof IDynamicMultiBlock multiBlock)
         {
-            this.parentMultiBlock = (IDynamicMultiBlock)multiBlock;
+            this.parentMultiBlock = multiBlock;
             setBoundingBox(parentMultiBlock.aabb());
             this.multiID = -1;
         }
@@ -68,7 +62,7 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
             if (parentMultiBlock.isValid())
                 parentMultiBlock.tick();
             else
-                remove();
+                discard();
 
         this.firstTick = false;
     }
@@ -116,7 +110,7 @@ public class MultiEntity extends Entity implements IEntityAdditionalSpawnData
     public void kill() {}
 
     @Override
-    public void thunderHit(ServerLevel world, LightningBolt lightning) {}
+    public void thunderHit(ServerLevel level, LightningBolt lightning) {}
 
     @Nullable
     public IDynamicMultiBlock parentMultiBlock()

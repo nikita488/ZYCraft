@@ -9,8 +9,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
-import nikita488.zycraft.menu.FabricatorContainer;
-import nikita488.zycraft.tile.FabricatorTile;
+import nikita488.zycraft.block.entity.FabricatorBlockEntity;
+import nikita488.zycraft.menu.FabricatorMenu;
 
 import java.util.Map;
 import java.util.function.Supplier;
@@ -79,11 +79,11 @@ public class SetFabricatorRecipePacket
 
             player.resetLastActionTime();
 
-            AbstractContainerMenu container = player.containerMenu;
+            AbstractContainerMenu menu = player.containerMenu;
 
-            if (container.containerId == packet.windowID() && container instanceof FabricatorContainer && !player.isSpectator())
+            if (menu.containerId == packet.windowID() && menu instanceof FabricatorMenu fabricatorMenu && !player.isSpectator())
             {
-                FabricatorTile fabricator = ((FabricatorContainer)container).blockEntity();
+                FabricatorBlockEntity fabricator = fabricatorMenu.blockEntity();
 
                 if (fabricator == null)
                     return;

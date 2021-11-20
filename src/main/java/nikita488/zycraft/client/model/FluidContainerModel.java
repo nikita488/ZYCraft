@@ -1,6 +1,10 @@
 package nikita488.zycraft.client.model;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.mojang.datafixers.util.Either;
 import com.mojang.datafixers.util.Pair;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -10,23 +14,38 @@ import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.ItemOverride;
+import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.renderer.model.*;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.*;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.BlockModelRotation;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.resources.model.ModelBakery;
+import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.UnbakedModel;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.model.*;
+import net.minecraftforge.client.model.BakedModelWrapper;
+import net.minecraftforge.client.model.IModelConfiguration;
+import net.minecraftforge.client.model.IModelLoader;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
 public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
@@ -57,7 +76,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
     public BakedModel bake(IModelConfiguration owner, ModelBakery bakery, Function<Material, TextureAtlasSprite> spriteGetter, ModelState transform, ItemOverrides overrides, ResourceLocation location)
     {
         if (replacementTexture == null)
-            return new Baked(model.bake(bakery, model, spriteGetter, transform, location, true), new ItemOverrides(this, bakery, model, model.getOverrides()));
+            return new Baked(model.bake(bakery, model, spriteGetter, transform, location, true), new Overrides(this, bakery, model, model.getOverrides()));
 
         Map<String, Either<Material, String>> textures = new HashMap<>(model.textureMap);
 
@@ -79,16 +98,16 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
     private static class Baked extends BakedModelWrapper<BakedModel>
     {
-        private final ItemOverrides overrides;
+        private final Overrides overrides;
 
-        public Baked(BakedModel model, ItemOverrides overrides)
+        public Baked(BakedModel model, Overrides overrides)
         {
             super(model);
             this.overrides = overrides;
         }
 
         @Override
-        public ItemOverrides getOverrides()
+        public Overrides getOverrides()
         {
             return overrides;
         }
@@ -119,7 +138,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
         }
     }
 
-    private static class ItemOverrides extends ItemOverrides
+    private static class Overrides extends ItemOverrides
     {
         private final FluidContainerModel parent;
         private final ModelBakery bakery;
@@ -127,7 +146,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
         private final ItemOverride[] overrides;
         private final Object2ObjectMap<ResourceLocation, BakedModel[]> overrideModels = new Object2ObjectOpenHashMap<>();
 
-        public ItemOverrides(FluidContainerModel parent, ModelBakery bakery, UnbakedModel emptyModel, List<ItemOverride> overrides)
+        public Overrides(FluidContainerModel parent, ModelBakery bakery, UnbakedModel emptyModel, List<ItemOverride> overrides)
         {
             this.parent = parent;
             this.bakery = bakery;
@@ -140,7 +159,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
         @Nullable
         @Override
-        public BakedModel resolve(BakedModel emptyModel, ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity)
+        public BakedModel resolve(BakedModel emptyModel, ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int hashCode)
         {
             if (overrides.length == 0)
                 return emptyModel;
@@ -171,14 +190,14 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
                 return wrappedModels;
             });
 
-            for (int i = 0; i < overrides.length; i++)
+            /*for (int i = 0; i < overrides.length; i++)
             {
-                if (!overrides[i].test(stack, world, entity))
+                if (!overrides[i].test(stack, level, entity))
                     continue;
 
                 BakedModel model = models[i];
                 return model != null ? model : emptyModel;
-            }
+            }*/
 
             return emptyModel;
         }

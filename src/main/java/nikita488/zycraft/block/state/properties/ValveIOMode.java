@@ -31,14 +31,11 @@ public enum ValveIOMode implements StringRepresentable
 
     public TranslatableComponent displayName()
     {
-        switch (this)
+        return switch (this)
         {
-            case IN:
-            default:
-                return ZYLang.VALVE_IN;
-            case OUT:
-                return ZYLang.VALVE_OUT;
-        }
+            case IN -> ZYLang.VALVE_IN;
+            case OUT -> ZYLang.VALVE_OUT;
+        };
     }
 
     @Override

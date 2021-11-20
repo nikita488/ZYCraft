@@ -1,5 +1,6 @@
 package nikita488.zycraft.util;
 
+import com.google.common.base.MoreObjects;
 import com.mojang.serialization.Codec;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
@@ -10,6 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 import javax.annotation.concurrent.Immutable;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -283,6 +285,27 @@ public class Cuboid6i implements Iterable<BlockPos>
     public Cuboid6i copy()
     {
         return new Cuboid6i(this);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj) return true;
+        if (!(obj instanceof Cuboid6i)) return false;
+        Cuboid6i cuboid = (Cuboid6i)obj;
+        return x1 == cuboid.x1 && y1 == cuboid.y1 && z1 == cuboid.z1 && x2 == cuboid.x2 && y2 == cuboid.y2 && z2 == cuboid.z2;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(x1, y1, z1, x2, y2, z2);
+    }
+
+    @Override
+    public String toString()
+    {
+        return MoreObjects.toStringHelper(this).add("x1", x1).add("y1", y1).add("z1", z1).add("x2", x2).add("y2", y2).add("z2", z2).toString();
     }
 
     public static class Mutable extends Cuboid6i

@@ -19,7 +19,9 @@ import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.util.Color;
 import nikita488.zycraft.util.Cuboid6i;
 
-import static net.minecraft.client.renderer.LightTexture.*;
+import static net.minecraft.client.renderer.LightTexture.block;
+import static net.minecraft.client.renderer.LightTexture.pack;
+import static net.minecraft.client.renderer.LightTexture.sky;
 
 public class MultiFluidRenderer
 {

@@ -9,10 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.DrawHighlightEvent;
+import net.minecraftforge.client.event.DrawSelectionEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -59,11 +58,10 @@ public class MultiHighlightRenderer
             LAST_POS.set(BlockPos.ZERO);
     }
 
-    private static void onDrawBlockHighlight(DrawHighlightEvent.HighlightBlock event)
+    private static void onDrawBlockHighlight(DrawSelectionEvent.HighlightBlock event)
     {
         Level level = event.getInfo().getEntity().getCommandSenderWorld();
         BlockPos highlightPos = event.getTarget().getBlockPos();
-        BlockEntity blockEntity = level.getBlockEntity(highlightPos);
         long time = level.getGameTime();
 
         if (!LAST_POS.equals(highlightPos))
@@ -74,13 +72,8 @@ public class MultiHighlightRenderer
 
         lastTime = time;
 
-        if (blockEntity instanceof IMultiChild)
+        if (level.getBlockEntity(highlightPos) instanceof IMultiChild child && child.hasParents())
         {
-            IMultiChild child = (IMultiChild)blockEntity;
-
-            if (!child.hasParents())
-                return;
-
             float ticksElapsed = (time - startTime) + event.getPartialTicks();
             float strength = Math.max(0F, 1F - ticksElapsed / 100);
 

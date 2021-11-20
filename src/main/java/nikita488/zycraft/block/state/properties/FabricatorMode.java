@@ -21,17 +21,12 @@ public enum FabricatorMode implements StringRepresentable
 
     public boolean canCraft(boolean lastPowered, boolean powered)
     {
-        switch (this)
+        return switch (this)
         {
-            case AUTO_LOW:
-                return !powered;
-            case AUTO_HIGH:
-                return powered;
-            case PULSE:
-                return !lastPowered && powered;
-            default:
-                return false;
-        }
+            case AUTO_LOW -> !powered;
+            case AUTO_HIGH -> powered;
+            case PULSE -> !lastPowered && powered;
+        };
     }
 
     public int rgb(boolean powered)
@@ -43,16 +38,12 @@ public enum FabricatorMode implements StringRepresentable
 
     public TranslatableComponent displayName()
     {
-        switch (this)
+        return switch (this)
         {
-            case AUTO_HIGH:
-            default:
-                return ZYLang.FABRICATOR_AUTO_HIGH;
-            case AUTO_LOW:
-                return ZYLang.FABRICATOR_AUTO_LOW;
-            case PULSE:
-                return ZYLang.FABRICATOR_PULSE;
-        }
+            case AUTO_HIGH -> ZYLang.FABRICATOR_AUTO_HIGH;
+            case AUTO_LOW -> ZYLang.FABRICATOR_AUTO_LOW;
+            case PULSE -> ZYLang.FABRICATOR_PULSE;
+        };
     }
 
     @Override

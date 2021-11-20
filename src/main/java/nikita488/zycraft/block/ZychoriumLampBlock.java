@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
-import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
@@ -33,7 +33,7 @@ public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.ZYCHORIUM_LAMP.create(pos, state);
+        return ZYBlockEntities.ZYCHORIUM_LAMP.create(pos, state);
     }
 
     @Override
@@ -62,14 +62,14 @@ public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
             if (lit)
                 level.getBlockTicks().scheduleTick(pos, this, 4);
             else
-                level.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
+                level.setBlock(pos, state.cycle(LIT), UPDATE_CLIENTS);
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel world, BlockPos pos, Random random)
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
     {
-        if (isLit(state) && !world.hasNeighborSignal(pos))
-            world.setBlock(pos, state.cycle(LIT), Block.UPDATE_CLIENTS);
+        if (isLit(state) && !level.hasNeighborSignal(pos))
+            level.setBlock(pos, state.cycle(LIT), UPDATE_CLIENTS);
     }
 
     private boolean isLit(BlockState state)

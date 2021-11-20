@@ -7,14 +7,14 @@ import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.block.entity.FabricatorBlockEntity;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.menu.FabricatorContainer;
+import nikita488.zycraft.menu.FabricatorMenu;
 import nikita488.zycraft.network.SetFabricatorRecipePacket;
-import nikita488.zycraft.tile.FabricatorTile;
 
 import javax.annotation.Nullable;
 
-public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<FabricatorContainer>
+public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<FabricatorMenu, CraftingRecipe>
 {
     private final IRecipeTransferHandlerHelper helper;
 
@@ -25,27 +25,26 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(FabricatorContainer container, Object recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer)
+    public IRecipeTransferError transferRecipe(FabricatorMenu container, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer)
     {
-        if (recipe instanceof CraftingRecipe)
-        {
-            CraftingRecipe craftingRecipe = (CraftingRecipe)recipe;
+        if (!FabricatorBlockEntity.isRecipeCompatible(recipe))
+            return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
 
-            if (!FabricatorTile.isRecipeCompatible(craftingRecipe))
-                return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
+        if (doTransfer)
+            ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.containerId, recipe, recipeLayout.getItemStacks().getGuiIngredients()));
 
-            if (doTransfer)
-                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.containerId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
-
-            return null;
-        }
-
-        return helper.createInternalError();
+        return null;
     }
 
     @Override
-    public Class<FabricatorContainer> getContainerClass()
+    public Class<FabricatorMenu> getContainerClass()
     {
-        return FabricatorContainer.class;
+        return FabricatorMenu.class;
+    }
+
+    @Override
+    public Class<CraftingRecipe> getRecipeClass()
+    {
+        return CraftingRecipe.class;
     }
 }

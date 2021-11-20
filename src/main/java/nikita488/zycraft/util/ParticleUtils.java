@@ -3,7 +3,6 @@ package nikita488.zycraft.util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.block.QuartzCrystalClusterBlock;
@@ -20,10 +19,8 @@ public class ParticleUtils
 
     public static void glowingColorableBlock(BlockState state, Level level, BlockPos pos, Random random)
     {
-        BlockEntity blockEntity = level.getBlockEntity(pos);
-
-        if (blockEntity instanceof IColorable)
-            glowingBlock(state, level, pos, random, Color.rgba(((IColorable)blockEntity).getColor(state, level, pos), 192));
+        if (level.getBlockEntity(pos) instanceof IColorable colorable)
+            glowingBlock(state, level, pos, random, Color.rgba(colorable.getColor(state, level, pos), 192));
     }
 
     public static void glowingBlock(BlockState state, Level level, BlockPos pos, Random random, int rgba)

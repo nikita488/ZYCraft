@@ -3,10 +3,10 @@ package nikita488.zycraft.init.worldgen;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.worldgen.feature.ClusterFeature;
-import nikita488.zycraft.worldgen.feature.ClusterFeatureConfig;
-import nikita488.zycraft.worldgen.feature.ZychoriteVeinConfig;
-import nikita488.zycraft.worldgen.feature.ZychoriteVeinFeature;
+import nikita488.zycraft.levelgen.feature.ClusterFeature;
+import nikita488.zycraft.levelgen.feature.ClusterFeatureConfig;
+import nikita488.zycraft.levelgen.feature.ZychoriteVeinConfig;
+import nikita488.zycraft.levelgen.feature.ZychoriteVeinFeature;
 
 public class ZYFeatures
 {

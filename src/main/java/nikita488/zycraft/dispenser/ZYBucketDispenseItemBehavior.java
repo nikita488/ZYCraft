@@ -10,9 +10,7 @@ import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FlowingFluid;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -49,19 +47,22 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block instanceof BucketPickup)
+        if (block instanceof BucketPickup pickup)
         {
-            Fluid fluid = ((BucketPickup)block).takeLiquid(level, pos, state);
+            ItemStack bucket = pickup.pickupBlock(level, pos, state);
 
-            if (!(fluid instanceof FlowingFluid))
+            if (bucket.isEmpty())
                 return super.execute(source, stack);
 
-            FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
+            level.gameEvent(null, GameEvent.FLUID_PICKUP, pos);
+
+            //TODO: Fix bucket handling
+/*            FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
 
             if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
                 return super.execute(source, stack);
 
-            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);*/
             stack.shrink(1);
 
             ItemStack filledContainer = handler.getContainer();

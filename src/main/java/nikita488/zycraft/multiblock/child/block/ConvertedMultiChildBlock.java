@@ -1,16 +1,25 @@
 package nikita488.zycraft.multiblock.child.block;
 
+import com.mojang.math.Vector3d;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.entity.*;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -27,26 +36,48 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.IBlockRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.common.ToolType;
+import net.minecraftforge.common.ToolAction;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
-import nikita488.zycraft.init.ZYTiles;
-import nikita488.zycraft.multiblock.child.tile.ConvertedMultiChildTile;
-import team.chisel.ctm.api.IFacade;
+import nikita488.zycraft.init.ZYBlockEntities;
+import nikita488.zycraft.multiblock.child.block.entity.ConvertedMultiChildBlockEntity;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
-public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
+public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFacade
 {
     public static final BooleanProperty USE_SHAPE_FOR_LIGHT_OCCLUSION = ZYBlockStateProperties.USE_SHAPE_FOR_LIGHT_OCCLUSION;
     public static final BooleanProperty SIGNAL_SOURCE = ZYBlockStateProperties.SIGNAL_SOURCE;
     public static final BooleanProperty HAS_ANALOG_OUTPUT_SIGNAL = ZYBlockStateProperties.HAS_ANALOG_OUTPUT_SIGNAL;
+    private final IBlockRenderProperties renderProperties = new IBlockRenderProperties()
+    {
+        @Override
+        public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine engine)
+        {
+            state = getState(level, ((BlockHitResult)target).getBlockPos());
+            return RenderProperties.get(state.getBlock()).addHitEffects(state, level, target, engine);
+        }
+
+        @Override
+        public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine)
+        {
+            state = getState(level, pos);
+            return RenderProperties.get(state.getBlock()).addDestroyEffects(state, level, pos, engine);
+        }
+
+        @Override
+        public Vector3d getFogColor(BlockState state, LevelReader reader, BlockPos pos, Entity entity, Vector3d color, float partialTicks)
+        {
+            state = getState(reader, pos);
+            return RenderProperties.get(state.getBlock()).getFogColor(state, reader, pos, entity, color, partialTicks);
+        }
+    };
 
     public ConvertedMultiChildBlock(Properties properties)
     {
@@ -54,17 +85,22 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
         registerDefaultState(defaultBlockState().setValue(USE_SHAPE_FOR_LIGHT_OCCLUSION, false).setValue(SIGNAL_SOURCE, false).setValue(HAS_ANALOG_OUTPUT_SIGNAL, false));
     }
 
+    @Override
+    public void initializeClient(Consumer<IBlockRenderProperties> consumer)
+    {
+        consumer.accept(renderProperties);
+    }
+
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.CONVERTED_MULTI_CHILD.create();
+        return ZYBlockEntities.CONVERTED_MULTI_CHILD.create(pos, state);
     }
 
     private static BlockState getState(BlockGetter getter, BlockPos pos)
     {
-        BlockEntity blockEntity = getter.getBlockEntity(pos);
-        return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState() : Blocks.AIR.defaultBlockState();
+        return getter.getBlockEntity(pos) instanceof ConvertedMultiChildBlockEntity converted ? converted.initialState() : Blocks.AIR.defaultBlockState();
     }
     //AbstractBlock.Properties methods
     public static boolean isValidSpawn(BlockState state, BlockGetter getter, BlockPos pos, EntityType<?> type)
@@ -174,8 +210,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     @Override
     public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
     {
-        BlockEntity blockEntity = builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        return blockEntity instanceof ConvertedMultiChildTile ? ((ConvertedMultiChildTile)blockEntity).initialState().getDrops(builder) : super.getDrops(state, builder);
+        return builder.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ConvertedMultiChildBlockEntity converted ?
+                converted.initialState().getDrops(builder) :
+                super.getDrops(state, builder);
     }
 
     @Override
@@ -200,7 +237,6 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public float getShadeBrightness(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return getState(getter, pos).getShadeBrightness(getter, pos);
@@ -233,9 +269,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void spawnAfterBreak(BlockState state, ServerLevel world, BlockPos pos, ItemStack stack)
+    public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack)
     {
-        getState(world, pos).spawnAfterBreak(world, pos, stack);
+        getState(level, pos).spawnAfterBreak(level, pos, stack);
     }
 
 /*    //TODO: Probably remove?
@@ -283,7 +319,6 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
     {
         getState(level, pos).getBlock().animateTick(state, level, pos, random);
@@ -296,9 +331,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void popExperience(ServerLevel world, BlockPos pos, int amount) 
+    public void popExperience(ServerLevel level, BlockPos pos, int amount)
     {
-        getState(world, pos).getBlock().popExperience(world, pos, amount);
+        getState(level, pos).getBlock().popExperience(level, pos, amount);
     }
 
     @Override
@@ -308,9 +343,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void stepOn(Level level, BlockPos pos, Entity entity) 
+    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity)
     {
-        getState(level, pos).getBlock().stepOn(level, pos, entity);
+        getState(level, pos).getBlock().stepOn(level, pos, state, entity);
     }
 
     @Override
@@ -320,9 +355,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public void fallOn(Level level, BlockPos pos, Entity entity, float fallDistance) 
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance)
     {
-        getState(level, pos).getBlock().fallOn(level, pos, entity, fallDistance);
+        getState(level, pos).getBlock().fallOn(level, state, pos, entity, fallDistance);
     }
 
     @Override
@@ -345,9 +380,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }*/
 
     @Override
-    public float getSlipperiness(BlockState state, LevelReader reader, BlockPos pos, @Nullable Entity entity) 
+    public float getFriction(BlockState state, LevelReader reader, BlockPos pos, @Nullable Entity entity)
     {
-        return getState(reader, pos).getSlipperiness(reader, pos, entity);
+        return getState(reader, pos).getFriction(reader, pos, entity);
     }
 
     @Override
@@ -357,9 +392,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
     //IForgeBlock methods
     @Override
-    public int getLightValue(BlockState state, BlockGetter getter, BlockPos pos)
+    public int getLightEmission(BlockState state, BlockGetter getter, BlockPos pos)
     {
-        return getState(getter, pos).getLightValue(getter, pos);
+        return getState(getter, pos).getLightEmission(getter, pos);
     }
 
     @Override
@@ -393,18 +428,6 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public boolean canBeReplacedByLeaves(BlockState state, LevelReader reader, BlockPos pos) 
-    {
-        return false;
-    }
-
-    @Override
-    public boolean canBeReplacedByLogs(BlockState state, LevelReader reader, BlockPos pos) 
-    {
-        return false;
-    }
-
-    @Override
     public float getExplosionResistance(BlockState state, BlockGetter getter, BlockPos pos, Explosion explosion)
     {
         return getState(getter, pos).getExplosionResistance(getter, pos, explosion);
@@ -413,7 +436,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     @Override
     public boolean canConnectRedstone(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Direction side)
     {
-        return getState(getter, pos).canConnectRedstone(getter, pos, side);
+        return getState(getter, pos).canRedstoneConnectTo(getter, pos, side);
     }
 
     @Override
@@ -423,29 +446,15 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     }
 
     @Override
-    public boolean addLandingEffects(BlockState state, ServerLevel world, BlockPos pos, BlockState unused, LivingEntity entity, int numberOfParticles)
+    public boolean addLandingEffects(BlockState state, ServerLevel level, BlockPos pos, BlockState unused, LivingEntity entity, int numberOfParticles)
     {
-        return getState(world, pos).addLandingEffects(world, pos, state, entity, numberOfParticles);
+        return getState(level, pos).addLandingEffects(level, pos, state, entity, numberOfParticles);
     }
 
     @Override
     public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) 
     {
         return getState(level, pos).addRunningEffects(level, pos, entity);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine manager)
-    {
-        return getState(level, ((BlockHitResult)target).getBlockPos()).addHitEffects(level, target, manager);
-    }
-
-    @Override
-    @OnlyIn(Dist.CLIENT)
-    public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine manager) 
-    {
-        return getState(level, pos).addDestroyEffects(level, pos, manager);
     }
 
     @Override
@@ -586,7 +595,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
 
     @Nullable
     @Override
-    public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, ToolType toolType) 
+    public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, ToolAction action)
     {
         return null;
     }
@@ -595,12 +604,6 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
     public boolean isScaffolding(BlockState state, LevelReader reader, BlockPos pos, LivingEntity entity) 
     {
         return getState(reader, pos).isScaffolding(entity);
-    }
-
-    @Override
-    public Vec3 getFogColor(BlockState state, LevelReader reader, BlockPos pos, Entity entity, Vec3 originalColor, float partialTicks)
-    {
-        return getState(reader, pos).getFogColor(reader, pos, entity, originalColor, partialTicks);
     }
 
     @Override
@@ -615,10 +618,11 @@ public class ConvertedMultiChildBlock extends MultiChildBlock implements IFacade
         builder.add(USE_SHAPE_FOR_LIGHT_OCCLUSION, SIGNAL_SOURCE, HAS_ANALOG_OUTPUT_SIGNAL);
     }
 
-    @Nonnull
+    //TODO: Uncomment when CTM will be available for 1.17+
+/*    @Nonnull
     @Override
     public BlockState getFacade(@Nonnull BlockGetter getter, @Nonnull BlockPos pos, @Nullable Direction side)
     {
         return getState(getter, pos);
-    }
+    }*/
 }

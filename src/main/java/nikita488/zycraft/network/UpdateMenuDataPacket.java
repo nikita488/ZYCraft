@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.fmllegacy.LogicalSidedProvider;
 import net.minecraftforge.fmllegacy.network.NetworkEvent;
-import nikita488.zycraft.menu.ZYContainer;
+import nikita488.zycraft.menu.ZYMenu;
 import nikita488.zycraft.menu.data.IMenuData;
 
 import java.util.function.Supplier;
@@ -52,10 +52,10 @@ public class UpdateMenuDataPacket
             if (mc.player == null)
                 return;
 
-            AbstractContainerMenu container = mc.player.containerMenu;
+            AbstractContainerMenu menu = mc.player.containerMenu;
 
-            if (container.containerId == packet.windowID && container instanceof ZYContainer)
-                ((ZYContainer)container).handleVariable(packet.id(), packet.buffer());
+            if (menu.containerId == packet.windowID && menu instanceof ZYMenu modMenu)
+                modMenu.handleVariable(packet.id(), packet.buffer());
         });
 
         return true;

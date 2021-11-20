@@ -1,20 +1,25 @@
 package nikita488.zycraft.multiblock.child.block;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.multiblock.child.block.entity.ItemIOBlockEntity;
 
 import javax.annotation.Nullable;
 import java.util.List;
+
+import static nikita488.zycraft.util.BlockEntityUtils.createTickerHelper;
 
 public class ItemIOBlock extends MultiInterfaceBlock
 {
@@ -35,9 +40,16 @@ public class ItemIOBlock extends MultiInterfaceBlock
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.ITEM_IO.create();
+        return ZYBlockEntities.ITEM_IO.create(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
+    {
+        return level.isClientSide() ? null : createTickerHelper(type, ZYBlockEntities.ITEM_IO.get(), ItemIOBlockEntity::serverTick);
     }
 
     @Override

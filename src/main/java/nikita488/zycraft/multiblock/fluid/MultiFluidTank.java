@@ -5,9 +5,9 @@ import net.minecraft.Util;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
@@ -125,7 +125,7 @@ public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMu
     @Override
     public MultiFluidTank readFromNBT(CompoundTag tag)
     {
-        if (tag.contains("Fluid", Constants.NBT.TAG_COMPOUND))
+        if (tag.contains("Fluid", Tag.TAG_COMPOUND))
             setFluid(FluidStack.loadFluidStackFromNBT(tag.getCompound("Fluid")));
         return this;
     }

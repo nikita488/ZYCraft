@@ -16,8 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import nikita488.zycraft.block.state.properties.InterfaceAxis;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.init.ZYLang;
@@ -38,7 +36,6 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter getter, List<Component> tooltip, TooltipFlag flag)
     {
         tooltip.add(ZYLang.INTERFACE);
@@ -56,9 +53,9 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
     {
         BlockEntity blockEntity = level.getBlockEntity(pos);
 
-        if (blockEntity instanceof IMultiChild)
+        if (blockEntity instanceof IMultiChild child)
         {
-            if (((IMultiChild)blockEntity).hasParents() || player.isShiftKeyDown())
+            if (child.hasParents() || player.isShiftKeyDown())
                 return super.use(state, level, pos, player, hand, hitResult);
 
             if (!level.isClientSide())

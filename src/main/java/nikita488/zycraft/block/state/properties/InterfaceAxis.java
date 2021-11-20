@@ -24,17 +24,12 @@ public enum InterfaceAxis implements StringRepresentable
 
     public static InterfaceAxis get(Direction.Axis axis)
     {
-        switch (axis)
+        return switch (axis)
         {
-            case X:
-                return X;
-            case Y:
-                return Y;
-            case Z:
-                return Z;
-            default:
-                return ALL;
-        }
+            case X -> X;
+            case Y -> Y;
+            case Z -> Z;
+        };
     }
 
     public static void set(BlockState state, Level level, BlockPos pos, InterfaceAxis axis)

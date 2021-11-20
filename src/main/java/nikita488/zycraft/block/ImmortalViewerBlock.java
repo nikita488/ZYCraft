@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.enums.ViewerType;
+import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.init.ZYTiles;
 import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
@@ -35,7 +35,7 @@ public class ImmortalViewerBlock extends ViewerBlock implements EntityBlock
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.COLORABLE.create(pos, state);
+        return ZYBlockEntities.COLORABLE.create(pos, state);
     }
 
     @Override

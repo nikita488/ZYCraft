@@ -3,8 +3,8 @@ package nikita488.zycraft.init.worldgen;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.world.level.levelgen.placement.FeatureDecorator;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.worldgen.placement.ClusterPlacement;
-import nikita488.zycraft.worldgen.placement.ClusterPlacementConfig;
+import nikita488.zycraft.levelgen.placement.ClusterPlacement;
+import nikita488.zycraft.levelgen.placement.ClusterPlacementConfig;
 
 public class ZYPlacements
 {

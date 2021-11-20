@@ -10,7 +10,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import nikita488.zycraft.init.ZYTiles;
+import nikita488.zycraft.init.ZYBlockEntities;
 
 import javax.annotation.Nullable;
 
@@ -23,9 +23,9 @@ public class MultiAirBlock extends MultiChildBlock
 
     @Nullable
     @Override
-    public BlockEntity createTileEntity(BlockState state, BlockGetter getter)
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state)
     {
-        return ZYTiles.MULTI_AIR.create();
+        return ZYBlockEntities.MULTI_AIR.create(pos, state);
     }
 
     @Override
@@ -68,11 +68,5 @@ public class MultiAirBlock extends MultiChildBlock
     public float getShadeBrightness(BlockState state, BlockGetter getter, BlockPos pos)
     {
         return 1F;
-    }
-
-    @Override
-    public boolean isAir(BlockState state, BlockGetter getter, BlockPos pos)
-    {
-        return false;
     }
 }

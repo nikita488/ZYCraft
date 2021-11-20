@@ -9,9 +9,9 @@ import net.minecraft.world.item.ItemStack;
 
 public class SerializableCraftingContainer extends CraftingContainer
 {
-    public SerializableCraftingContainer(AbstractContainerMenu container, int width, int height)
+    public SerializableCraftingContainer(AbstractContainerMenu menu, int width, int height)
     {
-        super(container, width, height);
+        super(menu, width, height);
     }
 
     @Override
