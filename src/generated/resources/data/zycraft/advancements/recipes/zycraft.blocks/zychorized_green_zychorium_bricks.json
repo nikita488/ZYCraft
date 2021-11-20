@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:zychorite"
+            "items": [
+              "zycraft:zychorite"
+            ]
           }
         ]
       }

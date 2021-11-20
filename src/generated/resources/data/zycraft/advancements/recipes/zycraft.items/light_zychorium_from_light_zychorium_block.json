@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:light_zychorium_block"
+            "items": [
+              "zycraft:light_zychorium_block"
+            ]
           }
         ]
       }

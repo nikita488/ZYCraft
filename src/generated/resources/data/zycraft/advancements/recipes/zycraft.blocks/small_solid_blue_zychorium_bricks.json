@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:solid_blue_zychorium_bricks"
+            "items": [
+              "zycraft:solid_blue_zychorium_bricks"
+            ]
           }
         ]
       }

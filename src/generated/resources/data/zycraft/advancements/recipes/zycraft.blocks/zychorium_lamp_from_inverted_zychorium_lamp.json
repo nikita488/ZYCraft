@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:inverted_zychorium_lamp"
+            "items": [
+              "zycraft:inverted_zychorium_lamp"
+            ]
           }
         ]
       }

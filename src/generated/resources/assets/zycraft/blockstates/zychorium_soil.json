@@ -1,9 +1,9 @@
 {
   "variants": {
-    "flipped=false": {
+    "powered=false": {
       "model": "zycraft:block/zychorium_soil"
     },
-    "flipped=true": {
+    "powered=true": {
       "model": "zycraft:block/zychorium_soil",
       "x": 180
     }

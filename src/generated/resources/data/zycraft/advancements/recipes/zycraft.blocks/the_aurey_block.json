@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:aluminium_block"
+            "items": [
+              "zycraft:aluminium_block"
+            ]
           }
         ]
       }

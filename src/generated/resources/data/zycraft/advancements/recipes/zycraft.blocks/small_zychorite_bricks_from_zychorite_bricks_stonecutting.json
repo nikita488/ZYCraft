@@ -11,7 +11,9 @@
       "conditions": {
         "items": [
           {
-            "item": "zycraft:zychorite_bricks"
+            "items": [
+              "zycraft:zychorite_bricks"
+            ]
           }
         ]
       }
