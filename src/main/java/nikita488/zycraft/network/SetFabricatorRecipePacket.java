@@ -17,14 +17,14 @@ import java.util.function.Supplier;
 
 public class SetFabricatorRecipePacket
 {
-    private final int windowID;
+    private final int menuID;
     private final ResourceLocation recipeID;
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
     private ItemStack craftingResult = ItemStack.EMPTY;
 
-    public SetFabricatorRecipePacket(int windowID, CraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
+    public SetFabricatorRecipePacket(int menuID, CraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
     {
-        this.windowID = windowID;
+        this.menuID = menuID;
         this.recipeID = recipe.getId();
 
         ingredients.forEach((index, ingredient) ->
@@ -43,7 +43,7 @@ public class SetFabricatorRecipePacket
 
     public SetFabricatorRecipePacket(FriendlyByteBuf buffer)
     {
-        this.windowID = buffer.readVarInt();
+        this.menuID = buffer.readVarInt();
         this.recipeID = buffer.readResourceLocation();
 
         for (int slot = 0; slot < 9; slot++)
@@ -59,7 +59,7 @@ public class SetFabricatorRecipePacket
 
     public static void encode(SetFabricatorRecipePacket packet, FriendlyByteBuf buffer)
     {
-        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.menuID());
         buffer.writeResourceLocation(packet.recipeID());
 
         for (int slot = 0; slot < 9; slot++)
@@ -81,7 +81,7 @@ public class SetFabricatorRecipePacket
 
             AbstractContainerMenu menu = player.containerMenu;
 
-            if (menu.containerId == packet.windowID() && menu instanceof FabricatorMenu fabricatorMenu && !player.isSpectator())
+            if (menu.containerId == packet.menuID() && menu instanceof FabricatorMenu fabricatorMenu && !player.isSpectator())
             {
                 FabricatorBlockEntity fabricator = fabricatorMenu.blockEntity();
 
@@ -100,9 +100,9 @@ public class SetFabricatorRecipePacket
         return true;
     }
 
-    public int windowID()
+    public int menuID()
     {
-        return windowID;
+        return menuID;
     }
 
     public ResourceLocation recipeID()

@@ -10,19 +10,19 @@ import java.util.function.Supplier;
 
 public class SetSlotStackPacket
 {
-    private final int windowID, slotIndex;
+    private final int menuID, slotIndex;
     private final ItemStack stack;
 
-    public SetSlotStackPacket(int windowID, int slotIndex, ItemStack stack)
+    public SetSlotStackPacket(int menuID, int slotIndex, ItemStack stack)
     {
-        this.windowID = windowID;
+        this.menuID = menuID;
         this.slotIndex = slotIndex;
         this.stack = stack;
     }
 
     public SetSlotStackPacket(FriendlyByteBuf buffer)
     {
-        this.windowID = buffer.readVarInt();
+        this.menuID = buffer.readVarInt();
         this.slotIndex = buffer.readVarInt();
         this.stack = buffer.readItem();
     }
@@ -34,7 +34,7 @@ public class SetSlotStackPacket
 
     public static void encode(SetSlotStackPacket packet, FriendlyByteBuf buffer)
     {
-        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.menuID());
         buffer.writeVarInt(packet.slotIndex());
         buffer.writeItem(packet.stack());
     }
@@ -52,16 +52,16 @@ public class SetSlotStackPacket
 
             AbstractContainerMenu menu = player.containerMenu;
 
-            if (menu.containerId == packet.windowID() && !player.isSpectator())
+            if (menu.containerId == packet.menuID() && !player.isSpectator())
                 menu.getSlot(packet.slotIndex()).set(packet.stack());
         });
 
         return true;
     }
 
-    public int windowID()
+    public int menuID()
     {
-        return windowID;
+        return menuID;
     }
 
     public int slotIndex()

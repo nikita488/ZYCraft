@@ -119,9 +119,9 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, Me
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int windowID, Inventory playerInventory, Player player)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
     {
-        return new TankMenu(windowID, playerInventory, this);
+        return new TankMenu(id, playerInventory, this);
     }
 
     @Override

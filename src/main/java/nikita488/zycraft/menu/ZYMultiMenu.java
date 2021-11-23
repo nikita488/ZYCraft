@@ -18,9 +18,9 @@ public class ZYMultiMenu<M extends MultiBlock> extends ZYMenu
     protected final M multiBlock;
     private final ObjectList<IOSlotOverlay> slotOverlays = new ObjectArrayList<>();
 
-    public ZYMultiMenu(@Nullable MenuType<?> type, int windowID, @Nullable M multiBlock)
+    public ZYMultiMenu(@Nullable MenuType<?> type, int id, Player player, @Nullable M multiBlock)
     {
-        super(type, windowID);
+        super(type, id, player);
         this.multiBlock = multiBlock;
     }
 

@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerListener;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -29,11 +28,13 @@ public abstract class ZYMenu extends AbstractContainerMenu
             return false;
         }
     };
+    private final Player player;
     protected final ObjectList<IMenuData> data = new ObjectArrayList<>();
 
-    public ZYMenu(@Nullable MenuType<?> type, int id)
+    public ZYMenu(@Nullable MenuType<?> type, int id, Player player)
     {
         super(type, id);
+        this.player = player;
     }
 
     protected static void assertInventorySize(IItemHandler inventory, int minSize)
@@ -89,12 +90,8 @@ public abstract class ZYMenu extends AbstractContainerMenu
         {
             IMenuData variable = data.get(i);
 
-            if (!variable.canBeUpdated())
-                continue;
-
-            for (ContainerListener listener : containerListeners)
-                if (listener instanceof ServerPlayer player)
-                    ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new UpdateMenuDataPacket(containerId, i, variable));
+            if (variable.canBeUpdated() && player instanceof ServerPlayer serverPlayer)
+                ZYCraft.CHANNEL.send(PacketDistributor.PLAYER.with(() -> serverPlayer), new UpdateMenuDataPacket(containerId, i, variable));
         }
     }
 

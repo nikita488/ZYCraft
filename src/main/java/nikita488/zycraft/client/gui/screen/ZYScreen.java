@@ -14,6 +14,7 @@ import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.sounds.SoundManager;
@@ -131,7 +132,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
     public void bindTexture(ResourceLocation textureID)
     {
-        minecraft.getTextureManager().bindForSetup(textureID);
+        RenderSystem.setShaderTexture(0, textureID);
     }
 
     public static void resetColor()
@@ -188,6 +189,8 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
     public static void renderTileableSprite(PoseStack stack, int x, int y, int blitOffset, TextureAtlasSprite sprite, int resolution, int width, int height)
     {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+
         BufferBuilder buffer = Tesselator.getInstance().getBuilder();
         float u1 = sprite.getU0();
         float v2 = sprite.getV1();
@@ -264,6 +267,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
             this.y = y;
             this.selectedColor = selectedColor;
             this.selectedItem = selectedItem;
+            addRenderableOnly(this);
         }
 
         public Menu addItem(Component tooltip, ResourceLocation iconName)
@@ -277,6 +281,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
         public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks)
         {
             resetColor();
+            bindTexture(GuiComponentManager.ATLAS_ID);
             renderGuiComponent(stack, x, y, GuiComponent.MENU_TOP);
 
             for (int item = 0; item < itemCount; item++)

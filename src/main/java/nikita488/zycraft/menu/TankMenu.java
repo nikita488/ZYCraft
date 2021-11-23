@@ -25,19 +25,19 @@ public class TankMenu extends ZYMultiMenu<TankMultiBlock>
     private final int capacity;
     private final IOMenuData ioData;
 
-    public TankMenu(MenuType<?> type, int windowID, Inventory playerInventory, FriendlyByteBuf buffer)
+    public TankMenu(MenuType<?> type, int id, Inventory playerInventory, FriendlyByteBuf buffer)
     {
-        this(type, windowID, playerInventory, null, new ItemStackHandler(2), new FluidMenuData(), buffer.readVarInt(), new IOMenuData());
+        this(type, id, playerInventory, null, new ItemStackHandler(2), new FluidMenuData(), buffer.readVarInt(), new IOMenuData());
     }
 
-    public TankMenu(int windowID, Inventory playerInventory, TankMultiBlock tank)
+    public TankMenu(int id, Inventory playerInventory, TankMultiBlock tank)
     {
-        this(ZYMenus.TANK.get(), windowID, playerInventory, tank, tank.inventory(), new FluidMenuData(() -> tank.fluidTank().getFluid()), tank.fluidTank().getCapacity(), new IOMenuData(tank::inventory));
+        this(ZYMenus.TANK.get(), id, playerInventory, tank, tank.inventory(), new FluidMenuData(() -> tank.fluidTank().getFluid()), tank.fluidTank().getCapacity(), new IOMenuData(tank::inventory));
     }
 
-    public TankMenu(@Nullable MenuType<?> type, int windowID, Inventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
+    public TankMenu(@Nullable MenuType<?> type, int id, Inventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
     {
-        super(type, windowID, multiBlock);
+        super(type, id, playerInventory.player, multiBlock);
 
         this.fluidData = fluidData;
         this.capacity = capacity;

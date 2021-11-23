@@ -11,9 +11,9 @@ public class ZYBlockEntityMenu<T extends ZYBlockEntity> extends ZYMenu
     @Nullable
     protected final T blockEntity;
 
-    public ZYBlockEntityMenu(@Nullable MenuType<?> type, int windowID, @Nullable T blockEntity)
+    public ZYBlockEntityMenu(@Nullable MenuType<?> type, int id, Player player, @Nullable T blockEntity)
     {
-        super(type, windowID);
+        super(type, id, player);
         this.blockEntity = blockEntity;
     }
 

@@ -12,20 +12,20 @@ import java.util.function.Supplier;
 
 public class UpdateMenuDataPacket
 {
-    private final int windowID, index;
+    private final int menuID, index;
     private IMenuData variable;
     private FriendlyByteBuf buffer;
 
-    public UpdateMenuDataPacket(int windowID, int index, IMenuData variable)
+    public UpdateMenuDataPacket(int menuID, int index, IMenuData variable)
     {
-        this.windowID = windowID;
+        this.menuID = menuID;
         this.index = index;
         this.variable = variable;
     }
 
     public UpdateMenuDataPacket(FriendlyByteBuf buffer)
     {
-        this.windowID = buffer.readVarInt();
+        this.menuID = buffer.readVarInt();
         this.index = buffer.readVarInt();
         this.buffer = buffer;
     }
@@ -37,7 +37,7 @@ public class UpdateMenuDataPacket
 
     public static void encode(UpdateMenuDataPacket packet, FriendlyByteBuf buffer)
     {
-        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.menuID());
         buffer.writeVarInt(packet.id());
         packet.variable().update();
         packet.variable().encode(buffer);
@@ -54,16 +54,16 @@ public class UpdateMenuDataPacket
 
             AbstractContainerMenu menu = mc.player.containerMenu;
 
-            if (menu.containerId == packet.windowID && menu instanceof ZYMenu modMenu)
+            if (menu.containerId == packet.menuID && menu instanceof ZYMenu modMenu)
                 modMenu.handleVariable(packet.id(), packet.buffer());
         });
 
         return true;
     }
 
-    public int windowID()
+    public int menuID()
     {
-        return windowID;
+        return menuID;
     }
 
     public int id()

@@ -186,9 +186,9 @@ public class FabricatorBlockEntity extends ZYBlockEntity implements MenuProvider
 
     @Nullable
     @Override
-    public AbstractContainerMenu createMenu(int windowID, Inventory playerInventory, Player player)
+    public AbstractContainerMenu createMenu(int id, Inventory playerInventory, Player player)
     {
-        return new FabricatorMenu(windowID, playerInventory, this);
+        return new FabricatorMenu(id, playerInventory, this);
     }
 
     @Nonnull

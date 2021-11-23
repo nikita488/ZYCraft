@@ -27,10 +27,10 @@ public class FabricatorScreen extends ZYScreen<FabricatorMenu>
     protected void init()
     {
         super.init();
-        addRenderableOnly(new Menu(leftPos - 34, topPos + 23, ZYType.BLUE.rgb(), menu.modeData())
+        new Menu(leftPos - 34, topPos + 23, ZYType.BLUE.rgb(), menu.modeData())
                 .addItem(ZYLang.FABRICATOR_AUTO_LOW, new ResourceLocation("block/redstone_torch_off"))
                 .addItem(ZYLang.FABRICATOR_AUTO_HIGH, new ResourceLocation("block/redstone_torch"))
-                .addItem(ZYLang.FABRICATOR_PULSE, new ResourceLocation("item/redstone")));
+                .addItem(ZYLang.FABRICATOR_PULSE, new ResourceLocation("item/redstone"));
     }
 
     @Override

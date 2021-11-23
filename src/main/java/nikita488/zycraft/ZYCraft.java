@@ -3,6 +3,8 @@ package nikita488.zycraft;
 import com.tterrag.registrate.Registrate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.DispenserBlock;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.util.NonNullLazy;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.InterModComms;
@@ -11,8 +13,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fmllegacy.network.NetworkRegistry;
 import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.compat.theoneprobe.ZYProbeInfoProvider;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.dispenser.ZYBucketDispenseItemBehavior;
@@ -72,6 +76,9 @@ public class ZYCraft
         eventBus.addListener(ZYConfig::init);
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::enqueueIMC);
+
+        if (FMLEnvironment.dist == Dist.CLIENT)
+            MinecraftForgeClient.registerTextureAtlasSpriteLoader(ZYCraft.id("cloud"), new CloudSprite.Loader());
     }
 
     private void commonSetup(FMLCommonSetupEvent event)
