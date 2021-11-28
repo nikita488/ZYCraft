@@ -23,7 +23,7 @@ public enum MultiChildType implements IMultiChildMatcher
     FLAMMABLE(ZYBlocks.FLAMMABLE_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
             Arrays.stream(ZYConstants.DIRECTIONS).anyMatch(side -> state.isFlammable(getter, pos, side))),
     HARD(ZYBlocks.HARD_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && state.isSolidRender(getter, pos) &&
-            state.requiresCorrectToolForDrops()),
+            state.getMaterial() == Material.STONE || state.getMaterial() == Material.METAL || state.getMaterial() == Material.HEAVY_METAL),
     GLASS(ZYBlocks.GLASS_BLOCK, (state, getter, pos) -> state.isCollisionShapeFullBlock(getter, pos) && !state.isSolidRender(getter, pos) &&
             (state.getMaterial() == Material.GLASS || state.getMaterial() == Material.BUILDABLE_GLASS));
 
