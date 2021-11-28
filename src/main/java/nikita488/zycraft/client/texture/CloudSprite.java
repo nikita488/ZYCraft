@@ -11,7 +11,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.textures.ITextureAtlasSpriteLoader;
 import nikita488.zycraft.ZYCraft;
-import nikita488.zycraft.util.Color;
 import nikita488.zycraft.util.IntBiConsumer;
 
 import javax.annotation.Nonnull;
@@ -65,7 +64,7 @@ public class CloudSprite extends TextureAtlasSprite
     private void set(int x, int y)
     {
         int color = (int)(MathHelper.clamp(pixel(pixels, x, y) * 2F, 0F, 1F) * 255);
-        mainImage[0].setPixelRGBA(x, y, Color.argb(color, color, color, 255));
+        mainImage[0].setPixelRGBA(x, y, NativeImage.combine(255, color, color, color));
     }
 
     private float pixel(float[] pixels, int x, int y)

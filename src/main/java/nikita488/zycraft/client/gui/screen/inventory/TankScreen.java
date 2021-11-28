@@ -17,9 +17,9 @@ public class TankScreen extends ZYScreen<TankContainer>
 {
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/tank.png");
 
-    public TankScreen(TankContainer container, PlayerInventory inventory, ITextComponent title)
+    public TankScreen(TankContainer menu, PlayerInventory inventory, ITextComponent title)
     {
-        super(container, inventory, title);
+        super(menu, inventory, title);
         this.imageHeight = 188;
     }
 

@@ -41,9 +41,9 @@ public abstract class ZYScreen<T extends Container> extends ContainerScreen<T>
     protected int titleColor = 0x999999;
     protected int playerInventoryTitleColor = 0x999999;
 
-    public ZYScreen(T container, PlayerInventory inventory, ITextComponent title)
+    public ZYScreen(T menu, PlayerInventory inventory, ITextComponent title)
     {
-        super(container, inventory, title);
+        super(menu, inventory, title);
         this.imageWidth = 192;
         this.imageHeight = 182;
         this.titleLabelY = 14;

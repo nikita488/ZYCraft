@@ -60,11 +60,11 @@ public class ZYClientSetup
     }
 
     @SubscribeEvent
-    public static void register(ParticleFactoryRegisterEvent event)
+    public static void registerParticleProviders(ParticleFactoryRegisterEvent event)
     {
         Minecraft mc = Minecraft.getInstance();
 
-        mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
+        mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Provider::new);
         ((IReloadableResourceManager)mc.getResourceManager()).registerReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
     }
 

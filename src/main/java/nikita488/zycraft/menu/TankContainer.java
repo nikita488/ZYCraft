@@ -25,19 +25,19 @@ public class TankContainer extends ZYMultiContainer<TankMultiBlock>
     private final int capacity;
     private final IOMenuData ioData;
 
-    public TankContainer(ContainerType<?> type, int windowID, PlayerInventory playerInventory, PacketBuffer buffer)
+    public TankContainer(ContainerType<?> type, int id, PlayerInventory playerInventory, PacketBuffer buffer)
     {
-        this(type, windowID, playerInventory, null, new ItemStackHandler(2), new FluidMenuData(), buffer.readVarInt(), new IOMenuData());
+        this(type, id, playerInventory, null, new ItemStackHandler(2), new FluidMenuData(), buffer.readVarInt(), new IOMenuData());
     }
 
-    public TankContainer(int windowID, PlayerInventory playerInventory, TankMultiBlock tank)
+    public TankContainer(int id, PlayerInventory playerInventory, TankMultiBlock tank)
     {
-        this(ZYContainers.TANK.get(), windowID, playerInventory, tank, tank.inventory(), new FluidMenuData(() -> tank.fluidTank().getFluid()), tank.fluidTank().getCapacity(), new IOMenuData(tank::inventory));
+        this(ZYContainers.TANK.get(), id, playerInventory, tank, tank.inventory(), new FluidMenuData(() -> tank.fluidTank().getFluid()), tank.fluidTank().getCapacity(), new IOMenuData(tank::inventory));
     }
 
-    public TankContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
+    public TankContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, @Nullable TankMultiBlock multiBlock, IItemHandler inventory, FluidMenuData fluidData, int capacity, IOMenuData ioData)
     {
-        super(type, windowID, multiBlock);
+        super(type, id, multiBlock);
 
         this.fluidData = fluidData;
         this.capacity = capacity;

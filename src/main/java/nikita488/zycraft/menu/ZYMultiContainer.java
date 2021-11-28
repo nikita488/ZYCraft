@@ -18,9 +18,9 @@ public class ZYMultiContainer<M extends MultiBlock> extends ZYContainer
     protected final M multiBlock;
     private final ObjectList<IOSlotOverlay> slotOverlays = new ObjectArrayList<>();
 
-    public ZYMultiContainer(@Nullable ContainerType<?> type, int windowID, @Nullable M multiBlock)
+    public ZYMultiContainer(@Nullable ContainerType<?> type, int id, @Nullable M multiBlock)
     {
-        super(type, windowID);
+        super(type, id);
         this.multiBlock = multiBlock;
     }
 

@@ -9,9 +9,9 @@ import net.minecraft.util.NonNullList;
 
 public class SerializableCraftingInventory extends CraftingInventory
 {
-    public SerializableCraftingInventory(Container container, int width, int height)
+    public SerializableCraftingInventory(Container menu, int width, int height)
     {
-        super(container, width, height);
+        super(menu, width, height);
     }
 
     @Override

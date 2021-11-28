@@ -188,9 +188,9 @@ public class FabricatorTile extends ZYTile implements ITickableTileEntity, IName
 
     @Nullable
     @Override
-    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player)
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new FabricatorContainer(windowID, playerInventory, this);
+        return new FabricatorContainer(id, playerInventory, this);
     }
 
     @Nonnull

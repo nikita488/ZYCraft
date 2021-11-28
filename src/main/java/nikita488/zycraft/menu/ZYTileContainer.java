@@ -11,9 +11,9 @@ public class ZYTileContainer<T extends ZYTile> extends ZYContainer
     @Nullable
     protected final T blockEntity;
 
-    public ZYTileContainer(@Nullable ContainerType<?> type, int windowID, @Nullable T blockEntity)
+    public ZYTileContainer(@Nullable ContainerType<?> type, int id, @Nullable T blockEntity)
     {
-        super(type, windowID);
+        super(type, id);
         this.blockEntity = blockEntity;
     }
 

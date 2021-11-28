@@ -14,8 +14,9 @@ public class ZYRenderTypes extends RenderState
             false, true,
             RenderType.State.builder()
                     .setTextureState(new TextureState(ZYCraft.id("textures/misc/multi_highlight.png"), false, false))
-                    .setTransparencyState(RenderState.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(RenderState.COLOR_WRITE)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .setOutputState(ITEM_ENTITY_TARGET)
                     .createCompositeState(false));
 
     private ZYRenderTypes(String name, Runnable setupTask, Runnable clearTask)

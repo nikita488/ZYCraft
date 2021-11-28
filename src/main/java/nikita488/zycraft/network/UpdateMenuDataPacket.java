@@ -12,20 +12,20 @@ import java.util.function.Supplier;
 
 public class UpdateMenuDataPacket
 {
-    private final int windowID, index;
+    private final int menuID, index;
     private IMenuData variable;
     private PacketBuffer buffer;
 
-    public UpdateMenuDataPacket(int windowID, int index, IMenuData variable)
+    public UpdateMenuDataPacket(int menuID, int index, IMenuData variable)
     {
-        this.windowID = windowID;
+        this.menuID = menuID;
         this.index = index;
         this.variable = variable;
     }
 
     public UpdateMenuDataPacket(PacketBuffer buffer)
     {
-        this.windowID = buffer.readVarInt();
+        this.menuID = buffer.readVarInt();
         this.index = buffer.readVarInt();
         this.buffer = buffer;
     }
@@ -37,7 +37,7 @@ public class UpdateMenuDataPacket
 
     public static void encode(UpdateMenuDataPacket packet, PacketBuffer buffer)
     {
-        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.menuID());
         buffer.writeVarInt(packet.id());
         packet.variable().update();
         packet.variable().encode(buffer);
@@ -52,18 +52,18 @@ public class UpdateMenuDataPacket
             if (mc.player == null)
                 return;
 
-            Container container = mc.player.containerMenu;
+            Container menu = mc.player.containerMenu;
 
-            if (container.containerId == packet.windowID && container instanceof ZYContainer)
-                ((ZYContainer)container).handleVariable(packet.id(), packet.buffer());
+            if (menu.containerId == packet.menuID && menu instanceof ZYContainer)
+                ((ZYContainer)menu).handleVariable(packet.id(), packet.buffer());
         });
 
         return true;
     }
 
-    public int windowID()
+    public int menuID()
     {
-        return windowID;
+        return menuID;
     }
 
     public int id()

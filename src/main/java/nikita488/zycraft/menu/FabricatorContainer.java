@@ -32,19 +32,19 @@ public class FabricatorContainer extends ZYTileContainer<FabricatorTile>
     private final PlayerEntity player;
     private final IntMenuData modeData;
 
-    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory)
+    public FabricatorContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory)
     {
-        this(type, windowID, playerInventory, null, new Inventory(9), new ItemStackHandler(), new ItemStackHandler(9), new IntMenuData());
+        this(type, id, playerInventory, null, new Inventory(9), new ItemStackHandler(), new ItemStackHandler(9), new IntMenuData());
     }
 
-    public FabricatorContainer(int windowID, PlayerInventory playerInventory, FabricatorTile fabricator)
+    public FabricatorContainer(int id, PlayerInventory playerInventory, FabricatorTile fabricator)
     {
-        this(ZYContainers.FABRICATOR.get(), windowID, playerInventory, fabricator, fabricator.recipePattern(), fabricator.craftingResult(), fabricator.inventory(), new IntMenuData(() -> fabricator.mode().ordinal()));
+        this(ZYContainers.FABRICATOR.get(), id, playerInventory, fabricator, fabricator.recipePattern(), fabricator.craftingResult(), fabricator.inventory(), new IntMenuData(() -> fabricator.mode().ordinal()));
     }
 
-    public FabricatorContainer(@Nullable ContainerType<?> type, int windowID, PlayerInventory playerInventory, @Nullable FabricatorTile fabricator, IInventory recipePattern, IItemHandler craftingResult, IItemHandler inventory, IntMenuData modeData)
+    public FabricatorContainer(@Nullable ContainerType<?> type, int id, PlayerInventory playerInventory, @Nullable FabricatorTile fabricator, IInventory recipePattern, IItemHandler craftingResult, IItemHandler inventory, IntMenuData modeData)
     {
-        super(type, windowID, fabricator);
+        super(type, id, fabricator);
 
         this.player = playerInventory.player;
         this.level = player.level;

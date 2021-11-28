@@ -19,9 +19,9 @@ public class FabricatorScreen extends ZYScreen<FabricatorContainer>
     public static final ResourceLocation TEXTURE = ZYCraft.id("textures/gui/container/fabricator.png");
     private Menu modeMenu;
 
-    public FabricatorScreen(FabricatorContainer container, PlayerInventory inventory, ITextComponent title)
+    public FabricatorScreen(FabricatorContainer menu, PlayerInventory inventory, ITextComponent title)
     {
-        super(container, inventory, title);
+        super(menu, inventory, title);
     }
 
     @Override

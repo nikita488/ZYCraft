@@ -25,7 +25,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
 
     @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(FabricatorContainer container, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer)
+    public IRecipeTransferError transferRecipe(FabricatorContainer menu, Object recipe, IRecipeLayout recipeLayout, PlayerEntity player, boolean maxTransfer, boolean doTransfer)
     {
         if (recipe instanceof ICraftingRecipe)
         {
@@ -35,7 +35,7 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
                 return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
 
             if (doTransfer)
-                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(container.containerId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
+                ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(menu.containerId, craftingRecipe, recipeLayout.getItemStacks().getGuiIngredients()));
 
             return null;
         }

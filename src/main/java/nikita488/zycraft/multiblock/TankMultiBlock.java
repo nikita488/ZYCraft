@@ -119,9 +119,9 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
 
     @Nullable
     @Override
-    public Container createMenu(int windowID, PlayerInventory playerInventory, PlayerEntity player)
+    public Container createMenu(int id, PlayerInventory playerInventory, PlayerEntity player)
     {
-        return new TankContainer(windowID, playerInventory, this);
+        return new TankContainer(id, playerInventory, this);
     }
 
     @Override
@@ -186,9 +186,9 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, IN
     }
 
     @Override
-    public void render(MatrixStack stack, IRenderTypeBuffer buffer, int lightMap, float partialTicks)
+    public void render(MatrixStack stack, IRenderTypeBuffer source, int lightMap, float partialTicks)
     {
-        tank.get().render(stack, buffer, level, partialTicks);
+        tank.get().render(stack, source, level, partialTicks);
     }
 
     @Override

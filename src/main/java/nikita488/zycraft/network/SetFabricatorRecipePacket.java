@@ -17,14 +17,14 @@ import java.util.function.Supplier;
 
 public class SetFabricatorRecipePacket
 {
-    private final int windowID;
+    private final int menuID;
     private final ResourceLocation recipeID;
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
     private ItemStack craftingResult = ItemStack.EMPTY;
 
-    public SetFabricatorRecipePacket(int windowID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
+    public SetFabricatorRecipePacket(int menuID, ICraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
     {
-        this.windowID = windowID;
+        this.menuID = menuID;
         this.recipeID = recipe.getId();
 
         ingredients.forEach((index, ingredient) ->
@@ -43,7 +43,7 @@ public class SetFabricatorRecipePacket
 
     public SetFabricatorRecipePacket(PacketBuffer buffer)
     {
-        this.windowID = buffer.readVarInt();
+        this.menuID = buffer.readVarInt();
         this.recipeID = buffer.readResourceLocation();
 
         for (int slot = 0; slot < 9; slot++)
@@ -59,7 +59,7 @@ public class SetFabricatorRecipePacket
 
     public static void encode(SetFabricatorRecipePacket packet, PacketBuffer buffer)
     {
-        buffer.writeVarInt(packet.windowID());
+        buffer.writeVarInt(packet.menuID());
         buffer.writeResourceLocation(packet.recipeID());
 
         for (int slot = 0; slot < 9; slot++)
@@ -79,11 +79,11 @@ public class SetFabricatorRecipePacket
 
             player.resetLastActionTime();
 
-            Container container = player.containerMenu;
+            Container menu = player.containerMenu;
 
-            if (container.containerId == packet.windowID() && container.isSynched(player) && container instanceof FabricatorContainer && !player.isSpectator())
+            if (menu.containerId == packet.menuID() && menu.isSynched(player) && menu instanceof FabricatorContainer && !player.isSpectator())
             {
-                FabricatorTile fabricator = ((FabricatorContainer)container).blockEntity();
+                FabricatorTile fabricator = ((FabricatorContainer)menu).blockEntity();
 
                 if (fabricator == null)
                     return;
@@ -100,9 +100,9 @@ public class SetFabricatorRecipePacket
         return true;
     }
 
-    public int windowID()
+    public int menuID()
     {
-        return windowID;
+        return menuID;
     }
 
     public ResourceLocation recipeID()
