@@ -59,16 +59,23 @@ public class SparkleParticle extends SpriteTexturedParticle
         return LightTexture.pack(15, 15);
     }
 
+    public void setParticleSpeed(double x, double y, double z)
+    {
+        this.xd = x / lifetime;
+        this.yd = y / lifetime;
+        this.zd = z / lifetime;
+    }
+
     public void setGravity(float gravity)
     {
         this.gravity = gravity;
     }
 
-    public static class Factory implements IParticleFactory<SparkleParticleData>
+    public static class Provider implements IParticleFactory<SparkleParticleData>
     {
         private final IAnimatedSprite sprites;
 
-        public Factory(IAnimatedSprite sprites)
+        public Provider(IAnimatedSprite sprites)
         {
             this.sprites = sprites;
         }
@@ -77,20 +84,22 @@ public class SparkleParticle extends SpriteTexturedParticle
         @Override
         public Particle createParticle(SparkleParticleData data, ClientWorld level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SparkleParticle particle = new SparkleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
+            SparkleParticle sparkle = new SparkleParticle(level, x, y, z, 0D, 0D, 0D, sprites, data.hasFixedSize());
 
-            particle.setColor(data.r(), data.g(), data.b());
-            particle.setAlpha(data.a());
-            particle.setLifetime(5 * data.lifetimeFactor());
-            particle.scale(data.sizeFactor());
-            particle.setGravity(data.gravity());
-            particle.hasPhysics = data.hasPhysics();
+            sparkle.setColor(data.r(), data.g(), data.b());
+            sparkle.setAlpha(data.a());
+            sparkle.setLifetime(5 * data.lifetimeFactor());
+            sparkle.scale(data.sizeFactor());
+            sparkle.setGravity(data.gravity());
+            sparkle.hasPhysics = data.hasPhysics();
 
             if (!data.hasMotion())
-                particle.xd = particle.yd = particle.zd = 0D;
+                sparkle.setParticleSpeed(0D, 0D, 0D);
+            else
+                sparkle.setParticleSpeed(xSpeed, ySpeed, zSpeed);
 
-            particle.setSpriteFromAge(sprites);
-            return particle;
+            sparkle.setSpriteFromAge(sprites);
+            return sparkle;
         }
     }
 }
