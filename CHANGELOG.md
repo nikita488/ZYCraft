@@ -1,3 +1,8 @@
+### 3.1.29 (2021-11-28)
+
+* Added Redstone support for Basic Machines. Fire Basin acts like "Flint and Steel" and ignites a fire at the top face when powered (Extinguishes fire when unpowered). Water, Ice and Fluid Void will not function when powered
+* Changed matching of Hard blocks when forming MultiBlock's to test for STONE, METAL or HARD_METAL material
+
 ### 3.1.3 (2021-10-22)
 
 * Added check to prevent Quartz Crystal cluster accessing chunk that doesn't exist yet while generating
