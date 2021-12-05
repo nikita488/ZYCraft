@@ -13,9 +13,11 @@ public class ZYRenderTypes extends RenderStateShard
             VertexFormat.Mode.QUADS, 256,
             false, true,
             RenderType.CompositeState.builder()
+                    .setShaderState(POSITION_COLOR_TEX_SHADER)
                     .setTextureState(new TextureStateShard(ZYCraft.id("textures/misc/multi_highlight.png"), false, false))
-                    .setTransparencyState(RenderStateShard.TRANSLUCENT_TRANSPARENCY)
-                    .setWriteMaskState(RenderStateShard.COLOR_WRITE)
+                    .setTransparencyState(TRANSLUCENT_TRANSPARENCY)
+                    .setWriteMaskState(COLOR_WRITE)
+                    .setOutputState(ITEM_ENTITY_TARGET)
                     .createCompositeState(false));
 
     private ZYRenderTypes(String name, Runnable setupTask, Runnable clearTask)

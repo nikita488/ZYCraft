@@ -9,7 +9,7 @@ public interface IDynamicMultiBlock
 {
     default void tick() {}
 
-    default void render(PoseStack stack, MultiBufferSource buffer, int lightMap, float partialTicks) {}
+    default void render(PoseStack stack, MultiBufferSource source, int lightMap, float partialTicks) {}
 
     BlockPos origin();
 

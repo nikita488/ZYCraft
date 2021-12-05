@@ -64,11 +64,11 @@ public class SparkleParticle extends TextureSheetParticle
         this.gravity = gravity;
     }
 
-    public static class Factory implements ParticleProvider<SparkleParticleData>
+    public static class Provider implements ParticleProvider<SparkleParticleData>
     {
         private final SpriteSet sprites;
 
-        public Factory(SpriteSet sprites)
+        public Provider(SpriteSet sprites)
         {
             this.sprites = sprites;
         }
@@ -77,20 +77,22 @@ public class SparkleParticle extends TextureSheetParticle
         @Override
         public Particle createParticle(SparkleParticleData data, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
         {
-            SparkleParticle particle = new SparkleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
+            SparkleParticle sparkle = new SparkleParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, sprites, data.hasFixedSize());
 
-            particle.setColor(data.r(), data.g(), data.b());
-            particle.setAlpha(data.a());
-            particle.setLifetime(5 * data.lifetimeFactor());
-            particle.scale(data.sizeFactor());
-            particle.setGravity(data.gravity());
-            particle.hasPhysics = data.hasPhysics();
+            sparkle.setColor(data.r(), data.g(), data.b());
+            sparkle.setAlpha(data.a());
+            sparkle.setLifetime(5 * data.lifetimeFactor());
+            sparkle.scale(data.sizeFactor());
+            sparkle.setGravity(data.gravity());
+            sparkle.hasPhysics = data.hasPhysics();
 
             if (!data.hasMotion())
-                particle.xd = particle.yd = particle.zd = 0D;
+                sparkle.setParticleSpeed(0D, 0D, 0D);
+            else
+                sparkle.setParticleSpeed(xSpeed / sparkle.getLifetime(), ySpeed / sparkle.getLifetime(), zSpeed / sparkle.getLifetime());
 
-            particle.setSpriteFromAge(sprites);
-            return particle;
+            sparkle.setSpriteFromAge(sprites);
+            return sparkle;
         }
     }
 }

@@ -1,4 +1,4 @@
-package nikita488.zycraft.block.shape;
+package nikita488.zycraft.block;
 
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
@@ -10,7 +10,7 @@ import nikita488.zycraft.block.QuartzCrystalClusterBlock;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class ClusterShapes
+public class QuartzCrystalClusterShape
 {
     public static final VoxelShape[] DOWN = new VoxelShape[] {
             Block.box(6D, 6D, 6D, 10D, 16D, 10D),

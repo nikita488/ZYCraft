@@ -55,29 +55,6 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     public static final BooleanProperty USE_SHAPE_FOR_LIGHT_OCCLUSION = ZYBlockStateProperties.USE_SHAPE_FOR_LIGHT_OCCLUSION;
     public static final BooleanProperty SIGNAL_SOURCE = ZYBlockStateProperties.SIGNAL_SOURCE;
     public static final BooleanProperty HAS_ANALOG_OUTPUT_SIGNAL = ZYBlockStateProperties.HAS_ANALOG_OUTPUT_SIGNAL;
-    private final IBlockRenderProperties renderProperties = new IBlockRenderProperties()
-    {
-        @Override
-        public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine engine)
-        {
-            state = getState(level, ((BlockHitResult)target).getBlockPos());
-            return RenderProperties.get(state.getBlock()).addHitEffects(state, level, target, engine);
-        }
-
-        @Override
-        public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine)
-        {
-            state = getState(level, pos);
-            return RenderProperties.get(state.getBlock()).addDestroyEffects(state, level, pos, engine);
-        }
-
-        @Override
-        public Vector3d getFogColor(BlockState state, LevelReader reader, BlockPos pos, Entity entity, Vector3d color, float partialTicks)
-        {
-            state = getState(reader, pos);
-            return RenderProperties.get(state.getBlock()).getFogColor(state, reader, pos, entity, color, partialTicks);
-        }
-    };
 
     public ConvertedMultiChildBlock(Properties properties)
     {
@@ -88,7 +65,29 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     @Override
     public void initializeClient(Consumer<IBlockRenderProperties> consumer)
     {
-        consumer.accept(renderProperties);
+        consumer.accept(new IBlockRenderProperties()
+        {
+            @Override
+            public boolean addHitEffects(BlockState state, Level level, HitResult target, ParticleEngine engine)
+            {
+                state = getState(level, ((BlockHitResult)target).getBlockPos());
+                return RenderProperties.get(state.getBlock()).addHitEffects(state, level, target, engine);
+            }
+
+            @Override
+            public boolean addDestroyEffects(BlockState state, Level level, BlockPos pos, ParticleEngine engine)
+            {
+                state = getState(level, pos);
+                return RenderProperties.get(state.getBlock()).addDestroyEffects(state, level, pos, engine);
+            }
+
+            @Override
+            public Vector3d getFogColor(BlockState state, LevelReader reader, BlockPos pos, Entity entity, Vector3d color, float partialTicks)
+            {
+                state = getState(reader, pos);
+                return RenderProperties.get(state.getBlock()).getFogColor(state, reader, pos, entity, color, partialTicks);
+            }
+        });
     }
 
     @Nullable

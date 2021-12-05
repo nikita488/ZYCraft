@@ -11,6 +11,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -18,7 +20,6 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import nikita488.zycraft.block.shape.ClusterShapes;
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleUtils;
 
@@ -75,7 +76,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
     {
-        return ClusterShapes.get(state);
+        return QuartzCrystalClusterShape.get(state);
     }
 
     @Override
@@ -83,6 +84,18 @@ public class QuartzCrystalClusterBlock extends Block
     {
         if (!(entity instanceof ItemEntity))
             entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
     }
 
     @Override

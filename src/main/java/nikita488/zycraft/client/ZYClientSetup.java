@@ -2,11 +2,10 @@ package nikita488.zycraft.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.item.ItemProperties;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.event.ParticleFactoryRegisterEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.FluidStack;
@@ -18,7 +17,6 @@ import nikita488.zycraft.client.model.ConvertedMultiChildModel;
 import nikita488.zycraft.client.model.FluidContainerModel;
 import nikita488.zycraft.client.particle.SparkleParticle;
 import nikita488.zycraft.client.renderer.multiblock.MultiHighlightRenderer;
-import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.client.texture.GuiComponentManager;
 import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.init.ZYParticles;
@@ -34,7 +32,6 @@ public class ZYClientSetup
     {
         MultiManager.clientSetup();
         MultiHighlightRenderer.init();
-        MinecraftForgeClient.registerTextureAtlasSpriteLoader(ZYCraft.id("cloud"), new CloudSprite.Loader());
 
         event.enqueueWork(() ->
         {
@@ -60,12 +57,16 @@ public class ZYClientSetup
     }
 
     @SubscribeEvent
-    public static void register(ParticleFactoryRegisterEvent event)
+    public static void registerParticleProviders(ParticleFactoryRegisterEvent event)
     {
         Minecraft mc = Minecraft.getInstance();
+        mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Provider::new);
+    }
 
-        mc.particleEngine.register(ZYParticles.SPARKLE.get(), SparkleParticle.Factory::new);
-        ((ReloadableResourceManager)mc.getResourceManager()).registerReloadListener(guiComponentManager = new GuiComponentManager(mc.getTextureManager()));
+    @SubscribeEvent
+    public static void registerReloadListeners(RegisterClientReloadListenersEvent event)
+    {
+        event.registerReloadListener(guiComponentManager = new GuiComponentManager(Minecraft.getInstance().getTextureManager()));
     }
 
     public static GuiComponentManager guiComponentManager()
