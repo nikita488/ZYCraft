@@ -86,21 +86,38 @@ public class ZYLang
     public static final TranslationTextComponent FABRICATOR_AUTO_LOW = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_low", "Auto: Low");
     public static final TranslationTextComponent FABRICATOR_AUTO_HIGH = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_high", "Auto: High");
     public static final TranslationTextComponent FABRICATOR_PULSE = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "pulse", "Pulse");
-    public static final TranslationTextComponent VALVE_IN = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "in", "Input");
-    public static final TranslationTextComponent VALVE_OUT = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "out", "Output");
-    public static final TranslationTextComponent ITEM_IO_ANY = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "any", "Input/Output");
-    public static final TranslationTextComponent ITEM_IO_ALL_IN = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_in", "Input");
-    public static final TranslationTextComponent ITEM_IO_ALL_OUT = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_out", "Output");
-    public static final TranslationTextComponent ITEM_IO_IN1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in1", "Input1");
-    public static final TranslationTextComponent ITEM_IO_OUT1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out1", "Output1");
-    public static final TranslationTextComponent ITEM_IO_IN2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in2", "Input2");
-    public static final TranslationTextComponent ITEM_IO_OUT2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out2", "Output2");
+    public static final TranslationTextComponent VALVE_IN = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("valve"), "in", "Input")
+            .withStyle(TextFormatting.BLUE);
+    public static final TranslationTextComponent VALVE_OUT = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("valve"), "out", "Output")
+            .withStyle(TextFormatting.GOLD);
+    public static final TranslationTextComponent ITEM_IO_ANY = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "any", "Input/Output")
+            .withStyle(TextFormatting.WHITE);
+    public static final TranslationTextComponent ITEM_IO_ALL_IN = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_in", "Input")
+            .withStyle(TextFormatting.BLUE);
+    public static final TranslationTextComponent ITEM_IO_ALL_OUT = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_out", "Output")
+            .withStyle(TextFormatting.GOLD);
+    public static final TranslationTextComponent ITEM_IO_IN1 = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in1", "Input1")
+            .withStyle(TextFormatting.DARK_PURPLE);
+    public static final TranslationTextComponent ITEM_IO_OUT1 = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out1", "Output1")
+            .withStyle(TextFormatting.DARK_RED);
+    public static final TranslationTextComponent ITEM_IO_IN2 = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in2", "Input2")
+            .withStyle(TextFormatting.GREEN);
+    public static final TranslationTextComponent ITEM_IO_OUT2 = (TranslationTextComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out2", "Output2")
+            .withStyle(TextFormatting.YELLOW);
 
+    public static final TranslationTextComponent CURRENT_COLOR_LABEL = (TranslationTextComponent)REGISTRATE.addLang("label", ZYCraft.id("current_color"), "Current color:")
+            .withStyle(TextFormatting.GRAY);
     public static final TranslationTextComponent MODE_LABEL = REGISTRATE.addLang("label", ZYCraft.id("mode"), "Mode: ");
     public static final TranslationTextComponent SOURCE_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("source_fluid"), "Source fluid: ");
     public static final TranslationTextComponent VOID_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("void_fluid"), "Void fluid: ");
     public static final TranslationTextComponent STORED_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("stored_fluid"), "Stored fluid: ");
 
+    public static final TranslationTextComponent RED_INFO = (TranslationTextComponent)REGISTRATE.addLang("info", ZYCraft.id("red"), "Red: %s")
+            .withStyle(TextFormatting.RED);
+    public static final TranslationTextComponent GREEN_INFO = (TranslationTextComponent)REGISTRATE.addLang("info", ZYCraft.id("green"), "Green: %s")
+            .withStyle(TextFormatting.GREEN);
+    public static final TranslationTextComponent BLUE_INFO = (TranslationTextComponent)REGISTRATE.addLang("info", ZYCraft.id("blue"), "Blue: %s")
+            .withStyle(TextFormatting.BLUE);
     public static final TranslationTextComponent FLUID_INFO = REGISTRATE.addLang("info", ZYCraft.id("fluid"), "%s %s mB");
 
     public static final TranslationTextComponent FABRICATOR_RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.id("fabricator"), "recipe_incompatible", "Recipe incompatible with Fabricator");

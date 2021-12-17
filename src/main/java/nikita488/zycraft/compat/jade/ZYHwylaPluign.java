@@ -4,6 +4,7 @@ import mcp.mobius.waila.api.IRegistrar;
 import mcp.mobius.waila.api.IWailaPlugin;
 import mcp.mobius.waila.api.TooltipPosition;
 import mcp.mobius.waila.api.WailaPlugin;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.api.fluid.IFluidSource;
 import nikita488.zycraft.api.fluid.IFluidVoid;
 import nikita488.zycraft.block.FabricatorBlock;
@@ -16,6 +17,7 @@ public class ZYHwylaPluign implements IWailaPlugin
     @Override
     public void register(IRegistrar registrar)
     {
+        registrar.addConfig(ColorableComponentProvider.KEY, true);
         registrar.addConfig(FluidSourceComponentProvider.KEY, true);
         registrar.addConfig(FluidVoidComponentProvider.KEY, true);
         registrar.addConfig(FabricatorComponentProvider.KEY, true);
@@ -23,12 +25,14 @@ public class ZYHwylaPluign implements IWailaPlugin
         registrar.addConfig(ItemIOComponentProvider.KEY, true);
         registrar.addConfig(FluidVoidComponentProvider.KEY, true);
 
+        registrar.registerComponentProvider(ColorableComponentProvider.INSTANCE, TooltipPosition.BODY, IColorable.class);
         registrar.registerComponentProvider(FluidSourceComponentProvider.INSTANCE, TooltipPosition.BODY, IFluidSource.class);
         registrar.registerComponentProvider(FluidVoidComponentProvider.INSTANCE, TooltipPosition.BODY, IFluidVoid.class);
         registrar.registerComponentProvider(FabricatorComponentProvider.INSTANCE, TooltipPosition.BODY, FabricatorBlock.class);
         registrar.registerComponentProvider(ValveComponentProvider.INSTANCE, TooltipPosition.BODY, ValveBlock.class);
         registrar.registerComponentProvider(ItemIOComponentProvider.INSTANCE, TooltipPosition.BODY, ItemIOBlock.class);
 
+        registrar.registerBlockDataProvider(ColorableComponentProvider.INSTANCE, IColorable.class);
         registrar.registerBlockDataProvider(ValveComponentProvider.INSTANCE, ValveBlock.class);
     }
 }
