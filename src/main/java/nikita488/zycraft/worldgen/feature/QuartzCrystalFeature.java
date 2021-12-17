@@ -16,17 +16,17 @@ import nikita488.zycraft.util.ZYConstants;
 
 import java.util.Random;
 
-public class ClusterFeature extends Feature<ClusterFeatureConfig>
+public class QuartzCrystalFeature extends Feature<QuartzCrystalFeatureConfig>
 {
-    public static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
+    private static final BlockPos.Mutable RELATIVE_POS = new BlockPos.Mutable();
 
-    public ClusterFeature(Codec<ClusterFeatureConfig> codec)
+    public QuartzCrystalFeature(Codec<QuartzCrystalFeatureConfig> codec)
     {
         super(codec);
     }
 
     @Override
-    public boolean place(ISeedReader level, ChunkGenerator generator, Random random, BlockPos pos, ClusterFeatureConfig config)
+    public boolean place(ISeedReader level, ChunkGenerator generator, Random random, BlockPos pos, QuartzCrystalFeatureConfig config)
     {
         ObjectList<Direction> possibleSides = new ObjectArrayList<>();
 

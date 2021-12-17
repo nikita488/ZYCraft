@@ -12,17 +12,17 @@ import net.minecraft.world.gen.placement.Placement;
 import java.util.Random;
 import java.util.stream.Stream;
 
-public class ClusterPlacement extends Placement<ClusterPlacementConfig>
+public class QuartzCrystalPlacement extends Placement<QuartzCrystalPlacementConfig>
 {
     public static final BlockPos.Mutable POS = new BlockPos.Mutable();
 
-    public ClusterPlacement(Codec<ClusterPlacementConfig> codec)
+    public QuartzCrystalPlacement(Codec<QuartzCrystalPlacementConfig> codec)
     {
         super(codec);
     }
 
     @Override
-    public Stream<BlockPos> getPositions(WorldDecoratingHelper context, Random random, ClusterPlacementConfig config, BlockPos pos)
+    public Stream<BlockPos> getPositions(WorldDecoratingHelper context, Random random, QuartzCrystalPlacementConfig config, BlockPos pos)
     {
         ObjectList<BlockPos> clusters = new ObjectArrayList<>();
 

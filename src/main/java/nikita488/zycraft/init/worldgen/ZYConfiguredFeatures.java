@@ -8,9 +8,9 @@ import net.minecraft.world.gen.feature.OreFeatureConfig;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.init.ZYBlocks;
-import nikita488.zycraft.worldgen.feature.ClusterFeatureConfig;
+import nikita488.zycraft.worldgen.feature.QuartzCrystalFeatureConfig;
 import nikita488.zycraft.worldgen.feature.ZychoriteVeinConfig;
-import nikita488.zycraft.worldgen.placement.ClusterPlacementConfig;
+import nikita488.zycraft.worldgen.placement.QuartzCrystalPlacementConfig;
 
 public class ZYConfiguredFeatures
 {
@@ -24,9 +24,9 @@ public class ZYConfiguredFeatures
             .range(ZYConfig.aluminiumMaxHeight)
             .squared()
             .count(ZYConfig.aluminiumAmount);
-    public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL_CLUSTER = ZYFeatures.QUARTZ_CRYSTAL_CLUSTER.get()
-            .configured(new ClusterFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 5))
-            .decorated(ZYPlacements.QUARTZ_CRYSTAL_CLUSTER.get().configured(new ClusterPlacementConfig(ZYConfig.quartzCrystalClusterAttempts, ZYConfig.quartzCrystalClusterAmount)));
+    public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL = ZYFeatures.QUARTZ_CRYSTAL.get()
+            .configured(new QuartzCrystalFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 5))
+            .decorated(ZYPlacements.QUARTZ_CRYSTAL.get().configured(new QuartzCrystalPlacementConfig(ZYConfig.quartzCrystalAttempts, ZYConfig.quartzCrystalAmount)));
 
     public static void init()
     {
@@ -34,6 +34,6 @@ public class ZYConfiguredFeatures
 
         Registry.register(registry, ZYCraft.id("zychorite_vein"), ZYCHORITE_VEIN);
         Registry.register(registry, ZYCraft.id("ore_aluminium"), ORE_ALUMINIUM);
-        Registry.register(registry, ZYCraft.id("quartz_crystal_cluster"), QUARTZ_CRYSTAL_CLUSTER);
+        Registry.register(registry, ZYCraft.id("quartz_crystal_cluster"), QUARTZ_CRYSTAL);
     }
 }

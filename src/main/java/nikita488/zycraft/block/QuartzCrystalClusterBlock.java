@@ -11,6 +11,8 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
@@ -20,7 +22,6 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import nikita488.zycraft.block.shape.ClusterShapes;
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleUtils;
 
@@ -40,7 +41,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public boolean canBeReplaced(BlockState state, BlockItemUseContext context)
     {
-        return context.getItemInHand().getItem() == asItem() && state.getValue(AMOUNT) < 5 || super.canBeReplaced(state, context);
+        return (!context.isSecondaryUseActive() && context.getItemInHand().getItem() == asItem() && state.getValue(AMOUNT) < 5) || super.canBeReplaced(state, context);
     }
 
     @Override
@@ -62,10 +63,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, IWorld accessor, BlockPos currentPos, BlockPos facingPos)
     {
-        if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos))
-            return state;
-
-        return Blocks.AIR.defaultBlockState();
+        return facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos) ? state : Blocks.AIR.defaultBlockState();
     }
 
     @Override
@@ -78,14 +76,26 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public VoxelShape getShape(BlockState state, IBlockReader getter, BlockPos pos, ISelectionContext context)
     {
-        return ClusterShapes.get(state);
+        return QuartzCrystalShape.get(state);
     }
 
     @Override
     public void entityInside(BlockState state, World level, BlockPos pos, Entity entity)
     {
         if (!(entity instanceof ItemEntity))
-            entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));
+            entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL, state.getValue(AMOUNT));
+    }
+
+    @Override
+    public BlockState rotate(BlockState state, Rotation rotation)
+    {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public BlockState mirror(BlockState state, Mirror mirror)
+    {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
     }
 
     @Override

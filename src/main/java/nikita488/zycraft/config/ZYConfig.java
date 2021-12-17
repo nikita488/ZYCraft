@@ -21,8 +21,8 @@ public class ZYConfig
     public static int aluminiumAmount;
     public static int aluminiumMaxHeight;
 
-    public static int quartzCrystalClusterAttempts;
-    public static int quartzCrystalClusterAmount;
+    public static int quartzCrystalAttempts;
+    public static int quartzCrystalAmount;
 
     public static void register()
     {
@@ -51,8 +51,8 @@ public class ZYConfig
             aluminiumAmount = common.aluminiumAmount.get();
             aluminiumMaxHeight = common.aluminiumMaxHeight.get();
 
-            quartzCrystalClusterAttempts = common.quartzCrystalClusterAttempts.get();
-            quartzCrystalClusterAmount = common.quartzCrystalClusterAmount.get();
+            quartzCrystalAttempts = common.quartzCrystalAttempts.get();
+            quartzCrystalAmount = common.quartzCrystalAmount.get();
         }
     }
 }
