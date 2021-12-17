@@ -30,20 +30,11 @@ public class ZYPackets
     {
         SimpleChannel channel = ZYCraft.CHANNEL;
 
+        //Clientbound
         channel.messageBuilder(UpdateMenuDataPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(UpdateMenuDataPacket::decode)
                 .encoder(UpdateMenuDataPacket::encode)
                 .consumer(UpdateMenuDataPacket::handle)
-                .add();
-        channel.messageBuilder(SetFabricatorRecipePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(SetFabricatorRecipePacket::decode)
-                .encoder(SetFabricatorRecipePacket::encode)
-                .consumer(SetFabricatorRecipePacket::handle)
-                .add();
-        channel.messageBuilder(SetSlotStackPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
-                .decoder(SetSlotStackPacket::decode)
-                .encoder(SetSlotStackPacket::encode)
-                .consumer(SetSlotStackPacket::handle)
                 .add();
         channel.messageBuilder(AddMultiPacket.class, id++, NetworkDirection.PLAY_TO_CLIENT)
                 .decoder(AddMultiPacket::decode)
@@ -59,6 +50,17 @@ public class ZYPackets
                 .decoder(UpdateMultiPacket::decode)
                 .encoder(UpdateMultiPacket::encode)
                 .consumer(UpdateMultiPacket::handle)
+                .add();
+        //Serverbound
+        channel.messageBuilder(SetFabricatorRecipePacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SetFabricatorRecipePacket::decode)
+                .encoder(SetFabricatorRecipePacket::encode)
+                .consumer(SetFabricatorRecipePacket::handle)
+                .add();
+        channel.messageBuilder(SetSlotStackPacket.class, id++, NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SetSlotStackPacket::decode)
+                .encoder(SetSlotStackPacket::encode)
+                .consumer(SetSlotStackPacket::handle)
                 .add();
     }
 }
