@@ -25,7 +25,7 @@ public class ZYConfiguredFeatures
             .squared()
             .count(ZYConfig.aluminiumAmount);
     public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL = ZYFeatures.QUARTZ_CRYSTAL.get()
-            .configured(new QuartzCrystalFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, 5))
+            .configured(new QuartzCrystalFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE, ZYConfig.quartzCrystalMaxCrystals))
             .decorated(ZYPlacements.QUARTZ_CRYSTAL.get().configured(new QuartzCrystalPlacementConfig(ZYConfig.quartzCrystalAttempts, ZYConfig.quartzCrystalAmount)));
 
     public static void init()

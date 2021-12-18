@@ -23,6 +23,7 @@ public class ZYConfig
 
     public static int quartzCrystalAttempts;
     public static int quartzCrystalAmount;
+    public static int quartzCrystalMaxCrystals;
 
     public static void register()
     {
@@ -53,6 +54,7 @@ public class ZYConfig
 
             quartzCrystalAttempts = common.quartzCrystalAttempts.get();
             quartzCrystalAmount = common.quartzCrystalAmount.get();
+            quartzCrystalMaxCrystals = common.quartzCrystalMaxCrystals.get();
         }
     }
 }
