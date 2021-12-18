@@ -1,3 +1,8 @@
+### 3.1.34 (2021-12-18)
+
+* Added Colorable blocks support for Jade and TheOneProbe plugins
+* Added config option to set maximum amount of crystals per cluster. Refactored config comments and value ranges a bit
+
 ### 3.1.29 (2021-11-28)
 
 * Added Redstone support for Basic Machines. Fire Basin acts like "Flint and Steel" and ignites a fire at the top face when powered (Extinguishes fire when unpowered). Water, Ice and Fluid Void will not function when powered
