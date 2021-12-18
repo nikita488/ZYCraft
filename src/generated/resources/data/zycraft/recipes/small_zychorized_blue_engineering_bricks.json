@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XX",
+    "XX"
+  ],
+  "key": {
+    "X": {
+      "item": "zycraft:zychorized_blue_engineering_bricks"
+    }
+  },
+  "result": {
+    "item": "zycraft:small_zychorized_blue_engineering_bricks",
+    "count": 4
+  }
+}

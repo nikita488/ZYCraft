@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "I#I",
+    "#X#",
+    "I#I"
+  ],
+  "key": {
+    "I": {
+      "item": "zycraft:zychorite"
+    },
+    "#": {
+      "item": "zycraft:red_zychorium_bricks"
+    },
+    "X": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "result": {
+    "item": "zycraft:zychorized_red_engineering_bricks",
+    "count": 4
+  }
+}

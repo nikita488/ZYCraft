@@ -197,10 +197,10 @@ public abstract class MultiBlock
     public void save(CompoundTag tag) {}
     public void load(CompoundTag tag) {}
 
-    public final void markUnsaved()
+    public final void setUnsaved()
     {
         if (!level.isClientSide() && level.hasChunk(mainChunk.x, mainChunk.z))
-            level.getChunk(mainChunk.x, mainChunk.z).markUnsaved();
+            level.getChunk(mainChunk.x, mainChunk.z).setUnsaved(true);
     }
 
     public final void updateInterfacesForOutputSignal()

@@ -45,11 +45,9 @@ public class ColorableBlockEntity extends ZYBlockEntity implements IColorable
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag)
     {
-        super.save(tag);
         color.save(tag);
-        return tag;
     }
 
     @Override

@@ -163,10 +163,8 @@ public class FabricatorBlockEntity extends ZYBlockEntity implements MenuProvider
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag)
     {
-        super.save(tag);
-
         if (craftingRecipe != null)
             tag.putString("Recipe", craftingRecipe.getId().toString());
 
@@ -174,8 +172,6 @@ public class FabricatorBlockEntity extends ZYBlockEntity implements MenuProvider
         tag.put("Inventory", inventory.serializeNBT());
         tag.putBoolean("LastPowered", lastPowered);
         logic.save(tag);
-
-        return tag;
     }
 
     @Override

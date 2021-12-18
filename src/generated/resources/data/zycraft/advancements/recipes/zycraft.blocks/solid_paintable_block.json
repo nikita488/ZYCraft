@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:solid_paintable_block"
+    ]
+  },
+  "criteria": {
+    "has_aluminium_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zycraft:aluminium_block"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:solid_paintable_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminium_block",
+      "has_the_recipe"
+    ]
+  ]
+}

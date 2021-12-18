@@ -1,0 +1,9 @@
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "CTM",
+		"textures": [
+		    "zycraft:block/small_zychorized_engineering_bricks_ctm"
+		]
+	}
+}

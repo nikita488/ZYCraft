@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "zycraft:zychorized_dark_engineering_bricks"
+  },
+  "result": "zycraft:small_zychorized_dark_engineering_bricks",
+  "count": 1
+}

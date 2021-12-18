@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:paintable_viewer"
+    ]
+  },
+  "criteria": {
+    "has_glass_viewer": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zycraft:glass_viewer"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:paintable_viewer"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_glass_viewer",
+      "has_the_recipe"
+    ]
+  ]
+}

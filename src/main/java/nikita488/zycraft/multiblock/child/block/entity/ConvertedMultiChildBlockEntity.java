@@ -71,11 +71,9 @@ public class ConvertedMultiChildBlockEntity extends MultiChildBlockEntity
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag)
     {
-        super.save(tag);
         tag.put("InitialState", NbtUtils.writeBlockState(initialState));
-        return tag;
     }
 
     @Override

@@ -26,10 +26,11 @@ version = gradleutils.getMCTagOffsetBranchVersion(minecraft_version)
 group = "${mod_base_package}.${mod_id}"
 archivesBaseName = mod_name
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(16)
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 ext.MOD_VERSION = gradleutils.getTagOffsetVersion()
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+println(mod_name + ' ' + version)
 
 minecraft {
     mappings channel: mappings_channel, version: mappings_version
@@ -93,7 +94,7 @@ dependencies {
     if (!Boolean.getBoolean("idea.sync.active"))
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
+    def registrate = "com.tterrag.registrate:Registrate:MC1.18-${registrate_version}"
     implementation fg.deobf(registrate)
     shade registrate
 
@@ -104,8 +105,8 @@ dependencies {
     //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
     compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}:api")
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    implementation fg.deobf('curse.maven:the-one-probe-245211:3550084')
 
-    implementation fg.deobf('curse.maven:the-one-probe-245211:3430022')
     //runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
     //runtimeOnly fg.deobf('curse.maven:storage-drawers-223852:3180569')
     //runtimeOnly fg.deobf('curse.maven:mantle-74924:3389377')
@@ -200,7 +201,6 @@ publishing {
     }
 }
 
-/*
 tasks.curseforge.enabled = project.hasProperty('api_key')
 
 curseforge {
@@ -213,6 +213,7 @@ curseforge {
         changelog = file('CHANGELOG.md')
         changelogType = 'markdown'
         releaseType = project.hasProperty('release_type') ? project.release_type : 'beta'
+        addGameVersion "${minecraft_version}"
         mainArtifact(shadowJar) {
             displayName = "${mod_name} ${project.version}"
         }
@@ -225,4 +226,8 @@ curseforge {
             optionalDependency 'jade'
         }
     }
-}*/
+
+    options {
+        debug = true // defaults to false
+    }
+}

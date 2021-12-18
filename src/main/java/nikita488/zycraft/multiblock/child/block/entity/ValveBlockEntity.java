@@ -247,14 +247,10 @@ public class ValveBlockEntity extends MultiInterfaceBlockEntity implements IFlui
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag)
     {
-        super.save(tag);
-
         if (!storedFluid.isEmpty())
             tag.put("StoredFluid", storedFluid.writeToNBT(new CompoundTag()));
-
-        return tag;
     }
 
     @Nonnull

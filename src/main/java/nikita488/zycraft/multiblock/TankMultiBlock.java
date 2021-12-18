@@ -26,9 +26,9 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYMultiTypes;
 import nikita488.zycraft.menu.TankMenu;
@@ -53,7 +53,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, Me
         public void onContentsChanged()
         {
             super.onContentsChanged();
-            markUnsaved();
+            setUnsaved();
             updateInterfacesForOutputSignal();
         }
 
@@ -74,7 +74,7 @@ public class TankMultiBlock extends MultiBlock implements IDynamicMultiBlock, Me
         @Override
         protected void onContentsChanged(int slot)
         {
-            markUnsaved();
+            setUnsaved();
             updateInterfacesForOutputSignal();
         }
     }.input(0).output(1);

@@ -341,7 +341,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
                 bindTexture(blockAtlas);
                 renderSprite(stack, x + 3, y + 3, 16, 16, getSprite(blockAtlas, iconName));
 
-                if (isHovered())
+                if (isMouseOver(mouseX, mouseY))
                     renderToolTip(stack, mouseX, mouseY);
             }
         }
@@ -360,9 +360,9 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
         }
 
         @Override
-        public boolean isHovered()
+        public boolean isHoveredOrFocused()
         {
-            return !fluidData.get().isEmpty() && capacity > 0 && super.isHovered();
+            return !fluidData.get().isEmpty() && capacity > 0 && super.isHoveredOrFocused();
         }
 
         @Override
@@ -413,7 +413,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
             RenderSystem.disableBlend();
 
-            if (isHovered())
+            if (isMouseOver(mouseX, mouseY))
                 renderToolTip(pose, mouseX, mouseY);
         }
     }

@@ -39,7 +39,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public boolean canBeReplaced(BlockState state, BlockPlaceContext context)
     {
-        return context.getItemInHand().getItem() == asItem() && state.getValue(AMOUNT) < 5 || super.canBeReplaced(state, context);
+        return (!context.isSecondaryUseActive() && context.getItemInHand().is(asItem()) && state.getValue(AMOUNT) < 5) || super.canBeReplaced(state, context);
     }
 
     @Override
@@ -61,10 +61,7 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public BlockState updateShape(BlockState state, Direction facing, BlockState facingState, LevelAccessor accessor, BlockPos currentPos, BlockPos facingPos)
     {
-        if (facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos))
-            return state;
-
-        return Blocks.AIR.defaultBlockState();
+        return facing.getOpposite() != state.getValue(FACING) || state.canSurvive(accessor, currentPos) ? state : Blocks.AIR.defaultBlockState() ;
     }
 
     @Override
@@ -76,14 +73,14 @@ public class QuartzCrystalClusterBlock extends Block
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter getter, BlockPos pos, CollisionContext context)
     {
-        return QuartzCrystalClusterShape.get(state);
+        return QuartzCrystalShape.get(state);
     }
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
     {
         if (!(entity instanceof ItemEntity))
-            entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL_CLUSTER, state.getValue(AMOUNT));
+            entity.hurt(ZYDamageSources.QUARTZ_CRYSTAL, state.getValue(AMOUNT));
     }
 
     @Override

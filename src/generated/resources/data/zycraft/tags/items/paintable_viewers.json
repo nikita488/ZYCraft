@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#zycraft:viewers/paintable",
+    "#zycraft:viewers/phantomized_paintable"
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "zycraft:block/colorable_cube_all",
+  "textures": {
+    "base": "zycraft:block/solid_paintable_block",
+    "all": "zycraft:block/zychorium_block"
+  }
+}

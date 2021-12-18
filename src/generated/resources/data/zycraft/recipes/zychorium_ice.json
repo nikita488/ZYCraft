@@ -7,7 +7,7 @@
   ],
   "key": {
     "X": {
-      "tag": "zycraft:engineering_blocks/light"
+      "tag": "zycraft:engineering_bricks/light"
     },
     "#": {
       "item": "zycraft:zychorite"

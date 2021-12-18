@@ -73,7 +73,7 @@ public class FireBasinBlock extends Block
 
             if (flammable)
             {
-                aboveState.catchFire(level, abovePos, Direction.DOWN, null);
+                aboveState.onCaughtFire(level, abovePos, Direction.DOWN, null);
 
                 if (aboveState.getBlock() instanceof TntBlock)
                     level.removeBlock(abovePos, false);

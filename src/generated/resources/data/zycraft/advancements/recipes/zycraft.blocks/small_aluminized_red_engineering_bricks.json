@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:small_aluminized_red_engineering_bricks"
+    ]
+  },
+  "criteria": {
+    "has_aluminized_red_engineering_bricks": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "zycraft:aluminized_red_engineering_bricks"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:small_aluminized_red_engineering_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminized_red_engineering_bricks",
+      "has_the_recipe"
+    ]
+  ]
+}

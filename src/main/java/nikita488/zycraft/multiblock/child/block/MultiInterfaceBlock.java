@@ -19,7 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import nikita488.zycraft.block.state.properties.InterfaceAxis;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;
 import nikita488.zycraft.init.ZYLang;
-import nikita488.zycraft.multiblock.MultiType;
 import nikita488.zycraft.multiblock.child.IMultiChild;
 
 import javax.annotation.Nullable;
@@ -58,8 +57,9 @@ public abstract class MultiInterfaceBlock extends MultiChildBlock
             if (child.hasParents() || player.isShiftKeyDown())
                 return super.use(state, level, pos, player, hand, hitResult);
 
-            if (!level.isClientSide())
-                MultiType.tryFormMultiBlock(state, level, pos, hitResult.getDirection());
+            //TODO: Fix multiblocks
+            /*if (!level.isClientSide())
+                MultiType.tryFormMultiBlock(state, level, pos, hitResult.getDirection());*/
             return InteractionResult.sidedSuccess(level.isClientSide());
         }
 

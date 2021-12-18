@@ -52,13 +52,15 @@ public class ZYTags
         public static final IOptionalNamedTag<Block> VIEWERS_BASE = tag("viewers/base");
         public static final IOptionalNamedTag<Block> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
 
-        public static final IOptionalNamedTag<Block> IMMORTAL_VIEWERS = tag("immortal_viewers");
-        public static final IOptionalNamedTag<Block> VIEWERS_IMMORTAL = tag("viewers/immortal");
-        public static final IOptionalNamedTag<Block> VIEWERS_PHANTOMIZED_IMMORTAL = tag("viewers/phantomized_immortal");
+        public static final IOptionalNamedTag<Block> PAINTABLE_VIEWERS = tag("paintable_viewers");
+        public static final IOptionalNamedTag<Block> VIEWERS_PAINTABLE = tag("viewers/paintable");
+        public static final IOptionalNamedTag<Block> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
 
-        public static final IOptionalNamedTag<Block> ENGINEERING_BLOCK = tag("engineering_block");
-        public static final IOptionalNamedTag<Block> ZYCHORIZED_ENGINEERING_BLOCK = tag("zychorized_engineering_block");
-        public static final IOptionalNamedTag<Block> ALUMINIZED_ENGINEERING_BLOCK = tag("aluminized_engineering_block");
+        public static final IOptionalNamedTag<Block> ENGINEERING_BRICKS = tag("engineering_bricks");
+        public static final IOptionalNamedTag<Block> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
+        public static final IOptionalNamedTag<Block> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
+        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
+        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
 
         public static final IOptionalNamedTag<Block> BASIC_MACHINES = tag("basic_machines");
 
@@ -112,14 +114,16 @@ public class ZYTags
         public static final IOptionalNamedTag<Item> VIEWERS_BASE = tag("viewers/base");
         public static final IOptionalNamedTag<Item> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
 
-        public static final IOptionalNamedTag<Item> IMMORTAL_VIEWERS = tag("immortal_viewers");
-        public static final IOptionalNamedTag<Item> VIEWERS_IMMORTAL = tag("viewers/immortal");
-        public static final IOptionalNamedTag<Item> VIEWERS_PHANTOMIZED_IMMORTAL = tag("viewers/phantomized_immortal");
+        public static final IOptionalNamedTag<Item> PAINTABLE_VIEWERS = tag("paintable_viewers");
+        public static final IOptionalNamedTag<Item> VIEWERS_PAINTABLE = tag("viewers/paintable");
+        public static final IOptionalNamedTag<Item> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
 
-        public static final IOptionalNamedTag<Item> ENGINEERING_BLOCK = tag("engineering_block");
-        public static final IOptionalNamedTag<Item> ZYCHORIZED_ENGINEERING_BLOCK = tag("zychorized_engineering_block");
-        public static final IOptionalNamedTag<Item> ALUMINIZED_ENGINEERING_BLOCK = tag("aluminized_engineering_block");
-        public static final Map<ZYType, IOptionalNamedTag<Item>> ENGINEERING_BLOCKS = zyTag("engineering_blocks/{type}");
+        public static final IOptionalNamedTag<Item> ENGINEERING_BRICKS = tag("engineering_bricks");
+        public static final IOptionalNamedTag<Item> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
+        public static final IOptionalNamedTag<Item> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
+        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
+        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
+        public static final Map<ZYType, IOptionalNamedTag<Item>> ENGINEERING_BRICKS_BY_TYPE = zyTag("engineering_bricks/{type}");
 
         public static final IOptionalNamedTag<Item> BASIC_MACHINES = tag("basic_machines");
 
@@ -145,30 +149,31 @@ public class ZYTags
     {
         REGISTRATE.addDataGenerator(ProviderType.BLOCK_TAGS, tags ->
         {
-            tags.tag(Blocks.BASE_ZYCHORIUM_BRICKS).addTags(
-                    Blocks.BRICKS_ZYCHORIUM,
+            tags.tag(Blocks.BASE_ZYCHORIUM_BRICKS).addTags(Blocks.BRICKS_ZYCHORIUM,
                     Blocks.BRICKS_SOLID_ZYCHORIUM,
                     Blocks.BRICKS_ZYCHORIZED_ZYCHORIUM,
                     Blocks.BRICKS_ALUMINIZED_ZYCHORIUM);
 
-            tags.tag(Blocks.SMALL_ZYCHORIUM_BRICKS).addTags(
-                    Blocks.SMALL_BRICKS_ZYCHORIUM,
+            tags.tag(Blocks.SMALL_ZYCHORIUM_BRICKS).addTags(Blocks.SMALL_BRICKS_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_SOLID_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM,
                     Blocks.SMALL_BRICKS_ALUMINIZED_ZYCHORIUM);
 
             tags.tag(Blocks.ZYCHORIUM_BRICKS).addTags(Blocks.BASE_ZYCHORIUM_BRICKS, Blocks.SMALL_ZYCHORIUM_BRICKS);
             tags.tag(Blocks.BASE_VIEWERS).addTags(Blocks.VIEWERS_BASE, Blocks.VIEWERS_PHANTOMIZED);
-            tags.tag(Blocks.IMMORTAL_VIEWERS).addTags(Blocks.VIEWERS_IMMORTAL, Blocks.VIEWERS_PHANTOMIZED_IMMORTAL);
-            tags.tag(Blocks.VIEWERS).addTags(Blocks.BASE_VIEWERS, Blocks.IMMORTAL_VIEWERS);
-            tags.tag(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.IMMORTAL_VIEWERS);
+            tags.tag(Blocks.PAINTABLE_VIEWERS).addTags(Blocks.VIEWERS_PAINTABLE, Blocks.VIEWERS_PHANTOMIZED_PAINTABLE);
+            tags.tag(Blocks.VIEWERS).addTags(Blocks.BASE_VIEWERS, Blocks.PAINTABLE_VIEWERS);
+            tags.tag(Blocks.COLORABLE).addTags(Blocks.ZYCHORIUM_LAMPS, Blocks.PAINTABLE_VIEWERS);
 
-            tags.tag(Blocks.ENGINEERING_BLOCK).addTags(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Blocks.ALUMINIZED_ENGINEERING_BLOCK);
+            tags.tag(Blocks.ENGINEERING_BRICKS).addTags(Blocks.BRICKS_ZYCHORIZED_ENGINEERING,
+                    Blocks.BRICKS_ALUMINIZED_ENGINEERING,
+                    Blocks.SMALL_BRICKS_ZYCHORIZED_ENGINEERING,
+                    Blocks.SMALL_BRICKS_ALUMINIZED_ENGINEERING);
 
             tags.tag(Tags.Blocks.ORES).addTags(Blocks.ORES_ZYCHORIUM, Blocks.ORES_ALUMINIUM, Blocks.ORES_ALUMINUM);
             tags.tag(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
             tags.tag(Tags.Blocks.GLASS_COLORLESS).addTag(Blocks.BASE_VIEWERS);
-            tags.tag(Tags.Blocks.STAINED_GLASS).addTag(Blocks.IMMORTAL_VIEWERS);
+            tags.tag(Tags.Blocks.STAINED_GLASS).addTag(Blocks.PAINTABLE_VIEWERS);
             tags.tag(Tags.Blocks.DIRT).add(ZYBlocks.ZYCHORIUM_SOIL.get());
 
             tags.tag(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
@@ -210,26 +215,28 @@ public class ZYTags
             tags.copy(Blocks.VIEWERS_BASE, Items.VIEWERS_BASE);
             tags.copy(Blocks.VIEWERS_PHANTOMIZED, Items.VIEWERS_PHANTOMIZED);
 
-            tags.copy(Blocks.IMMORTAL_VIEWERS, Items.IMMORTAL_VIEWERS);
-            tags.copy(Blocks.VIEWERS_IMMORTAL, Items.VIEWERS_IMMORTAL);
-            tags.copy(Blocks.VIEWERS_PHANTOMIZED_IMMORTAL, Items.VIEWERS_PHANTOMIZED_IMMORTAL);
+            tags.copy(Blocks.PAINTABLE_VIEWERS, Items.PAINTABLE_VIEWERS);
+            tags.copy(Blocks.VIEWERS_PAINTABLE, Items.VIEWERS_PAINTABLE);
+            tags.copy(Blocks.VIEWERS_PHANTOMIZED_PAINTABLE, Items.VIEWERS_PHANTOMIZED_PAINTABLE);
 
-            tags.copy(Blocks.ENGINEERING_BLOCK, Items.ENGINEERING_BLOCK);
-            tags.copy(Blocks.ZYCHORIZED_ENGINEERING_BLOCK, Items.ZYCHORIZED_ENGINEERING_BLOCK);
-            tags.copy(Blocks.ALUMINIZED_ENGINEERING_BLOCK, Items.ALUMINIZED_ENGINEERING_BLOCK);
+            tags.copy(Blocks.ENGINEERING_BRICKS, Items.ENGINEERING_BRICKS);
+            tags.copy(Blocks.BRICKS_ZYCHORIZED_ENGINEERING, Items.BRICKS_ZYCHORIZED_ENGINEERING);
+            tags.copy(Blocks.BRICKS_ALUMINIZED_ENGINEERING, Items.BRICKS_ALUMINIZED_ENGINEERING);
+            tags.copy(Blocks.SMALL_BRICKS_ZYCHORIZED_ENGINEERING, Items.SMALL_BRICKS_ZYCHORIZED_ENGINEERING);
+            tags.copy(Blocks.SMALL_BRICKS_ALUMINIZED_ENGINEERING, Items.SMALL_BRICKS_ALUMINIZED_ENGINEERING);
 
             for (ZYType type : ZYType.VALUES)
-            {
-                tags.tag(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ZYCHORIZED_ENGINEERING_BLOCK.get(type).get().asItem());
-                tags.tag(Items.ENGINEERING_BLOCKS.get(type)).add(ZYBlocks.ALUMINIZED_ENGINEERING_BLOCK.get(type).get().asItem());
-            }
+                tags.tag(Items.ENGINEERING_BRICKS_BY_TYPE.get(type)).add(ZYBlocks.ZYCHORIZED_ENGINEERING_BRICKS.get(type).get().asItem(),
+                        ZYBlocks.SMALL_ZYCHORIZED_ENGINEERING_BRICKS.get(type).get().asItem(),
+                        ZYBlocks.ALUMINIZED_ENGINEERING_BRICKS.get(type).get().asItem(),
+                        ZYBlocks.SMALL_ALUMINIZED_ENGINEERING_BRICKS.get(type).get().asItem());
 
             tags.copy(Blocks.BASIC_MACHINES, Items.BASIC_MACHINES);
 
             tags.tag(Tags.Items.ORES).addTags(Items.ORES_ZYCHORIUM, Items.ORES_ALUMINIUM, Items.ORES_ALUMINUM);
             tags.tag(Tags.Items.STORAGE_BLOCKS).addTag(Items.STORAGE_BLOCKS_ZYCHORIUM);
             tags.tag(Tags.Items.GLASS_COLORLESS).addTag(Items.BASE_VIEWERS);
-            tags.tag(Tags.Items.STAINED_GLASS).addTag(Items.IMMORTAL_VIEWERS);
+            tags.tag(Tags.Items.STAINED_GLASS).addTag(Items.PAINTABLE_VIEWERS);
             tags.tag(Tags.Items.GEMS).addTag(Items.ZYCHORIUM);
         });
     }

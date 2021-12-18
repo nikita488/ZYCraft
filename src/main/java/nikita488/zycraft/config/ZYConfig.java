@@ -16,14 +16,15 @@ public class ZYConfig
     public static int zychoriteSize;
     public static int zychoriteOrePercentage;
     public static int zychoriteAmount;
+    public static int zychoriteMinHeight;
     public static int zychoriteMaxHeight;
 
     public static int aluminiumSize;
     public static int aluminiumAmount;
+    public static int aluminiumMinHeight;
     public static int aluminiumMaxHeight;
 
-    public static int quartzCrystalClusterAttempts;
-    public static int quartzCrystalClusterAmount;
+    public static int quartzCrystalMaxCrystals;
 
     public static void register()
     {
@@ -46,14 +47,15 @@ public class ZYConfig
             zychoriteSize = common.zychoriteSize.get();
             zychoriteOrePercentage = common.zychoriteOrePercentage.get();
             zychoriteAmount = common.zychoriteAmount.get();
+            zychoriteMinHeight = common.zychoriteMinHeight.get();
             zychoriteMaxHeight = common.zychoriteMaxHeight.get();
 
             aluminiumSize = common.aluminiumSize.get();
             aluminiumAmount = common.aluminiumAmount.get();
+            aluminiumMinHeight = common.aluminiumMinHeight.get();
             aluminiumMaxHeight = common.aluminiumMaxHeight.get();
 
-            quartzCrystalClusterAttempts = common.quartzCrystalClusterAttempts.get();
-            quartzCrystalClusterAmount = common.quartzCrystalClusterAmount.get();
+            quartzCrystalMaxCrystals = common.quartzCrystalMaxCrystals.get();
         }
     }
 }

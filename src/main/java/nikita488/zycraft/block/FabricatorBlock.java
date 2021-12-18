@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fmllegacy.network.NetworkHooks;
+import net.minecraftforge.network.NetworkHooks;
 import nikita488.zycraft.block.entity.FabricatorBlockEntity;
 import nikita488.zycraft.block.state.properties.FabricatorMode;
 import nikita488.zycraft.block.state.properties.ZYBlockStateProperties;

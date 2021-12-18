@@ -23,7 +23,7 @@ import net.minecraftforge.event.entity.EntityTeleportEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.network.PacketDistributor;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.entity.MultiEntity;
 import nikita488.zycraft.event.PlayerLoadedChunkEvent;
@@ -105,7 +105,7 @@ public class MultiManager extends SavedData
             return;
 
         if (multiBlocks.remove(multiBlock) && multiBlock.isMainChunk(chunkPos))
-            multiBlock.markUnsaved();
+            multiBlock.setUnsaved();
 
         if (multiBlocks.isEmpty())
             chunkMultiBlocks.remove(chunkPos.toLong());
@@ -130,7 +130,7 @@ public class MultiManager extends SavedData
 
         for (ChunkPos pos : multiBlock.parentChunks())
             if (addMultiToChunk(pos, multiBlock) && multiBlock.isMainChunk(pos))
-                multiBlock.markUnsaved();
+                multiBlock.setUnsaved();
 
         if (multiBlock.isClientSide())
             return;

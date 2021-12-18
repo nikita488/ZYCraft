@@ -14,8 +14,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import nikita488.zycraft.client.texture.CloudSprite;
 import nikita488.zycraft.compat.theoneprobe.ZYProbeInfoProvider;
 import nikita488.zycraft.config.ZYConfig;
@@ -31,9 +31,9 @@ import nikita488.zycraft.init.ZYMultiTypes;
 import nikita488.zycraft.init.ZYParticles;
 import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.init.ZYTags;
-import nikita488.zycraft.init.worldgen.ZYConfiguredFeatures;
-import nikita488.zycraft.init.worldgen.ZYFeatures;
-import nikita488.zycraft.init.worldgen.ZYPlacements;
+import nikita488.zycraft.init.levelgen.ZYConfiguredFeatures;
+import nikita488.zycraft.init.levelgen.ZYFeatures;
+import nikita488.zycraft.init.levelgen.ZYPlacements;
 import nikita488.zycraft.multiblock.MultiManager;
 import nikita488.zycraft.network.ZYPackets;
 import org.apache.logging.log4j.LogManager;
@@ -60,7 +60,6 @@ public class ZYCraft
         ZYEntities.init();
         ZYParticles.init();
         ZYFeatures.init();
-        ZYPlacements.init();
         ZYMenus.init();
         ZYRegistries.init();
         ZYMultiTypes.init();
@@ -86,6 +85,7 @@ public class ZYCraft
         event.enqueueWork(() ->
         {
             ZYConfiguredFeatures.init();
+            ZYPlacements.init();
             DispenserBlock.registerBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
         MultiManager.commonSetup();

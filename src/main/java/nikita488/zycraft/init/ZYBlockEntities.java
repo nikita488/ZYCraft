@@ -1,7 +1,7 @@
 package nikita488.zycraft.init;
 
 import com.tterrag.registrate.Registrate;
-import com.tterrag.registrate.util.entry.TileEntityEntry;
+import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.entity.ColorableBlockEntity;
@@ -18,31 +18,30 @@ public class ZYBlockEntities
 {
     private static final Registrate REGISTRATE = ZYCraft.registrate();
 
-    public static final TileEntityEntry<ColorableBlockEntity> COLORABLE = REGISTRATE.<ColorableBlockEntity>tileEntity("colorable", (pos, state, type) -> new ColorableBlockEntity(type, pos, state))
-            .validBlocks(
-                    ZYBlocks.IMMORTAL_BLOCK,
-                    ZYBlocks.THE_AUREY_BLOCK,
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.BASIC),
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.GLOWING),
-                    ZYBlocks.IMMORTAL_VIEWER.get(ViewerType.DARK),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.BASIC),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.GLOWING),
-                    ZYBlocks.PHANTOMIZED_IMMORTAL_VIEWER.get(ViewerType.DARK))
+    public static final BlockEntityEntry<ColorableBlockEntity> COLORABLE = REGISTRATE.<ColorableBlockEntity>blockEntity("colorable", ColorableBlockEntity::new)
+            .validBlocks(ZYBlocks.PAINTABLE_BLOCK,
+                    ZYBlocks.SOLID_PAINTABLE_BLOCK,
+                    ZYBlocks.PAINTABLE_VIEWER.get(ViewerType.BASIC),
+                    ZYBlocks.PAINTABLE_VIEWER.get(ViewerType.GLOWING),
+                    ZYBlocks.PAINTABLE_VIEWER.get(ViewerType.DARK),
+                    ZYBlocks.PHANTOMIZED_PAINTABLE_VIEWER.get(ViewerType.BASIC),
+                    ZYBlocks.PHANTOMIZED_PAINTABLE_VIEWER.get(ViewerType.GLOWING),
+                    ZYBlocks.PHANTOMIZED_PAINTABLE_VIEWER.get(ViewerType.DARK))
             .register();
 
-    public static final TileEntityEntry<ZychoriumLampBlockEntity> ZYCHORIUM_LAMP = REGISTRATE.<ZychoriumLampBlockEntity>tileEntity("zychorium_lamp", (pos, state, type) -> new ZychoriumLampBlockEntity(type, pos, state))
+    public static final BlockEntityEntry<ZychoriumLampBlockEntity> ZYCHORIUM_LAMP = REGISTRATE.blockEntity("zychorium_lamp", ZychoriumLampBlockEntity::new)
             .validBlocks(ZYBlocks.ZYCHORIUM_LAMP, ZYBlocks.INVERTED_ZYCHORIUM_LAMP)
             .register();
 
-    public static final TileEntityEntry<FabricatorBlockEntity> FABRICATOR = TileEntityEntry.cast(ZYBlocks.FABRICATOR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
+    public static final BlockEntityEntry<FabricatorBlockEntity> FABRICATOR = BlockEntityEntry.cast(ZYBlocks.FABRICATOR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
 
-    public static final TileEntityEntry<MultiAirBlockEntity> MULTI_AIR = TileEntityEntry.cast(ZYBlocks.MULTI_AIR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
-    public static final TileEntityEntry<ConvertedMultiChildBlockEntity> CONVERTED_MULTI_CHILD = REGISTRATE.<ConvertedMultiChildBlockEntity>tileEntity("converted_multi_child", (pos, state, type) -> new ConvertedMultiChildBlockEntity(type, pos, state))
+    public static final BlockEntityEntry<MultiAirBlockEntity> MULTI_AIR = BlockEntityEntry.cast(ZYBlocks.MULTI_AIR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
+    public static final BlockEntityEntry<ConvertedMultiChildBlockEntity> CONVERTED_MULTI_CHILD = REGISTRATE.blockEntity("converted_multi_child", ConvertedMultiChildBlockEntity::new)
             .validBlocks(ZYBlocks.FLAMMABLE_BLOCK, ZYBlocks.HARD_BLOCK, ZYBlocks.GLASS_BLOCK)
             .register();
-    public static final TileEntityEntry<ValveBlockEntity> VALVE = TileEntityEntry.cast(ZYBlocks.VALVE.getSibling(ForgeRegistries.BLOCK_ENTITIES));
-    public static final TileEntityEntry<ItemIOBlockEntity> ITEM_IO = TileEntityEntry.cast(ZYBlocks.ITEM_IO.getSibling(ForgeRegistries.BLOCK_ENTITIES));
-    public static final TileEntityEntry<FluidSelectorBlockEntity> FLUID_SELECTOR = TileEntityEntry.cast(ZYBlocks.FLUID_SELECTOR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
+    public static final BlockEntityEntry<ValveBlockEntity> VALVE = BlockEntityEntry.cast(ZYBlocks.VALVE.getSibling(ForgeRegistries.BLOCK_ENTITIES));
+    public static final BlockEntityEntry<ItemIOBlockEntity> ITEM_IO = BlockEntityEntry.cast(ZYBlocks.ITEM_IO.getSibling(ForgeRegistries.BLOCK_ENTITIES));
+    public static final BlockEntityEntry<FluidSelectorBlockEntity> FLUID_SELECTOR = BlockEntityEntry.cast(ZYBlocks.FLUID_SELECTOR.getSibling(ForgeRegistries.BLOCK_ENTITIES));
 
     public static void init() {}
 }

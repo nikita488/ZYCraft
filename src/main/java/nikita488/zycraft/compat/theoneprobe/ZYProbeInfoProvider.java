@@ -6,15 +6,18 @@ import mcjty.theoneprobe.api.IProbeInfo;
 import mcjty.theoneprobe.api.IProbeInfoProvider;
 import mcjty.theoneprobe.api.ITheOneProbe;
 import mcjty.theoneprobe.api.ProbeMode;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.api.fluid.IFluidSource;
 import nikita488.zycraft.api.fluid.IFluidVoid;
 import nikita488.zycraft.block.FabricatorBlock;
@@ -44,44 +47,61 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
     @Override
     public void addProbeInfo(ProbeMode mode, IProbeInfo info, Player player, Level level, BlockState state, IProbeHitData data)
     {
-        if (ZYBlocks.FABRICATOR.has(state))
+        BlockPos pos = data.getPos();
+        Direction side = data.getSideHit();
+
+        if (level.getBlockEntity(pos) instanceof IColorable colorable)
+            addColorableProbeInfo(info, colorable, state, level, pos);
+        else if (ZYBlocks.FABRICATOR.has(state))
             addFabricatorProbeInfo(info, state);
         else if (ZYBlocks.VALVE.has(state))
-            addValveProbeInfo(info, level, state, data.getPos());
+            addValveProbeInfo(info, level, state, pos);
         else if (ZYBlocks.ITEM_IO.has(state))
             addItemIOProbeInfo(info, state);
         else if (state.getBlock() instanceof IFluidSource source)
-            addFluidSourceProbeInfo(info, source, level, state, data.getPos(), data.getSideHit());
+            addFluidSourceProbeInfo(info, source, level, state, pos, side);
         else if (state.getBlock() instanceof IFluidVoid fluidVoid)
-            addFluidVoidProbeInfo(info, fluidVoid, level, state, data.getPos(), data.getSideHit());
+            addFluidVoidProbeInfo(info, fluidVoid, level, state, pos, side);
+    }
+
+    private void addColorableProbeInfo(IProbeInfo info, IColorable colorable, BlockState state, BlockAndTintGetter getter, BlockPos pos)
+    {
+        int color = colorable.getColor(state, getter, pos);
+
+        info.mcText(ZYLang.CURRENT_COLOR_LABEL);
+        info.mcText(ZYLang.copy(ZYLang.RED_INFO, (color >> 16) & 255));
+        info.mcText(ZYLang.copy(ZYLang.GREEN_INFO, (color >> 8) & 255));
+        info.mcText(ZYLang.copy(ZYLang.BLUE_INFO, color & 255));
     }
 
     private void addFabricatorProbeInfo(IProbeInfo info, BlockState state)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(FabricatorBlock.MODE).displayName()));
+        info.text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(FabricatorBlock.MODE).displayName()));
     }
 
     private void addValveProbeInfo(IProbeInfo info, Level level, BlockState state, BlockPos pos)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ValveBlock.IO_MODE).displayName()));
+        info.mcText(ZYLang.MODE_LABEL.plainCopy().withStyle(ChatFormatting.GRAY)
+                .append(state.getValue(ValveBlock.IO_MODE).displayName()));
 
-        if (level.getBlockEntity(pos) instanceof ValveBlockEntity valve)
-        {
-            FluidStack storedFluid = valve.getStoredFluid();
+        if (!(level.getBlockEntity(pos) instanceof ValveBlockEntity valve))
+            return;
 
-            if (!storedFluid.isEmpty())
-                info.horizontal()
-                        .text(CompoundText.create().label(ZYLang.STORED_FLUID_LABEL))
-                        .tankSimple(storedFluid.getAmount(), storedFluid,
-                                info.defaultProgressStyle()
-                                        .prefix(storedFluid.getDisplayName().copy().append(" "))
-                                        .suffix(new TextComponent(" mB")));
-        }
+        FluidStack storedFluid = valve.getStoredFluid();
+
+        if (!storedFluid.isEmpty())
+            info.horizontal()
+                    .text(CompoundText.create().label(ZYLang.STORED_FLUID_LABEL))
+                    .tankSimple(storedFluid.getAmount(), storedFluid,
+                            info.defaultProgressStyle()
+                                    .prefix(storedFluid.getDisplayName().copy().append(" "))
+                                    .suffix(new TextComponent(" mB")));
     }
 
     private void addItemIOProbeInfo(IProbeInfo info, BlockState state)
     {
-        info.horizontal().text(CompoundText.create().label(ZYLang.MODE_LABEL).info(state.getValue(ItemIOBlock.IO_MODE).displayName()));
+        info.mcText(ZYLang.MODE_LABEL.plainCopy().withStyle(ChatFormatting.GRAY)
+                .append(state.getValue(ItemIOBlock.IO_MODE).displayName()));
     }
 
     private void addFluidSourceProbeInfo(IProbeInfo info, IFluidSource source, Level level, BlockState state, BlockPos pos, Direction side)

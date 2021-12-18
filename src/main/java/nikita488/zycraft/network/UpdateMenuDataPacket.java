@@ -3,8 +3,7 @@ package nikita488.zycraft.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.fmllegacy.LogicalSidedProvider;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import nikita488.zycraft.menu.ZYMenu;
 import nikita488.zycraft.menu.data.IMenuData;
 
@@ -47,7 +46,7 @@ public class UpdateMenuDataPacket
     {
         context.get().enqueueWork(() ->
         {
-            Minecraft mc = LogicalSidedProvider.INSTANCE.get(context.get().getDirection().getReceptionSide());
+            Minecraft mc = Minecraft.getInstance();
 
             if (mc.player == null)
                 return;

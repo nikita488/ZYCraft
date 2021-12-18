@@ -50,7 +50,7 @@ public class ZYBlockEntity extends BlockEntity
     @Override
     public CompoundTag getUpdateTag()
     {
-        return Util.make(super.getUpdateTag(), this::encode);
+        return Util.make(new CompoundTag(), this::encode);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class ZYBlockEntity extends BlockEntity
     public ClientboundBlockEntityDataPacket getUpdatePacket()
     {
         CompoundTag tag = Util.make(new CompoundTag(), this::encodeUpdate);
-        return !tag.isEmpty() ? new ClientboundBlockEntityDataPacket(worldPosition, 0, tag) : null;
+        return !tag.isEmpty() ? ClientboundBlockEntityDataPacket.create(this, blockEntity -> tag) : null;
     }
 
     @Override

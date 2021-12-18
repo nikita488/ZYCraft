@@ -1,16 +1,16 @@
 {
   "required": true,
   "package": "${project.group}.mixin",
-  "compatibilityLevel": "JAVA_16",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "mixins.${mod_id}.refmap.json",
   "mixins": [
-    "world.server.ServerWorldMixin",
-    "world.server.ChunkManagerMixin",
-    "world.chunk.storage.ChunkSerializerMixin"
+    "server.level.ServerLevelMixin",
+    "server.level.ChunkMapMixin",
+    "world.level.chunk.storage.ChunkSerializerMixin"
   ],
   "client": [
     "client.MinecraftMixin",
-    "client.world.ClientWorldMixin"
+    "client.multiplayer.ClientLevelMixin"
   ],
   "server": [],
   "minVersion": "0.8"

@@ -1,8 +1,8 @@
 package nikita488.zycraft.init;
 
 import com.tterrag.registrate.Registrate;
-import com.tterrag.registrate.builders.ContainerBuilder;
-import com.tterrag.registrate.util.entry.ContainerEntry;
+import com.tterrag.registrate.builders.MenuBuilder;
+import com.tterrag.registrate.util.entry.MenuEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.gui.screen.inventory.FabricatorScreen;
 import nikita488.zycraft.client.gui.screen.inventory.TankScreen;
@@ -13,9 +13,9 @@ public class ZYMenus
 {
     private static final Registrate REGISTRATE = ZYCraft.registrate();
 
-    public static final ContainerEntry<FabricatorMenu> FABRICATOR = REGISTRATE.container("fabricator", FabricatorMenu::new, () -> FabricatorScreen::new)
+    public static final MenuEntry<FabricatorMenu> FABRICATOR = REGISTRATE.menu("fabricator", FabricatorMenu::new, () -> FabricatorScreen::new)
             .register();
-    public static final ContainerEntry<TankMenu> TANK = REGISTRATE.container("tank", (ContainerBuilder.ForgeContainerFactory<TankMenu>)TankMenu::new, () -> TankScreen::new)
+    public static final MenuEntry<TankMenu> TANK = REGISTRATE.menu("tank", (MenuBuilder.ForgeMenuFactory<TankMenu>)TankMenu::new, () -> TankScreen::new)
             .register();
 
     public static void init() {}

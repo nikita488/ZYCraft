@@ -1,7 +1,7 @@
 package nikita488.zycraft.network;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent;
 import nikita488.zycraft.multiblock.MultiBlock;
 import nikita488.zycraft.multiblock.MultiManager;
 

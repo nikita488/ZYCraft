@@ -26,7 +26,7 @@ public enum ViewerType
     private final NonNullSupplier<DataIngredient> ingredient;
     private final NonNullUnaryOperator<Block.Properties> properties;
     public static final ViewerType[] VALUES = new ViewerType[] {BASIC, DIRE, ALUMINIUM, REINFORCED, GLOWING, DARK};
-    public static final ViewerType[] IMMORTAL_VALUES = new ViewerType[] {BASIC, GLOWING, DARK};
+    public static final ViewerType[] PAINTABLE_VALUES = new ViewerType[] {BASIC, GLOWING, DARK};
 
     ViewerType(String name, NonNullSupplier<DataIngredient> ingredient)
     {
@@ -40,15 +40,15 @@ public enum ViewerType
         this.properties = properties;
     }
 
-    public static <T> Map<ViewerType, T> buildMap(String pattern, boolean immortal, NonNullBiFunction<ViewerType, String, T> factory)
+    public static <T> Map<ViewerType, T> buildMap(String pattern, boolean paintable, NonNullBiFunction<ViewerType, String, T> factory)
     {
         ImmutableMap.Builder<ViewerType, T> map = ImmutableMap.builder();
-        ViewerType[] values = immortal ? IMMORTAL_VALUES : VALUES;
+        ViewerType[] values = paintable ? PAINTABLE_VALUES : VALUES;
 
         for (ViewerType type : values)
         {
-            String target = immortal && type == BASIC ? "{type}_" : "{type}";
-            String replacement = immortal && type == BASIC ? "" : type.toString();
+            String target = paintable && type == BASIC ? "{type}_" : "{type}";
+            String replacement = paintable && type == BASIC ? "" : type.toString();
             map.put(type, factory.apply(type, pattern.replace(target, replacement)));
         }
 

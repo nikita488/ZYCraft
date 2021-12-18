@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "zycraft:aluminized_green_engineering_bricks"
+  },
+  "result": "zycraft:small_aluminized_green_engineering_bricks",
+  "count": 1
+}

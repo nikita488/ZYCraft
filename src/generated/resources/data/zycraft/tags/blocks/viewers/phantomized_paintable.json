@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:phantomized_paintable_viewer",
+    "zycraft:phantomized_glowing_paintable_viewer",
+    "zycraft:phantomized_dark_paintable_viewer"
+  ]
+}

@@ -86,21 +86,38 @@ public class ZYLang
     public static final TranslatableComponent FABRICATOR_AUTO_LOW = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_low", "Auto: Low");
     public static final TranslatableComponent FABRICATOR_AUTO_HIGH = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "auto_high", "Auto: High");
     public static final TranslatableComponent FABRICATOR_PULSE = REGISTRATE.addLang("mode", ZYCraft.id("fabricator"), "pulse", "Pulse");
-    public static final TranslatableComponent VALVE_IN = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "in", "Input");
-    public static final TranslatableComponent VALVE_OUT = REGISTRATE.addLang("mode", ZYCraft.id("valve"), "out", "Output");
-    public static final TranslatableComponent ITEM_IO_ANY = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "any", "Input/Output");
-    public static final TranslatableComponent ITEM_IO_ALL_IN = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_in", "Input");
-    public static final TranslatableComponent ITEM_IO_ALL_OUT = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_out", "Output");
-    public static final TranslatableComponent ITEM_IO_IN1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in1", "Input1");
-    public static final TranslatableComponent ITEM_IO_OUT1 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out1", "Output1");
-    public static final TranslatableComponent ITEM_IO_IN2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in2", "Input2");
-    public static final TranslatableComponent ITEM_IO_OUT2 = REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out2", "Output2");
+    public static final TranslatableComponent VALVE_IN = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("valve"), "in", "Input")
+            .withStyle(ChatFormatting.BLUE);
+    public static final TranslatableComponent VALVE_OUT = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("valve"), "out", "Output")
+            .withStyle(ChatFormatting.GOLD);
+    public static final TranslatableComponent ITEM_IO_ANY = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "any", "Input/Output")
+            .withStyle(ChatFormatting.WHITE);
+    public static final TranslatableComponent ITEM_IO_ALL_IN = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_in", "Input")
+            .withStyle(ChatFormatting.BLUE);
+    public static final TranslatableComponent ITEM_IO_ALL_OUT = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "all_out", "Output")
+            .withStyle(ChatFormatting.GOLD);
+    public static final TranslatableComponent ITEM_IO_IN1 = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in1", "Input1")
+            .withStyle(ChatFormatting.DARK_PURPLE);
+    public static final TranslatableComponent ITEM_IO_OUT1 = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out1", "Output1")
+            .withStyle(ChatFormatting.DARK_RED);
+    public static final TranslatableComponent ITEM_IO_IN2 = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "in2", "Input2")
+            .withStyle(ChatFormatting.GREEN);
+    public static final TranslatableComponent ITEM_IO_OUT2 = (TranslatableComponent)REGISTRATE.addLang("mode", ZYCraft.id("item_io"), "out2", "Output2")
+            .withStyle(ChatFormatting.YELLOW);
 
+    public static final TranslatableComponent CURRENT_COLOR_LABEL = (TranslatableComponent)REGISTRATE.addLang("label", ZYCraft.id("current_color"), "Current color:")
+            .withStyle(ChatFormatting.GRAY);
     public static final TranslatableComponent MODE_LABEL = REGISTRATE.addLang("label", ZYCraft.id("mode"), "Mode: ");
     public static final TranslatableComponent SOURCE_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("source_fluid"), "Source fluid: ");
     public static final TranslatableComponent VOID_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("void_fluid"), "Void fluid: ");
     public static final TranslatableComponent STORED_FLUID_LABEL = REGISTRATE.addLang("label", ZYCraft.id("stored_fluid"), "Stored fluid: ");
 
+    public static final TranslatableComponent RED_INFO = (TranslatableComponent)REGISTRATE.addLang("info", ZYCraft.id("red"), "Red: %s")
+            .withStyle(ChatFormatting.RED);
+    public static final TranslatableComponent GREEN_INFO = (TranslatableComponent)REGISTRATE.addLang("info", ZYCraft.id("green"), "Green: %s")
+            .withStyle(ChatFormatting.GREEN);
+    public static final TranslatableComponent BLUE_INFO = (TranslatableComponent)REGISTRATE.addLang("info", ZYCraft.id("blue"), "Blue: %s")
+            .withStyle(ChatFormatting.BLUE);
     public static final TranslatableComponent FLUID_INFO = REGISTRATE.addLang("info", ZYCraft.id("fluid"), "%s %s mB");
 
     public static final TranslatableComponent FABRICATOR_RECIPE_INCOMPATIBLE = REGISTRATE.addLang("jei", ZYCraft.id("fabricator"), "recipe_incompatible", "Recipe incompatible with Fabricator");

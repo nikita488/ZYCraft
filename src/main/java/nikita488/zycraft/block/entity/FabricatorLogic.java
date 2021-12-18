@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fmllegacy.hooks.BasicEventHooks;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -158,7 +158,7 @@ public class FabricatorLogic
 
         player.setPosRaw(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
         craftingResult.onCraftedBy(fabricator.getLevel(), player, craftingResult.getCount());
-        BasicEventHooks.firePlayerCraftingEvent(player, craftingResult, craftingInventory);
+        ForgeEventFactory.firePlayerCraftingEvent(player, craftingResult, craftingInventory);
 
         ForgeHooks.setCraftingPlayer(player);
         NonNullList<ItemStack> remainingItems = recipe.getRemainingItems(craftingInventory);

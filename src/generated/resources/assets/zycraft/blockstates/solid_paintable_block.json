@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "zycraft:block/solid_paintable_block"
+    }
+  }
+}

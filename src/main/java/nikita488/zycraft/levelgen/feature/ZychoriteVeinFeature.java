@@ -8,7 +8,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.BulkSectionAccess;
-import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.feature.Feature;
@@ -19,20 +18,20 @@ import nikita488.zycraft.init.ZYBlocks;
 import java.util.BitSet;
 import java.util.Random;
 
-public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
+public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfiguration>
 {
-    public ZychoriteVeinFeature(Codec<ZychoriteVeinConfig> codec)
+    public ZychoriteVeinFeature(Codec<ZychoriteVeinConfiguration> codec)
     {
         super(codec);
     }
 
     @Override
-    public boolean place(FeaturePlaceContext<ZychoriteVeinConfig> context)
+    public boolean place(FeaturePlaceContext<ZychoriteVeinConfiguration> context)
     {
         Random random = context.random();
         BlockPos pos = context.origin();
         WorldGenLevel level = context.level();
-        ZychoriteVeinConfig config = context.config();
+        ZychoriteVeinConfiguration config = context.config();
         float f = random.nextFloat() * (float)Math.PI;
         float f1 = (float)config.size / 8.0F;
         int i = Mth.ceil(((float)config.size / 16.0F * 2.0F + 1.0F) / 2.0F);
@@ -60,7 +59,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
         return false;
     }
 
-    protected boolean doPlace(WorldGenLevel level, Random random, ZychoriteVeinConfig config, double p_66536_, double p_66537_, double p_66538_, double p_66539_, double p_66540_, double p_66541_, int p_66542_, int p_66543_, int p_66544_, int p_66545_, int p_66546_)
+    protected boolean doPlace(WorldGenLevel level, Random random, ZychoriteVeinConfiguration config, double p_66536_, double p_66537_, double p_66538_, double p_66539_, double p_66540_, double p_66541_, int p_66542_, int p_66543_, int p_66544_, int p_66545_, int p_66546_)
     {
         int i = 0;
         BitSet bitset = new BitSet(p_66545_ * p_66546_ * p_66545_);
@@ -132,7 +131,7 @@ public class ZychoriteVeinFeature extends Feature<ZychoriteVeinConfig>
                                                 blockpos$mutableblockpos.set(i2, j2, k2);
                                                 if (level.ensureCanWrite(blockpos$mutableblockpos)) {
                                                     LevelChunkSection levelchunksection = bulksectionaccess.getSection(blockpos$mutableblockpos);
-                                                    if (levelchunksection != LevelChunk.EMPTY_SECTION) {
+                                                    if (levelchunksection != null) {
                                                         int i3 = SectionPos.sectionRelative(i2);
                                                         int j3 = SectionPos.sectionRelative(j2);
                                                         int k3 = SectionPos.sectionRelative(k2);

@@ -60,7 +60,7 @@ public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
 
         if (lit != level.hasNeighborSignal(pos))
             if (lit)
-                level.getBlockTicks().scheduleTick(pos, this, 4);
+                level.scheduleTick(pos, this, 4);
             else
                 level.setBlock(pos, state.cycle(LIT), UPDATE_CLIENTS);
     }

@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#L#",
+    "RGB",
+    "#D#"
+  ],
+  "key": {
+    "#": {
+      "item": "zycraft:aluminium_block"
+    },
+    "R": {
+      "item": "zycraft:red_zychorium"
+    },
+    "G": {
+      "item": "zycraft:green_zychorium"
+    },
+    "B": {
+      "item": "zycraft:blue_zychorium"
+    },
+    "D": {
+      "item": "zycraft:dark_zychorium"
+    },
+    "L": {
+      "item": "zycraft:light_zychorium"
+    }
+  },
+  "result": {
+    "item": "zycraft:solid_paintable_block",
+    "count": 4
+  }
+}

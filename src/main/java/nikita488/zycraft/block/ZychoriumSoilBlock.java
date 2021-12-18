@@ -41,7 +41,7 @@ public class ZychoriumSoilBlock extends Block
 
         if (blockToTick instanceof IPlantable || (blockToTick instanceof BonemealableBlock bonemealable && bonemealable.isValidBonemealTarget(level, tickPos, stateToTick, false)))
         {
-            BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos().set(tickPos);
+            BlockPos.MutableBlockPos checkPos = tickPos.mutable();
 
             while (blockToTick == stateToTick.getBlock() && stateToTick.isRandomlyTicking())
                 stateToTick = level.getBlockState(checkPos.move(dir));

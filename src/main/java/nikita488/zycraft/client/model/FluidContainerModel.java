@@ -29,9 +29,9 @@ import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.model.BakedModelWrapper;
+import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
 import net.minecraftforge.fluids.FluidAttributes;
@@ -161,6 +161,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
         @Override
         public BakedModel resolve(BakedModel emptyModel, ItemStack stack, @Nullable ClientLevel level, @Nullable LivingEntity entity, int hashCode)
         {
+            //TODO: Fix Aluminium Foil rendering
             if (overrides.length == 0)
                 return emptyModel;
 
@@ -184,7 +185,7 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
 
                     if (!Objects.equals(model, this.emptyModel) && model instanceof BlockModel)
                         wrappedModels[i] = parent.wrapModel((BlockModel)model, texture)
-                                .bake(null, bakery, ModelLoader.defaultTextureGetter(), rotation, this, override.getModel());
+                                .bake(null, bakery, ForgeModelBakery.defaultTextureGetter(), rotation, this, override.getModel());
                 }
 
                 return wrappedModels;

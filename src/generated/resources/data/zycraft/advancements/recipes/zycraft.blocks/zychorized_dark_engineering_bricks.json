@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "zycraft:zychorized_dark_engineering_bricks"
+    ]
+  },
+  "criteria": {
+    "has_dusts_redstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:dusts/redstone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "zycraft:zychorized_dark_engineering_bricks"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_dusts_redstone",
+      "has_the_recipe"
+    ]
+  ]
+}

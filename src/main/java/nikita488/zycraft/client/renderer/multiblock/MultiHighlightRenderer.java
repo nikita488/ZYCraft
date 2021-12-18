@@ -60,7 +60,7 @@ public class MultiHighlightRenderer
 
     private static void onDrawBlockHighlight(DrawSelectionEvent.HighlightBlock event)
     {
-        Level level = event.getInfo().getEntity().getCommandSenderWorld();
+        Level level = event.getCamera().getEntity().getCommandSenderWorld();
         BlockPos highlightPos = event.getTarget().getBlockPos();
         long time = level.getGameTime();
 
@@ -85,13 +85,13 @@ public class MultiHighlightRenderer
             for (MultiBlock multiBlock : child.parentMultiBlocks())
                 highlightBlocks.addAll(multiBlock.childBlocks());
 
-            PoseStack stack = event.getMatrix();
-            Vec3 cameraPos = event.getInfo().getPosition();
+            PoseStack stack = event.getPoseStack();
+            Vec3 cameraPos = event.getCamera().getPosition();
 
             stack.pushPose();
             stack.translate(-cameraPos.x(), -cameraPos.y(), -cameraPos.z());
 
-            VertexConsumer buffer = event.getBuffers().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
+            VertexConsumer buffer = event.getMultiBufferSource().getBuffer(ZYRenderTypes.MULTI_HIGHLIGHT);
 
             for (BlockPos pos : highlightBlocks)
                 for (Direction side : ZYConstants.DIRECTIONS)

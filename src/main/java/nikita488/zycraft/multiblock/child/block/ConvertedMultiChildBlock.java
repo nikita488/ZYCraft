@@ -415,15 +415,15 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean removedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) 
+    public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid)
     {
-        return getState(level, pos).removedByPlayer(level, pos, player, willHarvest, fluid);
+        return getState(level, pos).onDestroyedByPlayer(level, pos, player, willHarvest, fluid);
     }
 
     @Override
-    public boolean canCreatureSpawn(BlockState state, BlockGetter getter, BlockPos pos, SpawnPlacements.Type type, @Nullable EntityType<?> entityType)
+    public boolean isValidSpawn(BlockState state, BlockGetter getter, BlockPos pos, SpawnPlacements.Type type, @Nullable EntityType<?> entityType)
     {
-        return getState(getter, pos).canCreatureSpawn((LevelReader)getter, pos, type, entityType);
+        return getState(getter, pos).isValidSpawn((LevelReader)getter, pos, type, entityType);
     }
 
     @Override
@@ -439,9 +439,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public ItemStack getPickBlock(BlockState state, HitResult target, BlockGetter getter, BlockPos pos, Player player)
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter getter, BlockPos pos, Player player)
     {
-        return getState(getter, pos).getPickBlock(target, getter, pos, player);
+        return getState(getter, pos).getCloneItemStack(target, getter, pos, player);
     }
 
     @Override
@@ -528,7 +528,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     @Override
     public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob entity)
     {
-        return getState(getter, pos).getAiPathNodeType(getter, pos, entity);
+        return getState(getter, pos).getBlockPathType(getter, pos, entity);
     }
     //FLAMMABLE START
     @Override

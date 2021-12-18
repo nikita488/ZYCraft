@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "zycraft:aluminized_blue_engineering_bricks",
+    "zycraft:aluminized_green_engineering_bricks",
+    "zycraft:aluminized_red_engineering_bricks",
+    "zycraft:aluminized_dark_engineering_bricks",
+    "zycraft:aluminized_light_engineering_bricks"
+  ]
+}

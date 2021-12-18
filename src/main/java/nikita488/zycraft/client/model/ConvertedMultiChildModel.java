@@ -69,16 +69,16 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
                 return Collections.emptyList();
 
             Minecraft mc = Minecraft.getInstance();
-            RenderType layer = MinecraftForgeClient.getRenderLayer();
+            RenderType type = MinecraftForgeClient.getRenderType();
 
-            if (layer == null)
+            if (type == null)
                 return mc.getModelManager().getMissingModel().getQuads(state, side, random, modelData);
 
             BlockState initialState = modelData.getData(ConvertedMultiChildBlockEntity.INITIAL_STATE);
             BlockAndTintGetter getter = modelData.getData(ConvertedMultiChildBlockEntity.BLOCK_GETTER);
             BlockPos pos = modelData.getData(ConvertedMultiChildBlockEntity.POS);
 
-            if (initialState == null || getter == null || pos == null || !ItemBlockRenderTypes.canRenderInLayer(initialState, layer))
+            if (initialState == null || getter == null || pos == null || !ItemBlockRenderTypes.canRenderInLayer(initialState, type))
                 return Collections.emptyList();
 
             BlockState relativeState = getter.getBlockState(RELATIVE_POS.setWithOffset(pos, side));

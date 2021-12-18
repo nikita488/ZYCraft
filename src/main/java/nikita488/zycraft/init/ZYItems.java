@@ -23,7 +23,7 @@ import java.util.Map;
 
 public class ZYItems
 {
-    private static final Registrate REGISTRATE = ZYCraft.registrate().itemGroup(() -> ZYCreativeModeTabs.ITEMS, "ZYCraft Items");
+    private static final Registrate REGISTRATE = ZYCraft.registrate().creativeModeTab(() -> ZYCreativeModeTabs.ITEMS, "ZYCraft Items");
 
     public static final Map<ZYType, ItemEntry<ZychoriumItem>> ZYCHORIUM = ZYType.buildMap("{type}_zychorium", (type, name) -> REGISTRATE.item(name, properties -> new ZychoriumItem(type, properties))
             .color(() -> () -> ZYItemColors.getZYItemColor(type))

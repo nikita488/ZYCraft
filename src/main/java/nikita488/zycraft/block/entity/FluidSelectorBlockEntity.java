@@ -37,14 +37,10 @@ public class FluidSelectorBlockEntity extends ZYBlockEntity
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag)
+    public void saveAdditional(CompoundTag tag)
     {
-        super.save(tag);
-
         if (!selectedFluid.isEmpty())
             tag.put("SelectedFluid", selectedFluid.writeToNBT(new CompoundTag()));
-
-        return tag;
     }
 
     @Override
