@@ -1,6 +1,6 @@
 package nikita488.zycraft.compat.jei;
 
-import mezz.jei.api.gui.IRecipeLayout;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
@@ -23,16 +23,14 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
         this.helper = helper;
     }
 
-    @Nullable
     @Override
-    public IRecipeTransferError transferRecipe(FabricatorMenu menu, CraftingRecipe recipe, IRecipeLayout recipeLayout, Player player, boolean maxTransfer, boolean doTransfer)
+    public @Nullable IRecipeTransferError transferRecipe(FabricatorMenu menu, CraftingRecipe recipe, IRecipeSlotsView recipeSlots, Player player, boolean maxTransfer, boolean doTransfer)
     {
         if (!FabricatorBlockEntity.isRecipeCompatible(recipe))
             return helper.createUserErrorWithTooltip(ZYLang.FABRICATOR_RECIPE_INCOMPATIBLE);
 
         if (doTransfer)
-            ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(menu.containerId, recipe, recipeLayout.getItemStacks().getGuiIngredients()));
-
+            ZYCraft.CHANNEL.sendToServer(new SetFabricatorRecipePacket(menu.containerId, recipe, recipeSlots));
         return null;
     }
 

@@ -2,7 +2,7 @@ package nikita488.zycraft.compat.jei;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import mezz.jei.api.constants.VanillaRecipeCategoryUid;
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.handlers.IGuiClickableArea;
 import mezz.jei.api.gui.handlers.IGuiContainerHandler;
 import net.minecraft.client.renderer.Rect2i;
@@ -25,8 +25,8 @@ public class FabricatorGuiContainerHandler implements IGuiContainerHandler<Fabri
     {
         ObjectList<IGuiClickableArea> areas = new ObjectArrayList<>();
 
-        areas.add(IGuiClickableArea.createBasic(86, 29, 20, 8, VanillaRecipeCategoryUid.CRAFTING));
-        areas.add(IGuiClickableArea.createBasic(86, 65, 20, 8, VanillaRecipeCategoryUid.CRAFTING));
+        areas.add(IGuiClickableArea.createBasic(86, 29, 20, 8, RecipeTypes.CRAFTING));
+        areas.add(IGuiClickableArea.createBasic(86, 65, 20, 8, RecipeTypes.CRAFTING));
         return areas;
     }
 }

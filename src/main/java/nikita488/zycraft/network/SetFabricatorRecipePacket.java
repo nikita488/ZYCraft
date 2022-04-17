@@ -1,6 +1,9 @@
 package nikita488.zycraft.network;
 
-import mezz.jei.api.gui.ingredient.IGuiIngredient;
+import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.gui.ingredient.IRecipeSlotView;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -12,7 +15,7 @@ import net.minecraftforge.network.NetworkEvent;
 import nikita488.zycraft.block.entity.FabricatorBlockEntity;
 import nikita488.zycraft.menu.FabricatorMenu;
 
-import java.util.Map;
+import java.util.List;
 import java.util.function.Supplier;
 
 public class SetFabricatorRecipePacket
@@ -22,23 +25,31 @@ public class SetFabricatorRecipePacket
     private final NonNullList<ItemStack> recipePattern = NonNullList.withSize(9, ItemStack.EMPTY);
     private ItemStack craftingResult = ItemStack.EMPTY;
 
-    public SetFabricatorRecipePacket(int menuID, CraftingRecipe recipe, Map<Integer, ? extends IGuiIngredient<ItemStack>> ingredients)
+    public SetFabricatorRecipePacket(int menuID, CraftingRecipe recipe, IRecipeSlotsView recipeSlots)
     {
         this.menuID = menuID;
         this.recipeID = recipe.getId();
 
-        ingredients.forEach((index, ingredient) ->
+        List<IRecipeSlotView> inputSlots = recipeSlots.getSlotViews(RecipeIngredientRole.INPUT);
+        List<IRecipeSlotView> outputSlots = recipeSlots.getSlotViews(RecipeIngredientRole.OUTPUT);
+
+        for (int slot = 0; slot < 9; slot++)
         {
-            ItemStack stack = ingredient.getDisplayedIngredient();
+            IRecipeSlotView view = inputSlots.get(slot);
 
-            if (stack == null)
-                return;
+            if (view.isEmpty())
+                continue;
 
-            if (ingredient.isInput())
-                recipePattern.set(index - 1, stack);
-            else
-                this.craftingResult = stack;
-        });
+            ItemStack stack = view.getDisplayedIngredient(VanillaTypes.ITEM_STACK).orElse(ItemStack.EMPTY);
+
+            if (!stack.isEmpty())
+                recipePattern.set(slot, stack);
+        }
+
+        this.craftingResult = outputSlots.stream()
+                .findFirst()
+                .flatMap(view -> view.getDisplayedIngredient(VanillaTypes.ITEM_STACK))
+                .orElse(ItemStack.EMPTY);
     }
 
     public SetFabricatorRecipePacket(FriendlyByteBuf buffer)
