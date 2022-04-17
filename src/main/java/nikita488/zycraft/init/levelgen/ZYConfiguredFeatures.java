@@ -14,12 +14,15 @@ import nikita488.zycraft.levelgen.feature.ZychoriteVeinConfiguration;
 
 public class ZYConfiguredFeatures
 {
-    public static final ConfiguredFeature<?, ?> ZYCHORITE_VEIN = ZYFeatures.ZYCHORITE_VEIN.get()
-            .configured(new ZychoriteVeinConfiguration(OreFeatures.NATURAL_STONE, ZYConfig.zychoriteSize, ZYConfig.zychoriteOrePercentage * 0.01F));
-    public static final ConfiguredFeature<?, ?> ORE_ALUMINIUM = Feature.ORE
-            .configured(new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, ZYBlocks.ALUMINIUM_ORE.getDefaultState(), ZYConfig.aluminiumSize));
-    public static final ConfiguredFeature<?, ?> QUARTZ_CRYSTAL = ZYFeatures.QUARTZ_CRYSTAL.get()
-            .configured(new QuartzCrystalConfiguration(OreFeatures.NATURAL_STONE, ZYConfig.quartzCrystalMaxCrystals));
+    public static final ConfiguredFeature<ZychoriteVeinConfiguration, ?> ZYCHORITE_VEIN = new ConfiguredFeature<>(
+            ZYFeatures.ZYCHORITE_VEIN.get(),
+            new ZychoriteVeinConfiguration(OreFeatures.NATURAL_STONE, ZYConfig.zychoriteSize, ZYConfig.zychoriteOrePercentage * 0.01F));
+    public static final ConfiguredFeature<OreConfiguration, ?> ORE_ALUMINIUM = new ConfiguredFeature<>(
+            Feature.ORE,
+            new OreConfiguration(OreFeatures.STONE_ORE_REPLACEABLES, ZYBlocks.ALUMINIUM_ORE.getDefaultState(), ZYConfig.aluminiumSize));
+    public static final ConfiguredFeature<QuartzCrystalConfiguration, ?> QUARTZ_CRYSTAL = new ConfiguredFeature<>(
+            ZYFeatures.QUARTZ_CRYSTAL.get(),
+            new QuartzCrystalConfiguration(OreFeatures.NATURAL_STONE, ZYConfig.quartzCrystalMaxCrystals));
 
     public static void init()
     {

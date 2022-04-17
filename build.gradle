@@ -94,18 +94,18 @@ dependencies {
     if (!Boolean.getBoolean("idea.sync.active"))
         annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
-    def registrate = "com.tterrag.registrate:Registrate:MC1.18-${registrate_version}"
+    def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
     implementation fg.deobf(registrate)
     shade registrate
 
-    //implementation fg.deobf("team.chisel.ctm:CTM:MC1.16.1-${ctm_version}")
+    implementation fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
     //compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
     //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
     compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}:api")
     runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
-    implementation fg.deobf('curse.maven:the-one-probe-245211:3550084')
+    implementation fg.deobf('curse.maven:the-one-probe-245211:3671753')
 
     //runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
     //runtimeOnly fg.deobf('curse.maven:storage-drawers-223852:3180569')

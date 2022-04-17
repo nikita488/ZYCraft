@@ -1,5 +1,6 @@
 package nikita488.zycraft.init.levelgen;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -33,8 +34,8 @@ public class ZYWorldGen
 
         BiomeGenerationSettingsBuilder builder = event.getGeneration();
 
-        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYPlacements.ZYCHORITE_VEIN);
-        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYPlacements.ORE_ALUMINIUM);
-        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, ZYPlacements.QUARTZ_CRYSTAL);
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(ZYPlacements.ZYCHORITE_VEIN));
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(ZYPlacements.ORE_ALUMINIUM));
+        builder.addFeature(GenerationStep.Decoration.UNDERGROUND_ORES, Holder.direct(ZYPlacements.QUARTZ_CRYSTAL));
     }
 }

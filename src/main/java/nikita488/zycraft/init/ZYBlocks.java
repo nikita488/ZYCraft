@@ -424,6 +424,7 @@ public class ZYBlocks
                         .partialState().with(ZychoriumSoilBlock.POWERED, true)
                         .modelForState().modelFile(model).rotationX(180).addModel();
             })
+            .tag(BlockTags.DIRT)
             .recipe((ctx, provider) -> basicMachine(ZYType.GREEN, provider, DataIngredient.tag(ItemTags.SAPLINGS), ctx::getEntry))
             .register();
 

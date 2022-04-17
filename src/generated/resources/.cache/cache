@@ -314,7 +314,6 @@ ba048f509325b3a57dbfe9e504a4141ceb7f8e2a assets/zycraft/models/item/zychorium_ic
 07b5fc5f771cb6865c5b6bb76f481a34a11a6b8a assets/zycraft/models/item/zychorized_light_zychorium_bricks.json
 640fb6129452457a9aadb92fc16ce57b867430a4 assets/zycraft/models/item/zychorized_red_engineering_bricks.json
 07b5fc5f771cb6865c5b6bb76f481a34a11a6b8a assets/zycraft/models/item/zychorized_red_zychorium_bricks.json
-b92a36207f03f762a91ad3ef0ef62fd55c8ce4ac data/forge/tags/blocks/dirt.json
 034c90ab440ff740ec72ea95f8affc2f7d634f75 data/forge/tags/blocks/glass/colorless.json
 44590633dab6cfde31deb8e0c604a2dcc1ce2b73 data/forge/tags/blocks/ores.json
 2fb18c91382e2023c70cb240e424fa2b4a8565c3 data/forge/tags/blocks/ores/aluminium.json
@@ -330,6 +329,7 @@ d02e7b0a063fbf0021a08f868822e0fd8ac0362f data/forge/tags/blocks/stained_glass.js
 d02e7b0a063fbf0021a08f868822e0fd8ac0362f data/forge/tags/items/stained_glass.json
 8fc52c88575a79f3c0304c7fa9f0304abfee44bf data/forge/tags/items/stone.json
 8ee952cec7e5b38874855285903732ce62a460ed data/forge/tags/items/storage_blocks.json
+b92a36207f03f762a91ad3ef0ef62fd55c8ce4ac data/minecraft/tags/blocks/dirt.json
 7d95253247b92e71f117e7f1c797ed4c059407ff data/minecraft/tags/blocks/dragon_immune.json
 714180d2fd4d143ebafd66ee2d1d70759c733dc9 data/minecraft/tags/blocks/impermeable.json
 f6b0c3208656385524787d2f8d29f867f74dac0f data/minecraft/tags/blocks/mineable/pickaxe.json

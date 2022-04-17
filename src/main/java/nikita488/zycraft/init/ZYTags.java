@@ -5,10 +5,10 @@ import com.tterrag.registrate.providers.ProviderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.Tags.IOptionalNamedTag;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.enums.ZYType;
 
@@ -20,61 +20,61 @@ public class ZYTags
 
     public static class Blocks
     {
-        public static final IOptionalNamedTag<Block> ORES_ZYCHORIUM = tag("ores/zychorium");
-        public static final IOptionalNamedTag<Block> ORES_ALUMINIUM = forgeTag("ores/aluminium");
-        public static final IOptionalNamedTag<Block> ORES_ALUMINUM = forgeTag("ores/aluminum");
+        public static final TagKey<Block> ORES_ZYCHORIUM = tag("ores/zychorium");
+        public static final TagKey<Block> ORES_ALUMINIUM = forgeTag("ores/aluminium");
+        public static final TagKey<Block> ORES_ALUMINUM = forgeTag("ores/aluminum");
 
-        public static final IOptionalNamedTag<Block> STORAGE_BLOCKS_ZYCHORIUM = tag("storage_blocks/zychorium");
+        public static final TagKey<Block> STORAGE_BLOCKS_ZYCHORIUM = tag("storage_blocks/zychorium");
 
-        public static final IOptionalNamedTag<Block> ZYCHORIUM_BRICKS = tag("zychorium_bricks");
+        public static final TagKey<Block> ZYCHORIUM_BRICKS = tag("zychorium_bricks");
 
-        public static final IOptionalNamedTag<Block> BASE_ZYCHORIUM_BRICKS = tag("base_zychorium_bricks");
-        public static final IOptionalNamedTag<Block> BRICKS_ZYCHORIUM = tag("bricks/zychorium");
-        public static final IOptionalNamedTag<Block> BRICKS_SOLID_ZYCHORIUM = tag("bricks/solid_zychorium");
-        public static final IOptionalNamedTag<Block> BRICKS_ZYCHORIZED_ZYCHORIUM = tag("bricks/zychorized_zychorium");
-        public static final IOptionalNamedTag<Block> BRICKS_ALUMINIZED_ZYCHORIUM = tag("bricks/aluminized_zychorium");
+        public static final TagKey<Block> BASE_ZYCHORIUM_BRICKS = tag("base_zychorium_bricks");
+        public static final TagKey<Block> BRICKS_ZYCHORIUM = tag("bricks/zychorium");
+        public static final TagKey<Block> BRICKS_SOLID_ZYCHORIUM = tag("bricks/solid_zychorium");
+        public static final TagKey<Block> BRICKS_ZYCHORIZED_ZYCHORIUM = tag("bricks/zychorized_zychorium");
+        public static final TagKey<Block> BRICKS_ALUMINIZED_ZYCHORIUM = tag("bricks/aluminized_zychorium");
 
-        public static final IOptionalNamedTag<Block> SMALL_ZYCHORIUM_BRICKS = tag("small_zychorium_bricks");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ZYCHORIUM = tag("small_bricks/zychorium");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_SOLID_ZYCHORIUM = tag("small_bricks/solid_zychorium");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM = tag("small_bricks/zychorized_zychorium");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ALUMINIZED_ZYCHORIUM = tag("small_bricks/aluminized_zychorium");
+        public static final TagKey<Block> SMALL_ZYCHORIUM_BRICKS = tag("small_zychorium_bricks");
+        public static final TagKey<Block> SMALL_BRICKS_ZYCHORIUM = tag("small_bricks/zychorium");
+        public static final TagKey<Block> SMALL_BRICKS_SOLID_ZYCHORIUM = tag("small_bricks/solid_zychorium");
+        public static final TagKey<Block> SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM = tag("small_bricks/zychorized_zychorium");
+        public static final TagKey<Block> SMALL_BRICKS_ALUMINIZED_ZYCHORIUM = tag("small_bricks/aluminized_zychorium");
 
-        public static final IOptionalNamedTag<Block> ZYCHORIUM_PLATE = tag("zychorium_plate");
-        public static final IOptionalNamedTag<Block> ZYCHORIUM_SHIELD = tag("zychorium_shield");
+        public static final TagKey<Block> ZYCHORIUM_PLATE = tag("zychorium_plate");
+        public static final TagKey<Block> ZYCHORIUM_SHIELD = tag("zychorium_shield");
 
-        public static final IOptionalNamedTag<Block> COLORABLE = tag("colorable");
-        public static final IOptionalNamedTag<Block> ZYCHORIUM_LAMPS = tag("zychorium_lamps");
+        public static final TagKey<Block> COLORABLE = tag("colorable");
+        public static final TagKey<Block> ZYCHORIUM_LAMPS = tag("zychorium_lamps");
 
-        public static final IOptionalNamedTag<Block> VIEWERS = tag("viewers");
+        public static final TagKey<Block> VIEWERS = tag("viewers");
 
-        public static final IOptionalNamedTag<Block> BASE_VIEWERS = tag("base_viewers");
-        public static final IOptionalNamedTag<Block> VIEWERS_BASE = tag("viewers/base");
-        public static final IOptionalNamedTag<Block> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
+        public static final TagKey<Block> BASE_VIEWERS = tag("base_viewers");
+        public static final TagKey<Block> VIEWERS_BASE = tag("viewers/base");
+        public static final TagKey<Block> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
 
-        public static final IOptionalNamedTag<Block> PAINTABLE_VIEWERS = tag("paintable_viewers");
-        public static final IOptionalNamedTag<Block> VIEWERS_PAINTABLE = tag("viewers/paintable");
-        public static final IOptionalNamedTag<Block> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
+        public static final TagKey<Block> PAINTABLE_VIEWERS = tag("paintable_viewers");
+        public static final TagKey<Block> VIEWERS_PAINTABLE = tag("viewers/paintable");
+        public static final TagKey<Block> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
 
-        public static final IOptionalNamedTag<Block> ENGINEERING_BRICKS = tag("engineering_bricks");
-        public static final IOptionalNamedTag<Block> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
-        public static final IOptionalNamedTag<Block> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
-        public static final IOptionalNamedTag<Block> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
+        public static final TagKey<Block> ENGINEERING_BRICKS = tag("engineering_bricks");
+        public static final TagKey<Block> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
+        public static final TagKey<Block> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
+        public static final TagKey<Block> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
+        public static final TagKey<Block> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
 
-        public static final IOptionalNamedTag<Block> BASIC_MACHINES = tag("basic_machines");
+        public static final TagKey<Block> BASIC_MACHINES = tag("basic_machines");
 
-        private static IOptionalNamedTag<Block> tag(String name)
+        private static TagKey<Block> tag(String name)
         {
-            return BlockTags.createOptional(ZYCraft.id(name));
+            return BlockTags.create(ZYCraft.id(name));
         }
 
-        private static IOptionalNamedTag<Block> forgeTag(String name)
+        private static TagKey<Block> forgeTag(String name)
         {
-            return BlockTags.createOptional(new ResourceLocation("forge", name));
+            return BlockTags.create(new ResourceLocation("forge", name));
         }
 
-        private static Map<ZYType, IOptionalNamedTag<Block>> zyTag(String pattern)
+        private static Map<ZYType, TagKey<Block>> zyTag(String pattern)
         {
             return ZYType.buildMap(pattern, (type, name) -> tag(name));
         }
@@ -82,64 +82,64 @@ public class ZYTags
 
     public static class Items
     {
-        public static final IOptionalNamedTag<Item> ORES_ZYCHORIUM = tag("ores/zychorium");
-        public static final IOptionalNamedTag<Item> ORES_ALUMINIUM = forgeTag("ores/aluminium");
-        public static final IOptionalNamedTag<Item> ORES_ALUMINUM = forgeTag("ores/aluminum");
+        public static final TagKey<Item> ORES_ZYCHORIUM = tag("ores/zychorium");
+        public static final TagKey<Item> ORES_ALUMINIUM = forgeTag("ores/aluminium");
+        public static final TagKey<Item> ORES_ALUMINUM = forgeTag("ores/aluminum");
 
-        public static final IOptionalNamedTag<Item> STORAGE_BLOCKS_ZYCHORIUM = tag("storage_blocks/zychorium");
+        public static final TagKey<Item> STORAGE_BLOCKS_ZYCHORIUM = tag("storage_blocks/zychorium");
 
-        public static final IOptionalNamedTag<Item> ZYCHORIUM_BRICKS = tag("zychorium_bricks");
+        public static final TagKey<Item> ZYCHORIUM_BRICKS = tag("zychorium_bricks");
 
-        public static final IOptionalNamedTag<Item> BASE_ZYCHORIUM_BRICKS = tag("base_zychorium_bricks");
-        public static final IOptionalNamedTag<Item> BRICKS_ZYCHORIUM = tag("bricks/zychorium");
-        public static final IOptionalNamedTag<Item> BRICKS_SOLID_ZYCHORIUM = tag("bricks/solid_zychorium");
-        public static final IOptionalNamedTag<Item> BRICKS_ZYCHORIZED_ZYCHORIUM = tag("bricks/zychorized_zychorium");
-        public static final IOptionalNamedTag<Item> BRICKS_ALUMINIZED_ZYCHORIUM = tag("bricks/aluminized_zychorium");
+        public static final TagKey<Item> BASE_ZYCHORIUM_BRICKS = tag("base_zychorium_bricks");
+        public static final TagKey<Item> BRICKS_ZYCHORIUM = tag("bricks/zychorium");
+        public static final TagKey<Item> BRICKS_SOLID_ZYCHORIUM = tag("bricks/solid_zychorium");
+        public static final TagKey<Item> BRICKS_ZYCHORIZED_ZYCHORIUM = tag("bricks/zychorized_zychorium");
+        public static final TagKey<Item> BRICKS_ALUMINIZED_ZYCHORIUM = tag("bricks/aluminized_zychorium");
 
-        public static final IOptionalNamedTag<Item> SMALL_ZYCHORIUM_BRICKS = tag("small_zychorium_bricks");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ZYCHORIUM = tag("small_bricks/zychorium");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_SOLID_ZYCHORIUM = tag("small_bricks/solid_zychorium");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM = tag("small_bricks/zychorized_zychorium");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ALUMINIZED_ZYCHORIUM = tag("small_bricks/aluminized_zychorium");
+        public static final TagKey<Item> SMALL_ZYCHORIUM_BRICKS = tag("small_zychorium_bricks");
+        public static final TagKey<Item> SMALL_BRICKS_ZYCHORIUM = tag("small_bricks/zychorium");
+        public static final TagKey<Item> SMALL_BRICKS_SOLID_ZYCHORIUM = tag("small_bricks/solid_zychorium");
+        public static final TagKey<Item> SMALL_BRICKS_ZYCHORIZED_ZYCHORIUM = tag("small_bricks/zychorized_zychorium");
+        public static final TagKey<Item> SMALL_BRICKS_ALUMINIZED_ZYCHORIUM = tag("small_bricks/aluminized_zychorium");
 
-        public static final IOptionalNamedTag<Item> ZYCHORIUM_PLATE = tag("zychorium_plate");
-        public static final IOptionalNamedTag<Item> ZYCHORIUM_SHIELD = tag("zychorium_shield");
+        public static final TagKey<Item> ZYCHORIUM_PLATE = tag("zychorium_plate");
+        public static final TagKey<Item> ZYCHORIUM_SHIELD = tag("zychorium_shield");
 
-        public static final IOptionalNamedTag<Item> COLORABLE = tag("colorable");
-        public static final IOptionalNamedTag<Item> ZYCHORIUM_LAMPS = tag("zychorium_lamps");
+        public static final TagKey<Item> COLORABLE = tag("colorable");
+        public static final TagKey<Item> ZYCHORIUM_LAMPS = tag("zychorium_lamps");
 
-        public static final IOptionalNamedTag<Item> VIEWERS = tag("viewers");
+        public static final TagKey<Item> VIEWERS = tag("viewers");
 
-        public static final IOptionalNamedTag<Item> BASE_VIEWERS = tag("base_viewers");
-        public static final IOptionalNamedTag<Item> VIEWERS_BASE = tag("viewers/base");
-        public static final IOptionalNamedTag<Item> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
+        public static final TagKey<Item> BASE_VIEWERS = tag("base_viewers");
+        public static final TagKey<Item> VIEWERS_BASE = tag("viewers/base");
+        public static final TagKey<Item> VIEWERS_PHANTOMIZED = tag("viewers/phantomized");
 
-        public static final IOptionalNamedTag<Item> PAINTABLE_VIEWERS = tag("paintable_viewers");
-        public static final IOptionalNamedTag<Item> VIEWERS_PAINTABLE = tag("viewers/paintable");
-        public static final IOptionalNamedTag<Item> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
+        public static final TagKey<Item> PAINTABLE_VIEWERS = tag("paintable_viewers");
+        public static final TagKey<Item> VIEWERS_PAINTABLE = tag("viewers/paintable");
+        public static final TagKey<Item> VIEWERS_PHANTOMIZED_PAINTABLE = tag("viewers/phantomized_paintable");
 
-        public static final IOptionalNamedTag<Item> ENGINEERING_BRICKS = tag("engineering_bricks");
-        public static final IOptionalNamedTag<Item> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
-        public static final IOptionalNamedTag<Item> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
-        public static final IOptionalNamedTag<Item> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
-        public static final Map<ZYType, IOptionalNamedTag<Item>> ENGINEERING_BRICKS_BY_TYPE = zyTag("engineering_bricks/{type}");
+        public static final TagKey<Item> ENGINEERING_BRICKS = tag("engineering_bricks");
+        public static final TagKey<Item> BRICKS_ZYCHORIZED_ENGINEERING = tag("bricks/zychorized_engineering");
+        public static final TagKey<Item> BRICKS_ALUMINIZED_ENGINEERING = tag("bricks/aluminized_engineering");
+        public static final TagKey<Item> SMALL_BRICKS_ZYCHORIZED_ENGINEERING = tag("small_bricks/zychorized_engineering");
+        public static final TagKey<Item> SMALL_BRICKS_ALUMINIZED_ENGINEERING = tag("small_bricks/aluminized_engineering");
+        public static final Map<ZYType, TagKey<Item>> ENGINEERING_BRICKS_BY_TYPE = zyTag("engineering_bricks/{type}");
 
-        public static final IOptionalNamedTag<Item> BASIC_MACHINES = tag("basic_machines");
+        public static final TagKey<Item> BASIC_MACHINES = tag("basic_machines");
 
-        public static final IOptionalNamedTag<Item> ZYCHORIUM = tag("zychorium");
+        public static final TagKey<Item> ZYCHORIUM = tag("zychorium");
 
-        private static IOptionalNamedTag<Item> tag(String name)
+        private static TagKey<Item> tag(String name)
         {
-            return ItemTags.createOptional(ZYCraft.id(name));
+            return ItemTags.create(ZYCraft.id(name));
         }
 
-        private static IOptionalNamedTag<Item> forgeTag(String name)
+        private static TagKey<Item> forgeTag(String name)
         {
-            return ItemTags.createOptional(new ResourceLocation("forge", name));
+            return ItemTags.create(new ResourceLocation("forge", name));
         }
 
-        private static Map<ZYType, IOptionalNamedTag<Item>> zyTag(String pattern)
+        private static Map<ZYType, TagKey<Item>> zyTag(String pattern)
         {
             return ZYType.buildMap(pattern, (type, name) -> tag(name));
         }
@@ -174,7 +174,6 @@ public class ZYTags
             tags.tag(Tags.Blocks.STORAGE_BLOCKS).addTag(Blocks.STORAGE_BLOCKS_ZYCHORIUM);
             tags.tag(Tags.Blocks.GLASS_COLORLESS).addTag(Blocks.BASE_VIEWERS);
             tags.tag(Tags.Blocks.STAINED_GLASS).addTag(Blocks.PAINTABLE_VIEWERS);
-            tags.tag(Tags.Blocks.DIRT).add(ZYBlocks.ZYCHORIUM_SOIL.get());
 
             tags.tag(BlockTags.IMPERMEABLE).addTags(Blocks.VIEWERS);
             tags.tag(BlockTags.WITHER_IMMUNE).addTag(Blocks.ZYCHORIUM_SHIELD);

@@ -54,25 +54,26 @@ public class ZYCraft
 
     public ZYCraft()
     {
+        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        ZYConfig.register();
+        eventBus.addListener(ZYConfig::init);
+
         ZYBlocks.init();
         ZYItems.init();
         ZYBlockEntities.init();
         ZYEntities.init();
-        ZYParticles.init();
-        ZYFeatures.init();
         ZYMenus.init();
+        ZYFeatures.init();
+        ZYParticles.init();
         ZYRegistries.init();
         ZYMultiTypes.init();
 
         ZYTags.init();
         ZYCreativeModeTabs.init();
         ZYLang.init();
-        ZYConfig.register();
         ZYPackets.init();
 
-        IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
-        eventBus.addListener(ZYConfig::init);
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::enqueueIMC);
 
