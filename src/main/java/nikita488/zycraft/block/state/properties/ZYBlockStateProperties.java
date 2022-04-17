@@ -5,10 +5,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 public class ZYBlockStateProperties
 {
-    public static final BooleanProperty ZYCHORIUM_WATER_POWERED = BooleanProperty.create("powered");
-    public static final BooleanProperty ZYCHORIUM_SOIL_FLIPPED = BooleanProperty.create("flipped");
     public static final EnumProperty<FabricatorMode> FABRICATOR_MODE = EnumProperty.create("mode", FabricatorMode.class);
-
     public static final BooleanProperty USE_SHAPE_FOR_LIGHT_OCCLUSION = BooleanProperty.create("use_shape_for_light_occlusion");
     public static final BooleanProperty SIGNAL_SOURCE = BooleanProperty.create("signal_source");
     public static final BooleanProperty HAS_ANALOG_OUTPUT_SIGNAL = BooleanProperty.create("has_analog_output_signal");

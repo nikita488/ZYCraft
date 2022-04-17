@@ -20,6 +20,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import nikita488.zycraft.util.FluidUtils;
@@ -86,32 +87,30 @@ public class ZYBucketItem extends ZYFluidContainerItem
             return InteractionResultHolder.sidedSuccess(getEmptySuccessItem(handler, heldStack, player), level.isClientSide());
         }
 
-        if (state.getBlock() instanceof BucketPickup pickup)
-        {
-            ItemStack bucket = pickup.pickupBlock(level, pos, state);
+        if (!(state.getBlock() instanceof BucketPickup pickup))
+            return InteractionResultHolder.fail(heldStack);
 
-            if (bucket.isEmpty())
-                return InteractionResultHolder.fail(heldStack);
+        ItemStack bucketStack = pickup.pickupBlock(level, pos, state);
 
-            //TODO: Fix bucket handling
-            /*FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
+        if (bucketStack.isEmpty())
+            return InteractionResultHolder.fail(heldStack);
 
-            if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-                return InteractionResultHolder.fail(heldStack);
+        FluidStack fluidStack = FluidUtil.getFluidContained(bucketStack).orElse(FluidStack.EMPTY);
 
-            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);*/
-            player.awardStat(Stats.ITEM_USED.get(this));
-            //player.playSound(fluid.getAttributes().getFillSound(), 1F, 1F);
-            level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
+        if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
+            return InteractionResultHolder.fail(heldStack);
 
-            ItemStack filledContainer = ItemUtils.createFilledResult(heldStack, player, handler.getContainer(), false);
+        handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        player.awardStat(Stats.ITEM_USED.get(this));
+        player.playSound(fluidStack.getFluid().getAttributes().getFillSound(fluidStack), 1F, 1F);
+        level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
 
-            if (player instanceof ServerPlayer serverPlayer)
-                CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, filledContainer);
+        ItemStack filledContainer = ItemUtils.createFilledResult(heldStack, player, handler.getContainer(), false);
 
-            return InteractionResultHolder.sidedSuccess(filledContainer, level.isClientSide());
-        }
+        if (player instanceof ServerPlayer serverPlayer)
+            CriteriaTriggers.FILLED_BUCKET.trigger(serverPlayer, filledContainer);
 
-        return InteractionResultHolder.fail(heldStack);
+        return InteractionResultHolder.sidedSuccess(filledContainer, level.isClientSide());
+
     }
 }

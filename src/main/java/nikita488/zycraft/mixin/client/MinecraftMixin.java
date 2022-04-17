@@ -2,6 +2,7 @@ package nikita488.zycraft.mixin.client;
 
 import net.minecraft.client.Minecraft;
 import nikita488.zycraft.client.ZYClientSetup;
+import nikita488.zycraft.client.texture.GuiComponentManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -13,6 +14,9 @@ public class MinecraftMixin
     @Inject(method = "close", at = @At(value = "INVOKE", target = "Lnet/minecraft/Util;shutdownExecutors()V"))
     private void close(CallbackInfo callback)
     {
-        ZYClientSetup.guiComponentManager().close();
+        GuiComponentManager manager = ZYClientSetup.guiComponentManager();
+
+        if (manager != null)
+            manager.close();
     }
 }

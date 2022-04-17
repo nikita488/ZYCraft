@@ -22,9 +22,12 @@ import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.init.ZYParticles;
 import nikita488.zycraft.multiblock.MultiManager;
 
+import javax.annotation.Nullable;
+
 @Mod.EventBusSubscriber(modid = ZYCraft.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ZYClientSetup
 {
+    @Nullable
     private static GuiComponentManager guiComponentManager;
 
     @SubscribeEvent
@@ -69,6 +72,7 @@ public class ZYClientSetup
         event.registerReloadListener(guiComponentManager = new GuiComponentManager(Minecraft.getInstance().getTextureManager()));
     }
 
+    @Nullable
     public static GuiComponentManager guiComponentManager()
     {
         return guiComponentManager;

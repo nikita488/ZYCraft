@@ -329,7 +329,7 @@ public class MultiManager extends SavedData
         }
 
         if (!multiTags.isEmpty())
-            event.getData().getCompound("Level").put(MULTI_BLOCKS_TAG, multiTags);
+            event.getData().put(MULTI_BLOCKS_TAG, multiTags);
     }
 
     private static void onChunkUnload(UnloadChunkEvent event)

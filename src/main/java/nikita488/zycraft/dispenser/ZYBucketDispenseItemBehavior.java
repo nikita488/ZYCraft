@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.entity.DispenserBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import nikita488.zycraft.util.FluidUtils;
@@ -37,45 +38,38 @@ public class ZYBucketDispenseItemBehavior extends DefaultDispenseItemBehavior
         BlockPos pos = source.getPos().relative(source.getBlockState().getValue(DispenserBlock.FACING));
 
         if (!containedFluid.isEmpty())
-        {
-            if (FluidUtils.tryPlaceFluid(containedFluid, null, level, pos, null))
-                return new ItemStack(stack.getItem());
-
-            return defaultBehaviour.dispense(source, stack);
-        }
+            return FluidUtils.tryPlaceFluid(containedFluid, null, level, pos, null) ? new ItemStack(stack.getItem()) : defaultBehaviour.dispense(source, stack);
 
         BlockState state = level.getBlockState(pos);
         Block block = state.getBlock();
 
-        if (block instanceof BucketPickup pickup)
-        {
-            ItemStack bucket = pickup.pickupBlock(level, pos, state);
+        if (!(block instanceof BucketPickup pickup))
+            return super.execute(source, stack);
 
-            if (bucket.isEmpty())
-                return super.execute(source, stack);
+        ItemStack bucketStack = pickup.pickupBlock(level, pos, state);
 
-            level.gameEvent(null, GameEvent.FLUID_PICKUP, pos);
+        if (bucketStack.isEmpty())
+            return super.execute(source, stack);
 
-            //TODO: Fix bucket handling
-/*            FluidStack fluidStack = new FluidStack(fluid, FluidAttributes.BUCKET_VOLUME);
+        level.gameEvent(null, GameEvent.FLUID_PICKUP, pos);
 
-            if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
-                return super.execute(source, stack);
+        FluidStack fluidStack = FluidUtil.getFluidContained(bucketStack).orElse(FluidStack.EMPTY);
 
-            handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);*/
-            stack.shrink(1);
+        if (handler.fill(fluidStack, IFluidHandler.FluidAction.SIMULATE) != fluidStack.getAmount())
+            return super.execute(source, stack);
 
-            ItemStack filledContainer = handler.getContainer();
+        handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
+        stack.shrink(1);
 
-            if (stack.isEmpty())
-                return filledContainer;
+        ItemStack filledContainer = handler.getContainer();
 
-            if (source.<DispenserBlockEntity>getEntity().addItem(filledContainer) < 0)
-                defaultBehaviour.dispense(source, filledContainer);
+        if (stack.isEmpty())
+            return filledContainer;
 
-            return stack;
-        }
+        if (source.<DispenserBlockEntity>getEntity().addItem(filledContainer) < 0)
+            defaultBehaviour.dispense(source, filledContainer);
 
-        return super.execute(source, stack);
+        return stack;
+
     }
 }
