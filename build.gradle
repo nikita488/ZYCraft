@@ -1,26 +1,12 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
-        mavenCentral()
-    }
-    dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7.+'
-        classpath 'net.minecraftforge:GradleUtils:1.+'
-    }
-}
-
 plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.minecraftforge.gradleutils' version '1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
     id 'com.github.johnrengelman.shadow' version '7.0.+'
     id 'com.matthewprenger.cursegradle' version '1.4.+'
 }
-
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'net.minecraftforge.gradleutils'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
 
 version = gradleutils.getMCTagOffsetBranchVersion(minecraft_version)
 group = "${mod_base_package}.${mod_id}"
@@ -41,12 +27,23 @@ minecraft {
             workingDirectory project.file('run')
 
             args '--username', 'Dev###'
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
 
             mods { "${mod_id}" { source sourceSets.main } }
         }
 
         server {
             workingDirectory project.file('run')
+
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
+
+            mods { "${mod_id}" { source sourceSets.main } }
+        }
+		
+		gameTestServer {
+            workingDirectory project.file('run')
+
+            property 'forge.enabledGameTestNamespaces', "${mod_id}"
 
             mods { "${mod_id}" { source sourceSets.main } }
         }
@@ -81,7 +78,7 @@ repositories {
         }
     }
     maven { url 'https://dvs1.progwml6.com/files/maven' }
-    maven { url 'https://squiddev.cc/maven' }
+    maven { url 'https://maven.k-4u.nl' }
 }
 
 configurations {
@@ -90,9 +87,7 @@ configurations {
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    if (!Boolean.getBoolean("idea.sync.active"))
-        annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 
     def registrate = "com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}"
     implementation fg.deobf(registrate)
@@ -101,17 +96,10 @@ dependencies {
     implementation fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
     runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-    //compileOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}:api")
-    //runtimeOnly fg.deobf("mcjty.theoneprobe:TheOneProbe-1.16:1.16-${top_version}")
-    compileOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}:api")
-    runtimeOnly fg.deobf("curse.maven:jade-324717:${jade_file_id}")
-    implementation fg.deobf('curse.maven:the-one-probe-245211:3671753')
-
-    //runtimeOnly fg.deobf('curse.maven:mekanism-268560:3206392')
-    //runtimeOnly fg.deobf('curse.maven:storage-drawers-223852:3180569')
-    //runtimeOnly fg.deobf('curse.maven:mantle-74924:3389377')
-    //runtimeOnly fg.deobf('curse.maven:tinkers-construct-74072:3389395')
-    //runtimeOnly fg.deobf('curse.maven:chisel-235279:3376782')
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
+    implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
+    //compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8:api")
+    //runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8")
 }
 
 // This block of code expands all the gradle properties in the specified resource targets.
@@ -161,6 +149,10 @@ jar {
                 'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
 }
 
 shadowJar {
@@ -228,6 +220,6 @@ curseforge {
     }
 
     options {
-        debug = true // defaults to false
+        debug = false
     }
 }
