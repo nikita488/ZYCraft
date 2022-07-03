@@ -1,16 +1,16 @@
 package nikita488.zycraft.compat.jade;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.api.fluid.IFluidSource;
 import nikita488.zycraft.init.ZYLang;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public class FluidSourceComponentProvider implements IComponentProvider
+public class FluidSourceComponentProvider implements IBlockComponentProvider
 {
     public static final FluidSourceComponentProvider INSTANCE = new FluidSourceComponentProvider();
     public static final ResourceLocation KEY = ZYCraft.id("fluid_source");
@@ -26,5 +26,11 @@ public class FluidSourceComponentProvider implements IComponentProvider
                 tooltip.add(ZYLang.SOURCE_FLUID_LABEL.plainCopy()
                         .append(ZYLang.copy(ZYLang.FLUID_INFO, fluid.getDisplayName(), fluid.getAmount())));
         }
+    }
+
+    @Override
+    public ResourceLocation getUid()
+    {
+        return KEY;
     }
 }

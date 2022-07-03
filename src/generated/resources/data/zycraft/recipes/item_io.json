@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X#X",
-    "#$#",
-    "X#X"
-  ],
   "key": {
-    "X": {
-      "tag": "zycraft:engineering_bricks/green"
-    },
     "#": {
       "item": "minecraft:iron_bars"
     },
     "$": {
       "tag": "forge:chests/wooden"
+    },
+    "X": {
+      "tag": "zycraft:engineering_bricks/green"
     }
   },
+  "pattern": [
+    "X#X",
+    "#$#",
+    "X#X"
+  ],
   "result": {
     "item": "zycraft:item_io"
   }

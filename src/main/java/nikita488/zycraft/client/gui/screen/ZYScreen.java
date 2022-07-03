@@ -1,13 +1,10 @@
 package nikita488.zycraft.client.gui.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.BufferBuilder;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.Tesselator;
-import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.AbstractButton;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
@@ -20,13 +17,13 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.client.ZYClientSetup;
 import nikita488.zycraft.client.gui.GuiComponent;
@@ -174,16 +171,18 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
         if (fluid.isEmpty())
             return;
 
-        FluidAttributes attributes = fluid.getFluid().getAttributes();
-        int color = attributes.getColor(fluid);
+        FluidType type = fluid.getFluid().getFluidType();
+        IFluidTypeRenderProperties properties = RenderProperties.get(type);
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(properties.getStillTexture(fluid));
+        int color = properties.getColorTint(fluid);
 
-        if (attributes.isGaseous(fluid))
+        if (type.isLighterThanAir())
             color = Color.argb(color, (int)(Math.pow(density, 0.4F) * 255));
         else
             height *= density;
 
         setColor(color);
-        renderTileableSprite(stack, x, y, blitOffset, ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(fluid)).sprite(), resolution, width, height);
+        renderTileableSprite(stack, x, y, blitOffset, sprite, resolution, width, height);
         resetColor();
     }
 
@@ -354,7 +353,7 @@ public abstract class ZYScreen<T extends AbstractContainerMenu> extends Abstract
 
         public FluidGaugeWidget(int x, int y, FluidMenuData fluidData, int capacity)
         {
-            super(x, y, GuiComponent.BIG_TANK.width(), GuiComponent.BIG_TANK.height(), TextComponent.EMPTY);
+            super(x, y, GuiComponent.BIG_TANK.width(), GuiComponent.BIG_TANK.height(), Component.empty());
             this.fluidData = fluidData;
             this.capacity = capacity;
         }

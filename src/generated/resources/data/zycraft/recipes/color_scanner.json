@@ -1,19 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "RGB",
-    "###",
-    "D#L"
-  ],
   "key": {
     "#": {
       "item": "zycraft:zychorite"
-    },
-    "R": {
-      "item": "zycraft:red_zychorium"
-    },
-    "G": {
-      "item": "zycraft:green_zychorium"
     },
     "B": {
       "item": "zycraft:blue_zychorium"
@@ -21,10 +10,21 @@
     "D": {
       "item": "zycraft:dark_zychorium"
     },
+    "G": {
+      "item": "zycraft:green_zychorium"
+    },
     "L": {
       "item": "zycraft:light_zychorium"
+    },
+    "R": {
+      "item": "zycraft:red_zychorium"
     }
   },
+  "pattern": [
+    "RGB",
+    "###",
+    "D#L"
+  ],
   "result": {
     "item": "zycraft:color_scanner"
   }

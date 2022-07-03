@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "minecraft:stone_bricks"
+    },
+    "I": {
+      "item": "zycraft:quartz_crystal"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "zycraft:quartz_crystal"
-    },
-    "#": {
-      "tag": "minecraft:stone_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:quartz_crystal_bricks",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:quartz_crystal_bricks"
   }
 }

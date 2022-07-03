@@ -44,7 +44,7 @@ public class ZYClientSetup
 
                 if (fluidStack.isEmpty())
                     return 0F;
-                else if (fluidStack.getFluid().getAttributes().isGaseous(fluidStack))
+                else if (fluidStack.getFluid().getFluidType().isLighterThanAir())
                     return 1F;
                 else
                     return (float)fluidStack.getAmount() / 16000;

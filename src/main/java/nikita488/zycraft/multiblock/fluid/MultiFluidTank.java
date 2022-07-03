@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import nikita488.zycraft.client.renderer.multiblock.MultiFluidRenderer;
 import nikita488.zycraft.util.Cuboid6i;
@@ -21,7 +21,7 @@ import java.util.function.Predicate;
 
 public class MultiFluidTank extends FluidTank implements IMultiFluidHandler, IMultiFluidTank
 {
-    public static final int AMOUNT_PER_BLOCK = 16 * FluidAttributes.BUCKET_VOLUME;
+    public static final int AMOUNT_PER_BLOCK = 16 * FluidType.BUCKET_VOLUME;
     private final Cuboid6i bounds;
     private final BlockPos center;
     private final int area;

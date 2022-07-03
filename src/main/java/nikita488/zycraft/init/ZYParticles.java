@@ -4,12 +4,13 @@ import com.mojang.serialization.Codec;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.particle.SparkleParticleData;
 
 public class ZYParticles
 {
-    public static final RegistryEntry<ParticleType<SparkleParticleData>> SPARKLE = ZYCraft.registrate().simple("sparkle", ParticleType.class, () ->
+    public static final RegistryEntry<ParticleType<SparkleParticleData>> SPARKLE = ZYCraft.registrate().simple("sparkle", ForgeRegistries.Keys.PARTICLE_TYPES, () ->
             new ZYParticleType<>(SparkleParticleData.CODEC, false, SparkleParticleData.DESERIALIZER));
 
     public static void init() {}

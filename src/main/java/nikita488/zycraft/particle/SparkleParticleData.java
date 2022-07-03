@@ -7,6 +7,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.init.ZYParticles;
 
 public class SparkleParticleData implements ParticleOptions
@@ -89,7 +90,7 @@ public class SparkleParticleData implements ParticleOptions
     @Override
     public String writeToString()
     {
-        return getType().getRegistryName().toString();
+        return ForgeRegistries.PARTICLE_TYPES.getKey(getType()).toString();
     }
 
     public float r()

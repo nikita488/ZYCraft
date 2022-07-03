@@ -26,6 +26,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
 import nikita488.zycraft.ZYCraft;
+import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.multiblock.child.IMultiChild;
 import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
 import nikita488.zycraft.network.ZYPackets;
@@ -241,7 +242,7 @@ public abstract class MultiBlock
 
     public void fillCrashReportCategory(CrashReportCategory category)
     {
-        category.setDetail("MultiBlock Type", () -> type.getRegistryName() + " (" + getClass().getCanonicalName() + ")");
+        category.setDetail("MultiBlock Type", () -> ZYRegistries.MULTI_TYPES.get().getKey(type) + " (" + getClass().getCanonicalName() + ")");
         category.setDetail("MultiBlock Main Chunk", mainChunk);
         category.setDetail("MultiBlock ID", id);
     }
@@ -311,7 +312,7 @@ public abstract class MultiBlock
     @Override
     public final String toString() {
         return MoreObjects.toStringHelper(this)
-                .add("type", type.getRegistryName())
+                .add("type", ZYRegistries.MULTI_TYPES.get().getKey(type))
                 .add("level", level.toString() + "/" + level.dimension().location())
                 .add("mainChunk", mainChunk)
                 .add("id", id)

@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:glass_viewer"
+    },
+    "I": {
+      "item": "zycraft:aluminium"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "zycraft:aluminium"
-    },
-    "#": {
-      "item": "zycraft:glass_viewer"
-    }
-  },
   "result": {
-    "item": "zycraft:aluminium_viewer",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:aluminium_viewer"
   }
 }

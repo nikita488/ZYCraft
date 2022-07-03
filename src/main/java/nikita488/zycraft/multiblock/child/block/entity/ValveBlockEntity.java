@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.EmptyFluidHandler;
+import net.minecraftforge.registries.ForgeRegistries;
 import nikita488.zycraft.api.fluid.IFluidSource;
 import nikita488.zycraft.api.fluid.IFluidVoid;
 import nikita488.zycraft.block.state.properties.ValveIOMode;
@@ -93,7 +94,7 @@ public class ValveBlockEntity extends MultiInterfaceBlockEntity implements IFlui
 
         if (state.getBlock() instanceof IFluidSource source)
             fluid = source.getFluid(state, level, pos, side.getOpposite());
-        else if (fluidState.getType() == Fluids.WATER.delegate.get())
+        else if (fluidState.getType() == ForgeRegistries.FLUIDS.getDelegate(Fluids.WATER).get().value())//TODO: Do we still need delegate here?
             fluid = new FluidStack(Fluids.WATER, 50);
 
         if (!fluid.isEmpty())

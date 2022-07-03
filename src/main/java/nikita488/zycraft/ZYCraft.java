@@ -17,13 +17,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 import nikita488.zycraft.client.texture.CloudSprite;
+import nikita488.zycraft.compat.jade.ZYHwylaPluign;
 import nikita488.zycraft.compat.theoneprobe.ZYProbeInfoProvider;
-import nikita488.zycraft.config.ZYConfig;
 import nikita488.zycraft.dispenser.ZYBucketDispenseItemBehavior;
 import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.init.ZYBlocks;
 import nikita488.zycraft.init.ZYCreativeModeTabs;
 import nikita488.zycraft.init.ZYEntities;
+import nikita488.zycraft.init.ZYFeatures;
 import nikita488.zycraft.init.ZYItems;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.init.ZYMenus;
@@ -31,9 +32,6 @@ import nikita488.zycraft.init.ZYMultiTypes;
 import nikita488.zycraft.init.ZYParticles;
 import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.init.ZYTags;
-import nikita488.zycraft.init.levelgen.ZYConfiguredFeatures;
-import nikita488.zycraft.init.levelgen.ZYFeatures;
-import nikita488.zycraft.init.levelgen.ZYPlacements;
 import nikita488.zycraft.multiblock.MultiManager;
 import nikita488.zycraft.network.ZYPackets;
 import org.apache.logging.log4j.LogManager;
@@ -56,8 +54,8 @@ public class ZYCraft
     {
         IEventBus eventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        ZYConfig.register();
-        eventBus.addListener(ZYConfig::init);
+        //ZYConfig.register();
+        //eventBus.addListener(ZYConfig::init);
 
         ZYBlocks.init();
         ZYItems.init();
@@ -74,6 +72,8 @@ public class ZYCraft
         ZYLang.init();
         ZYPackets.init();
 
+        ZYHwylaPluign.init();
+
         eventBus.addListener(this::commonSetup);
         eventBus.addListener(this::enqueueIMC);
 
@@ -84,8 +84,6 @@ public class ZYCraft
     {
         event.enqueueWork(() ->
         {
-            ZYConfiguredFeatures.init();
-            ZYPlacements.init();
             DispenserBlock.registerBehavior(ZYItems.QUARTZ_BUCKET.get(), ZYBucketDispenseItemBehavior.INSTANCE);
         });
         MultiManager.commonSetup();

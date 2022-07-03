@@ -1,16 +1,16 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XX",
-    "XX"
-  ],
   "key": {
     "X": {
       "item": "zycraft:solid_red_zychorium_bricks"
     }
   },
+  "pattern": [
+    "XX",
+    "XX"
+  ],
   "result": {
-    "item": "zycraft:small_solid_red_zychorium_bricks",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:small_solid_red_zychorium_bricks"
   }
 }

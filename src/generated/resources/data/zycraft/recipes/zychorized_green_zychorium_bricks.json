@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:green_zychorium_bricks"
+    },
+    "I": {
+      "item": "zycraft:zychorite"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "zycraft:zychorite"
-    },
-    "#": {
-      "item": "zycraft:green_zychorium_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:zychorized_green_zychorium_bricks",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:zychorized_green_zychorium_bricks"
   }
 }

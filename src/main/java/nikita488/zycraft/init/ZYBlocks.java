@@ -44,7 +44,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.ColorableBlock;
 import nikita488.zycraft.block.FabricatorBlock;
@@ -485,7 +484,7 @@ public class ZYBlocks
             .register();
 
     public static final BlockEntry<MultiAirBlock> MULTI_AIR = REGISTRATE.block("multi_air", Material.AIR, MultiAirBlock::new)
-            .properties(properties -> properties.strength(-1F, 3600000.8F).noDrops().noOcclusion())
+            .properties(properties -> properties.strength(-1F, 3600000.8F).noLootTable().noOcclusion())
             .lang("MultiBlock Air")
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models().getExistingFile(provider.mcLoc("block/air"))))
             .simpleBlockEntity((BlockEntityBuilder.BlockEntityFactory<BlockEntity>)MultiAirBlockEntity::new)
@@ -528,7 +527,7 @@ public class ZYBlocks
 
     public static final BlockEntry<FluidSelectorBlock> FLUID_SELECTOR = REGISTRATE.block("fluid_selector", FluidSelectorBlock::new)
             .initialProperties(Material.STONE, MaterialColor.SNOW)
-            .properties(properties -> properties.strength(-1F, 3600000.8F).noDrops().isValidSpawn((state, level, pos, entity) -> false))
+            .properties(properties -> properties.strength(-1F, 3600000.8F).noLootTable().isValidSpawn((state, level, pos, entity) -> false))
             .addLayer(() -> RenderType::cutout)
             .color(() -> ZYBlockColors.FLUID_SELECTOR)
             .blockstate((ctx, provider) -> provider.simpleBlock(ctx.getEntry(), provider.models()
@@ -650,7 +649,7 @@ public class ZYBlocks
     private static <T extends ConvertedMultiChildBlock> BlockBuilder<T, Registrate> convertedMultiChild(BlockBuilder<T, Registrate> block)
     {
         return block.properties(properties -> properties
-                .noDrops()
+                .noLootTable()
                 .dynamicShape()
                 .isValidSpawn(ConvertedMultiChildBlock::isValidSpawn)
                 .isRedstoneConductor(ConvertedMultiChildBlock::isRedstoneConductor)
@@ -688,7 +687,7 @@ public class ZYBlocks
                 });
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)
+    private static <T extends ItemLike> void square(RegistrateRecipeProvider provider, DataIngredient source, Supplier<? extends T> result, int count, boolean small)
     {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result.get(), count).define('X', source);
 
@@ -704,18 +703,18 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void bricks(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> source, NonNullSupplier<? extends T> result)
     {
         bricks(provider, DataIngredient.items(source), result);
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void bricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void bricks(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         square(provider, source, result, 4, true);
         provider.stonecutting(source, result);
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void infused(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get(), 4)
                 .define('I', infusionSource)
@@ -727,7 +726,7 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void engineering(RegistrateRecipeProvider provider, DataIngredient infusionSource, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         DataIngredient core = DataIngredient.tag(Tags.Items.DUSTS_REDSTONE);
 
@@ -742,12 +741,12 @@ public class ZYBlocks
                 .save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void colorable(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void colorable(RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         colorable(provider.safeId(result.get()), provider, source, result);
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void colorable(ResourceLocation name, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get(), 4)
                 .define('#', source)
@@ -763,7 +762,7 @@ public class ZYBlocks
                 .save(provider, name);
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void lamp(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> result, boolean inverted)
+    private static <T extends ItemLike> void lamp(RegistrateRecipeProvider provider, NonNullSupplier<? extends T> result, boolean inverted)
     {
         DataIngredient quartzCrystalSource = DataIngredient.items(QUARTZ_CRYSTAL);
 
@@ -789,7 +788,7 @@ public class ZYBlocks
                 .save(provider, provider.safeId(to.getId()) + "_from_" + provider.safeName(from.getId()));
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void basicMachine(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void basicMachine(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder builder = ShapedRecipeBuilder.shaped(result.get())
                 .define('X', DataIngredient.tag(ZYTags.Items.ENGINEERING_BRICKS_BY_TYPE.get(type)))
@@ -806,7 +805,7 @@ public class ZYBlocks
         builder.save(provider, provider.safeId(result.get()));
     }
 
-    private static <T extends ItemLike & IForgeRegistryEntry<?>> void multiInterface(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
+    private static <T extends ItemLike> void multiInterface(ZYType type, RegistrateRecipeProvider provider, DataIngredient source, NonNullSupplier<? extends T> result)
     {
         ShapedRecipeBuilder.shaped(result.get())
                 .define('X', DataIngredient.tag(ZYTags.Items.ENGINEERING_BRICKS_BY_TYPE.get(type)))

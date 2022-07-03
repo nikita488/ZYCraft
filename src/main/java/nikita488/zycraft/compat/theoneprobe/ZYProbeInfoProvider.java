@@ -9,7 +9,7 @@ import mcjty.theoneprobe.api.ProbeMode;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -95,7 +95,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .tankSimple(storedFluid.getAmount(), storedFluid,
                             info.defaultProgressStyle()
                                     .prefix(storedFluid.getDisplayName().copy().append(" "))
-                                    .suffix(new TextComponent(" mB")));
+                                    .suffix(Component.literal(" mB")));
     }
 
     private void addItemIOProbeInfo(IProbeInfo info, BlockState state)
@@ -114,7 +114,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .tankSimple(fluid.getAmount(), fluid,
                             info.defaultProgressStyle()
                                     .prefix(fluid.getDisplayName().copy().append(" "))
-                                    .suffix(new TextComponent(" mB")));
+                                    .suffix(Component.literal(" mB")));
     }
 
     private void addFluidVoidProbeInfo(IProbeInfo info, IFluidVoid fluidVoid, Level level, BlockState state, BlockPos pos, Direction side)
@@ -128,7 +128,7 @@ public class ZYProbeInfoProvider implements IProbeInfoProvider, Function<ITheOne
                     .tankSimple(fluidToDrain.getAmount(), fluidToDrain,
                             info.defaultProgressStyle()
                                     .prefix(fluidToDrain.getDisplayName().copy().append(" "))
-                                    .suffix(new TextComponent(" mB")));
+                                    .suffix(Component.literal(" mB")));
         else if (drainAmount > 0)
             info.horizontal().text(CompoundText.create()
                     .label(ZYLang.VOID_FLUID_LABEL)

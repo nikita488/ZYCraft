@@ -28,15 +28,18 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.BakedModelWrapper;
 import net.minecraftforge.client.model.ForgeModelBakery;
 import net.minecraftforge.client.model.IModelConfiguration;
 import net.minecraftforge.client.model.IModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.geometry.IModelGeometry;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
@@ -166,17 +169,18 @@ public class FluidContainerModel implements IModelGeometry<FluidContainerModel>
                 return emptyModel;
 
             FluidStack fluidStack = FluidUtil.getFluidContained(stack).orElse(FluidStack.EMPTY);
-            ResourceLocation id = fluidStack.getFluid().getRegistryName();
+            ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluidStack.getFluid());
 
             if (fluidStack.isEmpty() || id == null)
                 return emptyModel;
 
-            FluidAttributes attributes = fluidStack.getFluid().getAttributes();
-            ResourceLocation texture = attributes.getStillTexture(fluidStack);
+            FluidType type = fluidStack.getFluid().getFluidType();
+            IFluidTypeRenderProperties properties = RenderProperties.get(type);
+            ResourceLocation texture = properties.getStillTexture(fluidStack);
             BakedModel[] models = overrideModels.computeIfAbsent(id, key ->
             {
                 BakedModel[] wrappedModels = new BakedModel[overrides.length];
-                BlockModelRotation rotation = attributes.isLighterThanAir() ? BlockModelRotation.X180_Y0 : BlockModelRotation.X0_Y0;
+                BlockModelRotation rotation = type.isLighterThanAir() ? BlockModelRotation.X180_Y0 : BlockModelRotation.X0_Y0;
 
                 for (int i = 0; i < overrides.length; i++)
                 {

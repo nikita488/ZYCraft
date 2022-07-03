@@ -13,9 +13,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.material.Fluid;
+import net.minecraftforge.client.IFluidTypeRenderProperties;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import nikita488.zycraft.util.Color;
 import nikita488.zycraft.util.Cuboid6i;
 
@@ -37,24 +39,25 @@ public class MultiFluidRenderer
 
         Vector3f origin = new Vector3f();
         Fluid fluid = stack.getFluid();
-        FluidAttributes attributes = fluid.getAttributes();
-        int color = attributes.getColor(stack);
-        TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(attributes.getStillTexture(stack)).sprite();
+        FluidType type = fluid.getFluidType();
+        IFluidTypeRenderProperties properties = RenderProperties.get(type);
+        int color = properties.getColorTint(stack);
+        TextureAtlasSprite sprite = ModelLoaderRegistry.blockMaterial(properties.getStillTexture(stack)).sprite();
         float fluidHeight = bounds.height();
 
-        if (attributes.isGaseous(stack))
+        if (type.isLighterThanAir())
             color = Color.argb(color, (int)(Math.pow(density, 0.4F) * 255));
         else
             fluidHeight *= density;
 
-        lightMap = pack(Math.max(block(lightMap), attributes.getLuminosity(stack)), sky(lightMap));
+        lightMap = pack(Math.max(block(lightMap), type.getLightLevel(stack)), sky(lightMap));
 
-        for (RenderType type : RenderType.chunkBufferLayers())
+        for (RenderType renderType : RenderType.chunkBufferLayers())
         {
-            if (!ItemBlockRenderTypes.canRenderInLayer(fluid.defaultFluidState(), type))
+            if (!ItemBlockRenderTypes.canRenderInLayer(fluid.defaultFluidState(), renderType))
                 continue;
 
-            VertexConsumer builder = source.getBuffer(type);
+            VertexConsumer builder = source.getBuffer(renderType);
 
             origin.set(bounds.minX(), bounds.minY(), bounds.minZ());
             fillFluidQuads(pose, builder, origin, Direction.DOWN, resolution, bounds.width(), bounds.depth(), color, sprite, lightMap);

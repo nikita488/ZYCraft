@@ -1,6 +1,6 @@
 package nikita488.zycraft.block.state.properties;
 
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.StringRepresentable;
 import nikita488.zycraft.enums.ZYType;
 import nikita488.zycraft.init.ZYLang;
@@ -36,7 +36,7 @@ public enum FabricatorMode implements StringRepresentable
         return powered ? ZYType.BLUE.rgb() : 0x002142;
     }
 
-    public TranslatableComponent displayName()
+    public MutableComponent displayName()
     {
         return switch (this)
         {

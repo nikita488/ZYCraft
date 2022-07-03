@@ -1,18 +1,23 @@
 package nikita488.zycraft.compat.jei;
 
+import mezz.jei.api.constants.RecipeTypes;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.transfer.IRecipeTransferError;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandler;
 import mezz.jei.api.recipe.transfer.IRecipeTransferHandlerHelper;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.entity.FabricatorBlockEntity;
 import nikita488.zycraft.init.ZYLang;
+import nikita488.zycraft.init.ZYMenus;
 import nikita488.zycraft.menu.FabricatorMenu;
 import nikita488.zycraft.network.SetFabricatorRecipePacket;
 
 import javax.annotation.Nullable;
+import java.util.Optional;
 
 public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<FabricatorMenu, CraftingRecipe>
 {
@@ -41,8 +46,14 @@ public class FabricatorRecipeTransferHandler implements IRecipeTransferHandler<F
     }
 
     @Override
-    public Class<CraftingRecipe> getRecipeClass()
+    public Optional<MenuType<FabricatorMenu>> getMenuType()
     {
-        return CraftingRecipe.class;
+        return Optional.of(ZYMenus.FABRICATOR.get());//TODO: Cache optional?
+    }
+
+    @Override
+    public RecipeType<CraftingRecipe> getRecipeType()
+    {
+        return RecipeTypes.CRAFTING;
     }
 }

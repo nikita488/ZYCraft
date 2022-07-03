@@ -1,13 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
-  "rewards": {
-    "recipes": [
-      "zycraft:inverted_zychorium_lamp_from_zychorium_lamp"
-    ]
-  },
   "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "zycraft:inverted_zychorium_lamp_from_zychorium_lamp"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
     "has_zychorium_lamp": {
-      "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
@@ -16,13 +16,8 @@
             ]
           }
         ]
-      }
-    },
-    "has_the_recipe": {
-      "trigger": "minecraft:recipe_unlocked",
-      "conditions": {
-        "recipe": "zycraft:inverted_zychorium_lamp_from_zychorium_lamp"
-      }
+      },
+      "trigger": "minecraft:inventory_changed"
     }
   },
   "requirements": [
@@ -30,5 +25,10 @@
       "has_zychorium_lamp",
       "has_the_recipe"
     ]
-  ]
+  ],
+  "rewards": {
+    "recipes": [
+      "zycraft:inverted_zychorium_lamp_from_zychorium_lamp"
+    ]
+  }
 }

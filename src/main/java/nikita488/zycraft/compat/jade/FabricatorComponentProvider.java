@@ -1,15 +1,15 @@
 package nikita488.zycraft.compat.jade;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.resources.ResourceLocation;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.block.FabricatorBlock;
 import nikita488.zycraft.init.ZYLang;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public class FabricatorComponentProvider implements IComponentProvider
+public class FabricatorComponentProvider implements IBlockComponentProvider
 {
     public static final FabricatorComponentProvider INSTANCE = new FabricatorComponentProvider();
     public static final ResourceLocation KEY = ZYCraft.id("fabricator");
@@ -19,5 +19,11 @@ public class FabricatorComponentProvider implements IComponentProvider
     {
         if (config.get(KEY))
             tooltip.add(ZYLang.MODE_LABEL.plainCopy().append(accessor.getBlockState().getValue(FabricatorBlock.MODE).displayName()));
+    }
+
+    @Override
+    public ResourceLocation getUid()
+    {
+        return KEY;
     }
 }

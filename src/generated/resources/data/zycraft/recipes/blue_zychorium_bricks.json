@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "tag": "minecraft:stone_bricks"
+    },
+    "I": {
+      "item": "zycraft:blue_zychorium"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "zycraft:blue_zychorium"
-    },
-    "#": {
-      "tag": "minecraft:stone_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:blue_zychorium_bricks",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:blue_zychorium_bricks"
   }
 }

@@ -104,7 +104,8 @@ public class FabricatorBlockEntity extends ZYBlockEntity implements MenuProvider
         {
             Optional<CraftingRecipe> craftingRecipe = level.getRecipeManager().byKey(fabricator.pendingRecipe)
                     .filter(FabricatorBlockEntity::isRecipeCompatible)
-                    .flatMap(recipe -> RecipeType.CRAFTING.tryMatch((CraftingRecipe)recipe, level, fabricator.recipePattern));
+                    .map(recipe -> (CraftingRecipe)recipe)
+                    .filter(recipe -> recipe.matches(fabricator.recipePattern, level));
 
             if (craftingRecipe.isEmpty())
                 craftingRecipe = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, fabricator.recipePattern, level)

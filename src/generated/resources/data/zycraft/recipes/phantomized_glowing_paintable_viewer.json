@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:glowing_paintable_viewer"
+    },
+    "I": {
+      "item": "minecraft:phantom_membrane"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "minecraft:phantom_membrane"
-    },
-    "#": {
-      "item": "zycraft:glowing_paintable_viewer"
-    }
-  },
   "result": {
-    "item": "zycraft:phantomized_glowing_paintable_viewer",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:phantomized_glowing_paintable_viewer"
   }
 }

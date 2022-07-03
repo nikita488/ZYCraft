@@ -17,9 +17,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -31,7 +32,7 @@ public class ZYBucketItem extends ZYFluidContainerItem
 {
     public ZYBucketItem(Properties properties)
     {
-        this(properties, FluidAttributes.BUCKET_VOLUME);
+        this(properties, FluidType.BUCKET_VOLUME);
     }
 
     public ZYBucketItem(Properties properties, int capacity)
@@ -102,7 +103,8 @@ public class ZYBucketItem extends ZYFluidContainerItem
 
         handler.fill(fluidStack, IFluidHandler.FluidAction.EXECUTE);
         player.awardStat(Stats.ITEM_USED.get(this));
-        player.playSound(fluidStack.getFluid().getAttributes().getFillSound(fluidStack), 1F, 1F);
+        Optional.ofNullable(fluidStack.getFluid().getFluidType().getSound(fluidStack, SoundActions.BUCKET_FILL))
+                .ifPresent(sound -> player.playSound(sound, 1F, 1F));
         level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
 
         ItemStack filledContainer = ItemUtils.createFilledResult(heldStack, player, handler.getContainer(), false);

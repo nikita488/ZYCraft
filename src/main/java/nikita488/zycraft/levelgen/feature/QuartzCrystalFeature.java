@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -16,7 +17,6 @@ import nikita488.zycraft.util.ZYConstants;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 public class QuartzCrystalFeature extends Feature<QuartzCrystalConfiguration>
 {
@@ -29,7 +29,7 @@ public class QuartzCrystalFeature extends Feature<QuartzCrystalConfiguration>
     public boolean place(FeaturePlaceContext<QuartzCrystalConfiguration> context)
     {
         WorldGenLevel level = context.level();
-        Random random = context.random();
+        RandomSource random = context.random();
         BlockPos origin = context.origin();
         QuartzCrystalConfiguration config = context.config();
         BlockState state = level.getBlockState(origin);
@@ -40,7 +40,7 @@ public class QuartzCrystalFeature extends Feature<QuartzCrystalConfiguration>
         BlockPos.MutableBlockPos relativePos = origin.mutable();
         List<Direction> directions = Arrays.asList(ZYConstants.DIRECTIONS);
 
-        Collections.shuffle(directions, random);
+        Collections.shuffle(directions);
 
         for (Direction direction : directions)
         {

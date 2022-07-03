@@ -1,10 +1,5 @@
 package nikita488.zycraft.compat.jade;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -16,8 +11,13 @@ import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYLang;
 import nikita488.zycraft.multiblock.child.block.ValveBlock;
 import nikita488.zycraft.multiblock.child.block.entity.ValveBlockEntity;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public class ValveComponentProvider implements IComponentProvider, IServerDataProvider<BlockEntity>
+public class ValveComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity>
 {
     public static final ValveComponentProvider INSTANCE = new ValveComponentProvider();
     public static final ResourceLocation KEY = ZYCraft.id("valve");
@@ -52,5 +52,11 @@ public class ValveComponentProvider implements IComponentProvider, IServerDataPr
             if (!storedFluid.isEmpty())
                 data.put("StoredFluid", storedFluid.writeToNBT(new CompoundTag()));
         }
+    }
+
+    @Override
+    public ResourceLocation getUid()
+    {
+        return KEY;
     }
 }

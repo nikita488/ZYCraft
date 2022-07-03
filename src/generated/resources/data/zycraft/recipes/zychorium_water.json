@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X#X",
-    "#$#",
-    "X#X"
-  ],
   "key": {
-    "X": {
-      "tag": "zycraft:engineering_bricks/blue"
-    },
     "#": {
       "item": "zycraft:zychorite"
     },
     "$": {
       "item": "minecraft:water_bucket"
+    },
+    "X": {
+      "tag": "zycraft:engineering_bricks/blue"
     }
   },
+  "pattern": [
+    "X#X",
+    "#$#",
+    "X#X"
+  ],
   "result": {
     "item": "zycraft:zychorium_water"
   }

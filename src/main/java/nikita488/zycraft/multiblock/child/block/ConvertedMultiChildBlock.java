@@ -5,6 +5,7 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -46,7 +48,6 @@ import nikita488.zycraft.multiblock.child.block.entity.ConvertedMultiChildBlockE
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Consumer;
 
 @SuppressWarnings("deprecation")
@@ -268,12 +269,12 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack)
+    public void spawnAfterBreak(BlockState state, ServerLevel level, BlockPos pos, ItemStack stack, boolean breakedByPlayer)
     {
-        getState(level, pos).spawnAfterBreak(level, pos, stack);
+        getState(level, pos).spawnAfterBreak(level, pos, stack, breakedByPlayer);
     }
 
-/*    //TODO: Probably remove?
+    /*    //TODO: Probably remove?
     @Override
     public void onBlockClicked(BlockState state, World level, BlockPos pos, PlayerEntity player)
     {
@@ -318,7 +319,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
         getState(level, pos).getBlock().animateTick(state, level, pos, random);
     }
@@ -475,9 +476,9 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader reader, BlockPos pos, int fortuneLevel, int silkTouch)
+    public int getExpDrop(BlockState state, LevelReader reader, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouch)
     {
-        return getState(reader, pos).getExpDrop(reader, pos, fortuneLevel, silkTouch);
+        return getState(reader, pos).getExpDrop(reader, randomSource, pos, fortuneLevel, silkTouch);
     }
 
     @Override
@@ -526,7 +527,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
 
     @Nullable
     @Override
-    public BlockPathTypes getAiPathNodeType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob entity)
+    public BlockPathTypes getAdjacentBlockPathType(BlockState state, BlockGetter getter, BlockPos pos, @Nullable Mob entity, BlockPathTypes originalType)
     {
         return getState(getter, pos).getBlockPathType(getter, pos, entity);
     }
@@ -594,7 +595,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
 
     @Nullable
     @Override
-    public BlockState getToolModifiedState(BlockState state, Level level, BlockPos pos, Player player, ItemStack stack, ToolAction action)
+    public BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction action, boolean simulate)
     {
         return null;
     }

@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:paintable_viewer"
+    },
+    "I": {
+      "tag": "forge:dusts/glowstone"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:dusts/glowstone"
-    },
-    "#": {
-      "item": "zycraft:paintable_viewer"
-    }
-  },
   "result": {
-    "item": "zycraft:glowing_paintable_viewer",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:glowing_paintable_viewer"
   }
 }

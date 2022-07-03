@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###",
-    "#X#",
-    "###"
-  ],
   "key": {
     "#": {
       "tag": "forge:glass"
@@ -13,8 +8,13 @@
       "tag": "forge:ingots/iron"
     }
   },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
   "result": {
-    "item": "zycraft:glass_viewer",
-    "count": 8
+    "count": 8,
+    "item": "zycraft:glass_viewer"
   }
 }

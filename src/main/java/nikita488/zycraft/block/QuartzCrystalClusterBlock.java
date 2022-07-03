@@ -2,6 +2,7 @@ package nikita488.zycraft.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -22,8 +23,6 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import nikita488.zycraft.init.ZYDamageSources;
 import nikita488.zycraft.util.ParticleUtils;
-
-import java.util.Random;
 
 public class QuartzCrystalClusterBlock extends Block
 {
@@ -65,7 +64,7 @@ public class QuartzCrystalClusterBlock extends Block
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
         ParticleUtils.quartzCrystalCluster(state, level, pos, random);
     }

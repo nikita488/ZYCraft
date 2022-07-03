@@ -3,6 +3,7 @@ package nikita488.zycraft.client;
 import com.google.common.collect.ImmutableMap;
 import net.minecraft.Util;
 import net.minecraft.client.color.item.ItemColor;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidUtil;
 import nikita488.zycraft.block.state.properties.ItemIOMode;
 import nikita488.zycraft.block.state.properties.ValveIOMode;
@@ -20,7 +21,7 @@ public enum ZYItemColors implements Supplier<ItemColor>
     ITEM_IO((stack, tintIndex) -> tintIndex == 1 ? ItemIOMode.ANY.rgb() : ZYType.GREEN.rgb()),
     COLOR_SCANNER((stack, tintIndex) -> ItemStackUtils.getInt(stack, "Color", 0xFFFFFF)),
     ALUMINIUM_FOIL((stack, tintIndex) -> tintIndex == 1 ? FluidUtil.getFluidContained(stack)
-            .map(containedFluid -> containedFluid.getFluid().getAttributes().getColor(containedFluid))
+            .map(containedFluid -> RenderProperties.get(containedFluid.getFluid()).getColorTint(containedFluid))
             .orElse(0xFFFFFF) : ZYType.GREEN.rgb());
 
     public static final Map<ZYType, ItemColor> ZY_COLORS = Util.make(() ->

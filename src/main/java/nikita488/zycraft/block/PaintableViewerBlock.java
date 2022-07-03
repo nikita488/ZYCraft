@@ -3,6 +3,7 @@ package nikita488.zycraft.block;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +23,6 @@ import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 
 public class PaintableViewerBlock extends ViewerBlock implements EntityBlock
 {
@@ -64,7 +64,7 @@ public class PaintableViewerBlock extends ViewerBlock implements EntityBlock
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
         if (type == ViewerType.GLOWING)
             ParticleUtils.glowingColorableBlock(state, level, pos, random);

@@ -17,8 +17,9 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Material;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -31,7 +32,7 @@ public class FluidUtils
 {
     public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount)
     {
-        transferFromTo(from, to, amount, FluidAttributes.BUCKET_VOLUME);
+        transferFromTo(from, to, amount, FluidType.BUCKET_VOLUME);
     }
 
     public static void transferFromTo(IFluidHandler from, IFluidHandler to, int amount, int maxDrain)
@@ -74,10 +75,10 @@ public class FluidUtils
 
         if (fluid instanceof FlowingFluid flowingFluid)
         {
-            FluidAttributes attributes = fluid.getAttributes();
-            FluidState fluidState = attributes.getStateForPlacement(level, pos, stack);
+            FluidType type = fluid.getFluidType();
+            FluidState fluidState = type.getStateForPlacement(level, pos, stack);
 
-            if (fluidState.isEmpty() || !fluidState.isSource() || !attributes.canBePlacedInWorld(level, pos, fluidState))
+            if (fluidState.isEmpty() || !fluidState.isSource() || !type.canBePlacedInLevel(level, pos, fluidState))
                 return false;
 
             BlockState blockState = level.getBlockState(pos);
@@ -87,16 +88,17 @@ public class FluidUtils
             if (!canPlace)
                 return hitResult != null && tryPlaceFluid(stack, player, level, hitResult.getBlockPos().relative(hitResult.getDirection()), null);
 
-            if (level.dimensionType().ultraWarm() && attributes.doesVaporize(level, pos, stack))
+            if (level.dimensionType().ultraWarm() && type.isVaporizedOnPlacement(level, pos, stack))
             {
-                attributes.vaporize(player, level, pos, stack);
+                type.onVaporize(player, level, pos, stack);
                 return true;
             }
 
             if (canPlaceFluid(level, pos, blockState, fluid))
             {
                 ((LiquidBlockContainer)blockState.getBlock()).placeLiquid(level, pos, blockState, flowingFluid.getSource(false));
-                level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
+                Optional.ofNullable(type.getSound(stack, SoundActions.BUCKET_EMPTY))
+                        .ifPresent(sound -> level.playSound(player, pos, sound, SoundSource.BLOCKS, 1F, 1F));
                 level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
                 return true;
             }
@@ -104,10 +106,11 @@ public class FluidUtils
             if (!level.isClientSide() && replaceable && !blockState.getMaterial().isLiquid())
                 level.destroyBlock(pos, true);
 
-            if (!level.setBlock(pos, attributes.getBlock(level, pos, fluidState), Block.UPDATE_ALL_IMMEDIATE) && !blockState.getFluidState().isSource())
+            if (!level.setBlock(pos, type.getBlockForFluidState(level, pos, fluidState), Block.UPDATE_ALL_IMMEDIATE) && !blockState.getFluidState().isSource())
                 return false;
 
-            level.playSound(player, pos, attributes.getEmptySound(), SoundSource.BLOCKS, 1F, 1F);
+            Optional.ofNullable(type.getSound(stack, SoundActions.BUCKET_EMPTY))
+                    .ifPresent(sound -> level.playSound(player, pos, sound, SoundSource.BLOCKS, 1F, 1F));
             level.gameEvent(player, GameEvent.FLUID_PLACE, pos);
             return true;
         }

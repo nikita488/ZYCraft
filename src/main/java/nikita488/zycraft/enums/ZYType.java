@@ -3,10 +3,10 @@ package nikita488.zycraft.enums;
 import com.google.common.collect.ImmutableMap;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import net.minecraft.Util;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.material.MaterialColor;
 
 import java.util.Map;
-import java.util.Random;
 
 public enum ZYType
 {
@@ -29,7 +29,7 @@ public enum ZYType
         this.mtlColor = mtlColor;
     }
 
-    public static ZYType randomType(Random random)
+    public static ZYType randomType(RandomSource random)
     {
         return Util.getRandom(VALUES, random);
     }

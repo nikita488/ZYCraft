@@ -1,10 +1,5 @@
 package nikita488.zycraft.compat.jade;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.IServerDataProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -13,8 +8,13 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.api.colorable.IColorable;
 import nikita488.zycraft.init.ZYLang;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public class ColorableComponentProvider implements IComponentProvider, IServerDataProvider<BlockEntity>
+public class ColorableComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockEntity>
 {
     public static final ColorableComponentProvider INSTANCE = new ColorableComponentProvider();
     public static final ResourceLocation KEY = ZYCraft.id("colorable");
@@ -39,5 +39,11 @@ public class ColorableComponentProvider implements IComponentProvider, IServerDa
     {
         if (blockEntity instanceof IColorable colorable)
             data.putInt("Color", colorable.getColor(blockEntity.getBlockState(), level, blockEntity.getBlockPos()));
+    }
+
+    @Override
+    public ResourceLocation getUid()
+    {
+        return KEY;
     }
 }

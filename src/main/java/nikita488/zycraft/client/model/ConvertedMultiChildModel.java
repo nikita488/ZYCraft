@@ -19,6 +19,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -34,7 +35,6 @@ import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -63,7 +63,7 @@ public class ConvertedMultiChildModel implements IModelGeometry<ConvertedMultiCh
         }
 
         @Override
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, Random random, IModelData modelData)
+        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource random, IModelData modelData)
         {
             if (state == null || side == null)
                 return Collections.emptyList();

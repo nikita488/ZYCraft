@@ -1,14 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X%X",
-    "#$#",
-    "X#X"
-  ],
   "key": {
-    "X": {
-      "tag": "zycraft:engineering_bricks/red"
-    },
     "#": {
       "item": "zycraft:zychorite"
     },
@@ -17,8 +9,16 @@
     },
     "%": {
       "item": "minecraft:iron_bars"
+    },
+    "X": {
+      "tag": "zycraft:engineering_bricks/red"
     }
   },
+  "pattern": [
+    "X%X",
+    "#$#",
+    "X#X"
+  ],
   "result": {
     "item": "zycraft:fire_basin"
   }

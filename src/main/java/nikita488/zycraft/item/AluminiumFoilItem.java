@@ -3,7 +3,7 @@ package nikita488.zycraft.item;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 
@@ -13,7 +13,7 @@ public class AluminiumFoilItem extends ZYFluidContainerItem
 {
     public AluminiumFoilItem(Properties properties)
     {
-        super(properties, 16 * FluidAttributes.BUCKET_VOLUME, 1);
+        super(properties, 16 * FluidType.BUCKET_VOLUME, 1);
     }
 
     @Override

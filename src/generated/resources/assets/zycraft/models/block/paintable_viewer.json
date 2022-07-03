@@ -1,7 +1,7 @@
 {
   "parent": "zycraft:block/colorable_cube_all",
   "textures": {
-    "base": "zycraft:block/paintable_viewer_base",
-    "all": "zycraft:block/paintable_viewer_overlay"
+    "all": "zycraft:block/paintable_viewer_overlay",
+    "base": "zycraft:block/paintable_viewer_base"
   }
 }

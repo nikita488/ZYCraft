@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:glass_viewer"
+    },
+    "I": {
+      "tag": "forge:obsidian"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:obsidian"
-    },
-    "#": {
-      "item": "zycraft:glass_viewer"
-    }
-  },
   "result": {
-    "item": "zycraft:reinforced_viewer",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:reinforced_viewer"
   }
 }

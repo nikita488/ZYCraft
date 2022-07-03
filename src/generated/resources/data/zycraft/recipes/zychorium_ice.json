@@ -1,21 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "X#X",
-    "#$#",
-    "X#X"
-  ],
   "key": {
-    "X": {
-      "tag": "zycraft:engineering_bricks/light"
-    },
     "#": {
       "item": "zycraft:zychorite"
     },
     "$": {
       "item": "minecraft:snowball"
+    },
+    "X": {
+      "tag": "zycraft:engineering_bricks/light"
     }
   },
+  "pattern": [
+    "X#X",
+    "#$#",
+    "X#X"
+  ],
   "result": {
     "item": "zycraft:zychorium_ice"
   }

@@ -5,6 +5,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.client.RenderProperties;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.util.Color;
 
@@ -51,7 +52,7 @@ public class FluidSelectorBlockEntity extends ZYBlockEntity
         if (selectedFluid.isEmpty())
             return;
 
-        int color = selectedFluid.getFluid().getAttributes().getColor(selectedFluid);
+        int color = RenderProperties.get(selectedFluid.getFluid()).getColorTint(selectedFluid);
         this.hsv = Color.rgbToHSV((color >> 16) & 255, (color >> 8) & 255, color & 255);
     }
 

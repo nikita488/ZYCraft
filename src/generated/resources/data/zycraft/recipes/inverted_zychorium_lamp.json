@@ -1,25 +1,11 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "RGB",
-    "#X#",
-    "D$L"
-  ],
   "key": {
-    "X": {
-      "tag": "forge:glass"
-    },
     "#": {
       "item": "zycraft:quartz_crystal"
     },
     "$": {
       "item": "minecraft:redstone_torch"
-    },
-    "R": {
-      "item": "zycraft:red_zychorium"
-    },
-    "G": {
-      "item": "zycraft:green_zychorium"
     },
     "B": {
       "item": "zycraft:blue_zychorium"
@@ -27,10 +13,24 @@
     "D": {
       "item": "zycraft:dark_zychorium"
     },
+    "G": {
+      "item": "zycraft:green_zychorium"
+    },
     "L": {
       "item": "zycraft:light_zychorium"
+    },
+    "R": {
+      "item": "zycraft:red_zychorium"
+    },
+    "X": {
+      "tag": "forge:glass"
     }
   },
+  "pattern": [
+    "RGB",
+    "#X#",
+    "D$L"
+  ],
   "result": {
     "item": "zycraft:inverted_zychorium_lamp"
   }

@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:blue_zychorium_bricks"
+    },
+    "I": {
+      "tag": "forge:obsidian"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:obsidian"
-    },
-    "#": {
-      "item": "zycraft:blue_zychorium_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:blue_zychorium_shield",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:blue_zychorium_shield"
   }
 }

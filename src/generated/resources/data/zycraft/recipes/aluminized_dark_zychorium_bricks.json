@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:dark_zychorium_bricks"
+    },
+    "I": {
+      "item": "zycraft:aluminium"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "item": "zycraft:aluminium"
-    },
-    "#": {
-      "item": "zycraft:dark_zychorium_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:aluminized_dark_zychorium_bricks",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:aluminized_dark_zychorium_bricks"
   }
 }

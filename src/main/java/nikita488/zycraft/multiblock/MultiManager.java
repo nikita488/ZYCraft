@@ -29,6 +29,7 @@ import nikita488.zycraft.entity.MultiEntity;
 import nikita488.zycraft.event.PlayerLoadedChunkEvent;
 import nikita488.zycraft.event.PostLoadChunkEvent;
 import nikita488.zycraft.event.UnloadChunkEvent;
+import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.network.AddMultiPacket;
 import nikita488.zycraft.network.RemoveMultiPacket;
 import nikita488.zycraft.network.UpdateMultiPacket;
@@ -313,7 +314,7 @@ public class MultiManager extends SavedData
             if (!multiBlock.isMainChunk(pos))
                 continue;
 
-            ResourceLocation id = multiBlock.type().getRegistryName();
+            ResourceLocation id = ZYRegistries.MULTI_TYPES.get().getKey(multiBlock.type());
 
             if (id == null)
             {

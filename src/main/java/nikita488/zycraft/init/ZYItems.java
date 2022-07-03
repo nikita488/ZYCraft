@@ -8,7 +8,7 @@ import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidType;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.client.ZYItemColors;
 import nikita488.zycraft.enums.ZYType;
@@ -94,7 +94,7 @@ public class ZYItems
                     .save(provider))
             .register();
 
-    public static final ItemEntry<ZYFluidContainerItem> ALUMINIUM_CAN = REGISTRATE.item("aluminium_can", properties -> new ZYFluidContainerItem(properties, FluidAttributes.BUCKET_VOLUME, 16))
+    public static final ItemEntry<ZYFluidContainerItem> ALUMINIUM_CAN = REGISTRATE.item("aluminium_can", properties -> new ZYFluidContainerItem(properties, FluidType.BUCKET_VOLUME, 16))
             .model((ctx, provider) -> NonNullBiConsumer.noop())
             .recipe((ctx, provider) -> ShapedRecipeBuilder.shaped(ctx.getEntry(), 16)
                     .define('#', Tags.Items.GLASS_PANES)

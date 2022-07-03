@@ -74,7 +74,7 @@ public class MultiHighlightRenderer
 
         if (level.getBlockEntity(highlightPos) instanceof IMultiChild child && child.hasParents())
         {
-            float ticksElapsed = (time - startTime) + event.getPartialTicks();
+            float ticksElapsed = (time - startTime) + event.getPartialTick();
             float strength = Math.max(0F, 1F - ticksElapsed / 100);
 
             if (strength <= 0F)

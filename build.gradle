@@ -3,6 +3,7 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'net.minecraftforge.gradleutils' version '1.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
     id 'org.spongepowered.mixin' version '0.7.+'
     id 'com.github.johnrengelman.shadow' version '7.0.+'
     id 'com.matthewprenger.cursegradle' version '1.4.+'
@@ -93,10 +94,11 @@ dependencies {
     implementation fg.deobf(registrate)
     shade registrate
 
-    implementation fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}:api")
-    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}:${jei_version}")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:3671753")
+    //implementation fg.deobf("team.chisel.ctm:CTM:${minecraft_version}-${ctm_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
+    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
+    runtimeOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:3838419")
     implementation fg.deobf("curse.maven:jade-324717:${jade_file_id}")
     //compileOnly fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8:api")
     //runtimeOnly fg.deobf("mcjty.theoneprobe:theoneprobe:1.18-5.1.0-8")

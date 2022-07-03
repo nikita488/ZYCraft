@@ -13,18 +13,6 @@ public class ZYConfig
     //Client values
 
     //Common values
-    public static int zychoriteSize;
-    public static int zychoriteOrePercentage;
-    public static int zychoriteAmount;
-    public static int zychoriteMinHeight;
-    public static int zychoriteMaxHeight;
-
-    public static int aluminiumSize;
-    public static int aluminiumAmount;
-    public static int aluminiumMinHeight;
-    public static int aluminiumMaxHeight;
-
-    public static int quartzCrystalMaxCrystals;
 
     public static void register()
     {
@@ -43,19 +31,6 @@ public class ZYConfig
         else if (config.getSpec() == COMMON.getValue())
         {
             ZYCommonConfig common = COMMON.getKey();
-
-            zychoriteSize = common.zychoriteSize.get();
-            zychoriteOrePercentage = common.zychoriteOrePercentage.get();
-            zychoriteAmount = common.zychoriteAmount.get();
-            zychoriteMinHeight = common.zychoriteMinHeight.get();
-            zychoriteMaxHeight = common.zychoriteMaxHeight.get();
-
-            aluminiumSize = common.aluminiumSize.get();
-            aluminiumAmount = common.aluminiumAmount.get();
-            aluminiumMinHeight = common.aluminiumMinHeight.get();
-            aluminiumMaxHeight = common.aluminiumMaxHeight.get();
-
-            quartzCrystalMaxCrystals = common.quartzCrystalMaxCrystals.get();
         }
     }
 }

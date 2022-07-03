@@ -6,7 +6,6 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -52,7 +51,7 @@ public class ScytheItem extends Item
     @Override
     public Component getName(ItemStack stack)
     {
-        return new TranslatableComponent(getDescriptionId(stack)).withStyle(ChatFormatting.BLUE);
+        return Component.translatable(getDescriptionId(stack)).withStyle(ChatFormatting.BLUE);
     }
 
     @Override

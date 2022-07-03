@@ -1,5 +1,4 @@
 {
-  "replace": false,
   "values": [
     "#zycraft:viewers/base",
     "#zycraft:viewers/phantomized"

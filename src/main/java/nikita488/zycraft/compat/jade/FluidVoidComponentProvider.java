@@ -1,16 +1,16 @@
 package nikita488.zycraft.compat.jade;
 
-import mcp.mobius.waila.api.BlockAccessor;
-import mcp.mobius.waila.api.IComponentProvider;
-import mcp.mobius.waila.api.ITooltip;
-import mcp.mobius.waila.api.config.IPluginConfig;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.api.fluid.IFluidVoid;
 import nikita488.zycraft.init.ZYLang;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
 
-public class FluidVoidComponentProvider implements IComponentProvider
+public class FluidVoidComponentProvider implements IBlockComponentProvider
 {
     public static final FluidVoidComponentProvider INSTANCE = new FluidVoidComponentProvider();
     public static final ResourceLocation KEY = ZYCraft.id("fluid_void");
@@ -30,5 +30,11 @@ public class FluidVoidComponentProvider implements IComponentProvider
                 tooltip.add(ZYLang.VOID_FLUID_LABEL.plainCopy()
                         .append(ZYLang.copy(ZYLang.FLUID_INFO, "Any", drainAmount)));
         }
+    }
+
+    @Override
+    public ResourceLocation getUid()
+    {
+        return KEY;
     }
 }

@@ -59,12 +59,12 @@ public class FireBasinBlock extends Block
             if (CampfireBlock.canLight(aboveState) || CandleBlock.canLight(aboveState) || CandleCakeBlock.canLight(aboveState))
             {
                 aboveState = aboveState.setValue(BlockStateProperties.LIT, true);
-                level.gameEvent(GameEvent.BLOCK_CHANGE, abovePos);
+                level.gameEvent(null, GameEvent.BLOCK_CHANGE, abovePos);
             }
             else if (aboveState.isAir())
             {
                 aboveState = SoulFireBlock.canSurviveOnBlock(state) ? Blocks.SOUL_FIRE.defaultBlockState() : Blocks.FIRE.defaultBlockState();
-                level.gameEvent(GameEvent.BLOCK_PLACE, abovePos);
+                level.gameEvent(null, GameEvent.BLOCK_PLACE, abovePos);
             }
             else if (aboveState.isFlammable(level, abovePos, Direction.DOWN))
                 flammable = true;
@@ -88,7 +88,7 @@ public class FireBasinBlock extends Block
         {
             level.levelEvent(LevelEvent.SOUND_EXTINGUISH_FIRE, abovePos, -1);
             level.setBlockAndUpdate(abovePos, Blocks.AIR.defaultBlockState());
-            level.gameEvent(GameEvent.BLOCK_DESTROY, abovePos);
+            level.gameEvent(null, GameEvent.BLOCK_DESTROY, abovePos);
         }
     }
 

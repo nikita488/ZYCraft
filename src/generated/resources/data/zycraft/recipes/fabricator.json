@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:zychorite"
+    },
+    "$": {
+      "item": "minecraft:crafting_table"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    },
+    "X": {
+      "tag": "zycraft:engineering_bricks/blue"
+    }
+  },
   "pattern": [
     "XIX",
     "#$#",
     "X#X"
   ],
-  "key": {
-    "X": {
-      "tag": "zycraft:engineering_bricks/blue"
-    },
-    "#": {
-      "item": "zycraft:zychorite"
-    },
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "$": {
-      "item": "minecraft:crafting_table"
-    }
-  },
   "result": {
     "item": "zycraft:fabricator"
   }

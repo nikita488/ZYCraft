@@ -1,0 +1,10 @@
+{
+  "type": "zycraft:quartz_crystal",
+  "config": {
+    "can_be_placed_on": {
+      "predicate_type": "minecraft:tag_match",
+      "tag": "minecraft:base_stone_overworld"
+    },
+    "max_crystals": 5
+  }
+}

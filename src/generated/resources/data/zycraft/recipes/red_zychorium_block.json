@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "XXX",
-    "XXX",
-    "XXX"
-  ],
   "key": {
     "X": {
       "item": "zycraft:red_zychorium"
     }
   },
+  "pattern": [
+    "XXX",
+    "XXX",
+    "XXX"
+  ],
   "result": {
     "item": "zycraft:red_zychorium_block"
   }

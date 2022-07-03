@@ -23,9 +23,10 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraftforge.common.SoundActions;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import nikita488.zycraft.api.fluid.IFluidSource;
@@ -94,14 +95,14 @@ public class ZychoriumWaterBlock extends Block implements IFluidSource
             return InteractionResult.PASS;
 
         IFluidHandlerItem handler = capability.get();
-        FluidStack water = new FluidStack(Fluids.WATER, FluidAttributes.BUCKET_VOLUME);
+        FluidStack water = new FluidStack(Fluids.WATER, FluidType.BUCKET_VOLUME);
 
         if (handler.fill(water, IFluidHandler.FluidAction.SIMULATE) <= 0)
             return InteractionResult.PASS;
 
         player.awardStat(Stats.ITEM_USED.get(heldStack.getItem()));
-        player.playSound(water.getFluid().getAttributes().getFillSound(), 1F, 1F);
-
+        Optional.ofNullable(water.getFluid().getFluidType().getSound(player, level, pos, SoundActions.BUCKET_FILL))
+                .ifPresent(sound -> player.playSound(sound, 1F, 1F));
         if (level.isClientSide())
             return InteractionResult.SUCCESS;
 

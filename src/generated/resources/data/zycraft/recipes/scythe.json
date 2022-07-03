@@ -1,10 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    " X#",
-    " # ",
-    "#X "
-  ],
   "key": {
     "#": {
       "tag": "forge:rods/wooden"
@@ -13,6 +8,11 @@
       "item": "zycraft:quartz_crystal"
     }
   },
+  "pattern": [
+    " X#",
+    " # ",
+    "#X "
+  ],
   "result": {
     "item": "zycraft:scythe"
   }

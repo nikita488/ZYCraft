@@ -13,8 +13,8 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
@@ -57,7 +57,7 @@ public class ZYFluidContainerItem extends Item
         if (!fluid.isEmpty())
             tooltip.add(((MutableComponent)fluid.getDisplayName()).withStyle(ChatFormatting.GRAY));
 
-        if (capacity > FluidAttributes.BUCKET_VOLUME)
+        if (capacity > FluidType.BUCKET_VOLUME)
             tooltip.add(ZYLang.copy(ZYLang.FLUID_TANK_FILLED, fluid.getAmount(), capacity));
     }
 

@@ -8,7 +8,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 import nikita488.zycraft.ZYCraft;
 import nikita488.zycraft.init.ZYRegistries;
 import nikita488.zycraft.multiblock.former.IMultiFormer;
@@ -16,7 +15,7 @@ import nikita488.zycraft.multiblock.former.IMultiFormer;
 import javax.annotation.Nullable;
 import java.util.Optional;
 
-public class MultiType<T extends MultiBlock> extends ForgeRegistryEntry<MultiType<?>>
+public class MultiType<T extends MultiBlock>
 {
     private final MultiSupplier<? extends T> factory;
     private final IMultiFormer former;

@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "zycraft:green_zychorium_bricks"
+    },
+    "I": {
+      "tag": "forge:ingots/iron"
+    }
+  },
   "pattern": [
     "I#I",
     "# #",
     "I#I"
   ],
-  "key": {
-    "I": {
-      "tag": "forge:ingots/iron"
-    },
-    "#": {
-      "item": "zycraft:green_zychorium_bricks"
-    }
-  },
   "result": {
-    "item": "zycraft:green_zychorium_plate",
-    "count": 4
+    "count": 4,
+    "item": "zycraft:green_zychorium_plate"
   }
 }

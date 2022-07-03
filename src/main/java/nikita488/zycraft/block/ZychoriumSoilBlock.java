@@ -3,6 +3,7 @@ package nikita488.zycraft.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -15,7 +16,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraftforge.common.IPlantable;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class ZychoriumSoilBlock extends Block
 {
@@ -28,7 +28,7 @@ public class ZychoriumSoilBlock extends Block
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         boolean powered = state.getValue(POWERED);
         Direction dir = powered ? Direction.DOWN : Direction.UP;

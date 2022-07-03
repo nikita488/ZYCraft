@@ -2,6 +2,7 @@ package nikita488.zycraft.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -15,7 +16,6 @@ import nikita488.zycraft.init.ZYBlockEntities;
 import nikita488.zycraft.util.ParticleUtils;
 
 import javax.annotation.Nullable;
-import java.util.Random;
 
 public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
 {
@@ -37,7 +37,7 @@ public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
     }
 
     @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
     {
         if (state.getValue(LIT))
             ParticleUtils.glowingColorableBlock(state, level, pos, random);
@@ -66,7 +66,7 @@ public class ZychoriumLampBlock extends ColorableBlock implements EntityBlock
     }
 
     @Override
-    public void tick(BlockState state, ServerLevel level, BlockPos pos, Random random)
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random)
     {
         if (isLit(state) && !level.hasNeighborSignal(pos))
             level.setBlock(pos, state.cycle(LIT), UPDATE_CLIENTS);
