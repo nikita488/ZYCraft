@@ -307,7 +307,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     //Block methods
 /*    //TODO: Probably remove
     @Override
-    public boolean ticksRandomly(BlockState state) 
+    public boolean ticksRandomly(BlockState state)
     {
         return state.get(RANDOMLY_TICKING);
     }*/
@@ -325,7 +325,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state) 
+    public void destroy(LevelAccessor accessor, BlockPos pos, BlockState state)
     {
         getState(accessor, pos).getBlock().destroy(accessor, pos, state);
     }
@@ -337,7 +337,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void wasExploded(Level level, BlockPos pos, Explosion explosion) 
+    public void wasExploded(Level level, BlockPos pos, Explosion explosion)
     {
         getState(level, pos).getBlock().wasExploded(level, pos, explosion);
     }
@@ -367,14 +367,14 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) 
+    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player)
     {
         getState(level, pos).getBlock().playerWillDestroy(level, pos, state, player);
     }
 
 /*    //TODO: Probably remove
     @Override
-    public void fillWithRain(World level, BlockPos pos) 
+    public void fillWithRain(World level, BlockPos pos)
     {
         getState(world, pos).getBlock().fillWithRain(world, pos);
     }*/
@@ -398,7 +398,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean isLadder(BlockState state, LevelReader reader, BlockPos pos, LivingEntity entity) 
+    public boolean isLadder(BlockState state, LevelReader reader, BlockPos pos, LivingEntity entity)
     {
         return getState(reader, pos).isLadder(reader, pos, entity);
     }
@@ -452,7 +452,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity) 
+    public boolean addRunningEffects(BlockState state, Level level, BlockPos pos, Entity entity)
     {
         return getState(level, pos).addRunningEffects(level, pos, entity);
     }
@@ -464,7 +464,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean isConduitFrame(BlockState state, LevelReader reader, BlockPos pos, BlockPos conduit) 
+    public boolean isConduitFrame(BlockState state, LevelReader reader, BlockPos pos, BlockPos conduit)
     {
         return getState(reader, pos).isConduitFrame(reader, pos, conduit);
     }
@@ -482,7 +482,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public float getEnchantPowerBonus(BlockState state, LevelReader reader, BlockPos pos) 
+    public float getEnchantPowerBonus(BlockState state, LevelReader reader, BlockPos pos)
     {
         return getState(reader, pos).getEnchantPowerBonus(reader, pos);
     }
@@ -495,13 +495,13 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }*/
 
     @Override
-    public boolean shouldCheckWeakPower(BlockState state, LevelReader reader, BlockPos pos, Direction side) 
+    public boolean shouldCheckWeakPower(BlockState state, LevelReader reader, BlockPos pos, Direction side)
     {
         return getState(reader, pos).shouldCheckWeakPower(reader, pos, side);
     }
 
     @Override
-    public boolean getWeakChanges(BlockState state, LevelReader reader, BlockPos pos) 
+    public boolean getWeakChanges(BlockState state, LevelReader reader, BlockPos pos)
     {
         return getState(reader, pos).getWeakChanges(reader, pos);
     }
@@ -514,7 +514,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
 
     @Nullable
     @Override
-    public float[] getBeaconColorMultiplier(BlockState state, LevelReader reader, BlockPos pos, BlockPos beaconPos) 
+    public float[] getBeaconColorMultiplier(BlockState state, LevelReader reader, BlockPos pos, BlockPos beaconPos)
     {
         return getState(reader, pos).getBeaconColorMultiplier(reader, pos, beaconPos);
     }
@@ -558,7 +558,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean isFireSource(BlockState state, LevelReader reader, BlockPos pos, Direction side) 
+    public boolean isFireSource(BlockState state, LevelReader reader, BlockPos pos, Direction side)
     {
         return getState(reader, pos).isFireSource(reader, pos, side);
     }
@@ -576,7 +576,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) 
+    public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion)
     {
         getState(level, pos).onBlockExploded(level, pos, explosion);
     }
@@ -588,7 +588,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter getter, BlockPos pos, FluidState fluidState) 
+    public boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter getter, BlockPos pos, FluidState fluidState)
     {
         return getState(getter, pos).shouldDisplayFluidOverlay(getter, pos, fluidState);
     }
@@ -601,7 +601,7 @@ public class ConvertedMultiChildBlock extends MultiChildBlock// implements IFaca
     }
 
     @Override
-    public boolean isScaffolding(BlockState state, LevelReader reader, BlockPos pos, LivingEntity entity) 
+    public boolean isScaffolding(BlockState state, LevelReader reader, BlockPos pos, LivingEntity entity)
     {
         return getState(reader, pos).isScaffolding(entity);
     }
